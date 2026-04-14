@@ -1,0 +1,1420 @@
+/*
+===============================================
+   ÍNDICE DE ESTILOS - OG IMAGE GENERATOR
+===============================================
+
+1. CONFIGURAÇÕES GLOBAIS
+   - Reset CSS
+   - Variáveis CSS (opcional)
+
+2. LAYOUT PRINCIPAL
+   - Body e Container
+   - Estrutura base
+
+3. FORMULÁRIO E CONTROLES
+   - Controles gerais
+   - Grupos de formulário
+   - Inputs e campos
+   - Botões principais
+   - Área de upload
+
+4. ELEMENTOS INTERATIVOS
+   - Sliders
+   - Seletores de template
+   - Indicadores de validação
+
+5. MODAIS E OVERLAYS
+   - Modal base
+   - Cabeçalho do modal
+   - Conteúdo do modal
+   - Botões de ação
+
+6. PREVIEW E VISUALIZAÇÃO
+   - Preview principal
+   - Imagem OG
+   - Conteúdo da imagem
+   - Indicadores de dimensão
+
+7. PREVIEWS DE REDES SOCIAIS
+   - Sistema de tabs
+   - Facebook preview
+   - Instagram preview
+   - Twitter/X preview
+   - Pinterest preview
+
+8. ESTADOS E ANIMAÇÕES
+   - Estados de carregamento
+   - Indicadores de sucesso
+   - Animações e transições
+
+9. UTILITÁRIOS
+   - Classes auxiliares
+   - Displays especiais
+   - Código e syntax highlighting
+
+10. RESPONSIVIDADE
+    - Breakpoints mobile
+    - Ajustes para tablet
+    - Otimizações touch
+
+11. MELHORIAS NA ÁREA DE UPLOAD
+    - Feedback visual
+    - Arrastar e soltar
+    - Botão de upload
+
+===============================================
+*/
+
+/* ==========================================
+   1. CONFIGURAÇÕES GLOBAIS
+   ========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   2. LAYOUT PRINCIPAL
+   ========================================== */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* ==========================================
+   3. FORMULÁRIO E CONTROLES
+   ========================================== */
+/* Controles Gerais */
+.controls {
+    padding: 30px;
+    background: #fff;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.controls h1 {
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Grupos de Formulário */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Inputs e Campos */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.color-input {
+    height: 50px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+/* Botões principais */
+.button-group{
+    display: flex;
+    gap: 10px;
+    flex-warp: wrap;
+}
+
+.update-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.update-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.export-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.code-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.code-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+.remove-image-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background 0.2s ease;
+}
+
+.remove-image-btn:hover {
+    background: #dc2626;
+}
+
+/* Área de upload */
+.file-input {
+    display: none;
+}
+
+.upload-area {
+    border: 2px dashed #e1e5e9;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.upload-area:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.upload-area.dragover {
+    border-color: #3b82f6;
+    background: #dbeafe;
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-content.error {
+    border: 2px dashed #ef4444;
+    background: #fef2f2;
+}
+
+.upload-content.error .upload-icon {
+    color: #ef4444;
+}
+
+.upload-content.error .upload-text {
+    color: #dc2626;
+}
+
+.upload-icon {
+    font-size: 24px;
+}
+
+.upload-text {
+    font-weight: 600;
+    color: #374151;
+}
+
+.upload-formats {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.upload-details {
+    display: flex;
+    gap: 16px;
+    margin: 4px 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.file-size {
+    font-weight: 500;
+}
+
+.file-dimensions {
+    font-weight: 500;
+    color: #059669;
+}
+
+/* ==========================================
+   4. ELEMENTOS INTERATIVOS
+   ========================================== */
+
+/* Sliders */
+
+.slider {
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background: #e1e5e9;
+    outline: none;
+    cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3b82f6;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3b82f6;
+    cursor: pointer;
+    border: none;
+}
+
+.slider-value {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* Seletores de Template */
+.template-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.template-btn {
+    padding: 10px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.template-btn:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+.template-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+/* Indicadores de validação */
+/* Estilos para validação de imagem OG */
+.validation-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+.validation-indicator.success {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.validation-indicator.warning {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fed7aa;
+}
+
+.validation-indicator.error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.validation-icon {
+    font-size: 14px;
+}
+
+.validation-text {
+    flex: 1;
+}
+
+/* ==========================================
+   5. MODAIS E OVERLAYS
+   ========================================== */
+
+/* Modal base */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease;
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #e1e5e9;
+    background: #f8fafc;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* Conteúdo do modal */
+.modal-body {
+    padding: 30px;
+}
+
+/* ==========================================
+   6. PREVIEW E VISUALIZAÇÃO
+   ========================================== */
+
+/* Preview principal */
+.preview {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.preview h2 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    margin: 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.preview-content {
+    padding: 24px;
+}
+
+/* Imagem OG */
+.og-image {
+    width: 100%;
+    max-width: 600px;
+    height: 315px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.og-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+.og-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.og-content {
+    position: relative;
+    z-index: 2;
+}
+
+.og-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+}
+
+.og-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.og-brand {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Dimensions Info Strong */
+.dimensions-info {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.dimensions-info strong {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* Indicador de proporções */
+.aspect-ratio-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* Melhorias no preview da imagem */
+#ogImage {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1.905; /* 1200/630 */
+}
+
+#ogImage:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================
+   7. PREVIEWS DE REDES SOCIAIS
+   ========================================== */
+
+/* Sistema de tabs */
+.social-tabs {
+    display: flex;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 20px;
+    gap: 4px;
+}
+
+.social-tab {
+    flex: 1;
+    padding: 12px 16px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.social-tab.active {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.social-tab:hover {
+    background: white;
+}
+
+/* Cores das redes sociais */
+.social-tab.facebook.active { color: #1877f2; }
+.social-tab.instagram.active { color: #e4405f; }
+.social-tab.twitter.active { color: #1da1f2; }
+.social-tab.pinterest.active { color: #bd081c; }
+
+/* Previews das redes sociais */
+.social-preview {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+.social-preview.active {
+    display: block;
+}
+
+/* Facebook Preview */
+.facebook-preview {
+    border: 1px solid #e4e6ea;
+}
+
+.facebook-header {
+    padding: 16px;
+    border-bottom: 1px solid #e4e6ea;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.facebook-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1877f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.facebook-user {
+    flex: 1;
+}
+
+.facebook-username {
+    font-weight: 600;
+    color: #1c1e21;
+    font-size: 14px;
+}
+
+.facebook-time {
+    color: #65676b;
+    font-size: 12px;
+}
+
+.facebook-post {
+    padding: 0 16px 16px;
+    color: #1c1e21;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.facebook-link {
+    border-top: 1px solid #e4e6ea;
+    display: flex;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.facebook-link:hover {
+    background: #f7f8fa;
+}
+
+.facebook-link-image {
+    width: 158px;
+    height: 158px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.facebook-link-content {
+    padding: 16px;
+    flex: 1;
+}
+
+.facebook-link-url {
+    color: #65676b;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.facebook-link-title {
+    color: #1c1e21;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.facebook-link-description {
+    color: #65676b;
+    font-size: 14px;
+    line-height: 1.3;
+}
+
+/* Instagram Preview */
+.instagram-preview {
+    max-width: 470px;
+    margin: 0 auto;
+    border: 1px solid #dbdbdb;
+}
+
+.instagram-header {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.instagram-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.instagram-username {
+    font-weight: 600;
+    color: #262626;
+    font-size: 14px;
+}
+
+.instagram-image {
+    width: 100%;
+    height: 470px;
+    background-size: cover;
+    background-position: center;
+}
+
+.instagram-actions {
+    padding: 16px;
+    border-bottom: 1px solid #efefef;
+}
+
+.instagram-icons {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.instagram-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.instagram-caption {
+    color: #262626;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.instagram-username-caption {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* X (Twitter) Preview */
+.twitter-preview {
+    border: 1px solid #cfd9de;
+}
+
+.twitter-header {
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.twitter-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #1da1f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.twitter-content {
+    flex: 1;
+}
+
+.twitter-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.twitter-name {
+    font-weight: 700;
+    color: #0f1419;
+    font-size: 15px;
+}
+
+.twitter-handle {
+    color: #536471;
+    font-size: 15px;
+}
+
+.twitter-time {
+    color: #536471;
+    font-size: 15px;
+}
+
+.twitter-text {
+    color: #0f1419;
+    font-size: 15px;
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+.twitter-card {
+    border: 1px solid #cfd9de;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.twitter-card:hover {
+    background: #f7f9fa;
+}
+
+.twitter-card-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.twitter-card-content {
+    padding: 12px;
+}
+
+.twitter-card-title {
+    font-size: 15px;
+    font-weight: 400;
+    color: #0f1419;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.twitter-card-description {
+    font-size: 15px;
+    color: #536471;
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+
+.twitter-card-url {
+    font-size: 15px;
+    color: #536471;
+    text-transform: lowercase;
+}
+
+/* Pinterest Preview */
+.pinterest-preview {
+    max-width: 300px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: white;
+}
+
+.pinterest-image {
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.pinterest-save-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #bd081c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.pinterest-image:hover .pinterest-save-btn {
+    opacity: 1;
+}
+
+.pinterest-content {
+    padding: 16px;
+}
+
+.pinterest-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #211922;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.pinterest-description {
+    font-size: 14px;
+    color: #5f5f5f;
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+.pinterest-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pinterest-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #bd081c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.pinterest-username {
+    font-size: 14px;
+    color: #5f5f5f;
+    font-weight: 600;
+}
+
+/* ==========================================
+   8. ESTADOS E ANIMAÇÕES
+   ========================================== */
+
+/* Estados de carregamento */
+/* Estilos para indicadores de carregamento */
+.export-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px 32px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+.export-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideInRight 0.3s ease;
+}
+
+.success-icon {
+    font-size: 16px;
+}
+
+/* Animações e transições */
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Animações */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================
+   9. UTILITÁRIOS
+   ========================================== */
+
+.code-container {
+    position: relative;
+    background: #1f2937;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.code-container pre {
+    color: #f9fafb;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: #2563eb;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .og-title {
+        font-size: 24px;
+    }
+    
+    .og-description {
+        font-size: 14px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+}
+
+/* Estilos para upload melhorado */
+.upload-content.error {
+    border: 2px dashed #ef4444;
+    background: #fef2f2;
+}
+
+.upload-content.error .upload-icon {
+    color: #ef4444;
+}
+
+.upload-content.error .upload-text {
+    color: #dc2626;
+}
+
+.upload-details {
+    display: flex;
+    gap: 16px;
+    margin: 4px 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Estilos para display de URL */
+.url-display {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    z-index: 1000;
+    animation: scaleIn 0.3s ease;
+}
+
+.url-display strong {
+    display: block;
+    margin-bottom: 12px;
+    color: #374151;
+}
+
+.url-display input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 13px;
+    margin-bottom: 12px;
+    background: #f9fafb;
+}
+
+.url-display button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.url-display button:hover {
+    background: #2563eb;
+}
+
+/* ==========================================
+   10. RESPONSIVIDADE
+   ========================================== */
+
+/* Layout em duas colunas para telas grandes */
+@media (min-width: 769px) {
+    .container-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    /* Se você quiser que alguns elementos ocupem a largura total */
+    .full-width {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Responsividade para telas médias/pequenas */
+@media (max-width: 768px) {
+    .container-grid {
+        display: block;
+    }
+    
+    .url-display {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .upload-details {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .export-loading {
+        padding: 16px 24px;
+        font-size: 14px;
+    }
+    
+    .export-success {
+        top: 10px;
+        right: 10px;
+        padding: 10px 16px;
+    }
+    
+    .social-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .social-tab {
+        flex: 1 1 45%;
+        font-size: 12px;
+        padding: 10px 8px;
+    }
+    
+    .facebook-link {
+        flex-direction: column;
+    }
+    
+    .facebook-link-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .instagram-preview {
+        max-width: 100%;
+    }
+    
+    .pinterest-preview {
+        max-width: 280px;
+    }
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   11. MELHORIAS NA ÁREA DE UPLOAD
+   ========================================== */
+
+/* Melhorias na área de upload */
+.upload-area {
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 49%, rgba(59, 130, 246, 0.1) 50%, transparent 51%);
+    background-size: 20px 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.upload-area:hover::before {
+    opacity: 1;
+}
+
+.upload-area.dragover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.upload-area.dragover::before {
+    opacity: 1;
+}

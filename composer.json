@@ -1,0 +1,27 @@
+{
+  "name": "aureaquotia/mvcl",
+  "description": "Aurea Quotia - sistema MVCL para orcamentos de design",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": "^8.2",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "nikic/fast-route": "^1.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "AureaQuotia\\System\\": "system/",
+      "AureaQuotia\\Admin\\": "admin/",
+      "AureaQuotia\\Cliente\\": "cliente/",
+      "AureaQuotia\\Install\\": "install/"
+    },
+    "files": [
+      "system/Support/helpers.php"
+    ]
+  },
+  "scripts": {
+    "serve": "php -S localhost:8080",
+    "dump": "composer dump-autoload -o"
+  }
+}

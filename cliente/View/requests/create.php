@@ -1,0 +1,824 @@
+<?php
+$selectedServices = old('service_ids', []);
+if (!is_array($selectedServices)) {
+    $selectedServices = [];
+}
+$selectedMap = array_fill_keys(array_map('intval', $selectedServices), true);
+
+$personTypeOptions = [
+    'pf' => 'Pessoa Fisica',
+    'pj' => 'Pessoa Juridica',
+];
+
+$companyProfileOptions = [
+    'mei' => 'MEI',
+    'pequena' => 'Pequena empresa',
+    'media' => 'Media empresa',
+    'grande' => 'Grande empresa',
+];
+
+$areaOptions = [
+    'moda_beleza' => 'Moda e beleza',
+    'alimentacao' => 'Alimentacao e gastronomia',
+    'saude' => 'Saude e bem-estar',
+    'educacao' => 'Educacao e treinamentos',
+    'tecnologia' => 'Tecnologia e software',
+    'comercio' => 'Comercio e varejo',
+    'servicos' => 'Servicos profissionais',
+    'imobiliario' => 'Imobiliario e construcao',
+    'eventos' => 'Eventos e entretenimento',
+    'industria' => 'Industria e manufatura',
+    'agro' => 'Agronegocio',
+];
+
+$businessMomentOptions = [
+    'estah_comecando' => 'Esta comecando',
+    'inicio' => 'Inicio',
+    'lancamento' => 'Lancamento',
+    'crescimento' => 'Crescimento / escalando o negocio',
+    'reposicionamento' => 'Ajustes e reposicionamento da marca',
+    'padronizacao' => 'Padronizacao da marca e processos da empresa',
+];
+
+$channelOptions = [
+    'digital' => 'Digital',
+    'fisico' => 'Fisico',
+    'hibrido' => 'Hibrido',
+];
+
+$priorityOptions = [
+    'equilibrio' => 'Equilibrio entre prazo e qualidade',
+    'inicio_rapido' => 'Inicio rapido',
+    'detalhado' => 'Projeto mais detalhado',
+];
+
+$selectedPersonType = (string) old('client_person_type', 'pf');
+if (!isset($personTypeOptions[$selectedPersonType])) {
+    $selectedPersonType = 'pf';
+}
+$selectedCompanyProfile = (string) old('company_profile', '');
+if ($selectedCompanyProfile !== '' && !isset($companyProfileOptions[$selectedCompanyProfile])) {
+    $selectedCompanyProfile = '';
+}
+$selectedArea = (string) old('client_area', '');
+if ($selectedArea !== '' && !isset($areaOptions[$selectedArea])) {
+    $selectedArea = '';
+}
+$selectedBusinessMoment = (string) old('business_moment', '');
+if ($selectedBusinessMoment !== '' && !isset($businessMomentOptions[$selectedBusinessMoment])) {
+    $selectedBusinessMoment = '';
+}
+$selectedChannel = (string) old('priority_channel', '');
+if ($selectedChannel !== '' && !isset($channelOptions[$selectedChannel])) {
+    $selectedChannel = '';
+}
+$selectedPriority = (string) old('project_priority', '');
+if ($selectedPriority !== '' && !isset($priorityOptions[$selectedPriority])) {
+    $selectedPriority = '';
+}
+$selectedServiceMode = (string) old('service_view_mode', 'recommended');
+if (!in_array($selectedServiceMode, ['recommended', 'all'], true)) {
+    $selectedServiceMode = 'recommended';
+}
+
+$classifyServiceGroup = static function (array $item, string $catalogLabel): string {
+    $text = strtolower(trim(implode(' ', [
+        (string) $catalogLabel,
+        (string) ($item['group_name'] ?? ''),
+        (string) ($item['service_name'] ?? ''),
+        (string) ($item['reference_code'] ?? ''),
+    ])));
+
+    $has = static function (string $haystack, array $terms): bool {
+        foreach ($terms as $term) {
+            if (str_contains($haystack, $term)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if ($has($text, ['logo', 'logotipo', 'logomarca', 'identidade visual', 'manual de marca'])) {
+        return 'identidade_visual';
+    }
+    if ($has($text, ['impresso', 'papelaria', 'embalagem', 'rotulo', 'folder', 'panfleto', 'cartao', 'editorial', 'sinalizacao', 'banner', 'fachada'])) {
+        return 'materiais_impressos';
+    }
+    if ($has($text, ['digital', 'social', 'site', 'landing', 'app', 'online', 'rede', 'video', 'audiovisual', 'motion', 'animacao', 'email'])) {
+        return 'materiais_digitais';
+    }
+
+    return 'branding_estrategia';
+};
+
+$serviceGroupDefinitions = [
+    'branding_estrategia' => 'Branding e estrategia de marca',
+    'identidade_visual' => 'Identidade visual',
+    'materiais_digitais' => 'Materiais digitais',
+    'materiais_impressos' => 'Materiais impressos',
+];
+
+$serviceGroups = [];
+foreach ($serviceGroupDefinitions as $groupKey => $groupLabel) {
+    $serviceGroups[$groupKey] = ['label' => $groupLabel, 'items' => []];
+}
+
+foreach ($serviceCatalogs as $catalog) {
+    $catalogLabel = (string) ($catalog['label'] ?? '');
+    foreach ((array) ($catalog['items'] ?? []) as $item) {
+        $groupKey = $classifyServiceGroup($item, $catalogLabel);
+        if (!isset($serviceGroups[$groupKey])) {
+            continue;
+        }
+        $item['catalog_label'] = $catalogLabel;
+        $serviceGroups[$groupKey]['items'][] = $item;
+    }
+}
+?>
+
+<section class="row justify-content-center">
+    <div class="col-xl-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-lg-5">
+                <h1 class="h3 mb-2">Formulario de Orcamento</h1>
+                <p class="text-muted mb-4">Preencha em 4 passos e receba um atendimento estrategico para marca, identidade visual e materiais da sua empresa.</p>
+
+                <form method="post" action="<?= e(url('/orcamento/enviar')) ?>" data-quote-wizard>
+                    <div class="aq-assistant-shell aq-wizard-shell">
+                        <div class="aq-assistant-header">
+                            <div>
+                                <h2 class="h5 mb-1">Assistente de autoatendimento</h2>
+                                <p class="text-muted small mb-0">Siga a jornada orientada para montar um pedido claro e objetivo.</p>
+                            </div>
+                            <span class="badge rounded-pill text-bg-primary">4 passos</span>
+                        </div>
+
+                        <div class="aq-assistant-progress-wrap mt-3">
+                            <div class="progress aq-assistant-progress" role="progressbar" aria-label="Progresso do formulario">
+                                <div class="progress-bar bg-primary" data-wizard-progressbar style="width:25%;" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></div>
+                            </div>
+                            <div class="aq-assistant-stepper mt-2">
+                                <button type="button" class="aq-assistant-step is-active" data-step-target="0">1. Perfil</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="1">2. Servicos</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="2">3. Estrategia</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="3">4. Revisao</button>
+                            </div>
+                        </div>
+
+                        <div class="aq-wizard-helper mt-3">
+                            <p class="aq-wizard-helper-title mb-1" data-assistant-title>Passo 1 - Perfil do cliente</p>
+                            <p class="aq-wizard-helper-text mb-0" data-assistant-text>Informe os dados iniciais para que o passo de servicos seja personalizado para seu perfil.</p>
+                        </div>
+                        <p class="aq-wizard-step-error mt-2 mb-0 d-none" data-step-error></p>
+
+                        <div class="aq-assistant-flow mt-3">
+                            <section class="aq-wizard-stage" data-step="0">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label" for="projectTitle">Nome do projeto</label>
+                                        <input class="form-control" id="projectTitle" name="project_title" required value="<?= e((string) old('project_title')) ?>" placeholder="Ex.: Rebranding para novo posicionamento">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="personType">Tipo de cadastro</label>
+                                        <select class="form-select" id="personType" name="client_person_type" data-person-type required>
+                                            <?php foreach ($personTypeOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedPersonType === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="clientArea">Area de atuacao</label>
+                                        <select class="form-select" id="clientArea" name="client_area" data-client-area required>
+                                            <option value="">Selecione a area</option>
+                                            <?php foreach ($areaOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedArea === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6" data-company-profile-group>
+                                        <label class="form-label" for="companyProfile">Porte da empresa</label>
+                                        <select class="form-select" id="companyProfile" name="company_profile" data-company-profile>
+                                            <option value="">Selecione o porte</option>
+                                            <?php foreach ($companyProfileOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedCompanyProfile === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label" for="requestedAvailability">Disponibilidade esperada</label>
+                                        <input class="form-control" id="requestedAvailability" name="requested_availability" value="<?= e((string) old('requested_availability')) ?>" placeholder="Ex.: inicio imediato, reunioes no periodo da tarde">
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="aq-wizard-stage d-none" data-step="1">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="aq-step-hint">
+                                            <strong>Escolha dos servicos</strong>
+                                            <p class="mb-0">Use a lista recomendada com base no seu perfil ou ative a visualizacao completa para ver todo o catalogo.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label d-block mb-2">Visualizacao dos servicos</label>
+                                        <div class="aq-service-visibility" role="group" aria-label="Visualizacao de servicos">
+                                            <label class="aq-service-visibility-option">
+                                                <input type="radio" name="service_view_mode" value="recommended" data-service-mode <?= $selectedServiceMode === 'recommended' ? 'checked' : '' ?>>
+                                                <span>Mostrar recomendados</span>
+                                            </label>
+                                            <label class="aq-service-visibility-option">
+                                                <input type="radio" name="service_view_mode" value="all" data-service-mode <?= $selectedServiceMode === 'all' ? 'checked' : '' ?>>
+                                                <span>Mostrar todos os servicos</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-text" data-service-mode-helper>As recomendacoes consideram tipo de cadastro, area e porte.</div>
+                                    </div>
+
+                                    <div class="col-12"><p class="small text-muted mb-2" data-service-counter aria-live="polite"></p></div>
+                                    <?php foreach ($serviceGroups as $groupKey => $group): ?>
+                                        <div class="col-12" data-service-group-section>
+                                            <div class="aq-service-group">
+                                                <h3 class="h6 mb-2"><?= e($group['label']) ?></h3>
+                                                <div class="aq-service-list">
+                                                    <?php foreach ($group['items'] as $item): ?>
+                                                        <?php
+                                                        $itemId = (int) ($item['id'] ?? 0);
+                                                        if ($itemId <= 0) {
+                                                            continue;
+                                                        }
+                                                        $isChecked = isset($selectedMap[$itemId]);
+                                                        $companyProfile = strtolower(trim((string) ($item['company_profile'] ?? 'geral')));
+                                                        if ($companyProfile === '') {
+                                                            $companyProfile = 'geral';
+                                                        }
+                                                        $label = trim(
+                                                            ((string) ($item['reference_code'] ?? '') !== '' ? '[' . (string) $item['reference_code'] . '] ' : '')
+                                                            . ((string) ($item['service_name'] ?? ''))
+                                                        );
+                                                        $meta = trim((string) ($item['group_name'] ?? ''));
+                                                        $searchText = trim(implode(' ', [
+                                                            (string) ($group['label'] ?? ''),
+                                                            (string) ($item['catalog_label'] ?? ''),
+                                                            (string) ($item['reference_code'] ?? ''),
+                                                            (string) ($item['service_name'] ?? ''),
+                                                            (string) ($item['group_name'] ?? ''),
+                                                            $companyProfile,
+                                                            (string) $groupKey,
+                                                        ]));
+                                                        ?>
+                                                        <div class="aq-service-row" data-service-option data-service-id="<?= $itemId ?>" data-service-profile="<?= e($companyProfile) ?>" data-service-group="<?= e($groupKey) ?>" data-service-text="<?= e($searchText) ?>">
+                                                            <label class="aq-service-card">
+                                                                <input class="form-check-input" type="checkbox" name="service_ids[]" value="<?= $itemId ?>" <?= $isChecked ? 'checked' : '' ?>>
+                                                                <span class="aq-service-card-content">
+                                                                    <span class="aq-service-card-title"><?= e($label) ?></span>
+                                                                    <?php if ($meta !== ''): ?>
+                                                                        <span class="aq-service-card-meta"><?= e($meta) ?></span>
+                                                                    <?php endif; ?>
+                                                                </span>
+                                                                <span class="badge rounded-pill aq-assistant-tag d-none" data-recommended-badge>Recomendado</span>
+                                                            </label>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </section>
+
+                            <section class="aq-wizard-stage d-none" data-step="2">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="aq-step-hint">
+                                            <strong>Direcionamento estrategico</strong>
+                                            <p class="mb-0">Essas respostas ajudam a agencia a analisar melhor o contexto e construir um orcamento mais aderente.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label" for="businessMoment">Momento do negocio</label>
+                                        <select class="form-select" id="businessMoment" name="business_moment" data-business-moment required>
+                                            <option value="">Selecione o momento</option>
+                                            <?php foreach ($businessMomentOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedBusinessMoment === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="priorityChannel">Canal prioritario</label>
+                                        <select class="form-select" id="priorityChannel" name="priority_channel" data-priority-channel required>
+                                            <option value="">Selecione o canal</option>
+                                            <?php foreach ($channelOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedChannel === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="projectPriority">Prioridade do projeto</label>
+                                        <select class="form-select" id="projectPriority" name="project_priority" data-project-priority required>
+                                            <option value="">Selecione a prioridade</option>
+                                            <?php foreach ($priorityOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedPriority === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="aq-wizard-stage d-none" data-step="3">
+                                <div class="aq-step-hint mb-3">
+                                    <strong>Resumo e revisao final</strong>
+                                    <p class="mb-0">Revise as escolhas antes de enviar. Se precisar, volte e ajuste qualquer etapa.</p>
+                                </div>
+
+                                <div class="aq-summary-grid">
+                                    <div class="aq-summary-card">
+                                        <h3 class="h6">Perfil do cliente</h3>
+                                        <dl class="aq-summary-list mb-0">
+                                            <div><dt>Nome do projeto</dt><dd data-summary-project-title>-</dd></div>
+                                            <div><dt>Tipo de cadastro</dt><dd data-summary-person-type>-</dd></div>
+                                            <div data-summary-company-profile-row><dt>Porte da empresa</dt><dd data-summary-company-profile>-</dd></div>
+                                            <div><dt>Area de atuacao</dt><dd data-summary-client-area>-</dd></div>
+                                            <div><dt>Disponibilidade esperada</dt><dd data-summary-availability>-</dd></div>
+                                        </dl>
+                                    </div>
+
+                                    <div class="aq-summary-card">
+                                        <h3 class="h6">Servicos selecionados</h3>
+                                        <ul class="aq-summary-services mb-0" data-summary-services></ul>
+                                    </div>
+
+                                    <div class="aq-summary-card">
+                                        <h3 class="h6">Estrategia</h3>
+                                        <dl class="aq-summary-list mb-0">
+                                            <div><dt>Momento do negocio</dt><dd data-summary-business-moment>-</dd></div>
+                                            <div><dt>Canal prioritario</dt><dd data-summary-priority-channel>-</dd></div>
+                                            <div><dt>Prioridade do projeto</dt><dd data-summary-project-priority>-</dd></div>
+                                        </dl>
+                                    </div>
+                                </div>
+
+                                <div class="aq-summary-actions mt-3">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="0">Editar perfil</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="1">Editar servicos</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="2">Editar estrategia</button>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="aq-assistant-nav mt-4">
+                            <button type="button" class="btn btn-outline-secondary" data-prev-step>Etapa anterior</button>
+                            <span class="small text-muted" data-step-label>Passo 1 de 4 - Perfil</span>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-primary" data-next-step>Proximo passo</button>
+                                <button type="submit" class="btn btn-primary d-none" data-submit-request>Seguir para orcamento</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('[data-quote-wizard]');
+    if (!form) {
+        return;
+    }
+
+    const stepSections = Array.from(form.querySelectorAll('[data-step]'));
+    const stepButtons = Array.from(form.querySelectorAll('[data-step-target]'));
+    const progressBar = form.querySelector('[data-wizard-progressbar]');
+    const stepLabel = form.querySelector('[data-step-label]');
+    const assistantTitle = form.querySelector('[data-assistant-title]');
+    const assistantText = form.querySelector('[data-assistant-text]');
+    const stepError = form.querySelector('[data-step-error]');
+
+    const prevButton = form.querySelector('[data-prev-step]');
+    const nextButton = form.querySelector('[data-next-step]');
+    const submitButton = form.querySelector('[data-submit-request]');
+
+    const personTypeSelect = form.querySelector('[data-person-type]');
+    const companyProfileGroup = form.querySelector('[data-company-profile-group]');
+    const companyProfileSelect = form.querySelector('[data-company-profile]');
+    const clientAreaSelect = form.querySelector('[data-client-area]');
+
+    const serviceModeRadios = Array.from(form.querySelectorAll('[data-service-mode]'));
+    const serviceModeHelper = form.querySelector('[data-service-mode-helper]');
+    const serviceCounter = form.querySelector('[data-service-counter]');
+    const serviceGroupSections = Array.from(form.querySelectorAll('[data-service-group-section]'));
+
+    const businessMomentSelect = form.querySelector('[data-business-moment]');
+    const priorityChannelSelect = form.querySelector('[data-priority-channel]');
+    const projectPrioritySelect = form.querySelector('[data-project-priority]');
+    const summaryProjectTitle = form.querySelector('[data-summary-project-title]');
+    const summaryPersonType = form.querySelector('[data-summary-person-type]');
+    const summaryCompanyProfile = form.querySelector('[data-summary-company-profile]');
+    const summaryCompanyProfileRow = form.querySelector('[data-summary-company-profile-row]');
+    const summaryClientArea = form.querySelector('[data-summary-client-area]');
+    const summaryAvailability = form.querySelector('[data-summary-availability]');
+    const summaryServices = form.querySelector('[data-summary-services]');
+    const summaryBusinessMoment = form.querySelector('[data-summary-business-moment]');
+    const summaryPriorityChannel = form.querySelector('[data-summary-priority-channel]');
+    const summaryProjectPriority = form.querySelector('[data-summary-project-priority]');
+
+    const projectTitleInput = form.querySelector('input[name="project_title"]');
+    const availabilityInput = form.querySelector('input[name="requested_availability"]');
+
+    const stepMeta = [
+        { label: 'Perfil', title: 'Passo 1 - Perfil do cliente', text: 'Informe os dados iniciais para que o passo de servicos seja personalizado para seu perfil.' },
+        { label: 'Servicos', title: 'Passo 2 - Escolha dos servicos', text: 'Voce pode usar os servicos recomendados para acelerar sua decisao ou visualizar o catalogo completo.' },
+        { label: 'Estrategia', title: 'Passo 3 - Estrategia do projeto', text: 'Defina momento, canal e prioridade para direcionar uma analise mais precisa do orcamento.' },
+        { label: 'Revisao', title: 'Passo 4 - Resumo e revisao', text: 'Revise todos os dados antes de enviar. Se necessario, volte para editar qualquer etapa.' }
+    ];
+
+    const areaKeywords = {
+        moda_beleza: ['moda', 'beleza', 'estetica', 'editorial', 'campanha', 'identidade'],
+        alimentacao: ['alimentacao', 'gastronomia', 'restaurante', 'cardapio', 'embalagem', 'delivery'],
+        saude: ['saude', 'clinica', 'bem estar', 'institucional'],
+        educacao: ['educacao', 'curso', 'treinamento', 'institucional'],
+        tecnologia: ['tecnologia', 'software', 'digital', 'site', 'app'],
+        comercio: ['comercio', 'varejo', 'promocao', 'campanha'],
+        servicos: ['servicos', 'institucional', 'branding'],
+        imobiliario: ['imobiliario', 'construcao', 'institucional', 'lancamento'],
+        eventos: ['evento', 'entretenimento', 'campanha', 'digital'],
+        industria: ['industria', 'catalogo', 'manual', 'tecnico', 'embalagem'],
+        agro: ['agro', 'institucional', 'rotulo', 'embalagem', 'marca']
+    };
+
+    const areaPreferredGroups = {
+        moda_beleza: ['identidade_visual', 'materiais_digitais'],
+        alimentacao: ['identidade_visual', 'materiais_impressos'],
+        saude: ['branding_estrategia', 'materiais_digitais'],
+        educacao: ['materiais_digitais', 'branding_estrategia'],
+        tecnologia: ['materiais_digitais', 'identidade_visual'],
+        comercio: ['materiais_digitais', 'materiais_impressos'],
+        servicos: ['branding_estrategia', 'identidade_visual'],
+        imobiliario: ['materiais_digitais', 'materiais_impressos'],
+        eventos: ['materiais_digitais', 'identidade_visual'],
+        industria: ['materiais_impressos', 'branding_estrategia'],
+        agro: ['materiais_impressos', 'identidade_visual']
+    };
+
+    const serviceOptions = Array.from(form.querySelectorAll('[data-service-option]')).map(function (element) {
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        const title = element.querySelector('.aq-service-card-title');
+        return {
+            element: element,
+            checkbox: checkbox,
+            id: String(element.getAttribute('data-service-id') || ''),
+            profile: String(element.getAttribute('data-service-profile') || 'geral').toLowerCase(),
+            group: String(element.getAttribute('data-service-group') || ''),
+            text: normalizeText(element.getAttribute('data-service-text') || ''),
+            label: title ? String(title.textContent || '').trim() : '',
+            badge: element.querySelector('[data-recommended-badge]')
+        };
+    });
+
+    let currentStep = 0;
+
+    function normalizeText(value) {
+        const raw = String(value || '');
+        const normalized = typeof raw.normalize === 'function' ? raw.normalize('NFD') : raw;
+        return normalized.replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, ' ').toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    function selectText(select) {
+        if (!select || select.selectedIndex < 0) {
+            return '';
+        }
+        const option = select.options[select.selectedIndex];
+        return option ? String(option.textContent || '').trim() : '';
+    }
+
+    function selectedPersonType() {
+        return String((personTypeSelect && personTypeSelect.value) || 'pf') === 'pj' ? 'pj' : 'pf';
+    }
+
+    function selectedServiceMode() {
+        const selected = serviceModeRadios.find(function (radio) { return radio.checked; });
+        return selected && selected.value === 'all' ? 'all' : 'recommended';
+    }
+
+    function clearStepError() {
+        if (stepError) {
+            stepError.textContent = '';
+            stepError.classList.add('d-none');
+        }
+    }
+
+    function showStepError(message, focusElement) {
+        if (stepError) {
+            stepError.textContent = message;
+            stepError.classList.remove('d-none');
+        }
+        if (focusElement && typeof focusElement.focus === 'function') {
+            focusElement.focus();
+        }
+    }
+
+    function syncPersonTypeFields() {
+        const isPj = selectedPersonType() === 'pj';
+        if (companyProfileGroup) {
+            companyProfileGroup.classList.toggle('d-none', !isPj);
+        }
+        if (companyProfileSelect) {
+            companyProfileSelect.required = isPj;
+            if (!isPj) {
+                companyProfileSelect.value = '';
+            }
+        }
+    }
+
+    function computeRecommendedIds() {
+        const personType = selectedPersonType();
+        const companyProfile = String((companyProfileSelect && companyProfileSelect.value) || '');
+        const area = String((clientAreaSelect && clientAreaSelect.value) || '');
+        const keywords = areaKeywords[area] || [];
+        const preferredGroups = areaPreferredGroups[area] || [];
+
+        const scored = serviceOptions.map(function (option) {
+            let score = 0;
+            if (option.profile === 'geral') { score += 2; }
+            if (personType === 'pf' && option.profile === 'geral') { score += 2; }
+            if (personType === 'pj' && companyProfile !== '' && option.profile === companyProfile) { score += 5; }
+            if (personType === 'pj' && companyProfile === 'pequena' && option.profile === 'microempresa') { score += 3; }
+            keywords.forEach(function (term) {
+                if (option.text.indexOf(term) !== -1) { score += 2; }
+            });
+            if (preferredGroups.indexOf(option.group) !== -1) { score += 2; }
+            if (option.group === 'branding_estrategia' || option.group === 'identidade_visual') { score += 1; }
+            return { id: option.id, score: score, label: option.label };
+        }).filter(function (entry) {
+            return entry.score > 0;
+        }).sort(function (a, b) {
+            if (b.score !== a.score) { return b.score - a.score; }
+            return a.label.localeCompare(b.label, 'pt-BR');
+        });
+
+        const ids = scored.length > 0
+            ? scored.slice(0, 10).map(function (entry) { return entry.id; })
+            : serviceOptions.slice(0, Math.min(10, serviceOptions.length)).map(function (option) { return option.id; });
+
+        return new Set(ids);
+    }
+
+    function updateServiceVisibility() {
+        const mode = selectedServiceMode();
+        const recommendedIds = computeRecommendedIds();
+        let visibleCount = 0;
+
+        serviceOptions.forEach(function (option) {
+            const checked = option.checkbox && option.checkbox.checked;
+            const isRecommended = recommendedIds.has(option.id);
+            const visible = mode === 'all' || isRecommended || checked;
+
+            option.element.classList.toggle('d-none', !visible);
+            option.element.classList.toggle('aq-service-recommended', isRecommended && mode !== 'all');
+
+            if (option.badge) {
+                option.badge.classList.toggle('d-none', !isRecommended || mode === 'all');
+            }
+
+            if (visible) { visibleCount++; }
+        });
+
+        serviceGroupSections.forEach(function (section) {
+            const visibleInGroup = section.querySelectorAll('[data-service-option]:not(.d-none)').length;
+            section.classList.toggle('d-none', visibleInGroup === 0);
+
+            const visibleOptions = Array.from(section.querySelectorAll('[data-service-option]:not(.d-none)'));
+            visibleOptions.forEach(function (optionElement, index) {
+                optionElement.classList.toggle('aq-service-row-alt', index % 2 === 1);
+            });
+        });
+
+        if (serviceCounter) {
+            const selectedCount = serviceOptions.filter(function (option) {
+                return option.checkbox && option.checkbox.checked;
+            }).length;
+            const visibleText = visibleCount === 1 ? '1 servico visivel' : visibleCount + ' servicos visiveis';
+            const selectedText = selectedCount === 1 ? '1 selecionado' : selectedCount + ' selecionados';
+            serviceCounter.textContent = visibleText + ' | ' + selectedText + '.';
+        }
+
+        if (serviceModeHelper) {
+            serviceModeHelper.textContent = mode === 'all'
+                ? 'Voce esta visualizando todo o catalogo de servicos da agencia.'
+                : 'Voce esta visualizando a lista recomendada para o seu perfil.';
+        }
+    }
+
+    function updateSummary() {
+        if (summaryProjectTitle) { summaryProjectTitle.textContent = String(projectTitleInput ? projectTitleInput.value : '').trim() || 'Nao informado'; }
+        if (summaryPersonType) { summaryPersonType.textContent = selectText(personTypeSelect) || 'Nao informado'; }
+        if (summaryClientArea) { summaryClientArea.textContent = selectText(clientAreaSelect) || 'Nao informado'; }
+        if (summaryAvailability) { summaryAvailability.textContent = String(availabilityInput ? availabilityInput.value : '').trim() || 'Nao informado'; }
+        if (summaryBusinessMoment) { summaryBusinessMoment.textContent = selectText(businessMomentSelect) || 'Nao informado'; }
+        if (summaryPriorityChannel) { summaryPriorityChannel.textContent = selectText(priorityChannelSelect) || 'Nao informado'; }
+        if (summaryProjectPriority) { summaryProjectPriority.textContent = selectText(projectPrioritySelect) || 'Nao informado'; }
+
+        const isPj = selectedPersonType() === 'pj';
+        if (summaryCompanyProfileRow) { summaryCompanyProfileRow.classList.toggle('d-none', !isPj); }
+        if (summaryCompanyProfile) { summaryCompanyProfile.textContent = isPj ? (selectText(companyProfileSelect) || 'Nao informado') : 'Nao se aplica'; }
+
+        if (summaryServices) {
+            const selectedLabels = serviceOptions.filter(function (option) {
+                return option.checkbox && option.checkbox.checked;
+            }).map(function (option) {
+                return option.label;
+            }).filter(Boolean);
+
+            summaryServices.innerHTML = '';
+            if (selectedLabels.length === 0) {
+                const emptyItem = document.createElement('li');
+                emptyItem.textContent = 'Nenhum servico selecionado.';
+                summaryServices.appendChild(emptyItem);
+            } else {
+                selectedLabels.forEach(function (label) {
+                    const item = document.createElement('li');
+                    item.textContent = label;
+                    summaryServices.appendChild(item);
+                });
+            }
+        }
+    }
+
+    function validateStep(stepIndex) {
+        const personType = selectedPersonType();
+
+        if (stepIndex === 0) {
+            if (String(projectTitleInput ? projectTitleInput.value : '').trim() === '') {
+                showStepError('Informe o nome do projeto para continuar.', projectTitleInput);
+                return false;
+            }
+            if (String(clientAreaSelect ? clientAreaSelect.value : '').trim() === '') {
+                showStepError('Selecione a area de atuacao para continuar.', clientAreaSelect);
+                return false;
+            }
+            if (personType === 'pj' && String(companyProfileSelect ? companyProfileSelect.value : '').trim() === '') {
+                showStepError('Selecione o porte da empresa para continuar.', companyProfileSelect);
+                return false;
+            }
+            return true;
+        }
+
+        if (stepIndex === 1) {
+            const hasService = serviceOptions.some(function (option) {
+                return option.checkbox && option.checkbox.checked;
+            });
+            if (!hasService) {
+                showStepError('Selecione pelo menos um servico para o orcamento.', serviceOptions[0] ? serviceOptions[0].checkbox : null);
+                return false;
+            }
+            return true;
+        }
+
+        if (stepIndex === 2) {
+            if (String(businessMomentSelect ? businessMomentSelect.value : '').trim() === '') {
+                showStepError('Selecione o momento do negocio para continuar.', businessMomentSelect);
+                return false;
+            }
+            if (String(priorityChannelSelect ? priorityChannelSelect.value : '').trim() === '') {
+                showStepError('Selecione o canal prioritario para continuar.', priorityChannelSelect);
+                return false;
+            }
+            if (String(projectPrioritySelect ? projectPrioritySelect.value : '').trim() === '') {
+                showStepError('Selecione a prioridade do projeto para continuar.', projectPrioritySelect);
+                return false;
+            }
+            return true;
+        }
+
+        return true;
+    }
+
+    function renderStep(stepIndex) {
+        const safeStep = Math.max(0, Math.min(stepMeta.length - 1, stepIndex));
+        currentStep = safeStep;
+
+        stepSections.forEach(function (section, index) {
+            const isCurrent = index === currentStep;
+            section.classList.toggle('d-none', !isCurrent);
+            section.setAttribute('aria-hidden', isCurrent ? 'false' : 'true');
+        });
+
+        stepButtons.forEach(function (button) {
+            const target = Number(button.getAttribute('data-step-target'));
+            const isActive = target === currentStep;
+            const isComplete = target < currentStep;
+            button.classList.toggle('is-active', isActive);
+            button.classList.toggle('is-complete', isComplete);
+            button.setAttribute('aria-current', isActive ? 'step' : 'false');
+        });
+
+        const progress = Math.round(((currentStep + 1) / stepMeta.length) * 100);
+        if (progressBar) {
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', String(progress));
+        }
+
+        if (stepLabel) { stepLabel.textContent = 'Passo ' + (currentStep + 1) + ' de ' + stepMeta.length + ' - ' + stepMeta[currentStep].label; }
+        if (assistantTitle) { assistantTitle.textContent = stepMeta[currentStep].title; }
+        if (assistantText) { assistantText.textContent = stepMeta[currentStep].text; }
+        if (prevButton) { prevButton.disabled = currentStep === 0; }
+
+        const isFinalStep = currentStep === stepMeta.length - 1;
+        if (nextButton) { nextButton.classList.toggle('d-none', isFinalStep); }
+        if (submitButton) { submitButton.classList.toggle('d-none', !isFinalStep); }
+        if (isFinalStep) { updateSummary(); }
+    }
+
+    function goToStep(target) {
+        const safeTarget = Math.max(0, Math.min(stepMeta.length - 1, target));
+        if (safeTarget > currentStep) {
+            for (let step = currentStep; step < safeTarget; step++) {
+                if (!validateStep(step)) {
+                    return;
+                }
+            }
+        }
+        clearStepError();
+        renderStep(safeTarget);
+    }
+
+    if (prevButton) {
+        prevButton.addEventListener('click', function () {
+            clearStepError();
+            renderStep(currentStep - 1);
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('click', function () {
+            if (!validateStep(currentStep)) { return; }
+            clearStepError();
+            renderStep(currentStep + 1);
+        });
+    }
+
+    stepButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            goToStep(Number(button.getAttribute('data-step-target')));
+        });
+    });
+
+    Array.from(form.querySelectorAll('[data-edit-step]')).forEach(function (button) {
+        button.addEventListener('click', function () {
+            goToStep(Number(button.getAttribute('data-edit-step')));
+        });
+    });
+
+    [personTypeSelect, companyProfileSelect, clientAreaSelect].forEach(function (input) {
+        if (!input) { return; }
+        input.addEventListener('change', function () {
+            syncPersonTypeFields();
+            updateServiceVisibility();
+            updateSummary();
+        });
+    });
+
+    [projectTitleInput, availabilityInput, businessMomentSelect, priorityChannelSelect, projectPrioritySelect].forEach(function (input) {
+        if (!input) { return; }
+        input.addEventListener('input', updateSummary);
+        input.addEventListener('change', updateSummary);
+    });
+
+    serviceModeRadios.forEach(function (radio) {
+        radio.addEventListener('change', updateServiceVisibility);
+    });
+
+    serviceOptions.forEach(function (option) {
+        if (!option.checkbox) { return; }
+        option.checkbox.addEventListener('change', function () {
+            updateServiceVisibility();
+            updateSummary();
+        });
+    });
+
+    form.addEventListener('submit', function (event) {
+        for (let step = 0; step <= 2; step++) {
+            if (!validateStep(step)) {
+                event.preventDefault();
+                renderStep(step);
+                return;
+            }
+        }
+        clearStepError();
+    });
+
+    syncPersonTypeFields();
+    updateServiceVisibility();
+    updateSummary();
+    renderStep(0);
+});
+</script>

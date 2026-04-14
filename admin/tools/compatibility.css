@@ -1,0 +1,102 @@
+/* Layout compatibility for tools rendered inside the admin iframe workspace */
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body.aq-tool-fluid {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    display: block !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box;
+}
+
+body.aq-tool-fluid *,
+body.aq-tool-fluid *::before,
+body.aq-tool-fluid *::after {
+    box-sizing: border-box;
+}
+
+/* Core wrappers used by tools */
+body.aq-tool-fluid .container,
+body.aq-tool-fluid .container-grid,
+body.aq-tool-fluid .page,
+body.aq-tool-fluid .main,
+body.aq-tool-fluid .main-content {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Background Remover */
+body.aq-tool-bgremove {
+    padding: clamp(10px, 1.4vw, 22px) !important;
+}
+
+body.aq-tool-bgremove .container {
+    padding: clamp(10px, 1.6vw, 24px) !important;
+}
+
+/* Color Palette */
+body.aq-tool-colorpalette {
+    padding: clamp(10px, 1.4vw, 22px) !important;
+}
+
+body.aq-tool-colorpalette .container {
+    padding: clamp(12px, 1.8vw, 26px) !important;
+}
+
+/* Color Strategy Advisor */
+body.aq-tool-coloradvisor .page {
+    padding: clamp(12px, 1.8vw, 28px) !important;
+}
+
+/* Mockups */
+body.aq-tool-mockups .container {
+    padding-left: clamp(12px, 1.6vw, 24px) !important;
+    padding-right: clamp(12px, 1.6vw, 24px) !important;
+}
+
+/* Font Advisor */
+body.aq-tool-fontadvisor {
+    padding: clamp(10px, 1.4vw, 22px) !important;
+}
+
+/* OG Image Generator */
+body.aq-tool-ocimage {
+    padding: clamp(10px, 1.4vw, 22px) !important;
+    display: block !important;
+}
+
+body.aq-tool-ocimage .container-grid {
+    display: grid !important;
+    grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr) !important;
+    gap: clamp(12px, 1.6vw, 24px) !important;
+}
+
+body.aq-tool-ocimage .controls,
+body.aq-tool-ocimage .preview {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+@media (max-width: 1024px) {
+    body.aq-tool-ocimage .container-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 992px) {
+    body.aq-tool-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
