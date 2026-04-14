@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Cliente\Controller;
+namespace NosfirQuotia\Cliente\Controller;
 
-use AureaQuotia\System\Engine\Controller;
+use NosfirQuotia\System\Engine\Controller;
 
 final class HomeController extends Controller
 {

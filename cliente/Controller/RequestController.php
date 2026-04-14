@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Cliente\Controller;
+namespace NosfirQuotia\Cliente\Controller;
 
-use AureaQuotia\Cliente\Model\ReferencePriceModel;
-use AureaQuotia\Cliente\Model\RequestModel;
+use NosfirQuotia\Cliente\Model\ReferencePriceModel;
+use NosfirQuotia\Cliente\Model\RequestModel;
 
 final class RequestController extends BaseClientController
 {

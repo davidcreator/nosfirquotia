@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Library;
+namespace NosfirQuotia\System\Library;
 
-use AureaQuotia\System\Engine\Session;
+use NosfirQuotia\System\Engine\Session;
 
 final class ClientAuth
 {

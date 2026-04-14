@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Engine;
+namespace NosfirQuotia\System\Engine;
 
-use AureaQuotia\System\Library\Database;
+use NosfirQuotia\System\Library\Database;
 
 abstract class Model
 {

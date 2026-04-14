@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Library;
+namespace NosfirQuotia\System\Library;
 
 use Throwable;
 
@@ -59,7 +59,7 @@ final class EmailService
             $fromEmail = 'no-reply@localhost';
         }
 
-        $fromName = trim((string) ($this->mailConfig['from_name'] ?? 'Aurea Quotia'));
+        $fromName = trim((string) ($this->mailConfig['from_name'] ?? 'Nosfir Quotia'));
         $fromNameSafe = str_replace(['"', "\r", "\n"], '', $fromName);
         $fromHeader = sprintf('"%s" <%s>', $fromNameSafe, $fromEmail);
 

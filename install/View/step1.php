@@ -1,7 +1,7 @@
 <section class="card border-0 shadow-sm">
     <div class="card-body p-4">
         <h2 class="h4 mb-3">Passo 1: Validacao de Requisitos</h2>
-        <p class="text-muted">Confira se o ambiente do servidor esta pronto para executar o Aurea Quotia.</p>
+        <p class="text-muted">Confira se o ambiente do servidor esta pronto para executar o Nosfir Quotia.</p>
 
         <div class="table-responsive mb-4">
             <table class="table align-middle">

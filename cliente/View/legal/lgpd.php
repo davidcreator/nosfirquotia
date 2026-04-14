@@ -3,7 +3,7 @@
         <h1 class="h3 mb-3"><?= e((string) ($pageTitle ?? 'Documento LGPD')) ?></h1>
         <p class="text-muted">Ultima atualizacao: <?= e(date('d/m/Y')) ?></p>
 
-        <p>O Aurea Quotia adota diretrizes de tratamento de dados pessoais alinhadas a Lei Geral de Protecao de Dados (Lei 13.709/2018), com foco em finalidade, necessidade, transparencia, seguranca e responsabilidade.</p>
+        <p>O Nosfir Quotia adota diretrizes de tratamento de dados pessoais alinhadas a Lei Geral de Protecao de Dados (Lei 13.709/2018), com foco em finalidade, necessidade, transparencia, seguranca e responsabilidade.</p>
 
         <h2 class="h5 mt-4">Direitos do titular</h2>
         <ul>

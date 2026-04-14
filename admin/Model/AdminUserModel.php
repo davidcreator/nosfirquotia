@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Model;
+namespace NosfirQuotia\Admin\Model;
 
-use AureaQuotia\System\Engine\Model;
-use AureaQuotia\System\Library\Auth;
+use NosfirQuotia\System\Engine\Model;
+use NosfirQuotia\System\Library\Auth;
 
 final class AdminUserModel extends Model
 {

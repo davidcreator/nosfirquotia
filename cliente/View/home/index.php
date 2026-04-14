@@ -3,7 +3,7 @@
         <div class="col-lg-8">
             <h1 class="display-6 fw-bold text-white mb-3">Solicite seu orcamento de Design de forma segura</h1>
             <p class="text-white-50 mb-4">
-                No Aurea Quotia o cliente abre uma solicitacao com os servicos desejados.
+                No Nosfir Quotia o cliente abre uma solicitacao com os servicos desejados.
                 O time administrativo analisa o pedido e gera um relatorio com valores, prazos, disponibilidade e validade de 90 dias.
             </p>
             <?php if (!empty($clientUser)): ?>

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use AureaQuotia\System\Library\Database;
+use NosfirQuotia\System\Library\Database;
 
-define('AQ_ROOT', dirname(__DIR__));
+define('NQ_ROOT', dirname(__DIR__));
 
-require AQ_ROOT . '/vendor/autoload.php';
+require NQ_ROOT . '/vendor/autoload.php';
 
-$configFile = AQ_ROOT . '/config/config.php';
+$configFile = NQ_ROOT . '/config/config.php';
 if (!is_file($configFile)) {
     fwrite(STDERR, "Arquivo config/config.php nao encontrado.\n");
     exit(1);

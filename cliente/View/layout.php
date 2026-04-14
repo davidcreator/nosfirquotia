@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($appName ?? 'Aurea Quotia') ?></title>
+    <title><?= e($appName ?? 'Nosfir Quotia') ?></title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">
@@ -12,7 +12,7 @@
 <?php $clientUser = client_user(); ?>
 <nav class="navbar navbar-expand-lg navbar-dark aq-client-navbar">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="<?= e(url('/')) ?>">Aurea Quotia</a>
+        <a class="navbar-brand fw-bold" href="<?= e(url('/')) ?>">Nosfir Quotia</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu">
             <span class="navbar-toggler-icon"></span>
         </button>

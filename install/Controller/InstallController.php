@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Install\Controller;
+namespace NosfirQuotia\Install\Controller;
 
-use AureaQuotia\System\Engine\Controller;
-use AureaQuotia\System\Library\Installer;
+use NosfirQuotia\System\Engine\Controller;
+use NosfirQuotia\System\Library\Installer;
 
 final class InstallController extends Controller
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Library;
+namespace NosfirQuotia\System\Library;
 
 final class BudgetCalculator
 {

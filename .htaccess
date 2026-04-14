@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^public/ - [L]
+RewriteRule ^admin/tools/ - [L]
+RewriteRule ^Tools/ - [L]
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^ index.php [QSA,L]

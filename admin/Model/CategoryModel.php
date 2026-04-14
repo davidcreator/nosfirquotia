@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Model;
+namespace NosfirQuotia\Admin\Model;
 
-use AureaQuotia\System\Engine\Model;
+use NosfirQuotia\System\Engine\Model;
 
 final class CategoryModel extends Model
 {

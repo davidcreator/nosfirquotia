@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Engine;
+namespace NosfirQuotia\System\Engine;
 
-use AureaQuotia\System\Library\Auth;
-use AureaQuotia\System\Library\ClientAuth;
-use AureaQuotia\System\Library\Database;
+use NosfirQuotia\System\Library\Auth;
+use NosfirQuotia\System\Library\ClientAuth;
+use NosfirQuotia\System\Library\Database;
 
 abstract class Controller
 {
@@ -26,7 +26,7 @@ abstract class Controller
     protected function render(string $template, array $data = [], ?string $layout = null): void
     {
         $shared = [
-            'appName' => $this->app->config('name', 'Aurea Quotia'),
+            'appName' => $this->app->config('name', 'Nosfir Quotia'),
             'currentPath' => $this->request->path(),
         ];
 

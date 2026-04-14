@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use AureaQuotia\System\Engine\Application;
+use NosfirQuotia\System\Engine\Application;
 
 if (!function_exists('app')) {
     function app(): Application

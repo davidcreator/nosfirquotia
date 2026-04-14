@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-define('AQ_ROOT', __DIR__);
+define('NQ_ROOT', __DIR__);
 
-$autoload = AQ_ROOT . '/vendor/autoload.php';
+$autoload = NQ_ROOT . '/vendor/autoload.php';
 
 if (!is_file($autoload)) {
     http_response_code(500);
@@ -14,11 +14,11 @@ if (!is_file($autoload)) {
 
 require $autoload;
 
-$configFile = AQ_ROOT . '/config/config.php';
-$configExampleFile = AQ_ROOT . '/config/config.example.php';
+$configFile = NQ_ROOT . '/config/config.php';
+$configExampleFile = NQ_ROOT . '/config/config.example.php';
 $legacyConfigFiles = [
-    AQ_ROOT . '/config/config-local.php',
-    AQ_ROOT . '/config/config local.php',
+    NQ_ROOT . '/config/config-local.php',
+    NQ_ROOT . '/config/config local.php',
 ];
 
 if (is_file($configFile)) {
@@ -31,7 +31,7 @@ if (is_file($configFile)) {
     $config['installed'] = false;
 } else {
     $config = [
-        'name' => 'Aurea Quotia',
+        'name' => 'Nosfir Quotia',
         'timezone' => 'America/Sao_Paulo',
         'installed' => false,
         'db' => [
@@ -45,7 +45,7 @@ if (is_file($configFile)) {
         ],
         'mail' => [
             'enabled' => true,
-            'from_name' => 'Aurea Quotia',
+            'from_name' => 'Nosfir Quotia',
             'from_email' => 'no-reply@localhost',
         ],
     ];
@@ -53,7 +53,7 @@ if (is_file($configFile)) {
 
 $config = resolveEnvironmentConfig($config);
 
-$application = new AureaQuotia\System\Engine\Application(AQ_ROOT, $config);
+$application = new NosfirQuotia\System\Engine\Application(NQ_ROOT, $config);
 $application->run();
 
 /**
@@ -123,7 +123,7 @@ function convertToMultiEnvironmentConfig(array $config, ?array $legacyLocal): ar
 {
     $mailDefaults = [
         'enabled' => true,
-        'from_name' => 'Aurea Quotia',
+        'from_name' => 'Nosfir Quotia',
         'from_email' => 'no-reply@localhost',
     ];
 

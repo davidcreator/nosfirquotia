@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\Admin\Model\EmailLogModel;
+use NosfirQuotia\Admin\Model\EmailLogModel;
 
 final class EmailLogController extends BaseAdminController
 {

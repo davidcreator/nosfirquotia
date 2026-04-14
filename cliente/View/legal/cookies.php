@@ -7,7 +7,7 @@
         <p>Cookies sao pequenos arquivos armazenados no navegador para manter funcionalidades e preferencias de navegacao.</p>
 
         <h2 class="h5 mt-4">2. Cookies essenciais</h2>
-        <p>O Aurea Quotia utiliza cookies essenciais para autenticacao de sessao, seguranca e funcionamento basico da plataforma. Esses cookies sao necessarios para o servico operar.</p>
+        <p>O Nosfir Quotia utiliza cookies essenciais para autenticacao de sessao, seguranca e funcionamento basico da plataforma. Esses cookies sao necessarios para o servico operar.</p>
 
         <h2 class="h5 mt-4">3. Consentimento</h2>
         <p>Ao acessar o sistema, o usuario pode definir preferencia de consentimento de cookies. O consentimento e armazenado para registro de preferencia.</p>

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Cliente\Controller;
+namespace NosfirQuotia\Cliente\Controller;
 
-use AureaQuotia\System\Engine\Controller;
-use AureaQuotia\System\Library\EmailService;
-use AureaQuotia\System\Library\PasswordResetService;
+use NosfirQuotia\System\Engine\Controller;
+use NosfirQuotia\System\Library\EmailService;
+use NosfirQuotia\System\Library\PasswordResetService;
 
 final class AuthController extends Controller
 {
@@ -168,7 +168,7 @@ final class AuthController extends Controller
         return new PasswordResetService(
             $this->db(),
             $emailService,
-            (string) $this->app->config('name', 'Aurea Quotia')
+            (string) $this->app->config('name', 'Nosfir Quotia')
         );
     }
 }

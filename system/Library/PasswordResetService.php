@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Library;
+namespace NosfirQuotia\System\Library;
 
 final class PasswordResetService
 {
     public function __construct(
         private readonly Database $db,
         private readonly EmailService $emailService,
-        private readonly string $appName = 'Aurea Quotia'
+        private readonly string $appName = 'Nosfir Quotia'
     ) {
     }
 

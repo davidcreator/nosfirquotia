@@ -1,6 +1,6 @@
 {
-  "name": "aureaquotia/mvcl",
-  "description": "Aurea Quotia - sistema MVCL para orcamentos de design",
+  "name": "nosfirquotia/mvcl",
+  "description": "Nosfir Quotia - sistema MVCL para orcamentos de design",
   "type": "project",
   "license": "proprietary",
   "require": {
@@ -11,10 +11,10 @@
   },
   "autoload": {
     "psr-4": {
-      "AureaQuotia\\System\\": "system/",
-      "AureaQuotia\\Admin\\": "admin/",
-      "AureaQuotia\\Cliente\\": "cliente/",
-      "AureaQuotia\\Install\\": "install/"
+      "NosfirQuotia\\System\\": "system/",
+      "NosfirQuotia\\Admin\\": "admin/",
+      "NosfirQuotia\\Cliente\\": "cliente/",
+      "NosfirQuotia\\Install\\": "install/"
     },
     "files": [
       "system/Support/helpers.php"

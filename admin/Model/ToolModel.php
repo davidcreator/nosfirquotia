@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Model;
+namespace NosfirQuotia\Admin\Model;
 
-use AureaQuotia\System\Engine\Model;
+use NosfirQuotia\System\Engine\Model;
 
 final class ToolModel extends Model
 {
@@ -57,7 +57,7 @@ final class ToolModel extends Model
             $hasEntrypoint = is_file($entrypoint);
             $metadata = self::TOOL_METADATA[$slug] ?? [
                 'name' => ucwords(str_replace(['-', '_'], ' ', $slug)),
-                'description' => 'Ferramenta integrada ao Aurea Quotia.',
+                'description' => 'Ferramenta integrada ao Nosfir Quotia.',
             ];
 
             $tools[] = [

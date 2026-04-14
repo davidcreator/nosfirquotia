@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\Admin\Model\ToolModel;
+use NosfirQuotia\Admin\Model\ToolModel;
 
 final class ToolController extends BaseAdminController
 {

@@ -4,7 +4,7 @@
         <p class="text-muted">Ultima atualizacao: <?= e(date('d/m/Y')) ?></p>
 
         <h2 class="h5 mt-4">1. Aceitacao</h2>
-        <p>Ao utilizar o Aurea Quotia, o usuario declara que leu e concorda com estes Termos de Uso e com as politicas publicadas nesta plataforma.</p>
+        <p>Ao utilizar o Nosfir Quotia, o usuario declara que leu e concorda com estes Termos de Uso e com as politicas publicadas nesta plataforma.</p>
 
         <h2 class="h5 mt-4">2. Conta e acesso</h2>
         <ul>

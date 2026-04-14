@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Instalacao - <?= e($appName ?? 'Aurea Quotia') ?></title>
+    <title>Instalacao - <?= e($appName ?? 'Nosfir Quotia') ?></title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">
@@ -11,7 +11,7 @@
 <body class="aq-install-bg">
 <main class="container py-4 py-lg-5">
     <section class="text-center mb-4">
-        <h1 class="h2 mb-2">Instalador Aurea Quotia</h1>
+        <h1 class="h2 mb-2">Instalador Nosfir Quotia</h1>
         <p class="text-muted">Configuracao inicial em 4 passos no estilo OpenCart.</p>
     </section>
 

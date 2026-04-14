@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\Admin\Model\ReferencePriceModel;
+use NosfirQuotia\Admin\Model\ReferencePriceModel;
 
 final class ReferencePriceController extends BaseAdminController
 {

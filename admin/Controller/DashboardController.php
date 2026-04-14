@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\Admin\Model\QuoteModel;
+use NosfirQuotia\Admin\Model\QuoteModel;
 
 final class DashboardController extends BaseAdminController
 {

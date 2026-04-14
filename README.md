@@ -1,4 +1,4 @@
-# Aurea Quotia
+# Nosfir Quotia
 
 Sistema web para solicitacao e geracao de orcamentos na area de Design, construido em PHP com arquitetura MVCL.
 
@@ -192,7 +192,7 @@ php database/upgrade_communications_security.php
 
 - A area de ferramentas e exclusiva do admin autenticado.
 - Cada projeto em `admin/tools/*` (ou em `Tools/*`, quando essa pasta existir na raiz) e listado no painel.
-- Ferramentas com `index.php` sao abertas dentro do layout admin em iframe, mantendo identidade visual do Aurea Quotia.
+- Ferramentas com `index.php` sao abertas dentro do layout admin em iframe, mantendo identidade visual do Nosfir Quotia.
 - Acesso direto aos projetos em `admin/tools` exige sessao admin.
 
 ## Central Fiscal (admin)

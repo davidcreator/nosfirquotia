@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Engine;
+namespace NosfirQuotia\System\Engine;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;

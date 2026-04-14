@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Engine;
+namespace NosfirQuotia\System\Engine;
 
-use AureaQuotia\System\Library\Auth;
-use AureaQuotia\System\Library\ClientAuth;
-use AureaQuotia\System\Library\Database;
+use NosfirQuotia\System\Library\Auth;
+use NosfirQuotia\System\Library\ClientAuth;
+use NosfirQuotia\System\Library\Database;
 use RuntimeException;
 use Throwable;
 

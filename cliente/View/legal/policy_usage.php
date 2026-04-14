@@ -4,7 +4,7 @@
         <p class="text-muted">Ultima atualizacao: <?= e(date('d/m/Y')) ?></p>
 
         <h2 class="h5 mt-4">1. Finalidade da plataforma</h2>
-        <p>O Aurea Quotia e um sistema de solicitacao, analise e emissao de orcamentos para servicos de design.</p>
+        <p>O Nosfir Quotia e um sistema de solicitacao, analise e emissao de orcamentos para servicos de design.</p>
 
         <h2 class="h5 mt-4">2. Condutas permitidas</h2>
         <ul>

@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-use AureaQuotia\Admin\Controller\AuthController as AdminAuthController;
-use AureaQuotia\Admin\Controller\CategoryController as AdminCategoryController;
-use AureaQuotia\Admin\Controller\DashboardController as AdminDashboardController;
-use AureaQuotia\Admin\Controller\QuoteController as AdminQuoteController;
-use AureaQuotia\Admin\Controller\ReferencePriceController as AdminReferencePriceController;
-use AureaQuotia\Admin\Controller\TaxController as AdminTaxController;
-use AureaQuotia\Admin\Controller\ToolController as AdminToolController;
-use AureaQuotia\Admin\Controller\AdminUserController as AdminUserController;
-use AureaQuotia\Admin\Controller\EmailLogController as AdminEmailLogController;
-use AureaQuotia\Cliente\Controller\AuthController as ClientAuthController;
-use AureaQuotia\Cliente\Controller\HomeController;
-use AureaQuotia\Cliente\Controller\RequestController as ClientRequestController;
-use AureaQuotia\Cliente\Controller\LegalController as ClientLegalController;
-use AureaQuotia\Install\Controller\InstallController;
-use AureaQuotia\System\Engine\Router;
+use NosfirQuotia\Admin\Controller\AuthController as AdminAuthController;
+use NosfirQuotia\Admin\Controller\CategoryController as AdminCategoryController;
+use NosfirQuotia\Admin\Controller\DashboardController as AdminDashboardController;
+use NosfirQuotia\Admin\Controller\QuoteController as AdminQuoteController;
+use NosfirQuotia\Admin\Controller\ReferencePriceController as AdminReferencePriceController;
+use NosfirQuotia\Admin\Controller\TaxController as AdminTaxController;
+use NosfirQuotia\Admin\Controller\ToolController as AdminToolController;
+use NosfirQuotia\Admin\Controller\AdminUserController as AdminUserController;
+use NosfirQuotia\Admin\Controller\EmailLogController as AdminEmailLogController;
+use NosfirQuotia\Cliente\Controller\AuthController as ClientAuthController;
+use NosfirQuotia\Cliente\Controller\HomeController;
+use NosfirQuotia\Cliente\Controller\RequestController as ClientRequestController;
+use NosfirQuotia\Cliente\Controller\LegalController as ClientLegalController;
+use NosfirQuotia\Install\Controller\InstallController;
+use NosfirQuotia\System\Engine\Router;
 
 return static function (Router $router): void {
     $router->get('/', [HomeController::class, 'index']);

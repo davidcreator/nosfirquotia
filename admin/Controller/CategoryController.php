@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\Admin\Model\CategoryModel;
+use NosfirQuotia\Admin\Model\CategoryModel;
 use Throwable;
 
 final class CategoryController extends BaseAdminController

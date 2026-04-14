@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($appName ?? 'Aurea Quotia') ?> - Admin</title>
+    <title><?= e($appName ?? 'Nosfir Quotia') ?> - Admin</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">
@@ -18,7 +18,7 @@
     ?>
     <nav class="navbar navbar-expand-lg navbar-dark aq-admin-navbar">
         <div class="container-fluid px-3 px-lg-4">
-            <a class="navbar-brand fw-semibold" href="<?= e(url($adminHomePath)) ?>">Aurea Quotia Admin</a>
+            <a class="navbar-brand fw-semibold" href="<?= e(url($adminHomePath)) ?>">Nosfir Quotia Admin</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\System\Library;
+namespace NosfirQuotia\System\Library;
 
 use PDO;
 use PDOException;
 use RuntimeException;
-use AureaQuotia\System\Library\Auth;
+use NosfirQuotia\System\Library\Auth;
 
 final class Installer
 {
@@ -253,7 +253,7 @@ final class Installer
 
         $mailDefaults = [
             'enabled' => true,
-            'from_name' => 'Aurea Quotia',
+            'from_name' => 'Nosfir Quotia',
             'from_email' => 'no-reply@localhost',
         ];
 
@@ -322,7 +322,7 @@ final class Installer
         }
 
         $config = [
-            'name' => (string) ($existing['name'] ?? 'Aurea Quotia'),
+            'name' => (string) ($existing['name'] ?? 'Nosfir Quotia'),
             'timezone' => (string) ($existing['timezone'] ?? 'America/Sao_Paulo'),
             'environment' => $environment,
             'environments' => $environments,

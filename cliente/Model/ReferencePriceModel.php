@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Cliente\Model;
+namespace NosfirQuotia\Cliente\Model;
 
-use AureaQuotia\System\Engine\Model;
+use NosfirQuotia\System\Engine\Model;
 
 final class ReferencePriceModel extends Model
 {

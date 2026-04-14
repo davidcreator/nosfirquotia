@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\Admin\Model\AdminUserModel;
-use AureaQuotia\System\Library\Auth;
+use NosfirQuotia\Admin\Model\AdminUserModel;
+use NosfirQuotia\System\Library\Auth;
 use Throwable;
 
 final class AdminUserController extends BaseAdminController

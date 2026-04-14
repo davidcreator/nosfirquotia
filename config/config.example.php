@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'name' => 'Aurea Quotia',
+    'name' => 'Nosfir Quotia',
     'timezone' => 'America/Sao_Paulo',
 
     // Troque entre 'local' e 'online'
@@ -23,7 +23,7 @@ return [
             ],
             'mail' => [
                 'enabled' => true,
-                'from_name' => 'Aurea Quotia',
+                'from_name' => 'Nosfir Quotia',
                 'from_email' => 'no-reply@localhost',
             ],
         ],
@@ -40,7 +40,7 @@ return [
             ],
             'mail' => [
                 'enabled' => true,
-                'from_name' => 'Aurea Quotia',
+                'from_name' => 'Nosfir Quotia',
                 'from_email' => 'no-reply@localhost',
             ],
         ],

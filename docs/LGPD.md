@@ -1,10 +1,10 @@
-# Documento LGPD - Aurea Quotia
+# Documento LGPD - Nosfir Quotia
 
 Ultima atualizacao: 03/04/2026
 
 ## 1. Objetivo
 
-Este documento estabelece as diretrizes de conformidade com a Lei Geral de Protecao de Dados Pessoais (LGPD - Lei no 13.709/2018) para o sistema Aurea Quotia, incluindo tratamento de dados de clientes e administradores.
+Este documento estabelece as diretrizes de conformidade com a Lei Geral de Protecao de Dados Pessoais (LGPD - Lei no 13.709/2018) para o sistema Nosfir Quotia, incluindo tratamento de dados de clientes e administradores.
 
 ## 2. Escopo
 
@@ -16,7 +16,7 @@ Aplica-se a:
 
 ## 3. Agentes de tratamento
 
-- Controlador: operacao responsavel pelo sistema Aurea Quotia.
+- Controlador: operacao responsavel pelo sistema Nosfir Quotia.
 - Operadores: terceiros contratados para suporte tecnico, hospedagem e envio de comunicacoes, quando aplicavel.
 - Encarregado (DPO): deve ser formalmente designado pelo controlador e divulgado em canal de atendimento ao titular.
 
@@ -79,7 +79,7 @@ Canal de atendimento deve viabilizar, quando aplicavel:
 
 ## 9. Seguranca da informacao (medidas tecnicas)
 
-No Aurea Quotia:
+No Nosfir Quotia:
 
 - controle de acesso por papeis e permissoes no admin;
 - conta Administrador Geral com governanca de acessos;

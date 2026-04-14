@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AureaQuotia\Admin\Controller;
+namespace NosfirQuotia\Admin\Controller;
 
-use AureaQuotia\System\Engine\Controller;
+use NosfirQuotia\System\Engine\Controller;
 
 abstract class BaseAdminController extends Controller
 {
