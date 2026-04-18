@@ -31,7 +31,7 @@ function bindReportEvents() {
     });
     document.getElementById('clearSavedBtn')?.addEventListener('click', clearSavedMockups);
     document.getElementById('backToEditorBtn')?.addEventListener('click', () => {
-        window.location.href = './index.php';
+        window.location.href = './editor.php';
     });
 
     document.addEventListener('copy', (event) => {

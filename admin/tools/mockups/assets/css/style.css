@@ -283,6 +283,272 @@ body {
     word-break: break-word;
 }
 
+/* Intake form acima dos mockups */
+body.aq-tool-mockups .work-intake {
+    margin-bottom: 2rem;
+    padding: 0;
+}
+
+body.aq-tool-mockups .work-intake-header {
+    text-align: center;
+    margin-bottom: 1.4rem;
+}
+
+body.aq-tool-mockups .work-intake-header h1 {
+    margin: 0;
+    color: #303062;
+    line-height: 1.1;
+    font-size: clamp(2.1rem, 4.2vw, 3.45rem);
+    letter-spacing: 0.1px;
+}
+
+body.aq-tool-mockups .work-intake-grid {
+    display: grid;
+    grid-template-columns: minmax(270px, 360px) minmax(0, 1fr);
+    gap: 2.2rem;
+    align-items: start;
+}
+
+body.aq-tool-mockups .work-intake-media {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+body.aq-tool-mockups .work-intake-preview-surface {
+    width: 100%;
+    border-radius: 0.2rem;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #d9dde8;
+}
+
+body.aq-tool-mockups .upload-preview-placeholder {
+    min-height: 235px;
+    border: 0;
+    border-radius: 0;
+    background: #f7f8fc;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: #64748b;
+}
+
+body.aq-tool-mockups .upload-preview-placeholder i {
+    font-size: 1.4rem;
+    color: #7182b0;
+}
+
+body.aq-tool-mockups .upload-preview.upload-preview-intake {
+    margin: 0;
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: #ffffff;
+    padding: 0;
+    gap: 0;
+}
+
+body.aq-tool-mockups .upload-preview.upload-preview-intake img {
+    width: 100%;
+    min-height: 235px;
+    max-height: 235px;
+    object-fit: cover;
+    border: 0;
+    border-radius: 0;
+}
+
+body.aq-tool-mockups .upload-preview.upload-preview-intake .upload-preview-meta {
+    padding: 0.55rem 0.65rem;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+body.aq-tool-mockups .upload-btn.upload-btn-intake {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.84rem 0.9rem;
+    border-radius: 0.4rem;
+    border: 1px solid #c5cbda;
+    color: #2e355d;
+    background: #ffffff;
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+body.aq-tool-mockups .upload-btn.upload-btn-intake:hover {
+    border-color: #aeb6cc;
+    background: #f8fafc;
+}
+
+body.aq-tool-mockups .upload-status.upload-status-intake {
+    margin-top: -0.1rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    opacity: 1;
+}
+
+body.aq-tool-mockups .upload-status.upload-status-intake.status-success {
+    color: #166534;
+}
+
+body.aq-tool-mockups .upload-status.upload-status-intake.status-error {
+    color: #b91c1c;
+}
+
+body.aq-tool-mockups .work-intake-color {
+    padding-top: 0.2rem;
+}
+
+body.aq-tool-mockups .work-intake-color h3 {
+    margin: 0 0 0.55rem;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+body.aq-tool-mockups .work-intake-help {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    background: #f8fafc;
+    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+body.aq-tool-mockups .work-intake-color-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.52rem;
+}
+
+body.aq-tool-mockups .work-intake-color-row input[type='color'] {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    padding: 0;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    cursor: pointer;
+}
+
+body.aq-tool-mockups .work-intake-color-row input[type='text'] {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    padding: 0.44rem 0.75rem;
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #fff;
+}
+
+body.aq-tool-mockups .work-intake-form-wrap {
+    width: 100%;
+}
+
+body.aq-tool-mockups .work-intake-form-tabs {
+    border-bottom: 1px solid #d1d5db;
+    margin-bottom: 1rem;
+}
+
+body.aq-tool-mockups .work-intake-tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #374151;
+    font-size: 1.55rem;
+    font-weight: 700;
+    padding: 0 0.55rem 0.5rem 0.55rem;
+    margin: 0;
+    border-bottom: 2px solid transparent;
+}
+
+body.aq-tool-mockups .work-intake-tab.is-active {
+    border-bottom-color: #ef4444;
+}
+
+body.aq-tool-mockups .work-intake-form {
+    display: grid;
+    gap: 1.35rem;
+}
+
+body.aq-tool-mockups .work-form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #1f3168;
+    font-size: 1.28rem;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+body.aq-tool-mockups .work-form-group p {
+    margin: 0 0 0.55rem;
+    color: #334155;
+    font-size: 1.03rem;
+    line-height: 1.45;
+}
+
+body.aq-tool-mockups .work-form-group input,
+body.aq-tool-mockups .work-form-group textarea {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.55rem;
+    background: #ffffff;
+    color: #1f2937;
+    font-size: 1rem;
+    line-height: 1.3;
+    padding: 0.72rem 0.86rem;
+}
+
+body.aq-tool-mockups .work-form-group textarea {
+    min-height: 84px;
+    resize: vertical;
+}
+
+body.aq-tool-mockups .work-form-group input:focus,
+body.aq-tool-mockups .work-form-group textarea:focus {
+    outline: none;
+    border-color: #8b95bb;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25);
+}
+
+@media (max-width: 990px) {
+    body.aq-tool-mockups .work-intake-grid {
+        grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+        gap: 1.2rem;
+    }
+
+    body.aq-tool-mockups .work-intake-tab {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 760px) {
+    body.aq-tool-mockups .work-intake-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.aq-tool-mockups .work-intake-media {
+        max-width: 360px;
+    }
+}
+
 /* ==========================================================================
    3. COMPONENTES DE INTERFACE
    ========================================================================== */
@@ -1436,5 +1702,326 @@ body {
 
     .report-card-media {
         min-height: 190px;
+    }
+}
+
+/* ==========================================================================
+   10. PAGINA DE RESULTADOS
+   ========================================================================== */
+
+body.mockup-results-page {
+    background: #f8fafc;
+}
+
+body.mockup-results-page .header .container {
+    gap: 0.8rem;
+}
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+}
+
+.results-hero {
+    display: grid;
+    grid-template-columns: minmax(280px, 460px) minmax(0, 1fr);
+    gap: 1.2rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.95rem;
+    padding: 1rem;
+    box-shadow: var(--shadow-light);
+}
+
+.results-hero-media {
+    border-radius: 0.65rem;
+    overflow: hidden;
+    border: 1px solid #dbe2ef;
+    min-height: 350px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
+}
+
+.results-hero-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    object-fit: contain;
+    object-position: center;
+    background: #f8fafc;
+}
+
+.results-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    justify-content: center;
+}
+
+.results-hero-content h1 {
+    margin: 0;
+    color: #1e1b4b;
+    font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+    line-height: 1.08;
+}
+
+.results-hero-byline {
+    margin: 0;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.results-hero-description {
+    margin: 0;
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    max-width: 72ch;
+}
+
+.results-hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.results-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.24rem 0.58rem;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.results-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.25rem;
+}
+
+.results-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.85rem;
+    padding: 0.85rem 0.9rem;
+}
+
+.results-tabs {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.results-tab {
+    appearance: none;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 0.42rem 0.72rem;
+    cursor: pointer;
+}
+
+.results-tab.is-active {
+    background: #eef2ff;
+    color: #312e81;
+    border-color: #a5b4fc;
+}
+
+.results-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.results-filters input,
+.results-filters select {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.55rem;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.65rem;
+    min-width: 200px;
+}
+
+.results-filters input:focus,
+.results-filters select:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18);
+}
+
+.results-status {
+    margin: 0;
+    color: #334155;
+    font-size: 0.82rem;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 0.9rem;
+}
+
+.results-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.78rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.results-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.results-favorite-btn {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.45rem;
+    z-index: 3;
+    width: 1.85rem;
+    height: 1.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #64748b;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.results-favorite-btn.is-active {
+    color: #dc2626;
+    border-color: #fca5a5;
+}
+
+.results-card-media {
+    width: 100%;
+    min-height: 188px;
+    max-height: 188px;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+.results-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.results-card-info {
+    padding: 0.62rem 0.68rem 0.72rem;
+}
+
+.results-card-info h3 {
+    margin: 0 0 0.2rem;
+    color: #1e3a8a;
+    font-size: 0.83rem;
+    line-height: 1.25;
+    min-height: 2.05em;
+}
+
+.results-card-meta {
+    margin: 0 0 0.28rem;
+    color: #64748b;
+    font-size: 0.74rem;
+}
+
+.results-card-price {
+    display: block;
+    color: #1d4ed8;
+    font-size: 0.96rem;
+    line-height: 1.15;
+}
+
+.results-card-old-price {
+    margin: 0.1rem 0 0.48rem;
+    color: #64748b;
+    font-size: 0.73rem;
+    text-decoration: line-through;
+}
+
+.results-download-btn {
+    appearance: none;
+    border: 1px solid #c7d2fe;
+    border-radius: 0.5rem;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 0.36rem 0.52rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.results-download-btn:hover {
+    background: #e0e7ff;
+}
+
+.results-empty {
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.82rem;
+    padding: 1rem;
+    text-align: center;
+    color: #475569;
+}
+
+.results-empty h3 {
+    margin: 0 0 0.35rem;
+    color: #0f172a;
+}
+
+@media (max-width: 1050px) {
+    .results-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .results-hero-media {
+        min-height: 300px;
+    }
+
+    .results-hero-media img {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 720px) {
+    .results-filters input,
+    .results-filters select {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    .results-grid {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 0.72rem;
+    }
+
+    .results-card-media {
+        min-height: 160px;
+        max-height: 160px;
     }
 }

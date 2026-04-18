@@ -5,7 +5,7 @@ declare(strict_types=1);
 return array (
   'name' => 'Nosfir Quotia',
   'timezone' => 'America/Sao_Paulo',
-  'environment' => 'local',
+  'environment' => 'online',
   'environments' => 
   array (
     'online' => 
@@ -16,9 +16,9 @@ return array (
         'driver' => 'mysql',
         'host' => 'localhost',
         'port' => 3306,
-        'database' => 'u163008030_quotia',
-        'username' => 'u163008030_nosfirquotia',
-        'password' => 'kP7%Tn)+99r,Ktb',
+        'database' => 'nosfirquotia',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8mb4',
       ),
       'mail' => 
@@ -34,9 +34,9 @@ return array (
       'db' => 
       array (
         'driver' => 'mysql',
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => 3306,
-        'database' => 'nosfir_quotia',
+        'database' => 'nosfir_quatia',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8mb4',

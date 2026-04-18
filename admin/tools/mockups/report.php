@@ -1,6 +1,11 @@
 <?php
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
+
+$mockupStylePath = __DIR__ . '/assets/css/style.css';
+$mockupStyleVersion = is_file($mockupStylePath) ? (string) filemtime($mockupStylePath) : '1';
+$reportJsPath = __DIR__ . '/assets/js/report.js';
+$reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : '1';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -9,7 +14,7 @@ require_once 'includes/functions.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MockupHub - Relatorio de Orcamento</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css?v=<?php echo htmlspecialchars($mockupStyleVersion, ENT_QUOTES, 'UTF-8'); ?>">
     <link rel="stylesheet" href="../compatibility.css">
 </head>
 <body class="aq-tool-fluid aq-tool-mockups mockup-report-page">
@@ -119,6 +124,6 @@ require_once 'includes/functions.php';
     </main>
 
     <script src="../shared/brand-kit.js"></script>
-    <script src="./assets/js/report.js"></script>
+    <script src="./assets/js/report.js?v=<?php echo htmlspecialchars($reportJsVersion, ENT_QUOTES, 'UTF-8'); ?>"></script>
 </body>
 </html>

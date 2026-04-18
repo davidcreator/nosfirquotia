@@ -191,7 +191,7 @@ const DEFAULT_EDITOR_STATE = {
     positionX: 50,
     positionY: 50,
     scale: 1,
-    imageLayoutMode: 'cover',
+    imageLayoutMode: 'fit-fill',
     rotation: 0,
     opacity: 1,
     shadow: 12,
@@ -202,6 +202,7 @@ const DEFAULT_EDITOR_STATE = {
     backgroundPreset: 'studio',
     bgColorStart: '#dbeafe',
     bgColorEnd: '#fee2e2',
+    mockupProductColor: '#ffffff',
     showGuides: true,
     textEnabled: true,
     textPrimary: '',
@@ -231,7 +232,16 @@ const MAX_WORKING_IMAGE_DIMENSION = 8192;
 const SAVED_EDITS_STORAGE_KEY = 'mockuphub_saved_edits_v1';
 const MAX_SAVED_EDITS = 120;
 const REPORT_PAGE_URL = './report.php';
+const RESULTS_PAGE_URL = './results.php';
 const BRAND_SYNC_FONTS = ['montserrat', 'poppins', 'lora', 'bebas', 'playfair'];
+const WORK_INFO_STORAGE_KEY = 'mockuphub_work_info_v1';
+const UPLOAD_VALIDATION_SESSION_KEY = 'mockuphub_upload_validation_v1';
+const UPLOAD_BRIDGE_SESSION_KEY = 'mockuphub_upload_bridge_dataurl_v1';
+const UPLOAD_BRIDGE_DB_NAME = 'mockuphub_upload_bridge_db';
+const UPLOAD_BRIDGE_STORE_NAME = 'artwork';
+const UPLOAD_BRIDGE_KEY = 'latest_artwork';
+const UPLOAD_BRIDGE_ENDPOINT = './upload-bridge.php';
+const EDITOR_STATE_BY_MOCKUP_STORAGE_KEY = 'mockuphub_editor_state_by_mockup_v1';
 
 const mockupsData = buildMockupCatalog();
 const allMockups = Object.values(mockupsData).flat();
@@ -241,36 +251,47 @@ let currentMockups = [];
 let filteredMockups = [];
 let renderedCount = 0;
 let selectedMockup = null;
+let pendingPreviewMockupId = null;
 let uploadedImage = null;
 let uploadedImageFileMeta = null;
 let uploadedLogo = null;
 let canvas = null;
 let ctx = null;
 let editorState = { ...DEFAULT_EDITOR_STATE };
+let editorStateByMockup = {};
 let favoritesOnly = false;
 let collectionFilterKey = 'all';
 let listObserver = null;
 let libraryState = createDefaultLibraryState();
 let editorSaveTimer = null;
+let thumbnailRefreshTimer = null;
 let editorDockHome = null;
 let hasPersistedEditorState = false;
+let workInfoState = createDefaultWorkInfoState();
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadLibraryState();
     loadEditorState();
+    loadEditorStateByMockup();
+    loadWorkInfoState();
     applySharedBrandDefaults();
     initializeApp();
     bindEvents();
+    initializeWorkIntakeForm();
     decorateCategoryButtons();
     refreshCollectionSelectors();
     loadMockups();
     renderCanvas();
+    await restoreUploadFromBridge();
 });
 
 window.addEventListener('beforeunload', () => {
     saveUserSettings();
     saveLibraryState();
+    persistSelectedMockupEditorState();
     saveEditorState();
+    saveEditorStateByMockup();
+    saveWorkInfoState();
 });
 
 function initializeApp() {
@@ -359,6 +380,7 @@ function bindEvents() {
         'backgroundPreset',
         'bgColorStart',
         'bgColorEnd',
+        'mockupProductColor',
         'showGuides',
         'positionX',
         'positionY',
@@ -641,10 +663,12 @@ function updateCatalogHighlights(currentCount, baseCount) {
 
 function getMockupThumbSrc(mockup) {
     if (uploadedImage) {
+        const previewState = getPreviewEditorStateForMockup(mockup);
         const composed = buildMockupPreviewDataUrl(mockup, 640, 420, {
             showGuides: false,
             includeText: false,
-            includeLogo: false
+            includeLogo: false,
+            editorStateOverride: previewState
         });
         if (composed) {
             return composed;
@@ -674,6 +698,21 @@ function refreshVisibleMockupThumbnails() {
 
         thumb.src = getMockupThumbSrc(mockup);
     });
+}
+
+function scheduleVisibleMockupThumbnailsRefresh(delayMs = 160) {
+    if (!uploadedImage) {
+        return;
+    }
+
+    if (thumbnailRefreshTimer) {
+        clearTimeout(thumbnailRefreshTimer);
+    }
+
+    thumbnailRefreshTimer = window.setTimeout(() => {
+        refreshVisibleMockupThumbnails();
+        thumbnailRefreshTimer = null;
+    }, Math.max(0, Number(delayMs) || 0));
 }
 
 function decorateCategoryButtons() {
@@ -934,7 +973,7 @@ function saveLibraryState() {
 
 function loadEditorState() {
     if (typeof localStorage === 'undefined') {
-        editorState = { ...DEFAULT_EDITOR_STATE };
+        editorState = normalizeEditorStateSnapshot(DEFAULT_EDITOR_STATE);
         hasPersistedEditorState = false;
         return;
     }
@@ -942,19 +981,16 @@ function loadEditorState() {
     try {
         const raw = localStorage.getItem(EDITOR_STORAGE_KEY);
         if (!raw) {
-            editorState = { ...DEFAULT_EDITOR_STATE };
+            editorState = normalizeEditorStateSnapshot(DEFAULT_EDITOR_STATE);
             hasPersistedEditorState = false;
             return;
         }
 
         const parsed = JSON.parse(raw);
-        editorState = {
-            ...DEFAULT_EDITOR_STATE,
-            ...parsed
-        };
+        editorState = normalizeEditorStateSnapshot(parsed);
         hasPersistedEditorState = true;
     } catch (error) {
-        editorState = { ...DEFAULT_EDITOR_STATE };
+        editorState = normalizeEditorStateSnapshot(DEFAULT_EDITOR_STATE);
         hasPersistedEditorState = false;
     }
 }
@@ -969,6 +1005,650 @@ function saveEditorState() {
     } catch (error) {
         // Ignora falhas de quota ou privacidade.
     }
+}
+
+function normalizeEditorStateSnapshot(snapshot) {
+    const normalized = {
+        ...DEFAULT_EDITOR_STATE,
+        ...(snapshot && typeof snapshot === 'object' ? snapshot : {})
+    };
+
+    normalized.canvasPreset = CANVAS_PRESETS[normalized.canvasPreset]
+        ? normalized.canvasPreset
+        : DEFAULT_EDITOR_STATE.canvasPreset;
+    normalized.backgroundPreset = String(normalized.backgroundPreset || DEFAULT_EDITOR_STATE.backgroundPreset);
+    normalized.bgColorStart = normalizeHexColor(normalized.bgColorStart, DEFAULT_EDITOR_STATE.bgColorStart).toLowerCase();
+    normalized.bgColorEnd = normalizeHexColor(normalized.bgColorEnd, DEFAULT_EDITOR_STATE.bgColorEnd).toLowerCase();
+    normalized.mockupProductColor = normalizeHexColor(
+        normalized.mockupProductColor,
+        DEFAULT_EDITOR_STATE.mockupProductColor
+    ).toLowerCase();
+
+    normalized.positionX = clampNumber(normalized.positionX, 0, 100);
+    normalized.positionY = clampNumber(normalized.positionY, 0, 100);
+    normalized.scale = Math.max(0.05, Number(normalized.scale) || DEFAULT_EDITOR_STATE.scale);
+    normalized.imageLayoutMode = resolveLayoutMode(normalized.imageLayoutMode);
+    if (normalized.imageLayoutMode === 'fit-fill' && normalized.scale > 1) {
+        normalized.scale = 1;
+    }
+    normalized.rotation = clampNumber(normalized.rotation, -180, 180);
+    normalized.opacity = clampNumber(normalized.opacity, 0.2, 1);
+    normalized.shadow = clampNumber(normalized.shadow, 0, 40);
+    normalized.radius = clampNumber(normalized.radius, 0, 48);
+    normalized.filter = String(normalized.filter || DEFAULT_EDITOR_STATE.filter);
+    normalized.showGuides = Boolean(normalized.showGuides);
+    normalized.flipHorizontal = Boolean(normalized.flipHorizontal);
+    normalized.flipVertical = Boolean(normalized.flipVertical);
+
+    normalized.textEnabled = Boolean(normalized.textEnabled);
+    normalized.textPrimary = String(normalized.textPrimary || '').slice(0, 120);
+    normalized.textSecondary = String(normalized.textSecondary || '').slice(0, 160);
+    normalized.textFont = String(normalized.textFont || DEFAULT_EDITOR_STATE.textFont);
+    normalized.textAlign = String(normalized.textAlign || DEFAULT_EDITOR_STATE.textAlign);
+    normalized.textColor = normalizeHexColor(normalized.textColor, DEFAULT_EDITOR_STATE.textColor).toLowerCase();
+    normalized.textSize = clampNumber(normalized.textSize, 22, 96);
+    normalized.textPositionX = clampNumber(normalized.textPositionX, 0, 100);
+    normalized.textPositionY = clampNumber(normalized.textPositionY, 0, 100);
+
+    normalized.logoScale = clampNumber(normalized.logoScale, 0.1, 1.8);
+    normalized.logoOpacity = clampNumber(normalized.logoOpacity, 0.1, 1);
+    normalized.logoPositionX = clampNumber(normalized.logoPositionX, 0, 100);
+    normalized.logoPositionY = clampNumber(normalized.logoPositionY, 0, 100);
+
+    normalized.exportFormat = String(normalized.exportFormat || DEFAULT_EDITOR_STATE.exportFormat);
+    normalized.exportQuality = clampNumber(normalized.exportQuality, 55, 100);
+    normalized.exportScale = Math.max(1, Math.min(2, Number(normalized.exportScale) || DEFAULT_EDITOR_STATE.exportScale));
+
+    return normalized;
+}
+
+function createInitialEditorStateForMockup(mockup) {
+    const initial = normalizeEditorStateSnapshot({
+        ...DEFAULT_EDITOR_STATE,
+        backgroundPreset: editorState.backgroundPreset || DEFAULT_EDITOR_STATE.backgroundPreset,
+        bgColorStart: editorState.bgColorStart || DEFAULT_EDITOR_STATE.bgColorStart,
+        bgColorEnd: editorState.bgColorEnd || DEFAULT_EDITOR_STATE.bgColorEnd,
+        mockupProductColor: editorState.mockupProductColor || workInfoState.productColor || DEFAULT_EDITOR_STATE.mockupProductColor,
+        textFont: editorState.textFont || DEFAULT_EDITOR_STATE.textFont,
+        textColor: editorState.textColor || DEFAULT_EDITOR_STATE.textColor,
+        textEnabled: editorState.textEnabled,
+        showGuides: editorState.showGuides,
+        exportFormat: editorState.exportFormat || DEFAULT_EDITOR_STATE.exportFormat,
+        exportQuality: editorState.exportQuality || DEFAULT_EDITOR_STATE.exportQuality,
+        exportScale: editorState.exportScale || DEFAULT_EDITOR_STATE.exportScale
+    });
+
+    if (mockup) {
+        initial.textPrimary = mockup.title;
+        initial.textSecondary = `${getCategoryLabel(mockup.category)} | ${mockup.orientation}`;
+    }
+
+    return initial;
+}
+
+function loadEditorStateByMockup() {
+    if (typeof localStorage === 'undefined') {
+        editorStateByMockup = {};
+        return;
+    }
+
+    try {
+        const raw = localStorage.getItem(EDITOR_STATE_BY_MOCKUP_STORAGE_KEY);
+        if (!raw) {
+            editorStateByMockup = {};
+            return;
+        }
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') {
+            editorStateByMockup = {};
+            return;
+        }
+
+        const next = {};
+        Object.keys(parsed).forEach((key) => {
+            const id = Number(key);
+            if (!Number.isFinite(id)) {
+                return;
+            }
+            next[String(id)] = normalizeEditorStateSnapshot(parsed[key]);
+        });
+        editorStateByMockup = next;
+    } catch (error) {
+        editorStateByMockup = {};
+    }
+}
+
+function saveEditorStateByMockup() {
+    if (typeof localStorage === 'undefined') {
+        return;
+    }
+
+    try {
+        localStorage.setItem(EDITOR_STATE_BY_MOCKUP_STORAGE_KEY, JSON.stringify(editorStateByMockup));
+    } catch (error) {
+        // Ignora falhas de quota ou privacidade.
+    }
+}
+
+function persistSelectedMockupEditorState() {
+    const mockupId = Number(selectedMockup?.id);
+    if (!Number.isFinite(mockupId)) {
+        return;
+    }
+
+    editorStateByMockup[String(mockupId)] = normalizeEditorStateSnapshot(editorState);
+}
+
+function resolveEditorStateForMockup(mockup, options = {}) {
+    if (!mockup || !Number.isFinite(Number(mockup.id))) {
+        return normalizeEditorStateSnapshot(editorState);
+    }
+
+    const key = String(Number(mockup.id));
+    const stored = editorStateByMockup[key];
+    if (stored && typeof stored === 'object') {
+        return normalizeEditorStateSnapshot(stored);
+    }
+
+    const initial = createInitialEditorStateForMockup(mockup);
+    if (options.persistIfMissing) {
+        editorStateByMockup[key] = initial;
+        if (options.saveNow) {
+            saveEditorStateByMockup();
+        }
+    }
+    return initial;
+}
+
+function getPreviewEditorStateForMockup(mockup) {
+    if (!mockup) {
+        return normalizeEditorStateSnapshot(editorState);
+    }
+
+    const selectedId = Number(selectedMockup?.id);
+    const mockupId = Number(mockup.id);
+    if (Number.isFinite(selectedId) && selectedId === mockupId) {
+        return normalizeEditorStateSnapshot(editorState);
+    }
+
+    return resolveEditorStateForMockup(mockup, { persistIfMissing: false });
+}
+
+function createDefaultWorkInfoState() {
+    return {
+        title: '',
+        mainTag: '',
+        supportingTags: '',
+        description: '',
+        backgroundColor: '#FFFFFF',
+        productColor: '#FFFFFF'
+    };
+}
+
+function loadWorkInfoState() {
+    const fallback = createDefaultWorkInfoState();
+    if (typeof localStorage === 'undefined') {
+        workInfoState = fallback;
+        return;
+    }
+
+    try {
+        const raw = localStorage.getItem(WORK_INFO_STORAGE_KEY);
+        if (!raw) {
+            workInfoState = fallback;
+            return;
+        }
+
+        const parsed = JSON.parse(raw);
+        const resolvedProductColor = normalizeHexColor(
+            parsed.productColor || parsed.backgroundColor,
+            '#FFFFFF'
+        );
+        workInfoState = {
+            title: String(parsed.title || '').slice(0, 120),
+            mainTag: String(parsed.mainTag || '').slice(0, 50),
+            supportingTags: String(parsed.supportingTags || '').slice(0, 900),
+            description: String(parsed.description || '').slice(0, 1600),
+            backgroundColor: resolvedProductColor,
+            productColor: resolvedProductColor
+        };
+    } catch (error) {
+        workInfoState = fallback;
+    }
+}
+
+function saveWorkInfoState() {
+    if (typeof localStorage === 'undefined') {
+        return;
+    }
+
+    try {
+        localStorage.setItem(WORK_INFO_STORAGE_KEY, JSON.stringify(workInfoState));
+    } catch (error) {
+        // Ignora falhas de quota.
+    }
+}
+
+function initializeWorkIntakeForm() {
+    const titleInput = document.getElementById('workTitleInput');
+    const mainTagInput = document.getElementById('workMainTagInput');
+    const supportingTagsInput = document.getElementById('workSupportingTagsInput');
+    const descriptionInput = document.getElementById('workDescriptionInput');
+    const colorInput = document.getElementById('workBackgroundColor');
+    const hexInput = document.getElementById('workBackgroundHex');
+
+    if (!titleInput && !mainTagInput && !supportingTagsInput && !descriptionInput && !colorInput && !hexInput) {
+        return;
+    }
+
+    if (titleInput) {
+        titleInput.value = workInfoState.title;
+        titleInput.addEventListener('input', () => {
+            workInfoState.title = String(titleInput.value || '').slice(0, 120);
+            saveWorkInfoState();
+        });
+    }
+
+    if (mainTagInput) {
+        mainTagInput.value = workInfoState.mainTag;
+        mainTagInput.addEventListener('input', () => {
+            workInfoState.mainTag = String(mainTagInput.value || '').slice(0, 50);
+            saveWorkInfoState();
+        });
+    }
+
+    if (supportingTagsInput) {
+        supportingTagsInput.value = workInfoState.supportingTags;
+        supportingTagsInput.addEventListener('input', () => {
+            workInfoState.supportingTags = String(supportingTagsInput.value || '').slice(0, 900);
+            saveWorkInfoState();
+        });
+    }
+
+    if (descriptionInput) {
+        descriptionInput.value = workInfoState.description;
+        descriptionInput.addEventListener('input', () => {
+            workInfoState.description = String(descriptionInput.value || '').slice(0, 1600);
+            saveWorkInfoState();
+        });
+    }
+
+    if (colorInput) {
+        colorInput.value = normalizeHexColor(workInfoState.backgroundColor, '#FFFFFF').toLowerCase();
+        colorInput.addEventListener('input', () => {
+            const normalized = normalizeHexColor(colorInput.value, workInfoState.backgroundColor);
+            workInfoState.backgroundColor = normalized;
+            if (hexInput) {
+                hexInput.value = normalized.toUpperCase();
+            }
+            applyWorkBackgroundColorToEditor(normalized);
+            saveWorkInfoState();
+        });
+    }
+
+    if (hexInput) {
+        hexInput.value = normalizeHexColor(workInfoState.backgroundColor, '#FFFFFF').toUpperCase();
+        hexInput.addEventListener('input', () => {
+            const value = String(hexInput.value || '').toUpperCase();
+            hexInput.value = value.slice(0, 7);
+        });
+        hexInput.addEventListener('blur', () => {
+            const normalized = normalizeHexColor(hexInput.value, workInfoState.backgroundColor);
+            workInfoState.backgroundColor = normalized;
+            hexInput.value = normalized.toUpperCase();
+            if (colorInput) {
+                colorInput.value = normalized.toLowerCase();
+            }
+            applyWorkBackgroundColorToEditor(normalized);
+            saveWorkInfoState();
+        });
+    }
+
+    const normalizedColor = normalizeHexColor(workInfoState.backgroundColor, '#FFFFFF');
+    workInfoState.backgroundColor = normalizedColor;
+    workInfoState.productColor = normalizedColor;
+    applyWorkBackgroundColorToEditor(normalizedColor);
+}
+
+function syncWorkTitleFromFileName(fileName) {
+    const titleInput = document.getElementById('workTitleInput');
+    if (!titleInput || String(titleInput.value || '').trim()) {
+        return;
+    }
+
+    const cleaned = String(fileName || '')
+        .replace(/\.[^/.]+$/, '')
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    if (!cleaned) {
+        return;
+    }
+
+    titleInput.value = cleaned.slice(0, 120);
+    workInfoState.title = titleInput.value;
+    saveWorkInfoState();
+}
+
+function applyWorkBackgroundColorToEditor(hexColor) {
+    const normalized = normalizeHexColor(hexColor, '#FFFFFF').toLowerCase();
+
+    workInfoState.backgroundColor = normalized.toUpperCase();
+    workInfoState.productColor = normalized.toUpperCase();
+
+    const productColorControl = document.getElementById('mockupProductColor');
+    if (productColorControl) {
+        productColorControl.value = normalized;
+    }
+
+    editorState.mockupProductColor = normalized;
+    scheduleEditorStateSave();
+    renderCanvas();
+    scheduleVisibleMockupThumbnailsRefresh(80);
+}
+
+function normalizeHexColor(rawValue, fallback = '#FFFFFF') {
+    const value = String(rawValue || '').trim().replace(/[^#0-9a-fA-F]/g, '');
+    if (/^#[0-9a-fA-F]{6}$/.test(value)) {
+        return value.toUpperCase();
+    }
+    if (/^[0-9a-fA-F]{6}$/.test(value)) {
+        return `#${value.toUpperCase()}`;
+    }
+    return String(fallback || '#FFFFFF').toUpperCase();
+}
+
+function openUploadBridgeDb() {
+    if (typeof indexedDB === 'undefined') {
+        return Promise.resolve(null);
+    }
+
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(UPLOAD_BRIDGE_DB_NAME, 1);
+        request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains(UPLOAD_BRIDGE_STORE_NAME)) {
+                db.createObjectStore(UPLOAD_BRIDGE_STORE_NAME);
+            }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('upload_bridge_open_failed'));
+    });
+}
+
+async function runUploadBridgeTx(mode, operation) {
+    const db = await openUploadBridgeDb();
+    if (!db) {
+        return null;
+    }
+
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(UPLOAD_BRIDGE_STORE_NAME, mode);
+        const store = tx.objectStore(UPLOAD_BRIDGE_STORE_NAME);
+        let request = null;
+        let result = null;
+
+        try {
+            request = operation(store) || null;
+        } catch (error) {
+            db.close();
+            reject(error);
+            return;
+        }
+
+        if (request) {
+            request.onsuccess = () => {
+                result = request.result;
+            };
+        }
+
+        tx.oncomplete = () => {
+            db.close();
+            resolve(result);
+        };
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error || new Error('upload_bridge_tx_failed'));
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error || new Error('upload_bridge_tx_aborted'));
+        };
+    });
+}
+
+async function persistUploadToBridge(file) {
+    if (!(file instanceof Blob)) {
+        return false;
+    }
+
+    const payload = {
+        blob: file,
+        name: String(file.name || 'arte.png'),
+        type: String(file.type || inferMimeFromExtension(file.name || 'arte.png')),
+        lastModified: Number(file.lastModified || Date.now())
+    };
+
+    try {
+        await runUploadBridgeTx('readwrite', (store) => store.put(payload, UPLOAD_BRIDGE_KEY));
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+async function readUploadFromBridge() {
+    try {
+        const payload = await runUploadBridgeTx('readonly', (store) => store.get(UPLOAD_BRIDGE_KEY));
+        if (!payload || !(payload.blob instanceof Blob)) {
+            return null;
+        }
+
+        const fileName = sanitizeFileName(payload.name || 'arte.png');
+        const fileType = String(payload.type || payload.blob.type || 'image/png');
+        const lastModified = Number(payload.lastModified || Date.now());
+        return createFileLike(payload.blob, fileName, fileType, lastModified);
+    } catch (error) {
+        return null;
+    }
+}
+
+async function readUploadFromSessionBridge() {
+    try {
+        const raw = sessionStorage.getItem(UPLOAD_BRIDGE_SESSION_KEY);
+        if (!raw) {
+            return null;
+        }
+
+        const payload = JSON.parse(raw);
+        if (!payload || typeof payload.dataUrl !== 'string' || !payload.dataUrl.startsWith('data:image/')) {
+            return null;
+        }
+
+        const response = await fetch(payload.dataUrl);
+        const blob = await response.blob();
+        const fileName = sanitizeFileName(payload.name || 'arte.png');
+        const fileType = String(payload.type || blob.type || 'image/png');
+        const lastModified = Number(payload.lastModified || Date.now());
+        return createFileLike(blob, fileName, fileType, lastModified);
+    } catch (error) {
+        return null;
+    }
+}
+
+async function readUploadFromServerBridge() {
+    try {
+        const response = await fetch(`${UPLOAD_BRIDGE_ENDPOINT}?action=read`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const metadata = await response.json();
+        if (!metadata || !metadata.ok || typeof metadata.streamUrl !== 'string') {
+            return null;
+        }
+
+        const streamResponse = await fetch(metadata.streamUrl, {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+        });
+
+        if (!streamResponse.ok) {
+            return null;
+        }
+
+        const blob = await streamResponse.blob();
+        const fileName = sanitizeFileName(metadata.name || 'arte.png');
+        const fileType = String(metadata.type || blob.type || 'image/png');
+        const lastModified = Number(metadata.lastModified || Date.now());
+        return createFileLike(blob, fileName, fileType, lastModified);
+    } catch (error) {
+        return null;
+    }
+}
+
+function createFileLike(blob, fileName, fileType, lastModified) {
+    const safeName = sanitizeFileName(fileName || 'arte.png');
+    const safeType = String(fileType || blob?.type || inferMimeFromExtension(safeName));
+    const safeLastModified = Number(lastModified || Date.now());
+
+    if (typeof File !== 'undefined') {
+        try {
+            return new File([blob], safeName, { type: safeType, lastModified: safeLastModified });
+        } catch (error) {
+            // fallback para navegadores com restricao no construtor File.
+        }
+    }
+
+    const fallbackBlob = blob instanceof Blob ? blob.slice(0, blob.size, safeType) : new Blob([blob], { type: safeType });
+    try {
+        Object.defineProperty(fallbackBlob, 'name', { value: safeName, configurable: true });
+    } catch (error) {
+        fallbackBlob.name = safeName;
+    }
+    try {
+        Object.defineProperty(fallbackBlob, 'lastModified', { value: safeLastModified, configurable: true });
+    } catch (error) {
+        fallbackBlob.lastModified = safeLastModified;
+    }
+    return fallbackBlob;
+}
+
+async function clearUploadBridge() {
+    try {
+        await runUploadBridgeTx('readwrite', (store) => store.delete(UPLOAD_BRIDGE_KEY));
+    } catch (error) {
+        // Nada a fazer.
+    }
+
+    try {
+        sessionStorage.removeItem(UPLOAD_BRIDGE_SESSION_KEY);
+    } catch (error) {
+        // Nada a fazer.
+    }
+
+    try {
+        await fetch(`${UPLOAD_BRIDGE_ENDPOINT}?action=clear`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store'
+        });
+    } catch (error) {
+        // Nada a fazer.
+    }
+}
+
+async function restoreUploadFromBridge() {
+    const bridgeReaders = [
+        readUploadFromBridge,
+        readUploadFromSessionBridge,
+        readUploadFromServerBridge
+    ];
+
+    const expectsInitialUpload = hasPendingInitialUploadValidation();
+    const maxAttempts = expectsInitialUpload ? 4 : 2;
+    let restored = false;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        for (const readFromBridge of bridgeReaders) {
+            let bridgedFile = null;
+            try {
+                bridgedFile = await readFromBridge();
+            } catch (error) {
+                bridgedFile = null;
+            }
+
+            if (!bridgedFile) {
+                continue;
+            }
+
+            const applied = await processUploadedArtworkFile(bridgedFile, {
+                persistToBridge: false,
+                preserveScroll: false,
+                skipFormatValidation: true
+            });
+
+            if (applied) {
+                restored = true;
+                break;
+            }
+        }
+
+        if (restored) {
+            break;
+        }
+
+        if (attempt < maxAttempts - 1) {
+            await waitMilliseconds(220 + (attempt * 180));
+        }
+    }
+
+    if (!restored) {
+        if (expectsInitialUpload) {
+            updateUploadFeedback({
+                status: 'error',
+                message: 'A imagem validada nao foi restaurada automaticamente. Clique em "Trocar imagem" para reenviar.'
+            });
+        }
+        try {
+            sessionStorage.removeItem(UPLOAD_VALIDATION_SESSION_KEY);
+        } catch (error) {
+            // ignora falha de storage
+        }
+        return;
+    }
+
+    await clearUploadBridge();
+
+    try {
+        sessionStorage.removeItem(UPLOAD_VALIDATION_SESSION_KEY);
+    } catch (error) {
+        // ignora falha de storage
+    }
+}
+
+function hasPendingInitialUploadValidation() {
+    try {
+        const raw = sessionStorage.getItem(UPLOAD_VALIDATION_SESSION_KEY);
+        return Boolean(raw);
+    } catch (error) {
+        return false;
+    }
+}
+
+function waitMilliseconds(duration) {
+    const waitFor = Math.max(0, Number(duration) || 0);
+    return new Promise((resolve) => {
+        window.setTimeout(resolve, waitFor);
+    });
 }
 
 function getBrandKitApi() {
@@ -1051,11 +1731,14 @@ function applyBrandKitToEditor(options = {}) {
 
     editorState.bgColorStart = primary;
     editorState.bgColorEnd = secondary;
+    editorState.mockupProductColor = primary;
     editorState.textColor = resolveReadableTextColor(neutral, accent);
     editorState.textFont = fontKey;
     applyEditorStateToControls();
     updateEditorMeta();
+    persistSelectedMockupEditorState();
     saveEditorState();
+    saveEditorStateByMockup();
     renderCanvas();
 
     if (notify) {
@@ -1072,13 +1755,14 @@ function syncBrandKitFromEditorState() {
     }
 
     const paletteColors = api.uniqueColors([
+        editorState.mockupProductColor,
         editorState.bgColorStart,
         editorState.bgColorEnd,
         editorState.textColor
     ]);
 
     api.syncColorPalette({
-        baseColor: editorState.bgColorStart,
+        baseColor: editorState.mockupProductColor || editorState.bgColorStart,
         type: 'mockup-editor',
         title: 'Paleta aplicada no editor de mockups',
         description: 'Cores utilizadas na composicao de mockups.',
@@ -1106,22 +1790,25 @@ function slugify(value) {
 }
 
 function previewMockup(id) {
-    selectedMockup = findMockupById(id);
-    if (!selectedMockup) {
+    const previewTarget = findMockupById(id);
+    if (!previewTarget) {
         return;
     }
+    pendingPreviewMockupId = previewTarget.id;
 
     const previewImage = document.getElementById('previewImage');
     if (previewImage) {
+        const previewState = resolveEditorStateForMockup(previewTarget, { persistIfMissing: false });
         if (uploadedImage) {
-            const composedPreview = buildMockupPreviewDataUrl(selectedMockup, 1080, 720, {
+            const composedPreview = buildMockupPreviewDataUrl(previewTarget, 1080, 720, {
                 showGuides: false,
                 includeText: true,
-                includeLogo: true
+                includeLogo: true,
+                editorStateOverride: previewState
             });
-            previewImage.src = composedPreview || `data:image/svg+xml;charset=utf-8,${encodeURIComponent(generatePreviewSvg(selectedMockup))}`;
+            previewImage.src = composedPreview || `data:image/svg+xml;charset=utf-8,${encodeURIComponent(generatePreviewSvg(previewTarget))}`;
         } else {
-            previewImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(generatePreviewSvg(selectedMockup))}`;
+            previewImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(generatePreviewSvg(previewTarget))}`;
         }
     }
 
@@ -1136,6 +1823,16 @@ function closeModal() {
     if (modal) {
         modal.style.display = 'none';
     }
+}
+
+function usePreviewedMockup() {
+    const targetId = Number(pendingPreviewMockupId);
+    if (!Number.isFinite(targetId)) {
+        closeModal();
+        return;
+    }
+
+    selectMockup(targetId);
 }
 
 function getEditorInlineAnchor() {
@@ -1221,10 +1918,21 @@ function repositionOpenEditor() {
 }
 
 function selectMockup(id = null) {
+    const previousMockupId = Number(selectedMockup?.id);
+    if (Number.isFinite(previousMockupId)) {
+        persistSelectedMockupEditorState();
+    }
+
     selectedMockup = id ? findMockupById(id) : selectedMockup;
     if (!selectedMockup) {
         return;
     }
+    pendingPreviewMockupId = selectedMockup.id;
+
+    editorState = resolveEditorStateForMockup(selectedMockup, {
+        persistIfMissing: true,
+        saveNow: false
+    });
 
     closeModal();
     const editor = document.getElementById('editorSection');
@@ -1241,13 +1949,6 @@ function selectMockup(id = null) {
     if (title) {
         title.textContent = selectedMockup.title;
     }
-
-    if (!editorState.textPrimary) {
-        editorState.textPrimary = selectedMockup.title;
-    }
-    if (!editorState.textSecondary) {
-        editorState.textSecondary = `${getCategoryLabel(selectedMockup.category)} | ${selectedMockup.orientation}`;
-    }
     updateEditorMeta();
     applyEditorStateToControls();
 
@@ -1258,11 +1959,17 @@ function selectMockup(id = null) {
             : 'Faca upload de uma imagem para aplicar no mockup selecionado.';
     }
 
+    persistSelectedMockupEditorState();
     saveEditorState();
+    saveEditorStateByMockup();
     renderCanvas();
 }
 
 function closeEditor() {
+    persistSelectedMockupEditorState();
+    saveEditorState();
+    saveEditorStateByMockup();
+
     const editor = document.getElementById('editorSection');
     if (editor) {
         editor.style.display = 'none';
@@ -1278,22 +1985,42 @@ async function handleFileUpload(event) {
         return;
     }
 
+    await processUploadedArtworkFile(file, {
+        persistToBridge: true,
+        preserveScroll: true
+    });
+
+    if (event.target) {
+        event.target.value = '';
+    }
+}
+
+async function processUploadedArtworkFile(file, options = {}) {
+    if (!file) {
+        return false;
+    }
+
+    const persistToBridge = options.persistToBridge !== false;
+    const preserveScroll = options.preserveScroll !== false;
+    const skipFormatValidation = options.skipFormatValidation === true;
     const scrollPositionBeforeUpload = window.scrollY || window.pageYOffset || 0;
 
-    if (!isSupportedUploadFile(file)) {
+    if (!skipFormatValidation && !isSupportedUploadFile(file)) {
         updateUploadFeedback({
             status: 'error',
             message: 'Formato nao suportado. Envie PNG, JPEG ou SVG.'
         });
-        event.target.value = '';
-        return;
+        return false;
     }
 
     try {
-        const [image, previewSrc] = await Promise.all([
-            loadArtworkImage(file),
-            createPreviewDataUrl(file)
-        ]);
+        const image = await loadArtworkImage(file);
+        let previewSrc = '';
+        try {
+            previewSrc = await createPreviewDataUrl(file);
+        } catch (previewError) {
+            previewSrc = createPreviewDataUrlFromSource(image);
+        }
 
         uploadedImage = image;
         uploadedImageFileMeta = {
@@ -1303,6 +2030,11 @@ async function handleFileUpload(event) {
         };
 
         applySmartFitDefaultsForUpload();
+        syncWorkTitleFromFileName(file.name);
+
+        if (persistToBridge) {
+            await persistUploadToBridge(file);
+        }
 
         const sourceSize = resolveSourceImageSize(image, { preferOriginal: true });
         const width = sourceSize.width;
@@ -1315,6 +2047,7 @@ async function handleFileUpload(event) {
         const optimizationInfo = wasOptimized
             ? ` | Otimizada para edicao: ${image._optimizedWidth}x${image._optimizedHeight}px`
             : '';
+
         updateUploadFeedback({
             status: 'success',
             message: successMessage,
@@ -1331,26 +2064,33 @@ async function handleFileUpload(event) {
 
         renderCanvas();
         refreshVisibleMockupThumbnails();
+        window.requestAnimationFrame(() => {
+            renderCanvas();
+            refreshVisibleMockupThumbnails();
+        });
+        return true;
     } catch (error) {
         updateUploadFeedback({
             status: 'error',
             message: 'Nao foi possivel carregar a imagem. Verifique o arquivo e tente novamente.'
         });
+        return false;
     } finally {
-        window.requestAnimationFrame(() => {
-            window.scrollTo({
-                top: scrollPositionBeforeUpload,
-                behavior: 'auto'
+        if (preserveScroll) {
+            window.requestAnimationFrame(() => {
+                window.scrollTo({
+                    top: scrollPositionBeforeUpload,
+                    behavior: 'auto'
+                });
             });
-        });
+        }
     }
-
-    event.target.value = '';
 }
 
 function updateUploadFeedback({ status = 'idle', message = '', previewSrc = '', details = '' } = {}) {
     const messageElement = document.getElementById('uploadStatusMessage');
     const preview = document.getElementById('uploadPreview');
+    const previewPlaceholder = document.getElementById('uploadPreviewPlaceholder');
     const previewImage = document.getElementById('uploadedPreviewImage');
     const previewTitle = document.getElementById('uploadPreviewTitle');
     const previewInfo = document.getElementById('uploadPreviewInfo');
@@ -1380,6 +2120,9 @@ function updateUploadFeedback({ status = 'idle', message = '', previewSrc = '', 
 
     if (previewSrc) {
         preview.style.display = 'flex';
+        if (previewPlaceholder) {
+            previewPlaceholder.style.display = 'none';
+        }
         previewImage.src = previewSrc;
         if (previewTitle) {
             previewTitle.textContent = status === 'success' ? 'Imagem carregada com sucesso' : 'Imagem selecionada';
@@ -1393,6 +2136,9 @@ function updateUploadFeedback({ status = 'idle', message = '', previewSrc = '', 
     }
 
     preview.style.display = 'none';
+    if (previewPlaceholder) {
+        previewPlaceholder.style.display = 'grid';
+    }
     previewImage.removeAttribute('src');
     if (previewTitle) {
         previewTitle.textContent = 'Imagem carregada';
@@ -1414,6 +2160,36 @@ function createPreviewDataUrl(file) {
         reader.onerror = () => reject(new Error('preview_dataurl_error'));
         reader.readAsDataURL(file);
     });
+}
+
+function createPreviewDataUrlFromSource(source) {
+    const sourceSize = resolveSourceImageSize(source, { preferOriginal: true });
+    const sourceWidth = Number(sourceSize.width || 0);
+    const sourceHeight = Number(sourceSize.height || 0);
+    if (!sourceWidth || !sourceHeight) {
+        return '';
+    }
+
+    const maxPreviewSide = 720;
+    const ratio = Math.min(1, maxPreviewSide / Math.max(sourceWidth, sourceHeight));
+    const width = Math.max(1, Math.round(sourceWidth * ratio));
+    const height = Math.max(1, Math.round(sourceHeight * ratio));
+    const previewCanvas = document.createElement('canvas');
+    previewCanvas.width = width;
+    previewCanvas.height = height;
+    const previewCtx = previewCanvas.getContext('2d');
+    if (!previewCtx) {
+        return '';
+    }
+
+    try {
+        previewCtx.imageSmoothingEnabled = true;
+        previewCtx.imageSmoothingQuality = 'high';
+        previewCtx.drawImage(source, 0, 0, width, height);
+        return previewCanvas.toDataURL('image/png');
+    } catch (error) {
+        return '';
+    }
 }
 
 function sanitizeFileName(name) {
@@ -1589,7 +2365,7 @@ function parseSvgLength(rawValue) {
 }
 
 function applySmartFitDefaultsForUpload() {
-    editorState.imageLayoutMode = 'contain';
+    editorState.imageLayoutMode = 'fit-fill';
     editorState.scale = 1;
     editorState.positionX = 50;
     editorState.positionY = 50;
@@ -1691,6 +2467,7 @@ function removeLogo() {
 function updateMockup() {
     syncControls();
     renderCanvas();
+    scheduleVisibleMockupThumbnailsRefresh(140);
 }
 
 function syncControls() {
@@ -1700,12 +2477,20 @@ function syncControls() {
     editorState.backgroundPreset = document.getElementById('backgroundPreset')?.value || DEFAULT_EDITOR_STATE.backgroundPreset;
     editorState.bgColorStart = document.getElementById('bgColorStart')?.value || DEFAULT_EDITOR_STATE.bgColorStart;
     editorState.bgColorEnd = document.getElementById('bgColorEnd')?.value || DEFAULT_EDITOR_STATE.bgColorEnd;
+    editorState.mockupProductColor = normalizeHexColor(
+        document.getElementById('mockupProductColor')?.value || editorState.mockupProductColor,
+        DEFAULT_EDITOR_STATE.mockupProductColor
+    ).toLowerCase();
     editorState.showGuides = Boolean(document.getElementById('showGuides')?.checked ?? DEFAULT_EDITOR_STATE.showGuides);
 
     editorState.positionX = Number(document.getElementById('positionX')?.value ?? DEFAULT_EDITOR_STATE.positionX);
     editorState.positionY = Number(document.getElementById('positionY')?.value ?? DEFAULT_EDITOR_STATE.positionY);
     editorState.scale = Number(document.getElementById('scaleRange')?.value ?? DEFAULT_EDITOR_STATE.scale);
     editorState.imageLayoutMode = document.getElementById('imageLayoutMode')?.value || DEFAULT_EDITOR_STATE.imageLayoutMode;
+    if (editorState.imageLayoutMode === 'fit-fill' && editorState.scale > 1) {
+        editorState.scale = 1;
+        setControl('scaleRange', editorState.scale);
+    }
     editorState.rotation = Number(document.getElementById('rotationRange')?.value ?? DEFAULT_EDITOR_STATE.rotation);
     editorState.flipHorizontal = Boolean(document.getElementById('flipHorizontal')?.checked ?? DEFAULT_EDITOR_STATE.flipHorizontal);
     editorState.flipVertical = Boolean(document.getElementById('flipVertical')?.checked ?? DEFAULT_EDITOR_STATE.flipVertical);
@@ -1747,6 +2532,7 @@ function applyEditorStateToControls() {
     setControl('backgroundPreset', editorState.backgroundPreset);
     setControl('bgColorStart', editorState.bgColorStart);
     setControl('bgColorEnd', editorState.bgColorEnd);
+    setControl('mockupProductColor', editorState.mockupProductColor);
     setControl('showGuides', editorState.showGuides);
 
     setControl('positionX', editorState.positionX);
@@ -1837,22 +2623,25 @@ function scheduleEditorStateSave() {
     }
 
     editorSaveTimer = window.setTimeout(() => {
+        persistSelectedMockupEditorState();
         saveEditorState();
+        saveEditorStateByMockup();
         editorSaveTimer = null;
     }, 220);
 }
 
 function resetEditor() {
-    editorState = { ...DEFAULT_EDITOR_STATE };
-    if (selectedMockup) {
-        editorState.textPrimary = selectedMockup.title;
-        editorState.textSecondary = `${getCategoryLabel(selectedMockup.category)} | ${selectedMockup.orientation}`;
-    }
+    editorState = selectedMockup
+        ? createInitialEditorStateForMockup(selectedMockup)
+        : { ...DEFAULT_EDITOR_STATE };
     applyCanvasPreset(editorState.canvasPreset);
     applyEditorStateToControls();
     updateEditorMeta();
+    persistSelectedMockupEditorState();
     saveEditorState();
+    saveEditorStateByMockup();
     renderCanvas();
+    scheduleVisibleMockupThumbnailsRefresh(80);
 }
 
 function renderCanvas(targetCanvas = canvas) {
@@ -1911,6 +2700,20 @@ function renderCanvas(targetCanvas = canvas) {
     drawLogo(targetCtx, targetCanvas, frame, scaleFactor);
 }
 
+function withTemporaryEditorState(stateOverride, callback) {
+    if (!stateOverride || typeof stateOverride !== 'object') {
+        return callback();
+    }
+
+    const previousState = editorState;
+    editorState = normalizeEditorStateSnapshot(stateOverride);
+    try {
+        return callback();
+    } finally {
+        editorState = previousState;
+    }
+}
+
 function buildMockupPreviewDataUrl(mockup, width = 1080, height = 720, options = {}) {
     if (!mockup) {
         return '';
@@ -1924,44 +2727,48 @@ function buildMockupPreviewDataUrl(mockup, width = 1080, height = 720, options =
         return '';
     }
 
-    try {
-        drawBackground(previewCtx, previewCanvas, editorState.backgroundPreset);
-        const frame = getFrameArea(mockup.orientation, previewCanvas);
-        drawFrame(previewCtx, frame, 1);
-        drawReferenceModel(previewCtx, frame, mockup, 1);
+    const renderPreview = () => {
+        try {
+            drawBackground(previewCtx, previewCanvas, editorState.backgroundPreset);
+            const frame = getFrameArea(mockup.orientation, previewCanvas);
+            drawFrame(previewCtx, frame, 1);
+            drawReferenceModel(previewCtx, frame, mockup, 1);
 
-        if (uploadedImage) {
-            drawImage(previewCtx, frame, mockup);
-        } else {
-            drawCanvasMessage(
-                previewCtx,
-                previewCanvas,
-                'Upload da arte',
-                'Sua imagem sera aplicada nesta area.',
-                frame.centerX,
-                frame.centerY,
-                1
-            );
+            if (uploadedImage) {
+                drawImage(previewCtx, frame, mockup);
+            } else {
+                drawCanvasMessage(
+                    previewCtx,
+                    previewCanvas,
+                    'Upload da arte',
+                    'Sua imagem sera aplicada nesta area.',
+                    frame.centerX,
+                    frame.centerY,
+                    1
+                );
+            }
+
+            if (options.showGuides && editorState.showGuides) {
+                drawGuides(previewCtx, frame, 1);
+            }
+
+            drawFrameOverlay(previewCtx, frame, mockup, 1);
+
+            if (options.includeText) {
+                drawTextOverlay(previewCtx, previewCanvas, 1, mockup);
+            }
+            if (options.includeLogo) {
+                drawLogo(previewCtx, previewCanvas, frame, 1);
+            }
+
+            return previewCanvas.toDataURL('image/png');
+        } catch (error) {
+            console.error('Erro ao montar preview de mockup:', error);
+            return '';
         }
+    };
 
-        if (options.showGuides && editorState.showGuides) {
-            drawGuides(previewCtx, frame, 1);
-        }
-
-        drawFrameOverlay(previewCtx, frame, mockup, 1);
-
-        if (options.includeText) {
-            drawTextOverlay(previewCtx, previewCanvas, 1, mockup);
-        }
-        if (options.includeLogo) {
-            drawLogo(previewCtx, previewCanvas, frame, 1);
-        }
-
-        return previewCanvas.toDataURL('image/png');
-    } catch (error) {
-        console.error('Erro ao montar preview de mockup:', error);
-        return '';
-    }
+    return withTemporaryEditorState(options.editorStateOverride, renderPreview);
 }
 
 function drawBackground(context, surfaceCanvas, preset) {
@@ -2022,37 +2829,108 @@ function drawFrame(context, frame, scaleFactor = 1) {
     context.restore();
 }
 
+function hexToRgb(hexColor, fallback = '#ffffff') {
+    const normalized = normalizeHexColor(hexColor, fallback).replace('#', '');
+    return {
+        r: Number.parseInt(normalized.slice(0, 2), 16),
+        g: Number.parseInt(normalized.slice(2, 4), 16),
+        b: Number.parseInt(normalized.slice(4, 6), 16)
+    };
+}
+
+function shiftRgb(rgb, amount) {
+    const ratio = Math.max(-1, Math.min(1, Number(amount) || 0));
+    const adjust = (value) => {
+        const safe = Number.isFinite(value) ? value : 0;
+        if (ratio >= 0) {
+            return Math.round(safe + ((255 - safe) * ratio));
+        }
+        return Math.round(safe * (1 + ratio));
+    };
+
+    return {
+        r: adjust(rgb.r),
+        g: adjust(rgb.g),
+        b: adjust(rgb.b)
+    };
+}
+
+function toCssRgba(rgb, alpha = 1) {
+    const safeAlpha = Math.max(0, Math.min(1, Number(alpha) || 0));
+    return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${safeAlpha})`;
+}
+
+function getColorLuminance(rgb) {
+    const r = Number.isFinite(rgb?.r) ? rgb.r : 0;
+    const g = Number.isFinite(rgb?.g) ? rgb.g : 0;
+    const b = Number.isFinite(rgb?.b) ? rgb.b : 0;
+    return ((0.299 * r) + (0.587 * g) + (0.114 * b)) / 255;
+}
+
+function resolveMockupProductPalette(referenceType = 'generic') {
+    const sourceColor = editorState.mockupProductColor
+        || workInfoState.productColor
+        || workInfoState.backgroundColor
+        || DEFAULT_EDITOR_STATE.mockupProductColor;
+    const base = hexToRgb(sourceColor, DEFAULT_EDITOR_STATE.mockupProductColor);
+    const luminance = getColorLuminance(base);
+
+    const keepLighterSurface = referenceType === 'paper' || referenceType === 'frame' || referenceType === 'device';
+    const fillBase = keepLighterSurface ? shiftRgb(base, 0.16) : base;
+    const fillAccent = shiftRgb(fillBase, luminance < 0.4 ? 0.12 : -0.08);
+    const fillDeep = shiftRgb(fillBase, luminance < 0.4 ? -0.2 : -0.24);
+    const stroke = luminance < 0.38
+        ? shiftRgb(fillBase, 0.52)
+        : shiftRgb(fillBase, -0.52);
+    const detail = luminance < 0.38
+        ? shiftRgb(fillBase, 0.32)
+        : shiftRgb(fillBase, -0.28);
+    const label = luminance < 0.5
+        ? shiftRgb(fillBase, 0.68)
+        : shiftRgb(fillBase, -0.72);
+
+    return {
+        fill: toCssRgba(fillBase, 0.96),
+        fillAccent: toCssRgba(fillAccent, 0.95),
+        fillDeep: toCssRgba(fillDeep, 0.9),
+        stroke: toCssRgba(stroke, 0.72),
+        detail: toCssRgba(detail, 0.64),
+        label: toCssRgba(label, 0.82)
+    };
+}
+
 function drawReferenceModel(context, frame, mockup, scaleFactor = 1) {
     if (!mockup) {
         return;
     }
 
     const referenceType = resolveMockupReferenceType(mockup);
+    const palette = resolveMockupProductPalette(referenceType);
     context.save();
     roundedRect(context, frame.x, frame.y, frame.width, frame.height, editorState.radius * scaleFactor);
     context.clip();
-    context.strokeStyle = 'rgba(15, 23, 42, 0.22)';
-    context.fillStyle = 'rgba(15, 23, 42, 0.06)';
+    context.strokeStyle = palette.stroke;
+    context.fillStyle = palette.fill;
     context.lineWidth = Math.max(1.2, 1.8 * scaleFactor);
 
     if (referenceType === 'shirt-front-back') {
-        drawShirtFrontBackReference(context, frame);
+        drawShirtFrontBackReference(context, frame, palette);
     } else if (referenceType === 'paper') {
-        drawPaperReference(context, frame);
+        drawPaperReference(context, frame, palette);
     } else if (referenceType === 'device') {
-        drawDeviceReference(context, frame);
+        drawDeviceReference(context, frame, palette);
     } else if (referenceType === 'box') {
-        drawBoxReference(context, frame);
+        drawBoxReference(context, frame, palette);
     } else if (referenceType === 'bag') {
-        drawBagReference(context, frame);
+        drawBagReference(context, frame, palette);
     } else if (referenceType === 'product') {
-        drawProductReference(context, frame);
+        drawProductReference(context, frame, palette);
     } else if (referenceType === 'signage') {
-        drawSignageReference(context, frame);
+        drawSignageReference(context, frame, palette);
     } else if (referenceType === 'frame') {
-        drawFrameReference(context, frame);
+        drawFrameReference(context, frame, palette);
     } else {
-        drawGenericReference(context, frame);
+        drawGenericReference(context, frame, palette);
     }
 
     context.restore();
@@ -2264,17 +3142,17 @@ function getReferenceContentRect(frame, paddingRatio = 0.08) {
     };
 }
 
-function drawShirtFrontBackReference(context, frame) {
+function drawShirtFrontBackReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.1);
     const gap = area.width * 0.06;
     const slotWidth = (area.width - gap) / 2;
     const slotHeight = area.height;
 
-    drawSingleShirtReference(context, area.x, area.y, slotWidth, slotHeight, false);
-    drawSingleShirtReference(context, area.x + slotWidth + gap, area.y, slotWidth, slotHeight, true);
+    drawSingleShirtReference(context, area.x, area.y, slotWidth, slotHeight, false, palette);
+    drawSingleShirtReference(context, area.x + slotWidth + gap, area.y, slotWidth, slotHeight, true, palette);
 
     context.save();
-    context.fillStyle = 'rgba(15, 23, 42, 0.34)';
+    context.fillStyle = palette.label;
     context.font = `600 ${Math.max(10, Math.round(frame.width * 0.024))}px "Segoe UI", Arial, sans-serif`;
     context.textAlign = 'center';
     context.fillText('FRENTE', area.x + slotWidth / 2, area.y + slotHeight - 6);
@@ -2282,7 +3160,8 @@ function drawShirtFrontBackReference(context, frame) {
     context.restore();
 }
 
-function drawSingleShirtReference(context, x, y, width, height, isBack = false) {
+function drawSingleShirtReference(context, x, y, width, height, isBack = false, palette = null) {
+    const activePalette = palette || resolveMockupProductPalette('shirt-front-back');
     const top = y + (height * 0.1);
     const bottom = y + (height * 0.88);
     const left = x + (width * 0.08);
@@ -2294,6 +3173,8 @@ function drawSingleShirtReference(context, x, y, width, height, isBack = false) 
     const shoulderY = y + (height * 0.24);
     const armpitY = y + (height * 0.38);
 
+    context.save();
+    context.fillStyle = isBack ? activePalette.fillAccent : activePalette.fill;
     context.beginPath();
     context.moveTo(chestLeft, shoulderY);
     context.lineTo(left, shoulderY + (height * 0.06));
@@ -2311,9 +3192,10 @@ function drawSingleShirtReference(context, x, y, width, height, isBack = false) 
     context.closePath();
     context.fill();
     context.stroke();
+    context.restore();
 
     context.save();
-    context.strokeStyle = 'rgba(15, 23, 42, 0.28)';
+    context.strokeStyle = activePalette.detail;
     context.lineWidth = Math.max(1, context.lineWidth * 0.9);
     if (isBack) {
         context.beginPath();
@@ -2329,13 +3211,20 @@ function drawSingleShirtReference(context, x, y, width, height, isBack = false) 
     context.restore();
 }
 
-function drawPaperReference(context, frame) {
+function drawPaperReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.1);
     const sheetW = area.width * 0.64;
     const sheetH = area.height * 0.76;
 
+    context.save();
+    context.fillStyle = palette.fillDeep;
     drawSkewSheet(context, area.x + (area.width * 0.12), area.y + (area.height * 0.18), sheetW, sheetH, -0.08);
+    context.restore();
+
+    context.save();
+    context.fillStyle = palette.fill;
     drawSkewSheet(context, area.x + (area.width * 0.2), area.y + (area.height * 0.12), sheetW, sheetH, 0.06);
+    context.restore();
 }
 
 function drawSkewSheet(context, x, y, width, height, skew = 0) {
@@ -2350,40 +3239,49 @@ function drawSkewSheet(context, x, y, width, height, skew = 0) {
     context.stroke();
 }
 
-function drawDeviceReference(context, frame) {
+function drawDeviceReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.1);
     if (frame.width >= frame.height) {
         const laptopW = area.width * 0.64;
         const laptopH = area.height * 0.54;
         const lx = area.x + (area.width - laptopW) / 2;
         const ly = area.y + (area.height * 0.12);
+        context.save();
+        context.fillStyle = palette.fill;
         roundedRect(context, lx, ly, laptopW, laptopH, 14);
         context.fill();
         context.stroke();
+        context.restore();
 
         const baseW = laptopW * 1.1;
         const baseH = area.height * 0.12;
+        context.save();
+        context.fillStyle = palette.fillDeep;
         roundedRect(context, lx - ((baseW - laptopW) / 2), ly + laptopH + 6, baseW, baseH, 10);
         context.fill();
         context.stroke();
+        context.restore();
     } else {
         const phoneW = area.width * 0.52;
         const phoneH = area.height * 0.84;
         const px = area.x + (area.width - phoneW) / 2;
         const py = area.y + (area.height - phoneH) / 2;
+        context.save();
+        context.fillStyle = palette.fill;
         roundedRect(context, px, py, phoneW, phoneH, 22);
         context.fill();
         context.stroke();
+        context.restore();
 
         context.save();
-        context.fillStyle = 'rgba(15, 23, 42, 0.2)';
+        context.fillStyle = palette.detail;
         roundedRect(context, px + (phoneW * 0.36), py + (phoneH * 0.04), phoneW * 0.28, phoneH * 0.035, 8);
         context.fill();
         context.restore();
     }
 }
 
-function drawBoxReference(context, frame) {
+function drawBoxReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.12);
     const w = area.width * 0.56;
     const h = area.height * 0.56;
@@ -2391,6 +3289,8 @@ function drawBoxReference(context, frame) {
     const x = area.x + ((area.width - w) / 2);
     const y = area.y + ((area.height - h) / 2) + (depth * 0.4);
 
+    context.save();
+    context.fillStyle = palette.fill;
     context.beginPath();
     context.moveTo(x, y);
     context.lineTo(x + w, y);
@@ -2400,6 +3300,7 @@ function drawBoxReference(context, frame) {
     context.fill();
     context.stroke();
 
+    context.fillStyle = palette.fillAccent;
     context.beginPath();
     context.moveTo(x, y);
     context.lineTo(x + depth, y - depth);
@@ -2409,6 +3310,7 @@ function drawBoxReference(context, frame) {
     context.fill();
     context.stroke();
 
+    context.fillStyle = palette.fillDeep;
     context.beginPath();
     context.moveTo(x + w, y);
     context.lineTo(x + w + depth, y - depth);
@@ -2417,84 +3319,115 @@ function drawBoxReference(context, frame) {
     context.closePath();
     context.fill();
     context.stroke();
+    context.restore();
 }
 
-function drawBagReference(context, frame) {
+function drawBagReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.16);
     const x = area.x + (area.width * 0.14);
     const y = area.y + (area.height * 0.14);
     const w = area.width * 0.72;
     const h = area.height * 0.76;
 
+    context.save();
+    context.fillStyle = palette.fill;
     roundedRect(context, x, y + (h * 0.16), w, h * 0.84, 18);
     context.fill();
     context.stroke();
+    context.restore();
 
     context.beginPath();
     context.moveTo(x + (w * 0.25), y + (h * 0.26));
     context.quadraticCurveTo(x + (w * 0.32), y, x + (w * 0.5), y);
     context.quadraticCurveTo(x + (w * 0.68), y, x + (w * 0.75), y + (h * 0.26));
+    context.save();
+    context.strokeStyle = palette.detail;
     context.stroke();
+    context.restore();
 }
 
-function drawProductReference(context, frame) {
+function drawProductReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.18);
     const w = area.width * 0.38;
     const h = area.height * 0.78;
     const x = area.x + ((area.width - w) / 2);
     const y = area.y + ((area.height - h) / 2);
 
+    context.save();
+    context.fillStyle = palette.fill;
     roundedRect(context, x, y + (h * 0.14), w, h * 0.86, 20);
     context.fill();
     context.stroke();
+    context.restore();
 
+    context.save();
+    context.fillStyle = palette.fillAccent;
     roundedRect(context, x + (w * 0.23), y, w * 0.54, h * 0.2, 8);
     context.fill();
     context.stroke();
+    context.restore();
 }
 
-function drawSignageReference(context, frame) {
+function drawSignageReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.12);
     const boardW = area.width * 0.82;
     const boardH = area.height * 0.56;
     const bx = area.x + (area.width - boardW) / 2;
     const by = area.y + (area.height * 0.1);
 
+    context.save();
+    context.fillStyle = palette.fill;
     roundedRect(context, bx, by, boardW, boardH, 14);
     context.fill();
     context.stroke();
+    context.restore();
 
+    context.save();
+    context.strokeStyle = palette.detail;
     context.beginPath();
     context.moveTo(bx + (boardW * 0.2), by + boardH);
     context.lineTo(bx + (boardW * 0.13), area.y + area.height);
     context.moveTo(bx + (boardW * 0.8), by + boardH);
     context.lineTo(bx + (boardW * 0.87), area.y + area.height);
     context.stroke();
+    context.restore();
 }
 
-function drawFrameReference(context, frame) {
+function drawFrameReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.16);
+    context.save();
+    context.fillStyle = palette.fill;
     roundedRect(context, area.x, area.y, area.width, area.height, 12);
     context.fill();
     context.stroke();
+    context.restore();
 
     const innerPad = Math.min(area.width, area.height) * 0.12;
+    context.save();
+    context.strokeStyle = palette.detail;
     roundedRect(context, area.x + innerPad, area.y + innerPad, area.width - (innerPad * 2), area.height - (innerPad * 2), 8);
     context.stroke();
+    context.restore();
 }
 
-function drawGenericReference(context, frame) {
+function drawGenericReference(context, frame, palette) {
     const area = getReferenceContentRect(frame, 0.14);
+    context.save();
+    context.fillStyle = palette.fill;
     roundedRect(context, area.x, area.y, area.width, area.height, 14);
     context.fill();
     context.stroke();
+    context.restore();
 
+    context.save();
+    context.strokeStyle = palette.detail;
     context.beginPath();
     context.moveTo(area.x + (area.width * 0.12), area.y + (area.height * 0.8));
     context.lineTo(area.x + (area.width * 0.42), area.y + (area.height * 0.46));
     context.lineTo(area.x + (area.width * 0.6), area.y + (area.height * 0.62));
     context.lineTo(area.x + (area.width * 0.86), area.y + (area.height * 0.34));
     context.stroke();
+    context.restore();
 }
 
 function drawImage(context, frame, mockup = selectedMockup) {
@@ -2520,8 +3453,14 @@ function drawImage(context, frame, mockup = selectedMockup) {
 
     const mode = resolveLayoutMode(editorState.imageLayoutMode);
     const scaleFactor = Math.max(0.05, Number(editorState.scale) || DEFAULT_EDITOR_STATE.scale);
-    const offsetX = ((editorState.positionX - 50) / 50) * (targetArea.width * 0.35);
-    const offsetY = ((editorState.positionY - 50) / 50) * (targetArea.height * 0.35);
+    const requestedOffsetX = ((editorState.positionX - 50) / 50) * (targetArea.width * 0.35);
+    const requestedOffsetY = ((editorState.positionY - 50) / 50) * (targetArea.height * 0.35);
+    const isSingleImageMode = mode === 'cover' || mode === 'contain' || mode === 'fit-fill';
+    const fitResult = isSingleImageMode
+        ? resolveFittedImageGeometry(targetArea, sourceWidth, sourceHeight, mode, scaleFactor, requestedOffsetX, requestedOffsetY)
+        : null;
+    const appliedOffsetX = fitResult ? fitResult.offsetX : requestedOffsetX;
+    const appliedOffsetY = fitResult ? fitResult.offsetY : requestedOffsetY;
 
     context.save();
     try {
@@ -2531,17 +3470,15 @@ function drawImage(context, frame, mockup = selectedMockup) {
         context.filter = resolveFilter(editorState.filter);
         context.imageSmoothingEnabled = true;
         context.imageSmoothingQuality = 'high';
-        context.translate(targetArea.centerX + offsetX, targetArea.centerY + offsetY);
+        context.translate(targetArea.centerX + appliedOffsetX, targetArea.centerY + appliedOffsetY);
         context.rotate((editorState.rotation * Math.PI) / 180);
         context.scale(editorState.flipHorizontal ? -1 : 1, editorState.flipVertical ? -1 : 1);
 
-        if (mode === 'cover' || mode === 'contain') {
-            const baseFit = mode === 'cover'
-                ? Math.max(targetArea.width / sourceWidth, targetArea.height / sourceHeight)
-                : Math.min(targetArea.width / sourceWidth, targetArea.height / sourceHeight);
-            const w = sourceWidth * baseFit * scaleFactor;
-            const h = sourceHeight * baseFit * scaleFactor;
-            context.drawImage(uploadedImage, -w / 2, -h / 2, w, h);
+        if (fitResult) {
+            if (mode === 'fit-fill' && (fitResult.width < targetArea.width || fitResult.height < targetArea.height)) {
+                drawFitFillBackdrop(context, uploadedImage, targetArea, sourceWidth, sourceHeight);
+            }
+            context.drawImage(uploadedImage, -fitResult.width / 2, -fitResult.height / 2, fitResult.width, fitResult.height);
         } else {
             const tileBaseFit = Math.min(targetArea.width / sourceWidth, targetArea.height / sourceHeight);
             const tileWidth = Math.max(8, sourceWidth * tileBaseFit * scaleFactor);
@@ -2568,12 +3505,62 @@ function drawImage(context, frame, mockup = selectedMockup) {
     }
 }
 
+function resolveFittedImageGeometry(targetArea, sourceWidth, sourceHeight, mode, requestedScale, requestedOffsetX, requestedOffsetY) {
+    const isNoCropMode = mode === 'fit-fill';
+    const baseFit = mode === 'cover'
+        ? Math.max(targetArea.width / sourceWidth, targetArea.height / sourceHeight)
+        : Math.min(targetArea.width / sourceWidth, targetArea.height / sourceHeight);
+    const effectiveScale = isNoCropMode
+        ? Math.min(1, requestedScale)
+        : requestedScale;
+    const width = sourceWidth * baseFit * effectiveScale;
+    const height = sourceHeight * baseFit * effectiveScale;
+
+    if (!isNoCropMode) {
+        return {
+            width,
+            height,
+            offsetX: requestedOffsetX,
+            offsetY: requestedOffsetY
+        };
+    }
+
+    const maxOffsetX = Math.max(0, (targetArea.width - width) / 2);
+    const maxOffsetY = Math.max(0, (targetArea.height - height) / 2);
+    return {
+        width,
+        height,
+        offsetX: clampNumber(requestedOffsetX, -maxOffsetX, maxOffsetX),
+        offsetY: clampNumber(requestedOffsetY, -maxOffsetY, maxOffsetY)
+    };
+}
+
+function drawFitFillBackdrop(context, image, targetArea, sourceWidth, sourceHeight) {
+    const coverFit = Math.max(targetArea.width / sourceWidth, targetArea.height / sourceHeight);
+    const backdropWidth = Math.max(targetArea.width, sourceWidth * coverFit);
+    const backdropHeight = Math.max(targetArea.height, sourceHeight * coverFit);
+
+    context.save();
+    context.globalAlpha = Math.max(0.12, Math.min(0.34, editorState.opacity * 0.32));
+    context.filter = 'blur(16px) saturate(1.08)';
+    context.drawImage(image, -backdropWidth / 2, -backdropHeight / 2, backdropWidth, backdropHeight);
+    context.restore();
+}
+
+function clampNumber(value, min, max) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+        return min;
+    }
+    return Math.min(max, Math.max(min, numeric));
+}
+
 function resolveLayoutMode(mode) {
-    const allowed = new Set(['cover', 'contain', 'repeat', 'repeat-mirror-x', 'repeat-mirror-y', 'repeat-mirror-xy']);
+    const allowed = new Set(['fit-fill', 'cover', 'contain', 'repeat', 'repeat-mirror-x', 'repeat-mirror-y', 'repeat-mirror-xy']);
     if (allowed.has(mode)) {
         return mode;
     }
-    return 'cover';
+    return 'fit-fill';
 }
 
 function drawRepeatedPattern(context, frame, image, tileWidth, tileHeight, mirrorX, mirrorY) {
@@ -2892,6 +3879,7 @@ function buildSnapshotBranding() {
     const api = getBrandKitApi();
     const branding = {
         colors: {
+            product: editorState.mockupProductColor,
             primary: editorState.bgColorStart,
             secondary: editorState.bgColorEnd,
             text: editorState.textColor
@@ -2970,7 +3958,74 @@ function saveMockupChanges(options = {}) {
     return true;
 }
 
-function finalizeMockupsForReport() {
+function convertArtworkSourceToBlob(source, mimeType = 'image/png', quality = 0.94) {
+    return new Promise((resolve, reject) => {
+        if (!source) {
+            reject(new Error('missing_source'));
+            return;
+        }
+
+        if (source instanceof HTMLCanvasElement && typeof source.toBlob === 'function') {
+            source.toBlob((blob) => {
+                if (blob) {
+                    resolve(blob);
+                    return;
+                }
+                reject(new Error('canvas_blob_failed'));
+            }, mimeType, quality);
+            return;
+        }
+
+        const width = Number(source?.naturalWidth || source?.width || source?._optimizedWidth || source?._originalWidth || 0);
+        const height = Number(source?.naturalHeight || source?.height || source?._optimizedHeight || source?._originalHeight || 0);
+        if (!width || !height) {
+            reject(new Error('invalid_source_dimensions'));
+            return;
+        }
+
+        const maxSide = 2600;
+        const ratio = Math.min(1, maxSide / Math.max(width, height));
+        const targetWidth = Math.max(1, Math.round(width * ratio));
+        const targetHeight = Math.max(1, Math.round(height * ratio));
+        const buffer = document.createElement('canvas');
+        buffer.width = targetWidth;
+        buffer.height = targetHeight;
+        const bufferCtx = buffer.getContext('2d');
+        if (!bufferCtx) {
+            reject(new Error('canvas_context_unavailable'));
+            return;
+        }
+
+        bufferCtx.imageSmoothingEnabled = true;
+        bufferCtx.imageSmoothingQuality = 'high';
+        bufferCtx.drawImage(source, 0, 0, targetWidth, targetHeight);
+        buffer.toBlob((blob) => {
+            if (blob) {
+                resolve(blob);
+                return;
+            }
+            reject(new Error('buffer_blob_failed'));
+        }, mimeType, quality);
+    });
+}
+
+async function persistCurrentArtworkForResults() {
+    if (!uploadedImage || typeof persistUploadToBridge !== 'function') {
+        return false;
+    }
+
+    try {
+        const blob = await convertArtworkSourceToBlob(uploadedImage, 'image/png', 0.96);
+        const fileName = sanitizeFileName(uploadedImageFileMeta?.name || 'arte-mockup.png');
+        const fileType = 'image/png';
+        const fileLike = createFileLike(blob, fileName, fileType, Date.now());
+        return await persistUploadToBridge(fileLike);
+    } catch (error) {
+        return false;
+    }
+}
+
+async function finalizeMockupsForReport() {
     const savedBefore = getSavedMockupEdits();
     if (!savedBefore.length && selectedMockup) {
         saveMockupChanges({ silent: true });
@@ -2982,7 +4037,8 @@ function finalizeMockupsForReport() {
         return;
     }
 
-    window.location.href = REPORT_PAGE_URL;
+    await persistCurrentArtworkForResults();
+    window.location.href = RESULTS_PAGE_URL;
 }
 
 function downloadMockup() {
