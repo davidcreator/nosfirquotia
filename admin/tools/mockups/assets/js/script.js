@@ -1028,7 +1028,7 @@ function normalizeEditorStateSnapshot(snapshot) {
     normalized.positionY = clampNumber(normalized.positionY, 0, 100);
     normalized.scale = Math.max(0.05, Number(normalized.scale) || DEFAULT_EDITOR_STATE.scale);
     normalized.imageLayoutMode = resolveLayoutMode(normalized.imageLayoutMode);
-    if (normalized.imageLayoutMode === 'fit-fill' && normalized.scale > 1) {
+    if (normalized.imageLayoutMode === 'fit-fill' && normalized.scale < 1) {
         normalized.scale = 1;
     }
     normalized.rotation = clampNumber(normalized.rotation, -180, 180);
@@ -2487,7 +2487,7 @@ function syncControls() {
     editorState.positionY = Number(document.getElementById('positionY')?.value ?? DEFAULT_EDITOR_STATE.positionY);
     editorState.scale = Number(document.getElementById('scaleRange')?.value ?? DEFAULT_EDITOR_STATE.scale);
     editorState.imageLayoutMode = document.getElementById('imageLayoutMode')?.value || DEFAULT_EDITOR_STATE.imageLayoutMode;
-    if (editorState.imageLayoutMode === 'fit-fill' && editorState.scale > 1) {
+    if (editorState.imageLayoutMode === 'fit-fill' && editorState.scale < 1) {
         editorState.scale = 1;
         setControl('scaleRange', editorState.scale);
     }
@@ -3020,11 +3020,11 @@ function resolveArtworkPlacementArea(frame, mockup) {
         const px = area.x + ((area.width - phoneW) / 2);
         const py = area.y + ((area.height - phoneH) / 2);
         return {
-            x: px + (phoneW * 0.1),
-            y: py + (phoneH * 0.12),
-            width: phoneW * 0.8,
-            height: phoneH * 0.74,
-            radius: Math.max(12, frame.width * 0.03)
+            x: px + (phoneW * 0.04),
+            y: py + (phoneH * 0.06),
+            width: phoneW * 0.92,
+            height: phoneH * 0.9,
+            radius: Math.max(14, frame.width * 0.03)
         };
     }
 
@@ -3066,11 +3066,11 @@ function resolveArtworkPlacementArea(frame, mockup) {
         const x = area.x + ((area.width - w) / 2);
         const y = area.y + ((area.height - h) / 2);
         return {
-            x: x + (w * 0.16),
-            y: y + (h * 0.42),
-            width: w * 0.68,
-            height: h * 0.34,
-            radius: Math.max(8, frame.width * 0.016)
+            x: x + (w * 0.04),
+            y: y + (h * 0.17),
+            width: w * 0.92,
+            height: h * 0.79,
+            radius: Math.max(12, frame.width * 0.02)
         };
     }
 
@@ -3453,8 +3453,9 @@ function drawImage(context, frame, mockup = selectedMockup) {
 
     const mode = resolveLayoutMode(editorState.imageLayoutMode);
     const scaleFactor = Math.max(0.05, Number(editorState.scale) || DEFAULT_EDITOR_STATE.scale);
-    const requestedOffsetX = ((editorState.positionX - 50) / 50) * (targetArea.width * 0.35);
-    const requestedOffsetY = ((editorState.positionY - 50) / 50) * (targetArea.height * 0.35);
+    const offsetReach = mode === 'fit-fill' ? 0.7 : 0.35;
+    const requestedOffsetX = ((editorState.positionX - 50) / 50) * (targetArea.width * offsetReach);
+    const requestedOffsetY = ((editorState.positionY - 50) / 50) * (targetArea.height * offsetReach);
     const isSingleImageMode = mode === 'cover' || mode === 'contain' || mode === 'fit-fill';
     const fitResult = isSingleImageMode
         ? resolveFittedImageGeometry(targetArea, sourceWidth, sourceHeight, mode, scaleFactor, requestedOffsetX, requestedOffsetY)
@@ -3475,9 +3476,6 @@ function drawImage(context, frame, mockup = selectedMockup) {
         context.scale(editorState.flipHorizontal ? -1 : 1, editorState.flipVertical ? -1 : 1);
 
         if (fitResult) {
-            if (mode === 'fit-fill' && (fitResult.width < targetArea.width || fitResult.height < targetArea.height)) {
-                drawFitFillBackdrop(context, uploadedImage, targetArea, sourceWidth, sourceHeight);
-            }
             context.drawImage(uploadedImage, -fitResult.width / 2, -fitResult.height / 2, fitResult.width, fitResult.height);
         } else {
             const tileBaseFit = Math.min(targetArea.width / sourceWidth, targetArea.height / sourceHeight);
@@ -3506,17 +3504,17 @@ function drawImage(context, frame, mockup = selectedMockup) {
 }
 
 function resolveFittedImageGeometry(targetArea, sourceWidth, sourceHeight, mode, requestedScale, requestedOffsetX, requestedOffsetY) {
-    const isNoCropMode = mode === 'fit-fill';
-    const baseFit = mode === 'cover'
+    const isFreeFillMode = mode === 'fit-fill';
+    const baseFit = mode === 'cover' || isFreeFillMode
         ? Math.max(targetArea.width / sourceWidth, targetArea.height / sourceHeight)
         : Math.min(targetArea.width / sourceWidth, targetArea.height / sourceHeight);
-    const effectiveScale = isNoCropMode
-        ? Math.min(1, requestedScale)
+    const effectiveScale = isFreeFillMode
+        ? Math.max(1, requestedScale)
         : requestedScale;
     const width = sourceWidth * baseFit * effectiveScale;
     const height = sourceHeight * baseFit * effectiveScale;
 
-    if (!isNoCropMode) {
+    if (!isFreeFillMode) {
         return {
             width,
             height,
@@ -3525,8 +3523,8 @@ function resolveFittedImageGeometry(targetArea, sourceWidth, sourceHeight, mode,
         };
     }
 
-    const maxOffsetX = Math.max(0, (targetArea.width - width) / 2);
-    const maxOffsetY = Math.max(0, (targetArea.height - height) / 2);
+    const maxOffsetX = Math.max(0, (width - targetArea.width) / 2);
+    const maxOffsetY = Math.max(0, (height - targetArea.height) / 2);
     return {
         width,
         height,

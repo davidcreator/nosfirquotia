@@ -243,7 +243,7 @@ require_once 'assets/common/header.php';
                             <div class="control-group">
                                 <label>Preenchimento e repeticao:</label>
                                 <select id="imageLayoutMode">
-                                    <option value="fit-fill">Ajustar sem corte (estilo Redbubble)</option>
+                                    <option value="fit-fill">Preencher mockup inteiro (estilo Redbubble)</option>
                                     <option value="cover">Cobrir quadro (cover)</option>
                                     <option value="contain">Conter no quadro (contain)</option>
                                     <option value="repeat">Repetir blocos</option>
