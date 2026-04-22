@@ -54,16 +54,57 @@ $priorityOptions = [
 ];
 
 $serviceCategoryOptions = [
-    'criacao_logo' => 'Criacao de logo',
-    'recriar_logo' => 'Recriar um logo (Vetorizacao)',
-    'identidade_visual' => 'Projeto de Identidade Visual (PIV)',
-    'naming' => 'Criacao de Nome (Naming)',
-    'branding' => 'Branding e Gestao de Marca',
-    'papelaria' => 'Papelaria Institucional',
-    'pdv' => 'Design para Ponto de Venda (PDV)',
-    'manual_identidade' => 'Manual de Identidade Visual',
-    'criar_tipografia' => 'Criar Tipografia',
-    'criar_ilustracao' => 'Criar Ilustracao',
+    'criacao_marca' => [
+        'label' => 'Criacao de marca',
+        'items' => [
+            'criacao_logo'   => 'Criação de Logo',
+            'criacao_naming' => 'Criação de Nome',
+            'criacao_marca_completa' => 'Marca Completa (Logo + Conceito)',
+        ]
+    ],
+    'identidade_visual' => [
+        'label' => 'Identidade Visual',
+        'items' => [
+            'piv' => 'Projeto de Identidade Visual (PIV)',
+            'manual_identidade' => 'Manual de Identidade Visual',
+            'papelaria' => 'Papelaria Institucional',
+        ]
+    ],
+    'branding' => [
+        'label' => 'Branding & Estratégia',
+        'items' => [
+            'branding' => 'Branding e Gestão de Marca',
+            'consultoria_design' => 'Consultoria em Design',
+            'mentoria_design' => 'Mentoria em Design',
+        ]
+    ],
+    'design_grafico' => [
+        'label' => 'Design Gráfico & Comunicação',
+        'items' => [
+            'pecas_promocionais' => 'Peças Promocionais',
+            'pdv' => 'Design para PDV',
+            'sinalizacao' => 'Sinalização',
+            'midia_externa' => 'Mídia Interna e Externa',
+        ]
+    ],
+    'digital' => [
+        'label' => 'Digital & Experiência',
+        'items' => [
+            'redes_sociais' => 'Design para Redes Sociais',
+            'ux_ui' => 'UX/UI Design',
+            'email_marketing' => 'E-mail Marketing',
+            'apresentacoes' => 'Apresentações e Multimídia',
+        ]
+    ],
+    'criacao_personalizada' => [
+        'label' => 'Criação Personalizada',
+        'items' => [
+            'ilustracao' => 'Ilustração',
+            'tipografia' => 'Tipografia Personalizada',
+            'embalagem' => 'Embalagem',
+            'vestuario' => 'Vestuário',
+        ]
+    ],
 ];
 
 $selectedPersonType = (string) old('client_person_type', 'pf');
@@ -216,12 +257,21 @@ foreach ($serviceCatalogs as $catalog) {
                                         </select>
                                     </div>
 
+                                    <div class="col-12 d-none" data-area-other-group>
+                                        <label class="form-label" for="clientAreaOther">Especifique sua área de atuação ou serviço</label>
+                                        <input type="text" class="form-control" id="clientAreaOther" name="client_area_other" value="<?= e((string) old('client_area_other')) ?>" placeholder="Descreva aqui sua área ou o serviço específico que busca">
+                                    </div>
+
                                     <div class="col-md-6">
                                         <label class="form-label" for="serviceCategory">Servico principal desejado</label>
                                         <select class="form-select" id="serviceCategory" name="service_category" data-service-category required>
                                             <option value="">Selecione um servico</option>
-                                            <?php foreach ($serviceCategoryOptions as $value => $label): ?>
-                                                <option value="<?= e($value) ?>" <?= $selectedServiceCategory === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php foreach ($serviceCategoryOptions as $groupKey => $groupData): ?>
+                                                <optgroup label="<?= e($groupData['label']) ?>">
+                                                    <?php foreach ($groupData['items'] as $value => $label): ?>
+                                                        <option value="<?= e($value) ?>" <?= $selectedServiceCategory === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                                    <?php endforeach; ?>
+                                                </optgroup>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -440,6 +490,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const companyProfileGroup = form.querySelector('[data-company-profile-group]');
     const companyProfileSelect = form.querySelector('[data-company-profile]');
     const clientAreaSelect = form.querySelector('[data-client-area]');
+    const areaOtherGroup = form.querySelector('[data-area-other-group]');
+    const areaOtherInput = form.querySelector('input[name="client_area_other"]');
     const serviceCategorySelect = form.querySelector('[data-service-category]');
 
     const serviceModeRadios = Array.from(form.querySelectorAll('[data-service-mode]'));
@@ -489,13 +541,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const categoryKeywords = {
         criacao_logo: ['logo', 'logotipo', 'logomarca', 'piv', 'identidade visual'],
+        criacao_naming: ['naming', 'nome', 'marca', 'slogan', 'tagline'],
+        criacao_marca_completa: ['logo', 'logotipo', 'conceito', 'completa', 'piv'],
+        piv: ['identidade visual', 'piv', 'marca', 'manual'],
+        manual_identidade: ['manual', 'identidade', 'guia', 'uso'],
+        papelaria: ['papelaria', 'cartao', 'envelope', 'pasta', 'timbrado'],
+        branding: ['branding', 'gestao', 'diagnostico', 'estrategia'],
+        consultoria_design: ['consultoria', 'design', 'orientacao'],
+        mentoria_design: ['mentoria', 'design', 'aprendizado'],
+        pecas_promocionais: ['promocional', 'folder', 'flyer', 'banner'],
+        pdv: ['pdv', 'ponto de venda', 'expositor', 'display'],
+        sinalizacao: ['sinalizacao', 'placa', 'adesivo', 'interno', 'externo'],
+        midia_externa: ['externa', 'outdoor', 'busdoor', 'fachada'],
+        redes_sociais: ['social', 'instagram', 'facebook', 'post', 'stories'],
+        ux_ui: ['ux', 'ui', 'interface', 'usuario', 'site', 'app'],
+        email_marketing: ['email', 'marketing', 'newsletter'],
+        apresentacoes: ['apresentacao', 'multimidia', 'ppt', 'deck'],
+        ilustracao: ['ilustracao', 'iconografia', 'mascote'],
+        tipografia: ['tipografia', 'fonte', 'lettering'],
+        embalagem: ['embalagem', 'rotulo', 'caixa', 'pacote'],
+        vestuario: ['vestuario', 'uniforme', 'camiseta', 'bone'],
+        // Legado
         recriar_logo: ['redesenho', 'vetorizacao', 'atualizacao', 'reformulacao', 'logo', 'logotipo'],
         identidade_visual: ['identidade visual', 'piv', 'marca', 'manual'],
         naming: ['naming', 'nome', 'marca', 'slogan', 'tagline'],
-        branding: ['branding', 'gestao', 'diagnostico', 'estrategia'],
-        papelaria: ['papelaria', 'cartao', 'envelope', 'pasta', 'timbrado'],
-        pdv: ['pdv', 'ponto de venda', 'expositor', 'display'],
-        manual_identidade: ['manual', 'identidade', 'guia', 'uso'],
         criar_tipografia: ['tipografia', 'fonte', 'lettering'],
         criar_ilustracao: ['ilustracao', 'iconografia', 'mascote']
     };
@@ -581,6 +650,18 @@ document.addEventListener('DOMContentLoaded', function () {
             companyProfileSelect.required = isPj;
             if (!isPj) {
                 companyProfileSelect.value = '';
+            }
+        }
+    }
+
+    function syncAreaOtherField() {
+        if (!clientAreaSelect || !areaOtherGroup) { return; }
+        const isOther = clientAreaSelect.value === 'outros';
+        areaOtherGroup.classList.toggle('d-none', !isOther);
+        if (areaOtherInput) {
+            areaOtherInput.required = isOther;
+            if (!isOther) {
+                areaOtherInput.value = '';
             }
         }
     }
@@ -675,7 +756,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateSummary() {
         if (summaryProjectTitle) { summaryProjectTitle.textContent = String(projectTitleInput ? projectTitleInput.value : '').trim() || 'Nao informado'; }
         if (summaryPersonType) { summaryPersonType.textContent = selectText(personTypeSelect) || 'Nao informado'; }
-        if (summaryClientArea) { summaryClientArea.textContent = selectText(clientAreaSelect) || 'Nao informado'; }
+        
+        if (summaryClientArea) { 
+            let areaText = selectText(clientAreaSelect);
+            if (clientAreaSelect && clientAreaSelect.value === 'outros' && areaOtherInput && areaOtherInput.value.trim() !== '') {
+                areaText += ': ' + areaOtherInput.value.trim();
+            }
+            summaryClientArea.textContent = areaText || 'Nao informado'; 
+        }
         if (summaryServiceCategory) { summaryServiceCategory.textContent = selectText(serviceCategorySelect) || 'Nao informado'; }
         if (summaryAvailability) { summaryAvailability.textContent = String(availabilityInput ? availabilityInput.value : '').trim() || 'Nao informado'; }
         if (summaryBusinessMoment) { summaryBusinessMoment.textContent = selectText(businessMomentSelect) || 'Nao informado'; }
@@ -718,6 +806,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (String(clientAreaSelect ? clientAreaSelect.value : '').trim() === '') {
                 showStepError('Selecione a area de atuacao para continuar.', clientAreaSelect);
+                return false;
+            }
+            if (clientAreaSelect && clientAreaSelect.value === 'outros' && String(areaOtherInput ? areaOtherInput.value : '').trim() === '') {
+                showStepError('Descreva sua area de atuacao ou servico.', areaOtherInput);
                 return false;
             }
             if (String(serviceCategorySelect ? serviceCategorySelect.value : '').trim() === '') {
@@ -841,12 +933,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!input) { return; }
         input.addEventListener('change', function () {
             syncPersonTypeFields();
+            syncAreaOtherField();
             updateServiceVisibility();
             updateSummary();
         });
     });
 
-    [projectTitleInput, availabilityInput, businessMomentSelect, priorityChannelSelect, projectPrioritySelect].forEach(function (input) {
+    [projectTitleInput, availabilityInput, areaOtherInput, businessMomentSelect, priorityChannelSelect, projectPrioritySelect].forEach(function (input) {
         if (!input) { return; }
         input.addEventListener('input', updateSummary);
         input.addEventListener('change', updateSummary);
@@ -876,6 +969,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     syncPersonTypeFields();
+    syncAreaOtherField();
     updateServiceVisibility();
     updateSummary();
     renderStep(0);

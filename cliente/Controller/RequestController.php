@@ -40,6 +40,7 @@ final class RequestController extends BaseClientController
             'client_person_type' => $personType,
             'company_profile' => $companyProfile,
             'client_area' => $this->sanitizeArea((string) $this->request->post('client_area', '')),
+            'client_area_other' => trim((string) $this->request->post('client_area_other', '')),
             'service_category' => $this->sanitizeServiceCategory((string) $this->request->post('service_category', '')),
             'requested_availability' => trim((string) $this->request->post('requested_availability', '')),
             'business_moment' => $this->sanitizeBusinessMoment((string) $this->request->post('business_moment', '')),
@@ -62,6 +63,8 @@ final class RequestController extends BaseClientController
 
         if ($payload['client_area'] === '') {
             $errors[] = 'Selecione a area de atuacao.';
+        } elseif ($payload['client_area'] === 'outros' && $payload['client_area_other'] === '') {
+            $errors[] = 'Descreva sua area de atuacao ou servico.';
         }
         
         if ($payload['service_category'] === '') {
@@ -213,9 +216,14 @@ final class RequestController extends BaseClientController
     {
         $category = strtolower(trim($category));
         $allowed = [
-            'criacao_logo', 'recriar_logo', 'identidade_visual', 'naming',
-            'branding', 'papelaria', 'pdv', 'manual_identidade',
-            'criar_tipografia', 'criar_ilustracao'
+            'criacao_logo', 'criacao_naming', 'criacao_marca_completa',
+            'piv', 'manual_identidade', 'papelaria',
+            'branding', 'consultoria_design', 'mentoria_design',
+            'pecas_promocionais', 'pdv', 'sinalizacao', 'midia_externa',
+            'redes_sociais', 'ux_ui', 'email_marketing', 'apresentacoes',
+            'ilustracao', 'tipografia', 'embalagem', 'vestuario',
+            // Suporte legado
+            'recriar_logo', 'identidade_visual', 'naming', 'criar_tipografia', 'criar_ilustracao'
         ];
         return in_array($category, $allowed, true) ? $category : '';
     }
@@ -260,7 +268,11 @@ final class RequestController extends BaseClientController
             $lines[] = 'Porte da empresa: ' . $this->resolveCompanyProfileLabel((string) ($payload['company_profile'] ?? ''));
         }
 
-        $lines[] = 'Area de atuacao: ' . $this->resolveAreaLabel((string) ($payload['client_area'] ?? ''));
+        $areaLabel = $this->resolveAreaLabel((string) ($payload['client_area'] ?? ''));
+        if (($payload['client_area'] ?? '') === 'outros' && ($payload['client_area_other'] ?? '') !== '') {
+            $areaLabel .= ': ' . $payload['client_area_other'];
+        }
+        $lines[] = 'Area de atuacao: ' . $areaLabel;
         $lines[] = 'Servico principal desejado: ' . $this->resolveServiceCategoryLabel((string) ($payload['service_category'] ?? ''));
         $lines[] = 'Disponibilidade esperada: ' . ($payload['requested_availability'] !== '' ? $payload['requested_availability'] : 'Nao informada');
         $lines[] = 'Momento do negocio: ' . $this->resolveBusinessMomentLabel((string) ($payload['business_moment'] ?? ''));
@@ -350,16 +362,33 @@ final class RequestController extends BaseClientController
     private function resolveServiceCategoryLabel(string $category): string
     {
         $map = [
-            'criacao_logo' => 'Criacao de logo',
-            'recriar_logo' => 'Recriar um logo (Vetorizacao)',
-            'identidade_visual' => 'Projeto de Identidade Visual (PIV)',
-            'naming' => 'Criacao de Nome (Naming)',
-            'branding' => 'Branding e Gestao de Marca',
-            'papelaria' => 'Papelaria Institucional',
-            'pdv' => 'Design para Ponto de Venda (PDV)',
-            'manual_identidade' => 'Manual de Identidade Visual',
-            'criar_tipografia' => 'Criar Tipografia',
-            'criar_ilustracao' => 'Criar Ilustracao',
+            'criacao_logo'           => 'Criação de Logo',
+            'criacao_naming'         => 'Criação de Nome',
+            'criacao_marca_completa' => 'Marca Completa (Logo + Conceito)',
+            'piv'                    => 'Projeto de Identidade Visual (PIV)',
+            'manual_identidade'      => 'Manual de Identidade Visual',
+            'papelaria'              => 'Papelaria Institucional',
+            'branding'               => 'Branding e Gestão de Marca',
+            'consultoria_design'     => 'Consultoria em Design',
+            'mentoria_design'        => 'Mentoria em Design',
+            'pecas_promocionais'     => 'Peças Promocionais',
+            'pdv'                    => 'Design para PDV',
+            'sinalizacao'            => 'Sinalização',
+            'midia_externa'          => 'Mídia Interna e Externa',
+            'redes_sociais'          => 'Design para Redes Sociais',
+            'ux_ui'                  => 'UX/UI Design',
+            'email_marketing'        => 'E-mail Marketing',
+            'apresentacoes'          => 'Apresentações e Multimídia',
+            'ilustracao'             => 'Ilustração',
+            'tipografia'             => 'Tipografia Personalizada',
+            'embalagem'              => 'Embalagem',
+            'vestuario'              => 'Vestuário',
+            // Suporte para chaves antigas se necessário
+            'recriar_logo'           => 'Recriar um logo (Vetorizacao)',
+            'identidade_visual'      => 'Projeto de Identidade Visual (PIV)',
+            'naming'                 => 'Criacao de Nome (Naming)',
+            'criar_tipografia'       => 'Criar Tipografia',
+            'criar_ilustracao'       => 'Criar Ilustracao',
         ];
 
         return $map[$category] ?? 'Nao informada';
