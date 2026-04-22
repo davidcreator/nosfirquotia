@@ -51,6 +51,7 @@ return static function (Router $router): void {
     $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
     $router->get('/admin/orcamentos', [AdminQuoteController::class, 'index']);
     $router->get('/admin/orcamentos/{id:\d+}', [AdminQuoteController::class, 'show']);
+    $router->get('/admin/orcamentos/{id:\d+}/manual-marca.json', [AdminQuoteController::class, 'downloadBrandManual']);
     $router->post('/admin/orcamentos/{id:\d+}/gerar-relatorio', [AdminQuoteController::class, 'generateReport']);
     $router->get('/admin/notificacoes-email', [AdminEmailLogController::class, 'index']);
     $router->get('/admin/referencias', [AdminReferencePriceController::class, 'index']);

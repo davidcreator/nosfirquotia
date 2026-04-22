@@ -8,6 +8,8 @@ use NosfirQuotia\System\Engine\Model;
 
 final class QuoteModel extends Model
 {
+    private ?bool $brandManualTableReady = null;
+
     public function dashboardStats(): array
     {
         $totalRequests = $this->db->fetch('SELECT COUNT(*) AS total FROM quote_requests');
@@ -169,6 +171,90 @@ final class QuoteModel extends Model
              ORDER BY id ASC',
             ['report_id' => $reportId]
         );
+    }
+
+    public function brandManual(int $requestId): ?array
+    {
+        if (!$this->ensureBrandManualTable()) {
+            return null;
+        }
+
+        return $this->db->fetch(
+            'SELECT
+                bmr.id,
+                bmr.quote_request_id,
+                bmr.admin_user_id,
+                bmr.schema_version,
+                bmr.tool_source,
+                bmr.generated_at,
+                bmr.payload_json,
+                bmr.created_at,
+                bmr.updated_at,
+                au.name AS admin_name
+             FROM brand_manual_reports bmr
+             LEFT JOIN admin_users au ON au.id = bmr.admin_user_id
+             WHERE bmr.quote_request_id = :request_id
+             LIMIT 1',
+            ['request_id' => $requestId]
+        );
+    }
+
+    public function saveBrandManualReport(
+        int $requestId,
+        int $adminUserId,
+        string $payloadJson,
+        string $schemaVersion,
+        string $toolSource,
+        ?string $generatedAt
+    ): bool {
+        if (!$this->ensureBrandManualTable()) {
+            return false;
+        }
+
+        $existing = $this->db->fetch(
+            'SELECT id FROM brand_manual_reports WHERE quote_request_id = :request_id LIMIT 1',
+            ['request_id' => $requestId]
+        );
+
+        if ($existing === null) {
+            $this->db->execute(
+                'INSERT INTO brand_manual_reports (
+                    quote_request_id, admin_user_id, schema_version, tool_source, generated_at, payload_json
+                 ) VALUES (
+                    :quote_request_id, :admin_user_id, :schema_version, :tool_source, :generated_at, :payload_json
+                 )',
+                [
+                    'quote_request_id' => $requestId,
+                    'admin_user_id' => $adminUserId,
+                    'schema_version' => $schemaVersion,
+                    'tool_source' => $toolSource,
+                    'generated_at' => $generatedAt,
+                    'payload_json' => $payloadJson,
+                ]
+            );
+            return true;
+        }
+
+        $this->db->execute(
+            'UPDATE brand_manual_reports
+             SET
+                admin_user_id = :admin_user_id,
+                schema_version = :schema_version,
+                tool_source = :tool_source,
+                generated_at = :generated_at,
+                payload_json = :payload_json
+             WHERE quote_request_id = :request_id',
+            [
+                'request_id' => $requestId,
+                'admin_user_id' => $adminUserId,
+                'schema_version' => $schemaVersion,
+                'tool_source' => $toolSource,
+                'generated_at' => $generatedAt,
+                'payload_json' => $payloadJson,
+            ]
+        );
+
+        return true;
     }
 
     public function taxSettings(): array
@@ -383,6 +469,38 @@ final class QuoteModel extends Model
         }
 
         return $label === $legacyDefault ? $fallback : $label;
+    }
+
+    private function ensureBrandManualTable(): bool
+    {
+        if ($this->brandManualTableReady !== null) {
+            return $this->brandManualTableReady;
+        }
+
+        try {
+            $this->db->execute(
+                'CREATE TABLE IF NOT EXISTS brand_manual_reports (
+                    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    quote_request_id INT UNSIGNED NOT NULL,
+                    admin_user_id INT UNSIGNED NOT NULL,
+                    schema_version VARCHAR(60) NOT NULL DEFAULT \'brand_manual_mvp_v1\',
+                    tool_source VARCHAR(80) NOT NULL DEFAULT \'brandmanual_tool\',
+                    generated_at DATETIME NULL,
+                    payload_json LONGTEXT NOT NULL,
+                    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                    CONSTRAINT fk_brand_manual_reports_request FOREIGN KEY (quote_request_id) REFERENCES quote_requests (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT fk_brand_manual_reports_admin FOREIGN KEY (admin_user_id) REFERENCES admin_users (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                    UNIQUE KEY uq_brand_manual_reports_request (quote_request_id),
+                    INDEX idx_brand_manual_reports_created (created_at)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+            );
+            $this->brandManualTableReady = true;
+        } catch (\Throwable) {
+            $this->brandManualTableReady = false;
+        }
+
+        return $this->brandManualTableReady;
     }
 
     public function createOrUpdateReport(

@@ -29,6 +29,7 @@ $areaOptions = [
     'eventos' => 'Eventos e entretenimento',
     'industria' => 'Industria e manufatura',
     'agro' => 'Agronegocio',
+    'outros' => 'Outros',
 ];
 
 $businessMomentOptions = [
@@ -50,6 +51,19 @@ $priorityOptions = [
     'equilibrio' => 'Equilibrio entre prazo e qualidade',
     'inicio_rapido' => 'Inicio rapido',
     'detalhado' => 'Projeto mais detalhado',
+];
+
+$serviceCategoryOptions = [
+    'criacao_logo' => 'Criacao de logo',
+    'recriar_logo' => 'Recriar um logo (Vetorizacao)',
+    'identidade_visual' => 'Projeto de Identidade Visual (PIV)',
+    'naming' => 'Criacao de Nome (Naming)',
+    'branding' => 'Branding e Gestao de Marca',
+    'papelaria' => 'Papelaria Institucional',
+    'pdv' => 'Design para Ponto de Venda (PDV)',
+    'manual_identidade' => 'Manual de Identidade Visual',
+    'criar_tipografia' => 'Criar Tipografia',
+    'criar_ilustracao' => 'Criar Ilustracao',
 ];
 
 $selectedPersonType = (string) old('client_person_type', 'pf');
@@ -75,6 +89,10 @@ if ($selectedChannel !== '' && !isset($channelOptions[$selectedChannel])) {
 $selectedPriority = (string) old('project_priority', '');
 if ($selectedPriority !== '' && !isset($priorityOptions[$selectedPriority])) {
     $selectedPriority = '';
+}
+$selectedServiceCategory = (string) old('service_category', '');
+if ($selectedServiceCategory !== '' && !isset($serviceCategoryOptions[$selectedServiceCategory])) {
+    $selectedServiceCategory = '';
 }
 $selectedServiceMode = (string) old('service_view_mode', 'recommended');
 if (!in_array($selectedServiceMode, ['recommended', 'all'], true)) {
@@ -198,6 +216,16 @@ foreach ($serviceCatalogs as $catalog) {
                                         </select>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="serviceCategory">Servico principal desejado</label>
+                                        <select class="form-select" id="serviceCategory" name="service_category" data-service-category required>
+                                            <option value="">Selecione um servico</option>
+                                            <?php foreach ($serviceCategoryOptions as $value => $label): ?>
+                                                <option value="<?= e($value) ?>" <?= $selectedServiceCategory === $value ? 'selected' : '' ?>><?= e($label) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
                                     <div class="col-md-6" data-company-profile-group>
                                         <label class="form-label" for="companyProfile">Porte da empresa</label>
                                         <select class="form-select" id="companyProfile" name="company_profile" data-company-profile>
@@ -236,7 +264,7 @@ foreach ($serviceCatalogs as $catalog) {
                                                 <span>Mostrar todos os servicos</span>
                                             </label>
                                         </div>
-                                        <div class="form-text" data-service-mode-helper>As recomendacoes consideram tipo de cadastro, area e porte.</div>
+                                        <div class="form-text" data-service-mode-helper>As recomendacoes consideram tipo de cadastro, area, servico principal e porte.</div>
                                     </div>
 
                                     <div class="col-12"><p class="small text-muted mb-2" data-service-counter aria-live="polite"></p></div>
@@ -346,6 +374,7 @@ foreach ($serviceCatalogs as $catalog) {
                                             <div><dt>Tipo de cadastro</dt><dd data-summary-person-type>-</dd></div>
                                             <div data-summary-company-profile-row><dt>Porte da empresa</dt><dd data-summary-company-profile>-</dd></div>
                                             <div><dt>Area de atuacao</dt><dd data-summary-client-area>-</dd></div>
+                                            <div><dt>Servico principal</dt><dd data-summary-service-category>-</dd></div>
                                             <div><dt>Disponibilidade esperada</dt><dd data-summary-availability>-</dd></div>
                                         </dl>
                                     </div>
@@ -411,6 +440,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const companyProfileGroup = form.querySelector('[data-company-profile-group]');
     const companyProfileSelect = form.querySelector('[data-company-profile]');
     const clientAreaSelect = form.querySelector('[data-client-area]');
+    const serviceCategorySelect = form.querySelector('[data-service-category]');
 
     const serviceModeRadios = Array.from(form.querySelectorAll('[data-service-mode]'));
     const serviceModeHelper = form.querySelector('[data-service-mode-helper]');
@@ -425,6 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const summaryCompanyProfile = form.querySelector('[data-summary-company-profile]');
     const summaryCompanyProfileRow = form.querySelector('[data-summary-company-profile-row]');
     const summaryClientArea = form.querySelector('[data-summary-client-area]');
+    const summaryServiceCategory = form.querySelector('[data-summary-service-category]');
     const summaryAvailability = form.querySelector('[data-summary-availability]');
     const summaryServices = form.querySelector('[data-summary-services]');
     const summaryBusinessMoment = form.querySelector('[data-summary-business-moment]');
@@ -452,7 +483,21 @@ document.addEventListener('DOMContentLoaded', function () {
         imobiliario: ['imobiliario', 'construcao', 'institucional', 'lancamento'],
         eventos: ['evento', 'entretenimento', 'campanha', 'digital'],
         industria: ['industria', 'catalogo', 'manual', 'tecnico', 'embalagem'],
-        agro: ['agro', 'institucional', 'rotulo', 'embalagem', 'marca']
+        agro: ['agro', 'institucional', 'rotulo', 'embalagem', 'marca'],
+        outros: []
+    };
+
+    const categoryKeywords = {
+        criacao_logo: ['logo', 'logotipo', 'logomarca', 'piv', 'identidade visual'],
+        recriar_logo: ['redesenho', 'vetorizacao', 'atualizacao', 'reformulacao', 'logo', 'logotipo'],
+        identidade_visual: ['identidade visual', 'piv', 'marca', 'manual'],
+        naming: ['naming', 'nome', 'marca', 'slogan', 'tagline'],
+        branding: ['branding', 'gestao', 'diagnostico', 'estrategia'],
+        papelaria: ['papelaria', 'cartao', 'envelope', 'pasta', 'timbrado'],
+        pdv: ['pdv', 'ponto de venda', 'expositor', 'display'],
+        manual_identidade: ['manual', 'identidade', 'guia', 'uso'],
+        criar_tipografia: ['tipografia', 'fonte', 'lettering'],
+        criar_ilustracao: ['ilustracao', 'iconografia', 'mascote']
     };
 
     const areaPreferredGroups = {
@@ -466,7 +511,8 @@ document.addEventListener('DOMContentLoaded', function () {
         imobiliario: ['materiais_digitais', 'materiais_impressos'],
         eventos: ['materiais_digitais', 'identidade_visual'],
         industria: ['materiais_impressos', 'branding_estrategia'],
-        agro: ['materiais_impressos', 'identidade_visual']
+        agro: ['materiais_impressos', 'identidade_visual'],
+        outros: []
     };
 
     const serviceOptions = Array.from(form.querySelectorAll('[data-service-option]')).map(function (element) {
@@ -543,7 +589,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const personType = selectedPersonType();
         const companyProfile = String((companyProfileSelect && companyProfileSelect.value) || '');
         const area = String((clientAreaSelect && clientAreaSelect.value) || '');
+        const category = String((serviceCategorySelect && serviceCategorySelect.value) || '');
         const keywords = areaKeywords[area] || [];
+        const catKeywords = categoryKeywords[category] || [];
         const preferredGroups = areaPreferredGroups[area] || [];
 
         const scored = serviceOptions.map(function (option) {
@@ -552,9 +600,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (personType === 'pf' && option.profile === 'geral') { score += 2; }
             if (personType === 'pj' && companyProfile !== '' && option.profile === companyProfile) { score += 5; }
             if (personType === 'pj' && companyProfile === 'pequena' && option.profile === 'microempresa') { score += 3; }
+            
             keywords.forEach(function (term) {
                 if (option.text.indexOf(term) !== -1) { score += 2; }
             });
+
+            catKeywords.forEach(function (term) {
+                if (option.text.indexOf(term) !== -1) { score += 10; } // High score for matching category
+            });
+
             if (preferredGroups.indexOf(option.group) !== -1) { score += 2; }
             if (option.group === 'branding_estrategia' || option.group === 'identidade_visual') { score += 1; }
             return { id: option.id, score: score, label: option.label };
@@ -566,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const ids = scored.length > 0
-            ? scored.slice(0, 10).map(function (entry) { return entry.id; })
+            ? scored.slice(0, 15).map(function (entry) { return entry.id; }) // Increased to 15 to show more options if filtered
             : serviceOptions.slice(0, Math.min(10, serviceOptions.length)).map(function (option) { return option.id; });
 
         return new Set(ids);
@@ -622,6 +676,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (summaryProjectTitle) { summaryProjectTitle.textContent = String(projectTitleInput ? projectTitleInput.value : '').trim() || 'Nao informado'; }
         if (summaryPersonType) { summaryPersonType.textContent = selectText(personTypeSelect) || 'Nao informado'; }
         if (summaryClientArea) { summaryClientArea.textContent = selectText(clientAreaSelect) || 'Nao informado'; }
+        if (summaryServiceCategory) { summaryServiceCategory.textContent = selectText(serviceCategorySelect) || 'Nao informado'; }
         if (summaryAvailability) { summaryAvailability.textContent = String(availabilityInput ? availabilityInput.value : '').trim() || 'Nao informado'; }
         if (summaryBusinessMoment) { summaryBusinessMoment.textContent = selectText(businessMomentSelect) || 'Nao informado'; }
         if (summaryPriorityChannel) { summaryPriorityChannel.textContent = selectText(priorityChannelSelect) || 'Nao informado'; }
@@ -663,6 +718,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (String(clientAreaSelect ? clientAreaSelect.value : '').trim() === '') {
                 showStepError('Selecione a area de atuacao para continuar.', clientAreaSelect);
+                return false;
+            }
+            if (String(serviceCategorySelect ? serviceCategorySelect.value : '').trim() === '') {
+                showStepError('Selecione o servico principal para continuar.', serviceCategorySelect);
                 return false;
             }
             if (personType === 'pj' && String(companyProfileSelect ? companyProfileSelect.value : '').trim() === '') {
@@ -778,7 +837,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    [personTypeSelect, companyProfileSelect, clientAreaSelect].forEach(function (input) {
+    [personTypeSelect, companyProfileSelect, clientAreaSelect, serviceCategorySelect].forEach(function (input) {
         if (!input) { return; }
         input.addEventListener('change', function () {
             syncPersonTypeFields();

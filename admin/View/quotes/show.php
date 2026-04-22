@@ -127,6 +127,20 @@
             </div>
         <?php endif; ?>
 
+        <?php
+        $brandManualData = isset($brandManual) && is_array($brandManual) ? $brandManual : null;
+        $brandManualPayload = (string) ($brandManualData['payload_json'] ?? '');
+        $brandManualUpdatedAt = (string) ($brandManualData['updated_at'] ?? '');
+        $brandManualCreatedAt = (string) ($brandManualData['created_at'] ?? '');
+        $brandManualSchema = (string) ($brandManualData['schema_version'] ?? '');
+        $brandManualSource = (string) ($brandManualData['tool_source'] ?? '');
+        $brandManualAdmin = (string) ($brandManualData['admin_name'] ?? '');
+        $brandManualGeneratedAt = (string) ($brandManualData['generated_at'] ?? '');
+        $brandManualSizeKb = $brandManualPayload !== ''
+            ? number_format((float) (strlen($brandManualPayload) / 1024), 1, ',', '.')
+            : '0,0';
+        ?>
+
         <form method="post" action="<?= e(url('/admin/orcamentos/' . (int) $requestData['id'] . '/gerar-relatorio')) ?>" class="row g-3" id="quoteReportForm">
             <input type="hidden" name="company_profile" id="companyProfileField" value="todos">
             <?php
@@ -307,6 +321,65 @@
                 <label class="form-label">Observacoes gerais do relatorio</label>
                 <textarea class="form-control" rows="3" name="report_notes"><?= e((string) ($requestData['report_notes'] ?? '')) ?></textarea>
             </div>
+            <div class="col-12">
+                <h3 class="h6 text-uppercase text-muted mb-2">Manual da Marca (MVP)</h3>
+                <div class="border rounded-3 p-3 bg-light-subtle">
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <a class="btn btn-sm btn-outline-primary" href="<?= e(url('/admin/ferramentas/brandmanual')) ?>" target="_blank" rel="noopener noreferrer">
+                            Abrir ferramenta Manual da Marca
+                        </a>
+                        <?php if ($brandManualData !== null && $brandManualPayload !== ''): ?>
+                            <a class="btn btn-sm btn-outline-success" href="<?= e(url('/admin/orcamentos/' . (int) $requestData['id'] . '/manual-marca.json')) ?>">
+                                Baixar JSON salvo no banco
+                            </a>
+                        <?php endif; ?>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="importBrandManualBtn">
+                            Importar ultimo payload do navegador
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" id="clearBrandManualBtn">
+                            Limpar campo
+                        </button>
+                    </div>
+
+                    <?php if ($brandManualData !== null): ?>
+                        <?php
+                        $brandManualLastRaw = $brandManualUpdatedAt !== '' ? $brandManualUpdatedAt : $brandManualCreatedAt;
+                        $brandManualLastTs = $brandManualLastRaw !== '' ? strtotime($brandManualLastRaw) : false;
+                        $brandManualGeneratedTs = $brandManualGeneratedAt !== '' ? strtotime($brandManualGeneratedAt) : false;
+                        ?>
+                        <div class="small text-muted mb-2">
+                            Ultimo manual salvo em
+                            <strong><?= e($brandManualLastTs !== false ? date('d/m/Y H:i', $brandManualLastTs) : 'data indisponivel') ?></strong>
+                            <?php if ($brandManualAdmin !== ''): ?>
+                                por <strong><?= e($brandManualAdmin) ?></strong>
+                            <?php endif; ?>.
+                            Schema: <strong><?= e($brandManualSchema !== '' ? $brandManualSchema : 'n/d') ?></strong>.
+                            Origem: <strong><?= e($brandManualSource !== '' ? $brandManualSource : 'n/d') ?></strong>.
+                            <?php if ($brandManualGeneratedTs !== false): ?>
+                                Gerado em <strong><?= e(date('d/m/Y H:i', $brandManualGeneratedTs)) ?></strong>.
+                            <?php endif; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="small text-muted mb-2">
+                            Nenhum manual da marca salvo para este pedido ainda.
+                        </div>
+                    <?php endif; ?>
+
+                    <label class="form-label small fw-semibold" for="manualBrandPayload">
+                        Payload JSON do Manual da Marca (opcional)
+                    </label>
+                    <textarea
+                        class="form-control font-monospace"
+                        rows="10"
+                        id="manualBrandPayload"
+                        name="manual_brand_payload"
+                        placeholder="{\"schema\":\"brand_manual_mvp_v1\", ...}"
+                    ><?= e($brandManualPayload) ?></textarea>
+                    <div class="small text-muted mt-2" id="manualBrandStatus">
+                        Tamanho atual: <?= e($brandManualSizeKb) ?> KB. O JSON sera validado antes de salvar.
+                    </div>
+                </div>
+            </div>
             <div class="col-12 d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">
                     <?= !empty($requestData['report_id']) ? 'Atualizar relatorio' : 'Gerar relatorio' ?>
@@ -334,6 +407,11 @@
     const subtotalNode = document.getElementById('reportSubtotalAmount');
     const taxesNode = document.getElementById('reportTaxesAmount');
     const finalNode = document.getElementById('reportFinalAmount');
+    const manualPayloadField = document.getElementById('manualBrandPayload');
+    const manualStatusNode = document.getElementById('manualBrandStatus');
+    const manualImportBtn = document.getElementById('importBrandManualBtn');
+    const manualClearBtn = document.getElementById('clearBrandManualBtn');
+    const manualStorageKey = 'brand_manual_mvp_latest_v1';
 
     const normalizeProfile = (value) => String(value || 'geral').toLowerCase().trim();
     const toNumber = (value) => {
@@ -343,6 +421,12 @@
 
     const money = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const normalizeArea = (value) => String(value || 'design').toLowerCase().trim();
+    const toKb = (text) => (String(text || '').length / 1024).toFixed(1).replace('.', ',');
+    const setManualStatus = (message) => {
+        if (manualStatusNode) {
+            manualStatusNode.textContent = message;
+        }
+    };
     const matchesProfile = (selectedProfile, rowProfile) => {
         if (selectedProfile === 'todos') {
             return true;
@@ -452,6 +536,57 @@
 
     if (areaSelect) {
         areaSelect.addEventListener('change', applyFilters);
+    }
+
+    if (manualImportBtn && manualPayloadField) {
+        manualImportBtn.addEventListener('click', () => {
+            if (typeof localStorage === 'undefined') {
+                setManualStatus('Importacao indisponivel: navegador sem localStorage.');
+                return;
+            }
+
+            const raw = localStorage.getItem(manualStorageKey);
+            if (!raw) {
+                setManualStatus('Nenhum payload encontrado no navegador. Gere primeiro em /admin/ferramentas/brandmanual.');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') {
+                    setManualStatus('Payload invalido encontrado no armazenamento local.');
+                    return;
+                }
+
+                const schema = String(parsed.schema || '').trim();
+                const generatedAt = String(parsed.generatedAt || '').trim();
+                const generatedDate = generatedAt !== '' ? new Date(generatedAt) : null;
+                const generatedLabel = generatedDate && Number.isFinite(generatedDate.getTime())
+                    ? generatedDate.toLocaleString('pt-BR')
+                    : '';
+                manualPayloadField.value = JSON.stringify(parsed, null, 2);
+                setManualStatus(
+                    `Payload importado (${toKb(manualPayloadField.value)} KB).`
+                    + (schema !== '' ? ` Schema: ${schema}.` : '')
+                    + (generatedLabel !== '' ? ` Gerado em: ${generatedLabel}.` : '')
+                );
+            } catch (error) {
+                setManualStatus('Falha ao importar payload do navegador: JSON invalido.');
+            }
+        });
+    }
+
+    if (manualClearBtn && manualPayloadField) {
+        manualClearBtn.addEventListener('click', () => {
+            manualPayloadField.value = '';
+            setManualStatus('Campo do manual limpo. Nenhum payload sera atualizado neste envio.');
+        });
+    }
+
+    if (manualPayloadField) {
+        manualPayloadField.addEventListener('input', () => {
+            setManualStatus(`Tamanho atual: ${toKb(manualPayloadField.value)} KB. O JSON sera validado ao salvar.`);
+        });
     }
 
     if (profileSelect || areaSelect) {

@@ -33,6 +33,9 @@ function bindReportEvents() {
     document.getElementById('backToEditorBtn')?.addEventListener('click', () => {
         window.location.href = './editor.php';
     });
+    document.getElementById('openBrandManualBtn')?.addEventListener('click', () => {
+        window.location.href = '../brandmanual/index.php';
+    });
 
     document.addEventListener('copy', (event) => {
         if (!isCopyBlocked()) {

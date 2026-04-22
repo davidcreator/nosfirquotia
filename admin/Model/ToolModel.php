@@ -29,6 +29,10 @@ final class ToolModel extends Model
             'name' => 'Font Strategy Advisor',
             'description' => 'Define pares tipograficos, hierarquia de fontes e recomendacoes para marca.',
         ],
+        'brandmanual' => [
+            'name' => 'Brand Manual Report (MVP)',
+            'description' => 'Consolida identidade visual (cores, tipografia, mockups e diretriz digital) em um unico relatorio.',
+        ],
         'mockups' => [
             'name' => 'Mockups',
             'description' => 'Criacao e edicao de mockups para apresentacoes de design.',

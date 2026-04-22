@@ -40,6 +40,7 @@ final class RequestController extends BaseClientController
             'client_person_type' => $personType,
             'company_profile' => $companyProfile,
             'client_area' => $this->sanitizeArea((string) $this->request->post('client_area', '')),
+            'service_category' => $this->sanitizeServiceCategory((string) $this->request->post('service_category', '')),
             'requested_availability' => trim((string) $this->request->post('requested_availability', '')),
             'business_moment' => $this->sanitizeBusinessMoment((string) $this->request->post('business_moment', '')),
             'priority_channel' => $this->sanitizePriorityChannel((string) $this->request->post('priority_channel', '')),
@@ -61,6 +62,10 @@ final class RequestController extends BaseClientController
 
         if ($payload['client_area'] === '') {
             $errors[] = 'Selecione a area de atuacao.';
+        }
+        
+        if ($payload['service_category'] === '') {
+            $errors[] = 'Selecione o servico principal.';
         }
 
         if ($personType === 'pj' && $payload['company_profile'] === '') {
@@ -198,10 +203,21 @@ final class RequestController extends BaseClientController
         $area = strtolower(trim($area));
         $allowed = [
             'moda_beleza', 'alimentacao', 'saude', 'educacao', 'tecnologia',
-            'comercio', 'servicos', 'imobiliario', 'eventos', 'industria', 'agro',
+            'comercio', 'servicos', 'imobiliario', 'eventos', 'industria', 'agro', 'outros',
         ];
 
         return in_array($area, $allowed, true) ? $area : '';
+    }
+
+    private function sanitizeServiceCategory(string $category): string
+    {
+        $category = strtolower(trim($category));
+        $allowed = [
+            'criacao_logo', 'recriar_logo', 'identidade_visual', 'naming',
+            'branding', 'papelaria', 'pdv', 'manual_identidade',
+            'criar_tipografia', 'criar_ilustracao'
+        ];
+        return in_array($category, $allowed, true) ? $category : '';
     }
 
     private function sanitizeBusinessMoment(string $moment): string
@@ -245,6 +261,7 @@ final class RequestController extends BaseClientController
         }
 
         $lines[] = 'Area de atuacao: ' . $this->resolveAreaLabel((string) ($payload['client_area'] ?? ''));
+        $lines[] = 'Servico principal desejado: ' . $this->resolveServiceCategoryLabel((string) ($payload['service_category'] ?? ''));
         $lines[] = 'Disponibilidade esperada: ' . ($payload['requested_availability'] !== '' ? $payload['requested_availability'] : 'Nao informada');
         $lines[] = 'Momento do negocio: ' . $this->resolveBusinessMomentLabel((string) ($payload['business_moment'] ?? ''));
         $lines[] = 'Canal prioritario: ' . $this->resolvePriorityChannelLabel((string) ($payload['priority_channel'] ?? ''));
@@ -324,9 +341,28 @@ final class RequestController extends BaseClientController
             'eventos' => 'Eventos e entretenimento',
             'industria' => 'Industria e manufatura',
             'agro' => 'Agronegocio',
+            'outros' => 'Outros',
         ];
 
-        return $map[$area] ?? 'Nao informado';
+        return $map[$area] ?? 'Nao informada';
+    }
+
+    private function resolveServiceCategoryLabel(string $category): string
+    {
+        $map = [
+            'criacao_logo' => 'Criacao de logo',
+            'recriar_logo' => 'Recriar um logo (Vetorizacao)',
+            'identidade_visual' => 'Projeto de Identidade Visual (PIV)',
+            'naming' => 'Criacao de Nome (Naming)',
+            'branding' => 'Branding e Gestao de Marca',
+            'papelaria' => 'Papelaria Institucional',
+            'pdv' => 'Design para Ponto de Venda (PDV)',
+            'manual_identidade' => 'Manual de Identidade Visual',
+            'criar_tipografia' => 'Criar Tipografia',
+            'criar_ilustracao' => 'Criar Ilustracao',
+        ];
+
+        return $map[$category] ?? 'Nao informada';
     }
 
     private function resolveBusinessMomentLabel(string $moment): string

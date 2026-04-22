@@ -64,6 +64,11 @@ body.aq-tool-mockups .container {
     padding-right: clamp(12px, 1.6vw, 24px) !important;
 }
 
+/* Brand Manual (MVP) */
+body.aq-tool-brandmanual .page {
+    padding: clamp(12px, 1.8vw, 28px) !important;
+}
+
 /* Font Advisor */
 body.aq-tool-fontadvisor {
     padding: clamp(10px, 1.4vw, 22px) !important;

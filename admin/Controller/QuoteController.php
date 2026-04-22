@@ -47,6 +47,7 @@ final class QuoteController extends BaseAdminController
             $reportTaxes = $model->reportTaxes((int) $request['report_id']);
         }
 
+        $brandManual = $model->brandManual((int) $request['id']);
         $taxSettings = $model->taxSettings();
 
         $this->render(
@@ -56,11 +57,47 @@ final class QuoteController extends BaseAdminController
                 'services' => $services,
                 'reportItems' => $reportItems,
                 'reportTaxes' => $reportTaxes,
+                'brandManual' => $brandManual,
                 'taxSettings' => $taxSettings,
                 'adminUser' => $this->adminUser(),
             ],
             'admin/View/layout'
         );
+    }
+
+    public function downloadBrandManual(string $id): void
+    {
+        $this->ensurePermission('quotes.manage');
+
+        $requestId = (int) $id;
+        $model = new QuoteModel($this->app);
+        $request = $model->find($requestId);
+
+        if ($request === null) {
+            $this->session->flash('error', 'Solicitacao nao encontrada.');
+            $this->redirect('/admin/orcamentos');
+        }
+
+        $manual = $model->brandManual($requestId);
+        $payloadJsonRaw = (string) ($manual['payload_json'] ?? '');
+        if (trim($payloadJsonRaw) === '') {
+            $this->session->flash('warning', 'Nao existe manual da marca salvo para download nesta solicitacao.');
+            $this->redirect('/admin/orcamentos/' . $requestId);
+        }
+
+        $fileName = $this->buildBrandManualFileName(
+            (string) ($request['project_title'] ?? ''),
+            $requestId,
+            (string) ($manual['generated_at'] ?? ($manual['updated_at'] ?? ($manual['created_at'] ?? '')))
+        );
+
+        header('Content-Type: application/json; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        header('X-Content-Type-Options: nosniff');
+        header('Cache-Control: private, max-age=0, no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        echo $payloadJsonRaw;
+        exit;
     }
 
     public function generateReport(string $id): void
@@ -201,13 +238,60 @@ final class QuoteController extends BaseAdminController
             'show_tax_details' => (bool) $this->request->post('show_tax_details', false),
         ];
 
-        $reportId = $model->createOrUpdateReport(
+        $manualPayloadRaw = trim((string) $this->request->post('manual_brand_payload', ''));
+        $manualPayloadParsed = null;
+        if ($manualPayloadRaw !== '') {
+            if (strlen($manualPayloadRaw) > 2_000_000) {
+                $this->session->flash('error', 'Payload do manual da marca excede o limite de 2 MB.');
+                $this->redirect('/admin/orcamentos/' . $requestId);
+            }
+
+            $decoded = json_decode($manualPayloadRaw, true);
+            if (!is_array($decoded)) {
+                $this->session->flash('error', 'Payload do manual da marca invalido. Verifique o JSON antes de salvar.');
+                $this->redirect('/admin/orcamentos/' . $requestId);
+            }
+
+            $manualPayloadParsed = [
+                'schema_version' => $this->sanitizeText(
+                    (string) ($decoded['schema'] ?? ''),
+                    60,
+                    'manual_brand_payload_v1'
+                ),
+                'tool_source' => $this->sanitizeText(
+                    (string) ($decoded['source'] ?? ''),
+                    80,
+                    'manual_brand_payload'
+                ),
+                'generated_at' => $this->normalizeDateTimeForDatabase((string) ($decoded['generatedAt'] ?? '')),
+                'payload_json' => $manualPayloadRaw,
+            ];
+        }
+
+        $model->createOrUpdateReport(
             $requestId,
             (int) ($this->adminUser()['id'] ?? 0),
             $payload,
             $serviceRows,
             $taxRows
         );
+
+        $warnings = [];
+        $manualSaved = false;
+        if (is_array($manualPayloadParsed)) {
+            $manualSaved = $model->saveBrandManualReport(
+                $requestId,
+                (int) ($this->adminUser()['id'] ?? 0),
+                (string) $manualPayloadParsed['payload_json'],
+                (string) $manualPayloadParsed['schema_version'],
+                (string) $manualPayloadParsed['tool_source'],
+                $manualPayloadParsed['generated_at']
+            );
+
+            if (!$manualSaved) {
+                $warnings[] = 'Relatorio salvo, mas nao foi possivel registrar o manual da marca no banco. Execute `php database/upgrade_brand_manual_mvp.php` e tente novamente.';
+            }
+        }
 
         $emailService = new EmailService($this->db(), (array) $this->app->config('mail', []));
         $accountUrl = rtrim($this->request->fullBaseUrl(), '/') . '/cliente/login';
@@ -240,17 +324,86 @@ final class QuoteController extends BaseAdminController
             : 'com detalhes de tributos ocultos para o cliente';
 
         $message = 'Relatorio de orcamento gerado com validade de 90 dias, ' . $visibilityLabel . '.';
+        if ($manualSaved) {
+            $message .= ' Manual da marca (MVP) atualizado com sucesso.';
+        }
         $emailStatus = (string) ($emailResult['status'] ?? '');
         if ($emailStatus === 'sent') {
             $message .= ' Email enviado ao cliente com sucesso.';
         } elseif ($emailStatus === 'invalid_email') {
-            $this->session->flash('warning', 'Relatorio salvo, mas o email nao foi enviado porque o endereco do cliente e invalido.');
+            $warnings[] = 'Relatorio salvo, mas o email nao foi enviado porque o endereco do cliente e invalido.';
         } else {
-            $this->session->flash('warning', 'Relatorio salvo, mas ocorreu problema no envio do email. Verifique em Notificacoes de Email.');
+            $warnings[] = 'Relatorio salvo, mas ocorreu problema no envio do email. Verifique em Notificacoes de Email.';
         }
 
+        if ($warnings !== []) {
+            $this->session->flash('warning', implode(' ', $warnings));
+        }
         $this->session->flash('success', $message);
         $this->redirect('/admin/orcamentos/' . $requestId);
+    }
+
+    private function sanitizeText(string $value, int $maxLength, string $fallback = ''): string
+    {
+        $normalized = trim($value);
+        if ($normalized === '') {
+            return $fallback;
+        }
+
+        if (function_exists('mb_substr')) {
+            return (string) mb_substr($normalized, 0, $maxLength, 'UTF-8');
+        }
+
+        return substr($normalized, 0, $maxLength);
+    }
+
+    private function normalizeDateTimeForDatabase(string $raw): ?string
+    {
+        $value = trim($raw);
+        if ($value === '') {
+            return null;
+        }
+
+        $timestamp = strtotime($value);
+        if ($timestamp === false) {
+            return null;
+        }
+
+        return date('Y-m-d H:i:s', $timestamp);
+    }
+
+    private function buildBrandManualFileName(string $projectTitle, int $requestId, string $rawDateTime): string
+    {
+        $projectSlug = $this->sanitizeFileSlug($projectTitle);
+        if ($projectSlug === '') {
+            $projectSlug = 'solicitacao-' . $requestId;
+        }
+
+        $timestamp = strtotime(trim($rawDateTime));
+        $dateLabel = $timestamp !== false ? date('Ymd-His', $timestamp) : date('Ymd-His');
+
+        return 'manual-marca-' . $projectSlug . '-id' . $requestId . '-' . $dateLabel . '.json';
+    }
+
+    private function sanitizeFileSlug(string $value): string
+    {
+        $normalized = strtolower(trim($value));
+        if ($normalized === '') {
+            return '';
+        }
+
+        $normalized = preg_replace('/[^a-z0-9]+/', '-', $normalized) ?? '';
+        $normalized = trim($normalized, '-');
+
+        if ($normalized === '') {
+            return '';
+        }
+
+        if (function_exists('mb_substr')) {
+            return (string) mb_substr($normalized, 0, 60, 'UTF-8');
+        }
+
+        return substr($normalized, 0, 60);
     }
 
     private function toFloat(string $value): ?float

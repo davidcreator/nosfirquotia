@@ -137,6 +137,22 @@ CREATE TABLE IF NOT EXISTS quote_report_taxes (
     INDEX idx_quote_report_taxes_report (quote_report_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS brand_manual_reports (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    quote_request_id INT UNSIGNED NOT NULL,
+    admin_user_id INT UNSIGNED NOT NULL,
+    schema_version VARCHAR(60) NOT NULL DEFAULT 'brand_manual_mvp_v1',
+    tool_source VARCHAR(80) NOT NULL DEFAULT 'brandmanual_tool',
+    generated_at DATETIME NULL,
+    payload_json LONGTEXT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_brand_manual_reports_request FOREIGN KEY (quote_request_id) REFERENCES quote_requests (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_brand_manual_reports_admin FOREIGN KEY (admin_user_id) REFERENCES admin_users (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    UNIQUE KEY uq_brand_manual_reports_request (quote_request_id),
+    INDEX idx_brand_manual_reports_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS tax_settings (
     id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
     imposto_label VARCHAR(120) NOT NULL DEFAULT 'Impostos',

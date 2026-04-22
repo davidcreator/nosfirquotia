@@ -154,6 +154,12 @@ Para ativar recursos de comunicacao por email, recuperacao de senha e logs de no
 php database/upgrade_communications_security.php
 ```
 
+Para ativar persistencia do Manual da Marca (MVP) no banco (vinculo por solicitacao):
+
+```bash
+php database/upgrade_brand_manual_mvp.php
+```
+
 ## Tabelas principais do fluxo atual
 
 - `client_users`
@@ -162,6 +168,7 @@ php database/upgrade_communications_security.php
 - `quote_reports`
 - `quote_report_items`
 - `quote_report_taxes`
+- `brand_manual_reports`
 - `tax_settings`
 - `admin_users` (com nivel, status ativo/inativo e permissoes por modulo)
 - `email_dispatch_logs`
@@ -180,6 +187,7 @@ php database/upgrade_communications_security.php
 - Recuperar senha admin: `/admin/esqueci-senha`
 - Redefinir senha admin: `/admin/redefinir-senha?token=...`
 - Admin solicitacoes/relatorios: `/admin/orcamentos`
+- Download do Manual da Marca salvo: `/admin/orcamentos/{id}/manual-marca.json`
 - Admin notificacoes de email: `/admin/notificacoes-email`
 - Admin base completa de precos/servicos: `/admin/referencias`
 - Admin central fiscal: `/admin/tributos`
@@ -194,6 +202,11 @@ php database/upgrade_communications_security.php
 - Cada projeto em `admin/tools/*` (ou em `Tools/*`, quando essa pasta existir na raiz) e listado no painel.
 - Ferramentas com `index.php` sao abertas dentro do layout admin em iframe, mantendo identidade visual do Nosfir Quotia.
 - Acesso direto aos projetos em `admin/tools` exige sessao admin.
+- MVP ativo de manual da marca: `Brand Manual Report (MVP)` em `/admin/ferramentas/brandmanual`.
+- O MVP consolida dados das chaves locais de integracao (`AQBrandKit`, mockups e OG settings) e exporta JSON/PDF resumo.
+- O modulo inclui `Template Studio` com 3 layouts de brandbook (`mono_arc`, `cobalt_grid`, `crimson_blob`), preview em 8 paginas, impressao e export HTML standalone.
+- Em `/admin/orcamentos/{id}` e possivel importar o ultimo payload do manual salvo no navegador e persistir no banco junto da geracao/atualizacao do relatorio.
+- Em `/admin/orcamentos/{id}/manual-marca.json` e possivel baixar o JSON persistido no banco para auditoria e anexos externos.
 
 ## Central Fiscal (admin)
 

@@ -29,6 +29,10 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
                     <i class="fas fa-arrow-left"></i>
                     Voltar ao Editor
                 </button>
+                <button type="button" class="btn-secondary" id="openBrandManualBtn">
+                    <i class="fas fa-book-open"></i>
+                    Abrir Manual da Marca (MVP)
+                </button>
             </div>
         </div>
     </header>
