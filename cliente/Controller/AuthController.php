@@ -168,7 +168,7 @@ final class AuthController extends Controller
         return new PasswordResetService(
             $this->db(),
             $emailService,
-            (string) $this->app->config('name', 'Nosfir Quotia')
+            (string) $this->app->config('name', 'Quotia')
         );
     }
 }

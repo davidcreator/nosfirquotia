@@ -3,7 +3,7 @@
         <div class="card border-0 shadow-sm">
             <div class="card-body p-4 p-lg-5">
                 <h1 class="h3 mb-3">Login Administrativo</h1>
-                <p class="text-muted mb-4">Acesse para gerenciar orcamentos e categorias do Nosfir Quotia.</p>
+                <p class="text-muted mb-4">Acesse para gerenciar orcamentos e categorias do Quotia.</p>
                 <form method="post" action="<?= e(url('/admin/login')) ?>" class="row g-3">
                     <div class="col-12">
                         <label class="form-label">Email</label>

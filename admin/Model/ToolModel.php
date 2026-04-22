@@ -61,7 +61,7 @@ final class ToolModel extends Model
             $hasEntrypoint = is_file($entrypoint);
             $metadata = self::TOOL_METADATA[$slug] ?? [
                 'name' => ucwords(str_replace(['-', '_'], ' ', $slug)),
-                'description' => 'Ferramenta integrada ao Nosfir Quotia.',
+                'description' => 'Ferramenta integrada ao Quotia.',
             ];
 
             $tools[] = [

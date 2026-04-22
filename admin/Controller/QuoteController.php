@@ -311,7 +311,7 @@ final class QuoteController extends BaseAdminController
                 'context_key' => 'quote_report_ready',
                 'recipient_name' => (string) ($request['client_name'] ?? 'Cliente'),
                 'recipient_email' => (string) ($request['client_email'] ?? ''),
-                'subject' => 'Seu orcamento esta pronto no Nosfir Quotia',
+                'subject' => 'Seu orcamento esta pronto no Quotia',
                 'html_body' => $html,
                 'text_body' => $text,
                 'related_type' => 'quote_request',
@@ -462,7 +462,7 @@ final class QuoteController extends BaseAdminController
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
   <h2 style="margin: 0 0 12px 0;">Seu orcamento esta pronto</h2>
   <p>Ola {$safeName},</p>
-  <p>Seu orcamento referente ao projeto <strong>{$safeProject}</strong> ja esta disponivel no Nosfir Quotia.</p>
+  <p>Seu orcamento referente ao projeto <strong>{$safeProject}</strong> ja esta disponivel no Quotia.</p>
   <p>Acesse sua conta para visualizar valores, prazos e disponibilidade:</p>
   <p>
     <a href="{$safeUrl}" style="display: inline-block; background: #1a4b8f; color: #fff; text-decoration: none; padding: 10px 14px; border-radius: 6px;">
@@ -477,7 +477,7 @@ HTML;
     private function buildClientReportReadyEmailText(string $name, string $projectTitle, string $accountUrl): string
     {
         return "Ola {$name},\n\n" .
-            "Seu orcamento referente ao projeto \"{$projectTitle}\" ja esta disponivel no Nosfir Quotia.\n" .
+            "Seu orcamento referente ao projeto \"{$projectTitle}\" ja esta disponivel no Quotia.\n" .
             "Acesse sua conta para visualizar os detalhes:\n{$accountUrl}\n\n" .
             "Obrigado.\n";
     }
