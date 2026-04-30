@@ -6,84 +6,227 @@
     <title><?= e($appName ?? 'Quotia') ?> - Admin</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="<?= e(asset('public/assets/vendor/reamur/css/all.min.css')) ?>" rel="stylesheet">
+    <link href="<?= e(asset('public/assets/vendor/reamur/css/theme-switcher.css')) ?>" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">
+    <link href="<?= e(asset('public/assets/css/admin.css')) ?>" rel="stylesheet">
 </head>
-<?php $isToolWorkspace = (bool) ($isToolWorkspace ?? false); ?>
-<body class="aq-admin-bg<?= $isToolWorkspace ? ' aq-admin-tools-open' : '' ?>">
-<?php if (!($isLoginPage ?? false)): ?>
+<?php
+$isLoginPage = (bool) ($isLoginPage ?? false);
+$isToolWorkspace = (bool) ($isToolWorkspace ?? false);
+$currentAdminPath = (string) ($currentPath ?? app()->request()->path());
+?>
+<body class="aq-admin-theme aq-admin-bg<?= $isLoginPage ? ' aq-admin-auth-page' : '' ?><?= $isToolWorkspace ? ' aq-admin-tools-open' : '' ?>">
+<?php if (!$isLoginPage): ?>
     <?php
     $adminUserData = admin_user();
+    $adminName = (string) ($adminUserData['name'] ?? 'Administrador');
     $adminAccessLevel = (string) ($adminUserData['access_level'] ?? 'Administrador');
     $adminHomePath = app()->auth()->preferredAdminPath();
+
+    $isActivePath = static function (string $pathPrefix) use ($currentAdminPath): bool {
+        if ($currentAdminPath === $pathPrefix) {
+            return true;
+        }
+
+        return str_starts_with($currentAdminPath, $pathPrefix . '/');
+    };
+
+    $menuItems = [];
+
+    if (admin_can('dashboard.view')) {
+        $menuItems[] = [
+            'label' => 'Dashboard',
+            'path' => '/admin/dashboard',
+            'icon' => 'fa-solid fa-tachometer-alt',
+            'active' => $isActivePath('/admin/dashboard'),
+        ];
+    }
+
+    if (admin_can('quotes.manage')) {
+        $menuItems[] = [
+            'label' => 'Solicitacoes',
+            'path' => '/admin/orcamentos',
+            'icon' => 'fa-solid fa-file-signature',
+            'active' => $isActivePath('/admin/orcamentos'),
+        ];
+        $menuItems[] = [
+            'label' => 'Notificacoes Email',
+            'path' => '/admin/notificacoes-email',
+            'icon' => 'fa-solid fa-envelope-open-text',
+            'active' => $isActivePath('/admin/notificacoes-email'),
+        ];
+    }
+
+    if (admin_can('references.view')) {
+        $menuItems[] = [
+            'label' => 'Precos e Servicos',
+            'path' => '/admin/referencias',
+            'icon' => 'fa-solid fa-table',
+            'active' => $isActivePath('/admin/referencias'),
+        ];
+    }
+
+    if (admin_can('taxes.manage')) {
+        $menuItems[] = [
+            'label' => 'Central Fiscal',
+            'path' => '/admin/tributos',
+            'icon' => 'fa-solid fa-balance-scale',
+            'active' => $isActivePath('/admin/tributos'),
+        ];
+    }
+
+    if (admin_can('tools.view')) {
+        $menuItems[] = [
+            'label' => 'Ferramentas',
+            'path' => '/admin/ferramentas',
+            'icon' => 'fa-solid fa-tools',
+            'active' => $isActivePath('/admin/ferramentas'),
+        ];
+    }
+
+    if (admin_can('categories.manage')) {
+        $menuItems[] = [
+            'label' => 'Categorias',
+            'path' => '/admin/categorias',
+            'icon' => 'fa-solid fa-tags',
+            'active' => $isActivePath('/admin/categorias'),
+        ];
+    }
+
+    if (admin_is_general()) {
+        $menuItems[] = [
+            'label' => 'Usuarios e Permissoes',
+            'path' => '/admin/usuarios',
+            'icon' => 'fa-solid fa-users-cog',
+            'active' => $isActivePath('/admin/usuarios'),
+        ];
+    }
     ?>
-    <nav class="navbar navbar-expand-lg navbar-dark aq-admin-navbar">
-        <div class="container-fluid px-3 px-lg-4">
-            <a class="navbar-brand fw-semibold" href="<?= e(url($adminHomePath)) ?>">Quotia Admin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="adminMenu">
-                <ul class="navbar-nav ms-auto">
-                    <?php if (admin_can('dashboard.view')): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/dashboard')) ?>">Dashboard</a></li>
-                    <?php endif; ?>
-                    <?php if (admin_can('quotes.manage')): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/orcamentos')) ?>">Solicitacoes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificacoes Email</a></li>
-                    <?php endif; ?>
-                    <?php if (admin_can('references.view')): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/referencias')) ?>">Precos e Servicos</a></li>
-                    <?php endif; ?>
-                    <?php if (admin_can('taxes.manage')): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/tributos')) ?>">Tributos</a></li>
-                    <?php endif; ?>
-                    <?php if (admin_can('tools.view')): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/ferramentas')) ?>">Ferramentas</a></li>
-                    <?php endif; ?>
-                    <?php if (admin_can('categories.manage')): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/categorias')) ?>">Categorias</a></li>
-                    <?php endif; ?>
-                    <?php if (admin_is_general()): ?>
-                        <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/usuarios')) ?>">Usuarios e Permissoes</a></li>
-                    <?php endif; ?>
-                    <li class="nav-item"><span class="nav-link disabled"><?= e($adminAccessLevel) ?></span></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/logout')) ?>">Sair</a></li>
-                </ul>
+    <div class="aq-admin-app">
+        <aside class="aq-admin-sidebar" id="aqAdminSidebar">
+            <a class="aq-admin-brand" href="<?= e(url($adminHomePath)) ?>">
+                <span class="aq-admin-brand-icon">
+                    <i class="fa-brands fa-reamurcms" aria-hidden="true"></i>
+                </span>
+                <span class="aq-admin-brand-logo">
+                    <img src="<?= e(asset('public/assets/vendor/reamur/image/reamurcms.png')) ?>" alt="Reamur">
+                </span>
+                <span class="aq-admin-brand-text"><?= e($appName ?? 'Quotia') ?> Admin</span>
+            </a>
+
+            <div class="aq-admin-user-panel">
+                <div class="aq-admin-user-avatar">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <div class="aq-admin-user-name"><?= e($adminName) ?></div>
+                    <div class="aq-admin-user-role"><?= e($adminAccessLevel) ?></div>
+                </div>
             </div>
+
+            <nav class="aq-admin-menu">
+                <ul class="aq-admin-menu-list">
+                    <?php foreach ($menuItems as $item): ?>
+                        <li class="aq-admin-menu-item">
+                            <a
+                                class="aq-admin-menu-link<?= !empty($item['active']) ? ' is-active' : '' ?>"
+                                href="<?= e(url((string) $item['path'])) ?>"
+                                title="<?= e((string) $item['label']) ?>"
+                            >
+                                <span class="aq-admin-menu-icon"><i class="<?= e((string) $item['icon']) ?>"></i></span>
+                                <span class="aq-admin-menu-label"><?= e((string) $item['label']) ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="aq-admin-main-shell">
+            <nav class="aq-admin-topbar">
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-link aq-admin-toggle" data-admin-sidebar-toggle aria-label="Alternar menu lateral">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="aq-admin-topbar-title">
+                        <h1 class="aq-admin-topbar-heading mb-0">Painel Administrativo</h1>
+                        <div class="aq-admin-topbar-meta">Quotia</div>
+                    </div>
+                </div>
+                <div class="aq-admin-topbar-actions">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        data-admin-sidebar-pin
+                        aria-label="Fixar ou recolher menu lateral"
+                    >
+                        <i class="fa-solid fa-thumbtack"></i>
+                    </button>
+                    <?php if (admin_can('tools.view') && !$isToolWorkspace): ?>
+                        <a class="btn btn-light btn-sm border" href="<?= e(url('/admin/ferramentas')) ?>">
+                            <i class="fa-solid fa-grip me-1"></i>
+                            Ferramentas
+                        </a>
+                    <?php endif; ?>
+                    <a class="btn btn-outline-secondary btn-sm" href="<?= e(url('/admin/logout')) ?>">
+                        <i class="fa-solid fa-sign-out-alt me-1"></i>
+                        Sair
+                    </a>
+                </div>
+            </nav>
+
+            <main class="aq-admin-content<?= $isToolWorkspace ? ' aq-admin-content-tool' : '' ?>">
+                <div class="aq-admin-page<?= $isToolWorkspace ? ' aq-admin-page-tool' : '' ?>">
+                    <div class="aq-admin-alert-stack">
+                        <?php if ($message = flash('success')): ?>
+                            <div class="alert alert-success"><?= e((string) $message) ?></div>
+                        <?php endif; ?>
+                        <?php if ($message = flash('error')): ?>
+                            <div class="alert alert-danger"><?= e((string) $message) ?></div>
+                        <?php endif; ?>
+                        <?php if ($message = flash('warning')): ?>
+                            <div class="alert alert-warning"><?= e((string) $message) ?></div>
+                        <?php endif; ?>
+                    </div>
+                    <?= $content ?>
+                </div>
+            </main>
+
+            <?php if (!$isToolWorkspace): ?>
+                <footer class="aq-admin-footer">
+                    <div class="aq-admin-footer-links">
+                        <a href="<?= e(url('/termos-de-uso')) ?>">Termos de Uso</a>
+                        <a href="<?= e(url('/politica-de-uso')) ?>">Politica de Uso</a>
+                        <a href="<?= e(url('/politica-de-privacidade')) ?>">Privacidade e Dados</a>
+                        <a href="<?= e(url('/politica-de-cookies')) ?>">Cookies</a>
+                        <a href="<?= e(url('/lgpd')) ?>">LGPD</a>
+                    </div>
+                </footer>
+            <?php endif; ?>
         </div>
-    </nav>
-<?php endif; ?>
-
-<?php if ($isToolWorkspace): ?>
-    <main class="aq-admin-main aq-admin-main-tool">
-        <?php if ($message = flash('success')): ?>
-            <div class="alert alert-success m-2 mb-0"><?= e((string) $message) ?></div>
-        <?php endif; ?>
-        <?php if ($message = flash('error')): ?>
-            <div class="alert alert-danger m-2 mb-0"><?= e((string) $message) ?></div>
-        <?php endif; ?>
-        <?php if ($message = flash('warning')): ?>
-            <div class="alert alert-warning m-2 mb-0"><?= e((string) $message) ?></div>
-        <?php endif; ?>
-        <?= $content ?>
-    </main>
+    </div>
 <?php else: ?>
-    <main class="aq-admin-main aq-admin-main-fluid px-3 px-lg-4 py-4 py-lg-4">
-        <?php if ($message = flash('success')): ?>
-            <div class="alert alert-success"><?= e((string) $message) ?></div>
-        <?php endif; ?>
-        <?php if ($message = flash('error')): ?>
-            <div class="alert alert-danger"><?= e((string) $message) ?></div>
-        <?php endif; ?>
-        <?php if ($message = flash('warning')): ?>
-            <div class="alert alert-warning"><?= e((string) $message) ?></div>
-        <?php endif; ?>
-
-        <?= $content ?>
+    <main class="aq-admin-auth-shell">
+        <div class="aq-admin-auth-wrap">
+            <div class="aq-admin-alert-stack">
+                <?php if ($message = flash('success')): ?>
+                    <div class="alert alert-success"><?= e((string) $message) ?></div>
+                <?php endif; ?>
+                <?php if ($message = flash('error')): ?>
+                    <div class="alert alert-danger"><?= e((string) $message) ?></div>
+                <?php endif; ?>
+                <?php if ($message = flash('warning')): ?>
+                    <div class="alert alert-warning"><?= e((string) $message) ?></div>
+                <?php endif; ?>
+            </div>
+            <?= $content ?>
+        </div>
     </main>
 
-    <footer class="aq-admin-footer px-3 px-lg-4 pb-4">
-        <div class="small text-muted d-flex flex-wrap gap-3 justify-content-center">
+    <footer class="aq-admin-auth-footer">
+        <div class="aq-admin-footer-links">
             <a href="<?= e(url('/termos-de-uso')) ?>">Termos de Uso</a>
             <a href="<?= e(url('/politica-de-uso')) ?>">Politica de Uso</a>
             <a href="<?= e(url('/politica-de-privacidade')) ?>">Privacidade e Dados</a>
@@ -108,5 +251,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= e(asset('public/assets/js/app.js')) ?>"></script>
+<script src="<?= e(asset('public/assets/vendor/reamur/js/theme-switcher.js')) ?>"></script>
+<script src="<?= e(asset('public/assets/vendor/reamur/js/modal-fix.js')) ?>"></script>
 </body>
 </html>

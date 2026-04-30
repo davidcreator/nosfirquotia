@@ -195,11 +195,11 @@ foreach ($serviceCatalogs as $catalog) {
 }
 ?>
 
-<section class="row justify-content-center">
+<section class="aq-request-create row justify-content-center">
     <div class="col-xl-10">
         <div class="card border-0 shadow-sm">
             <div class="card-body p-4 p-lg-5">
-                <h1 class="h3 mb-2">Formulario de Orcamento</h1>
+                <h1 class="h3 mb-2"><i class="fa-solid fa-wand-magic-sparkles me-2 text-primary"></i>Formulario de Orcamento</h1>
                 <p class="text-muted mb-4">Preencha em 4 passos e receba um atendimento estrategico para marca, identidade visual e materiais da sua empresa.</p>
 
                 <form method="post" action="<?= e(url('/orcamento/enviar')) ?>" data-quote-wizard>
@@ -209,7 +209,7 @@ foreach ($serviceCatalogs as $catalog) {
                                 <h2 class="h5 mb-1">Assistente de autoatendimento</h2>
                                 <p class="text-muted small mb-0">Siga a jornada orientada para montar um pedido claro e objetivo.</p>
                             </div>
-                            <span class="badge rounded-pill text-bg-primary">4 passos</span>
+                            <span class="badge rounded-pill text-bg-primary"><i class="fa-solid fa-route me-1"></i>4 passos</span>
                         </div>
 
                         <div class="aq-assistant-progress-wrap mt-3">
@@ -217,10 +217,10 @@ foreach ($serviceCatalogs as $catalog) {
                                 <div class="progress-bar bg-primary" data-wizard-progressbar style="width:25%;" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></div>
                             </div>
                             <div class="aq-assistant-stepper mt-2">
-                                <button type="button" class="aq-assistant-step is-active" data-step-target="0">1. Perfil</button>
-                                <button type="button" class="aq-assistant-step" data-step-target="1">2. Servicos</button>
-                                <button type="button" class="aq-assistant-step" data-step-target="2">3. Estrategia</button>
-                                <button type="button" class="aq-assistant-step" data-step-target="3">4. Revisao</button>
+                                <button type="button" class="aq-assistant-step is-active" data-step-target="0"><i class="fa-solid fa-id-card"></i>1. Perfil</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="1"><i class="fa-solid fa-list-check"></i>2. Servicos</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="2"><i class="fa-solid fa-compass-drafting"></i>3. Estrategia</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="3"><i class="fa-solid fa-square-check"></i>4. Revisao</button>
                             </div>
                         </div>
 
@@ -453,11 +453,11 @@ foreach ($serviceCatalogs as $catalog) {
                         </div>
 
                         <div class="aq-assistant-nav mt-4">
-                            <button type="button" class="btn btn-outline-secondary" data-prev-step>Etapa anterior</button>
+                            <button type="button" class="btn btn-outline-secondary" data-prev-step><i class="fa-solid fa-arrow-left me-1"></i>Etapa anterior</button>
                             <span class="small text-muted" data-step-label>Passo 1 de 4 - Perfil</span>
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-primary" data-next-step>Proximo passo</button>
-                                <button type="submit" class="btn btn-primary d-none" data-submit-request>Seguir para orcamento</button>
+                                <button type="button" class="btn btn-primary" data-next-step>Proximo passo<i class="fa-solid fa-arrow-right ms-1"></i></button>
+                                <button type="submit" class="btn btn-primary d-none" data-submit-request><i class="fa-solid fa-paper-plane me-1"></i>Seguir para orcamento</button>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,733 @@
+body.aq-admin-theme {
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+    color: #343a40;
+    background-color: #f4f6f9;
+    --aq-sidebar-expanded: 260px;
+    --aq-sidebar-collapsed: 82px;
+    --aq-sidebar-current: var(--aq-sidebar-expanded);
+}
+
+body.aq-admin-theme.aq-admin-bg {
+    min-height: 100vh;
+    display: block;
+    background: #f4f6f9;
+}
+
+body.aq-admin-theme.aq-admin-auth-page {
+    display: flex;
+    flex-direction: column;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed {
+    --aq-sidebar-current: var(--aq-sidebar-collapsed);
+}
+
+.aq-admin-theme a {
+    text-decoration: none;
+}
+
+.aq-admin-app {
+    min-height: 100vh;
+    display: flex;
+    width: 100%;
+    background: #f4f6f9;
+}
+
+.aq-admin-sidebar {
+    width: var(--aq-sidebar-current);
+    min-width: var(--aq-sidebar-current);
+    background: #343a40;
+    color: #c2c7d0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #2b3035;
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04);
+    transition: width 0.22s ease, min-width 0.22s ease, transform 0.25s ease;
+    z-index: 1041;
+}
+
+.aq-admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #ffffff;
+    padding: 0.95rem 1rem;
+    border-bottom: 1px solid #4b545c;
+    font-weight: 600;
+}
+
+.aq-admin-brand:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.aq-admin-brand-icon {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #3f6791;
+    color: #ffffff;
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.aq-admin-brand-icon i {
+    font-size: 1.03rem;
+}
+
+.aq-admin-brand-logo {
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 0.4rem;
+    background: rgba(255, 255, 255, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.aq-admin-brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.aq-admin-brand-text {
+    font-size: 1.02rem;
+    letter-spacing: 0.01em;
+    transition: opacity 0.18s ease;
+}
+
+.aq-admin-user-panel {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.95rem 1rem;
+    border-bottom: 1px solid #4b545c;
+}
+
+.aq-admin-user-avatar {
+    width: 2.15rem;
+    height: 2.15rem;
+    border-radius: 50%;
+    background: #495057;
+    color: #d8dadd;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.aq-admin-user-name {
+    color: #f8f9fa;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.aq-admin-user-role {
+    color: #aeb4bb;
+    font-size: 0.75rem;
+}
+
+.aq-admin-menu {
+    padding: 0.8rem 0;
+    overflow-y: auto;
+}
+
+.aq-admin-menu-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aq-admin-menu-item + .aq-admin-menu-item {
+    margin-top: 0.18rem;
+}
+
+.aq-admin-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: #c2c7d0;
+    padding: 0.58rem 1rem;
+    margin: 0 0.55rem;
+    border-radius: 0.35rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.aq-admin-menu-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.aq-admin-menu-link.is-active {
+    color: #ffffff;
+    background: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.28);
+}
+
+.aq-admin-menu-icon {
+    width: 1.2rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.aq-admin-menu-label {
+    white-space: nowrap;
+    transition: opacity 0.16s ease;
+}
+
+.aq-admin-main-shell {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.aq-admin-topbar {
+    min-height: 57px;
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.aq-admin-toggle {
+    border: 0;
+    color: #495057;
+    box-shadow: none;
+    padding: 0.45rem 0.5rem;
+    line-height: 1;
+}
+
+.aq-admin-toggle:hover {
+    color: #212529;
+    background: #e9ecef;
+}
+
+.aq-admin-topbar-title {
+    min-width: 0;
+}
+
+.aq-admin-topbar-heading {
+    color: #2c3137;
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.aq-admin-topbar-meta {
+    color: #6c757d;
+    font-size: 0.74rem;
+    line-height: 1.2;
+    margin-top: 0.1rem;
+}
+
+.aq-admin-topbar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.aq-admin-topbar-actions [data-admin-sidebar-pin].is-active {
+    background: #343a40;
+    border-color: #343a40;
+    color: #ffffff;
+}
+
+.aq-admin-content {
+    flex: 1 1 auto;
+    padding: 1.2rem;
+    min-width: 0;
+}
+
+.aq-admin-page {
+    width: 100%;
+    max-width: 100%;
+}
+
+.aq-admin-alert-stack {
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+}
+
+.aq-admin-alert-stack .alert {
+    margin-bottom: 0;
+    border: 1px solid transparent;
+    border-left-width: 0.28rem;
+    border-radius: 0.38rem;
+    padding: 0.58rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.aq-admin-alert-stack .alert-success {
+    border-color: #b6e3c5;
+    border-left-color: #28a745;
+}
+
+.aq-admin-alert-stack .alert-danger {
+    border-color: #f1c5cb;
+    border-left-color: #dc3545;
+}
+
+.aq-admin-alert-stack .alert-warning {
+    border-color: #ffe3a6;
+    border-left-color: #ffc107;
+}
+
+.aq-admin-footer,
+.aq-admin-auth-footer {
+    padding: 0.85rem 1.25rem 1rem;
+    border-top: 1px solid #dee2e6;
+    background: #ffffff;
+}
+
+.aq-admin-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    font-size: 0.76rem;
+    color: #6c757d;
+}
+
+.aq-admin-footer-links a {
+    color: #6c757d;
+}
+
+.aq-admin-footer-links a:hover {
+    color: #007bff;
+}
+
+.aq-admin-theme .card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.36rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.aq-admin-theme .card.border-0 {
+    border: 1px solid #dee2e6 !important;
+}
+
+.aq-admin-theme .card .card-body {
+    padding: 1rem 1rem;
+}
+
+.aq-admin-theme .badge {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.aq-admin-theme .table {
+    margin-bottom: 0;
+}
+
+.aq-admin-theme .table > :not(caption) > * > * {
+    padding: 0.7rem 0.72rem;
+    border-bottom-color: #edf1f5;
+    vertical-align: middle;
+}
+
+.aq-admin-theme .table thead th {
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6c757d;
+    border-bottom-width: 1px;
+    font-weight: 700;
+}
+
+.aq-admin-theme .table-light,
+.aq-admin-theme .table-light > th,
+.aq-admin-theme .table-light > td {
+    --bs-table-bg: #f8f9fa;
+}
+
+.aq-admin-theme .form-label {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.35rem;
+}
+
+.aq-admin-theme .form-control,
+.aq-admin-theme .form-select,
+.aq-admin-theme .input-group-text {
+    border-color: #ced4da;
+    border-radius: 0.33rem;
+    font-size: 0.9rem;
+}
+
+.aq-admin-theme .form-control:focus,
+.aq-admin-theme .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+.aq-admin-theme .btn {
+    border-radius: 0.32rem;
+    font-weight: 500;
+}
+
+.aq-admin-theme .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.aq-admin-theme .btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.aq-admin-theme .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.aq-admin-theme h1.h3 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #2f3542;
+}
+
+.aq-admin-theme h2.h5 {
+    font-size: 1.04rem;
+    font-weight: 600;
+    color: #2f3542;
+}
+
+.aq-admin-theme .text-muted {
+    color: #6c757d !important;
+}
+
+.aq-admin-content-tool {
+    padding: 0;
+    min-height: 0;
+}
+
+.aq-admin-page-tool {
+    height: 100%;
+    min-height: 0;
+}
+
+.aq-admin-tools-open .aq-admin-main-shell {
+    min-height: 0;
+}
+
+.aq-admin-tools-open .aq-admin-content {
+    flex: 1 1 auto;
+}
+
+.aq-tool-shell {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.aq-tool-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #d7deea;
+    background: #ffffff;
+}
+
+.aq-tool-title {
+    min-width: 0;
+}
+
+.aq-tool-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.aq-tool-viewport {
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.aq-tool-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #fff;
+}
+
+.aq-admin-auth-shell {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem 0.75rem;
+}
+
+.aq-admin-auth-wrap {
+    width: 100%;
+}
+
+.aq-admin-auth-shell .row {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.aq-admin-auth-shell .col-lg-5 {
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.aq-admin-auth-shell .card {
+    border-top: 3px solid #007bff;
+    box-shadow: 0 10px 24px rgba(31, 45, 61, 0.1);
+}
+
+.aq-admin-auth-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+    color: #495057;
+    font-weight: 600;
+}
+
+.aq-admin-auth-brand-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #343a40;
+    color: #ffffff;
+}
+
+.aq-admin-auth-brand-text {
+    font-size: 1rem;
+}
+
+.aq-admin-auth-shell .input-group-text {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.aq-stat-box {
+    position: relative;
+    border-radius: 0.36rem;
+    padding: 0.95rem 1rem;
+    color: #ffffff;
+    overflow: hidden;
+    min-height: 112px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.aq-stat-box small {
+    font-size: 0.78rem;
+    opacity: 0.88;
+}
+
+.aq-stat-box h2 {
+    margin: 0.35rem 0 0;
+    font-size: 1.88rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.aq-stat-box p {
+    margin: 0.35rem 0 0;
+    font-size: 0.84rem;
+    opacity: 0.9;
+}
+
+.aq-stat-icon {
+    position: absolute;
+    right: 0.72rem;
+    top: 0.7rem;
+    font-size: 2.1rem;
+    line-height: 1;
+    opacity: 0.24;
+}
+
+.aq-stat-box-primary {
+    background: linear-gradient(110deg, #007bff 0%, #1e87ff 100%);
+}
+
+.aq-stat-box-warning {
+    background: linear-gradient(110deg, #fd7e14 0%, #ff9f43 100%);
+}
+
+.aq-stat-box-success {
+    background: linear-gradient(110deg, #28a745 0%, #44c767 100%);
+}
+
+.aq-stat-box-info {
+    background: linear-gradient(110deg, #17a2b8 0%, #31c0d7 100%);
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar {
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04), 3px 0 12px rgba(12, 17, 25, 0.24);
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand {
+    justify-content: center;
+    gap: 0.45rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-logo,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-text,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel > div,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-label {
+    opacity: 0;
+    width: 0;
+    min-width: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel {
+    justify-content: center;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-link {
+    justify-content: center;
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
+    gap: 0;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-icon {
+    width: 1.2rem;
+    font-size: 1.03rem;
+}
+
+@media (max-width: 991.98px) {
+    .aq-admin-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        width: min(84vw, 280px);
+        min-width: min(84vw, 280px);
+        transform: translateX(-100%);
+        transition: transform 0.26s ease;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar {
+        width: min(84vw, 280px);
+        min-width: min(84vw, 280px);
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand {
+        justify-content: flex-start;
+        gap: 0.65rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-logo,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-text,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel > div,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-label {
+        opacity: 1;
+        width: auto;
+        overflow: visible;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel {
+        justify-content: flex-start;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-link {
+        justify-content: flex-start;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        gap: 0.7rem;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-open .aq-admin-sidebar {
+        transform: translateX(0);
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-open .aq-admin-main-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(52, 58, 64, 0.45);
+        z-index: 1039;
+    }
+
+    .aq-admin-content {
+        padding: 1rem 0.85rem;
+    }
+
+    .aq-admin-topbar {
+        padding: 0.45rem 0.78rem;
+    }
+
+    .aq-admin-topbar-actions .btn {
+        padding: 0.25rem 0.45rem;
+    }
+
+    .aq-admin-topbar-actions [data-admin-sidebar-pin] {
+        display: none;
+    }
+
+    .aq-tool-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 767px) {
+    .aq-admin-footer,
+    .aq-admin-auth-footer {
+        padding: 0.75rem 0.85rem 0.9rem;
+    }
+
+    .aq-admin-footer-links {
+        justify-content: flex-start;
+        gap: 0.5rem 0.8rem;
+        font-size: 0.74rem;
+    }
+
+    .aq-stat-box {
+        min-height: 98px;
+    }
+
+    .aq-stat-box h2 {
+        font-size: 1.52rem;
+    }
+}

@@ -1,20 +1,42 @@
 <?php $hasReport = !empty($requestData['report_id']); ?>
 <?php $isQuoteExpired = $hasReport && !empty($requestData['valid_until']) && strtotime((string) $requestData['valid_until']) < time(); ?>
 <?php $protectReport = $hasReport; ?>
+<?php
+$statusCode = (string) ($requestData['status'] ?? 'pendente');
+$statusLabel = match ($statusCode) {
+    'orcado' => 'Orcado',
+    'em_analise' => 'Em analise',
+    default => 'Pendente',
+};
+$statusClass = match ($statusCode) {
+    'orcado' => 'aq-client-status aq-client-status-orcado',
+    'em_analise' => 'aq-client-status aq-client-status-analise',
+    default => 'aq-client-status aq-client-status-pending',
+};
+$statusIcon = match ($statusCode) {
+    'orcado' => 'fa-solid fa-check',
+    'em_analise' => 'fa-solid fa-magnifying-glass',
+    default => 'fa-solid fa-clock',
+};
+?>
 
-<section class="mb-3 d-flex justify-content-between align-items-center">
+<section class="aq-client-page-head">
     <div>
-        <h1 class="h3 mb-1">Solicitacao #<?= (int) $requestData['id'] ?></h1>
-        <p class="text-muted mb-0"><?= e($requestData['project_title']) ?></p>
+        <h1 class="aq-client-page-title mb-1">Solicitacao #<?= (int) $requestData['id'] ?></h1>
+        <p class="aq-client-page-subtitle mb-2"><?= e($requestData['project_title']) ?></p>
+        <span class="<?= e($statusClass) ?>"><i class="<?= e($statusIcon) ?>"></i><?= e($statusLabel) ?></span>
     </div>
-    <a class="btn btn-outline-secondary" href="<?= e(url('/orcamentos')) ?>">Voltar</a>
+    <a class="btn btn-outline-secondary" href="<?= e(url('/orcamentos')) ?>">
+        <i class="fa-solid fa-arrow-left me-1"></i>
+        Voltar
+    </a>
 </section>
 
 <div class="row g-3">
     <div class="col-lg-7">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm aq-request-scope">
             <div class="card-body">
-                <h2 class="h5 mb-3">Escopo solicitado</h2>
+                <h2 class="h5 mb-3"><i class="fa-solid fa-file-lines me-2 text-primary"></i>Escopo solicitado</h2>
                 <p class="mb-3"><?= nl2br(e((string) $requestData['scope'])) ?></p>
                 <p class="mb-1"><strong>Prazo desejado:</strong> <?= $requestData['desired_deadline_days'] ? (int) $requestData['desired_deadline_days'] . ' dias' : 'Nao informado' ?></p>
                 <p class="mb-0"><strong>Disponibilidade desejada:</strong> <?= e((string) ($requestData['requested_availability'] ?? 'Nao informado')) ?></p>
@@ -22,9 +44,9 @@
         </div>
     </div>
     <div class="col-lg-5">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card border-0 shadow-sm aq-request-services">
             <div class="card-body">
-                <h2 class="h5 mb-3">Servicos selecionados</h2>
+                <h2 class="h5 mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i>Servicos selecionados</h2>
                 <?php if ($services === []): ?>
                     <p class="text-muted mb-0">Nenhum servico vinculado.</p>
                 <?php else: ?>
@@ -42,9 +64,9 @@
 </div>
 
 <section class="mt-3" data-quote-report-container="<?= $protectReport ? '1' : '0' ?>">
-    <div class="card border-0 shadow-sm">
+    <div class="card border-0 shadow-sm aq-request-report">
         <div class="card-body<?= $protectReport ? ' aq-quote-report-protected' : '' ?>">
-            <h2 class="h5 mb-3">Relatorio do Orcamento</h2>
+            <h2 class="h5 mb-3"><i class="fa-solid fa-file-invoice-dollar me-2 text-primary"></i>Relatorio do Orcamento</h2>
             <?php if (empty($requestData['report_id'])): ?>
                 <div class="alert alert-info mb-0">Seu pedido esta em analise. O admin ira gerar o relatorio em breve.</div>
             <?php else: ?>
@@ -73,7 +95,7 @@
                         <div class="alert alert-light border small">Sem componentes tributarios adicionais neste relatorio.</div>
                     <?php else: ?>
                         <div class="table-responsive mb-3">
-                            <table class="table table-sm align-middle">
+                            <table class="table table-sm align-middle aq-table-stack">
                                 <thead class="table-light">
                                 <tr>
                                     <th>Tributo/Encargo</th>
@@ -84,9 +106,9 @@
                                 <tbody>
                                 <?php foreach ($reportTaxes as $tax): ?>
                                     <tr>
-                                        <td><?= e((string) $tax['tax_label']) ?></td>
-                                        <td><?= number_format((float) $tax['tax_percent'], 2, ',', '.') ?>%</td>
-                                        <td>R$ <?= number_format((float) $tax['tax_amount'], 2, ',', '.') ?></td>
+                                        <td data-label="Tributo/Encargo"><?= e((string) $tax['tax_label']) ?></td>
+                                        <td data-label="Percentual"><?= number_format((float) $tax['tax_percent'], 2, ',', '.') ?>%</td>
+                                        <td data-label="Valor">R$ <?= number_format((float) $tax['tax_amount'], 2, ',', '.') ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
@@ -100,7 +122,7 @@
                 <?php endif; ?>
 
                 <div class="table-responsive mb-3">
-                    <table class="table table-sm align-middle">
+                    <table class="table table-sm align-middle aq-table-stack">
                         <thead class="table-light">
                         <tr>
                             <th>Servico</th>
@@ -113,11 +135,11 @@
                         <tbody>
                         <?php foreach ($reportItems as $item): ?>
                             <tr>
-                                <td><?= e($item['service_name']) ?></td>
-                                <td>R$ <?= number_format((float) $item['price_value'], 2, ',', '.') ?></td>
-                                <td><?= $item['deadline_days'] ? (int) $item['deadline_days'] . ' dias' : 'A combinar' ?></td>
-                                <td><?= e((string) ($item['availability_label'] ?? '-')) ?></td>
-                                <td><?= e((string) ($item['notes'] ?? '-')) ?></td>
+                                <td data-label="Servico"><?= e($item['service_name']) ?></td>
+                                <td data-label="Valor">R$ <?= number_format((float) $item['price_value'], 2, ',', '.') ?></td>
+                                <td data-label="Prazo"><?= $item['deadline_days'] ? (int) $item['deadline_days'] . ' dias' : 'A combinar' ?></td>
+                                <td data-label="Disponibilidade"><?= e((string) ($item['availability_label'] ?? '-')) ?></td>
+                                <td data-label="Observacoes"><?= e((string) ($item['notes'] ?? '-')) ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

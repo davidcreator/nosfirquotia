@@ -4,56 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($appName ?? 'Quotia') ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= e(asset('public/assets/vendor/reamur/css/all.min.css')) ?>" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">
+    <link href="<?= e(asset('public/assets/css/client.css')) ?>" rel="stylesheet">
 </head>
-<body class="aq-client-bg">
-<?php $clientUser = client_user(); ?>
-<nav class="navbar navbar-expand-lg navbar-dark aq-client-navbar">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="<?= e(url('/')) ?>">Quotia</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu">
+<body class="aq-client-theme aq-client-bg">
+<?php
+$clientUser = client_user();
+$clientName = (string) ($clientUser['name'] ?? 'Cliente');
+$currentClientPath = (string) ($currentPath ?? app()->request()->path());
+$isActivePath = static function (string $path) use ($currentClientPath): bool {
+    if ($path === '/') {
+        return $currentClientPath === '/';
+    }
+    if ($currentClientPath === $path) {
+        return true;
+    }
+    return str_starts_with($currentClientPath, $path . '/');
+};
+?>
+<div class="aq-client-shell">
+<nav class="navbar navbar-expand-lg navbar-dark aq-client-navbar" id="aqClientNavbar">
+    <div class="container aq-client-navbar-inner">
+        <a class="navbar-brand aq-client-brand" href="<?= e(url('/')) ?>">
+            <span class="aq-client-brand-icon"><i class="fa-brands fa-reamurcms" aria-hidden="true"></i></span>
+            <span>
+                <strong class="aq-client-brand-title">Quotia</strong>
+                <small class="aq-client-brand-subtitle">Portal do Cliente</small>
+            </span>
+        </a>
+        <button class="navbar-toggler aq-client-navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu" aria-controls="clientMenu" aria-expanded="false" aria-label="Alternar navegacao">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="clientMenu">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('/')) ?>">Inicio</a></li>
+        <div class="collapse navbar-collapse" id="clientMenu" data-client-nav-collapse>
+            <ul class="navbar-nav ms-auto aq-client-nav-list">
+                <li class="nav-item">
+                    <a class="nav-link aq-client-nav-link<?= $isActivePath('/') ? ' is-active' : '' ?>" href="<?= e(url('/')) ?>">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
                 <?php if ($clientUser): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/orcamento/novo')) ?>">Nova Solicitacao</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/orcamentos')) ?>">Minhas Solicitacoes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/cliente/logout')) ?>">Sair</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamento/novo') ? ' is-active' : '' ?>" href="<?= e(url('/orcamento/novo')) ?>">
+                            <i class="fa-solid fa-pen-ruler"></i>
+                            <span>Nova Solicitacao</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamentos') ? ' is-active' : '' ?>" href="<?= e(url('/orcamentos')) ?>">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span>Minhas Solicitacoes</span>
+                        </a>
+                    </li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/cliente/cadastro')) ?>">Criar Conta</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/cliente/login')) ?>">Entrar</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/cliente/cadastro') ? ' is-active' : '' ?>" href="<?= e(url('/cliente/cadastro')) ?>">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>Criar Conta</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/cliente/login') ? ' is-active' : '' ?>" href="<?= e(url('/cliente/login')) ?>">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span>Entrar</span>
+                        </a>
+                    </li>
                 <?php endif; ?>
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin')) ?>">Admin</a></li>
+                <li class="nav-item">
+                    <a class="nav-link aq-client-nav-link<?= $isActivePath('/admin') ? ' is-active' : '' ?>" href="<?= e(url('/admin')) ?>">
+                        <i class="fa-solid fa-shield"></i>
+                        <span>Admin</span>
+                    </a>
+                </li>
+                <?php if ($clientUser): ?>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-sm aq-client-nav-logout" href="<?= e(url('/cliente/logout')) ?>">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Sair
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
+            <?php if ($clientUser): ?>
+                <div class="aq-client-user-chip ms-lg-3">
+                    <span class="aq-client-user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="aq-client-user-name"><?= e($clientName) ?></span>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </nav>
 
-<main class="container py-4 py-lg-5">
-    <?php if ($message = flash('success')): ?>
-        <div class="alert alert-success"><?= e((string) $message) ?></div>
-    <?php endif; ?>
-    <?php if ($message = flash('error')): ?>
-        <div class="alert alert-danger"><?= e((string) $message) ?></div>
-    <?php endif; ?>
-    <?php if ($message = flash('warning')): ?>
-        <div class="alert alert-warning"><?= e((string) $message) ?></div>
-    <?php endif; ?>
+<main class="aq-client-main">
+    <div class="container py-4 py-lg-5">
+        <div class="aq-client-alert-stack">
+            <?php if ($message = flash('success')): ?>
+                <div class="alert alert-success"><?= e((string) $message) ?></div>
+            <?php endif; ?>
+            <?php if ($message = flash('error')): ?>
+                <div class="alert alert-danger"><?= e((string) $message) ?></div>
+            <?php endif; ?>
+            <?php if ($message = flash('warning')): ?>
+                <div class="alert alert-warning"><?= e((string) $message) ?></div>
+            <?php endif; ?>
+        </div>
 
-    <?= $content ?>
+        <?= $content ?>
+    </div>
 </main>
 
-<footer class="container pb-4">
-    <div class="small text-muted d-flex flex-wrap gap-3 justify-content-center">
-        <a href="<?= e(url('/termos-de-uso')) ?>">Termos de Uso</a>
-        <a href="<?= e(url('/politica-de-uso')) ?>">Politica de Uso</a>
-        <a href="<?= e(url('/politica-de-privacidade')) ?>">Privacidade e Dados</a>
-        <a href="<?= e(url('/politica-de-cookies')) ?>">Cookies</a>
-        <a href="<?= e(url('/lgpd')) ?>">LGPD</a>
+<footer class="aq-client-footer">
+    <div class="container">
+        <div class="aq-client-footer-links">
+            <a href="<?= e(url('/termos-de-uso')) ?>">Termos de Uso</a>
+            <a href="<?= e(url('/politica-de-uso')) ?>">Politica de Uso</a>
+            <a href="<?= e(url('/politica-de-privacidade')) ?>">Privacidade e Dados</a>
+            <a href="<?= e(url('/politica-de-cookies')) ?>">Cookies</a>
+            <a href="<?= e(url('/lgpd')) ?>">LGPD</a>
+        </div>
     </div>
 </footer>
 
@@ -72,5 +146,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= e(asset('public/assets/js/app.js')) ?>"></script>
+</div>
 </body>
 </html>
