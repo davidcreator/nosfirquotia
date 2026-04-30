@@ -10,35 +10,35 @@
                         <label class="form-label" for="registerName">Nome</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                            <input class="form-control" id="registerName" name="name" required autocomplete="name" value="<?= e((string) old('name')) ?>">
+                            <input class="form-control" id="registerName" name="name" required autocomplete="name" placeholder="Ex.: Maria da Silva" value="<?= e((string) old('name')) ?>">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="registerPhone">Telefone (opcional)</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                            <input class="form-control" id="registerPhone" name="phone" autocomplete="tel" value="<?= e((string) old('phone')) ?>">
+                            <input class="form-control" id="registerPhone" name="phone" autocomplete="tel" inputmode="numeric" maxlength="15" data-phone-mask="br" placeholder="Somente numeros: 11999998888" value="<?= e((string) old('phone')) ?>">
                         </div>
                     </div>
                     <div class="col-12">
                         <label class="form-label" for="registerEmail">Email</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" class="form-control" id="registerEmail" name="email" required autocomplete="email" value="<?= e((string) old('email')) ?>">
+                            <input type="email" class="form-control" id="registerEmail" name="email" required autocomplete="email" placeholder="exemplo@dominio.com" value="<?= e((string) old('email')) ?>">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="registerPassword">Senha</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" class="form-control" id="registerPassword" name="password" required autocomplete="new-password">
+                            <input type="password" class="form-control" id="registerPassword" name="password" required autocomplete="new-password" placeholder="Minimo de 6 caracteres">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="registerPasswordConfirm">Confirmar senha</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-shield-halved"></i></span>
-                            <input type="password" class="form-control" id="registerPasswordConfirm" name="password_confirm" required autocomplete="new-password">
+                            <input type="password" class="form-control" id="registerPasswordConfirm" name="password_confirm" required autocomplete="new-password" placeholder="Repita a senha">
                         </div>
                     </div>
                     <div class="col-12 d-grid">

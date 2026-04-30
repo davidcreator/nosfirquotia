@@ -22,8 +22,8 @@ body.aq-client-theme.aq-client-bg {
     position: sticky;
     top: 0;
     z-index: 1035;
-    background: linear-gradient(92deg, #102c57 0%, #1d4e90 62%, #1689a0 100%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(92deg, #0e2750 0%, #18447f 62%, #116d80 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     box-shadow: 0 10px 28px rgba(17, 34, 61, 0.16);
 }
 
@@ -68,7 +68,7 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
 
 .aq-client-brand-subtitle {
     display: block;
-    color: rgba(236, 245, 255, 0.74);
+    color: rgba(236, 245, 255, 0.9);
     font-size: 0.72rem;
     line-height: 1.15;
     letter-spacing: 0.02em;
@@ -93,11 +93,12 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    color: rgba(246, 251, 255, 0.88);
+    color: #ffffff;
     border-radius: 0.46rem;
     padding: 0.5rem 0.72rem;
     font-size: 0.91rem;
     font-weight: 600;
+    text-shadow: 0 1px 1px rgba(3, 14, 30, 0.42);
     transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 }
 
@@ -108,14 +109,14 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
 .aq-client-nav-link:hover,
 .aq-client-nav-link:focus {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(4, 18, 41, 0.32);
     transform: translateY(-1px);
 }
 
 .aq-client-nav-link.is-active {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.26);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    background: rgba(4, 18, 41, 0.46);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
 }
 
 .aq-client-nav-logout {
@@ -189,12 +190,12 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
     border-left-color: #ffc107;
 }
 
-.aq-client-theme a {
+.aq-client-theme .aq-client-main a:not(.btn):not(.aq-client-nav-link):not(.aq-client-brand):not(.aq-client-nav-logout) {
     color: #1c4f91;
     text-decoration: none;
 }
 
-.aq-client-theme a:hover {
+.aq-client-theme .aq-client-main a:not(.btn):not(.aq-client-nav-link):not(.aq-client-brand):not(.aq-client-nav-logout):hover {
     color: #0f3f7e;
 }
 
@@ -440,6 +441,79 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
     color: #1a4b8f;
 }
 
+.aq-legal-badge {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(125deg, #1d4f8d 0%, #117f94 100%);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.08rem;
+    box-shadow: 0 8px 20px rgba(20, 54, 98, 0.22);
+}
+
+.aq-legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.42rem;
+}
+
+.aq-legal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid #d2e2f4;
+    background: #f8fbff;
+    color: #2f5275;
+    border-radius: 999px;
+    padding: 0.35rem 0.72rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.16s ease;
+}
+
+.aq-legal-link:hover {
+    border-color: #96bbe9;
+    background: #edf5ff;
+    color: #1e487a;
+}
+
+.aq-legal-link.is-active {
+    border-color: #1a4b8f;
+    background: #1a4b8f;
+    color: #ffffff;
+    box-shadow: 0 5px 14px rgba(26, 75, 143, 0.22);
+}
+
+.aq-legal-content {
+    color: #334963;
+}
+
+.aq-legal-meta {
+    color: #657d99;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+}
+
+.aq-legal-content h2 {
+    color: #23496f;
+    font-size: 1.03rem;
+    font-weight: 700;
+    margin-top: 1.35rem;
+    margin-bottom: 0.5rem;
+}
+
+.aq-legal-content ul {
+    margin-bottom: 0;
+    padding-left: 1.1rem;
+}
+
+.aq-legal-content li + li {
+    margin-top: 0.3rem;
+}
+
 .aq-request-create .aq-assistant-step {
     display: inline-flex;
     align-items: center;
@@ -486,12 +560,12 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
     }
 
     .aq-client-nav-link {
-        border: 1px solid rgba(255, 255, 255, 0.26);
-        background: rgba(4, 18, 41, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.34);
+        background: rgba(4, 18, 41, 0.34);
     }
 
     .aq-client-nav-link.is-active {
-        background: rgba(255, 255, 255, 0.24);
+        background: rgba(4, 18, 41, 0.56);
     }
 
     .aq-client-nav-logout {
@@ -539,6 +613,18 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
 
     .aq-client-theme .card .card-body {
         padding: 0.9rem;
+    }
+
+    .aq-legal-links {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 0.35rem;
+    }
+
+    .aq-legal-link {
+        border-radius: 0.6rem;
+        justify-content: flex-start;
+        padding: 0.48rem 0.62rem;
     }
 
     .aq-client-theme .table-responsive {

@@ -284,6 +284,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const phoneMaskInputs = [].slice.call(document.querySelectorAll('input[data-phone-mask="br"]'));
+  if (phoneMaskInputs.length > 0) {
+    const extractPhoneDigits = (value) => String(value || '').replace(/\D/g, '').slice(0, 11);
+    const formatPhoneBr = (value) => {
+      const digits = extractPhoneDigits(value);
+      if (digits.length === 0) {
+        return '';
+      }
+
+      if (digits.length <= 2) {
+        return digits;
+      }
+
+      const ddd = digits.slice(0, 2);
+      const number = digits.slice(2);
+
+      if (number.length <= 4) {
+        return `(${ddd}) ${number}`;
+      }
+
+      if (number.length <= 8) {
+        return `(${ddd}) ${number.slice(0, 4)}-${number.slice(4)}`;
+      }
+
+      return `(${ddd}) ${number.slice(0, 5)}-${number.slice(5, 9)}`;
+    };
+
+    phoneMaskInputs.forEach((input) => {
+      const applyMask = () => {
+        input.value = formatPhoneBr(input.value);
+      };
+
+      input.addEventListener('input', applyMask);
+      input.addEventListener('blur', applyMask);
+      applyMask();
+    });
+  }
+
   const consentKey = 'aq_cookie_consent';
   const banner = document.getElementById('cookieConsentBanner');
   const buttons = [].slice.call(document.querySelectorAll('[data-cookie-consent]'));

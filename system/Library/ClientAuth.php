@@ -41,7 +41,8 @@ final class ClientAuth
     {
         $email = strtolower(trim($email));
         $name = trim($name);
-        $phone = trim($phone);
+        $phoneDigits = preg_replace('/\D+/', '', $phone);
+        $phone = is_string($phoneDigits) ? substr($phoneDigits, 0, 11) : '';
 
         if ($name === '' || $email === '' || $password === '') {
             return ['success' => false, 'error' => 'Preencha nome, email e senha.'];

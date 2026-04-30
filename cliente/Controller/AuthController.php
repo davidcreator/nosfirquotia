@@ -51,7 +51,9 @@ final class AuthController extends Controller
     {
         $name = trim((string) $this->request->post('name', ''));
         $email = strtolower(trim((string) $this->request->post('email', '')));
-        $phone = trim((string) $this->request->post('phone', ''));
+        $phoneRaw = (string) $this->request->post('phone', '');
+        $phoneDigits = preg_replace('/\D+/', '', $phoneRaw);
+        $phone = is_string($phoneDigits) ? substr($phoneDigits, 0, 11) : '';
         $password = (string) $this->request->post('password', '');
         $passwordConfirm = (string) $this->request->post('password_confirm', '');
 
