@@ -1,6 +1,7 @@
 RewriteEngine On
 
 RewriteRule ^public/ - [L]
+RewriteRule ^image/ - [L]
 RewriteRule ^admin/tools/ - [L]
 RewriteRule ^Tools/ - [L]
 RewriteRule ^index\.php$ - [L]

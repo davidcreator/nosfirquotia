@@ -1,54 +1,70 @@
-<section class="aq-client-auth-shell row justify-content-center">
-    <div class="col-lg-6">
-        <div class="card border-0 shadow-sm aq-client-auth-card">
-            <div class="card-body p-4 p-lg-5">
-                <span class="aq-client-auth-badge"><i class="fa-solid fa-user-plus"></i></span>
-                <h1 class="h3 mb-3">Criar conta de Cliente</h1>
-                <p class="text-muted mb-4">O cadastro e obrigatorio para solicitar um orcamento no Quotia.</p>
-                <form method="post" action="<?= e(url('/cliente/cadastro')) ?>" class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label" for="registerName">Nome</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                            <input class="form-control" id="registerName" name="name" required autocomplete="name" placeholder="Ex.: Maria da Silva" value="<?= e((string) old('name')) ?>">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="registerPhone">Telefone (opcional)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                            <input class="form-control" id="registerPhone" name="phone" autocomplete="tel" inputmode="numeric" maxlength="15" data-phone-mask="br" placeholder="Somente numeros: 11999998888" value="<?= e((string) old('phone')) ?>">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label" for="registerEmail">Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" class="form-control" id="registerEmail" name="email" required autocomplete="email" placeholder="exemplo@dominio.com" value="<?= e((string) old('email')) ?>">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="registerPassword">Senha</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" class="form-control" id="registerPassword" name="password" required autocomplete="new-password" placeholder="Minimo de 6 caracteres">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="registerPasswordConfirm">Confirmar senha</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-shield-halved"></i></span>
-                            <input type="password" class="form-control" id="registerPasswordConfirm" name="password_confirm" required autocomplete="new-password" placeholder="Repita a senha">
-                        </div>
-                    </div>
-                    <div class="col-12 d-grid">
-                        <button class="btn btn-primary btn-lg" type="submit">Criar conta</button>
-                    </div>
-                </form>
-                <div class="mt-3 text-center aq-client-auth-links">
-                    <small>Ja possui conta? <a href="<?= e(url('/cliente/login')) ?>">Entrar</a></small>
+<section class="aq-entry aq-entry-auth">
+    <div class="aq-entry-shell">
+        <div class="aq-entry-grid">
+            <section class="aq-entry-panel">
+                <div class="aq-entry-brand">
+                    <span class="aq-entry-brand-icon"><img src="<?= e(asset('image/quotia_logo.png')) ?>" alt="Quotia"></span>
+                    <strong>Quotia</strong>
                 </div>
-            </div>
+
+                <h1>Crie sua conta para solicitar orcamentos de forma profissional e organizada.</h1>
+                <p class="aq-entry-lead">
+                    Com seu cadastro ativo, voce pode abrir novas solicitacoes, acompanhar analises e manter historico completo de orcamentos.
+                </p>
+
+                <ul class="aq-entry-list">
+                    <li><strong>Conta unica:</strong> Use seu acesso para concentrar todas as demandas em um so ambiente.</li>
+                    <li><strong>Processo guiado:</strong> O Quotia ajuda voce a descrever melhor os servicos desejados.</li>
+                    <li><strong>Visao completa:</strong> Veja resposta do admin com valores, prazo e condicoes de validade.</li>
+                </ul>
+
+                <div class="aq-entry-actions">
+                    <a class="btn btn-outline-primary btn-lg" href="<?= e(url('/cliente/login')) ?>">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>
+                        Ja tenho conta
+                    </a>
+                </div>
+            </section>
+
+            <aside class="aq-entry-login">
+                <h2>Criar conta</h2>
+                <p>Preencha os dados abaixo para liberar seu acesso no portal do cliente.</p>
+
+                <form class="aq-entry-form aq-entry-form-grid" method="post" action="<?= e(url('/cliente/cadastro')) ?>">
+                    <div class="aq-entry-form-row aq-entry-form-row-2">
+                        <div class="aq-entry-field">
+                            <label for="registerName">Nome</label>
+                            <input id="registerName" name="name" required autocomplete="name" placeholder="Ex.: Maria da Silva" value="<?= e((string) old('name')) ?>">
+                        </div>
+                        <div class="aq-entry-field">
+                            <label for="registerPhone">Telefone (opcional)</label>
+                            <input id="registerPhone" name="phone" autocomplete="tel" inputmode="numeric" maxlength="15" data-phone-mask="br" placeholder="Somente numeros: 11999998888" value="<?= e((string) old('phone')) ?>">
+                        </div>
+                    </div>
+
+                    <div class="aq-entry-field">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" name="email" required autocomplete="email" placeholder="exemplo@dominio.com" value="<?= e((string) old('email')) ?>">
+                    </div>
+
+                    <div class="aq-entry-form-row aq-entry-form-row-2">
+                        <div class="aq-entry-field">
+                            <label for="registerPassword">Senha</label>
+                            <input type="password" id="registerPassword" name="password" required autocomplete="new-password" placeholder="Minimo de 6 caracteres">
+                        </div>
+                        <div class="aq-entry-field">
+                            <label for="registerPasswordConfirm">Confirmar senha</label>
+                            <input type="password" id="registerPasswordConfirm" name="password_confirm" required autocomplete="new-password" placeholder="Repita a senha">
+                        </div>
+                    </div>
+
+                    <button class="aq-entry-submit" type="submit">Criar conta</button>
+                </form>
+
+                <div class="aq-entry-login-links">
+                    <a class="forgot-link" href="<?= e(url('/cliente/login')) ?>">Voltar para login</a>
+                </div>
+            </aside>
         </div>
     </div>
 </section>

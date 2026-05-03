@@ -1,13 +1,26 @@
-<section class="mb-3">
-    <h1 class="h3 mb-1">Categorias de Orcamento</h1>
-    <p class="text-muted mb-0">Gerencie os tipos de trabalho em Design e Desenvolvimento.</p>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Categorias de orcamento</h1>
+            <p class="aq-admin-page-hero-subtitle">Gerencie os tipos de trabalho em Design e Desenvolvimento.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <span class="aq-admin-link-chip"><i class="fa-solid fa-tags"></i> Catalogo interno</span>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="row g-3">
     <div class="col-lg-5">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h2 class="h5 mb-3">Nova categoria</h2>
+        <div class="aq-admin-panel h-100">
+            <div class="aq-admin-panel-header">
+                <div>
+                    <h2 class="aq-admin-panel-title">Nova categoria</h2>
+                </div>
+            </div>
+            <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/categorias')) ?>" class="row g-3">
                     <div class="col-12">
                         <label class="form-label">Area</label>
@@ -36,7 +49,12 @@
         </div>
     </div>
     <div class="col-lg-7">
-        <div class="card border-0 shadow-sm">
+        <div class="aq-admin-panel aq-admin-table-card">
+            <div class="aq-admin-panel-header">
+                <div>
+                    <h2 class="aq-admin-panel-title">Categorias cadastradas</h2>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table mb-0 align-middle">
                     <thead class="table-light">

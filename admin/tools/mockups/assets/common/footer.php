@@ -21,5 +21,6 @@ $mockupScriptVersion = is_file($mockupScriptPath) ? (string) filemtime($mockupSc
 
     <script src="../shared/brand-kit.js"></script>
     <script src="./assets/js/script.js?v=<?php echo htmlspecialchars($mockupScriptVersion, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

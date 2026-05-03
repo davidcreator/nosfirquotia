@@ -1,8 +1,24 @@
-<section class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Solicitacoes e Relatorios</h1>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Solicitacoes e relatorios</h1>
+            <p class="aq-admin-page-hero-subtitle">Gestao central de pedidos, status de analise e emissao de propostas.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <span class="aq-admin-link-chip"><i class="fa-solid fa-file-signature"></i> Fila ativa</span>
+            </div>
+        </div>
+    </div>
 </section>
 
-<div class="card border-0 shadow-sm">
+<div class="aq-admin-panel aq-admin-table-card">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Lista de solicitacoes</h2>
+            <p class="aq-admin-panel-subtitle">Acompanhe cada proposta ate a etapa de conclusao.</p>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
             <thead class="table-light">

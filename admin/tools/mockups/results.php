@@ -94,5 +94,6 @@ $resultsScriptVersion = is_file($resultsScriptPath) ? (string) filemtime($result
     <script src="../shared/brand-kit.js"></script>
     <script src="./assets/js/script.js?v=<?php echo htmlspecialchars($mockupScriptVersion, ENT_QUOTES, 'UTF-8'); ?>"></script>
     <script src="./assets/js/results.js?v=<?php echo htmlspecialchars($resultsScriptVersion, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

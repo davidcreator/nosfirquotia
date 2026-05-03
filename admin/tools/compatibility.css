@@ -17,10 +17,86 @@ body.aq-tool-fluid {
     box-sizing: border-box;
 }
 
+body.aq-tool-fluid {
+    --aq-tool-primary: #18447f;
+    --aq-tool-primary-dark: #0e2750;
+    --aq-tool-accent: #116d80;
+    --aq-tool-text: #23344a;
+    --aq-tool-muted: #637892;
+    --aq-tool-border: #d8e3f2;
+    --aq-tool-surface: #ffffff;
+    --aq-tool-soft: #f3f8ff;
+    background:
+        radial-gradient(880px 360px at -8% -14%, rgba(24, 68, 127, 0.14) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(760px 300px at 112% -20%, rgba(17, 109, 128, 0.13) 0%, rgba(17, 109, 128, 0) 56%),
+        linear-gradient(180deg, #f5f8fd 0%, #edf4fc 100%);
+    color: var(--aq-tool-text);
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+}
+
 body.aq-tool-fluid *,
 body.aq-tool-fluid *::before,
 body.aq-tool-fluid *::after {
     box-sizing: border-box;
+}
+
+body.aq-tool-fluid h1,
+body.aq-tool-fluid h2,
+body.aq-tool-fluid h3 {
+    color: #203958;
+}
+
+body.aq-tool-fluid p,
+body.aq-tool-fluid small,
+body.aq-tool-fluid label,
+body.aq-tool-fluid li {
+    color: var(--aq-tool-text);
+}
+
+body.aq-tool-fluid a {
+    color: var(--aq-tool-primary);
+}
+
+body.aq-tool-fluid a:hover {
+    color: #12386a;
+}
+
+body.aq-tool-fluid button,
+body.aq-tool-fluid .btn,
+body.aq-tool-fluid input[type="button"],
+body.aq-tool-fluid input[type="submit"],
+body.aq-tool-fluid .upload-option-button,
+body.aq-tool-fluid .upload-header-link,
+body.aq-tool-fluid .upload-option-link {
+    border-radius: 0.65rem !important;
+}
+
+body.aq-tool-fluid input,
+body.aq-tool-fluid textarea,
+body.aq-tool-fluid select {
+    border-radius: 0.62rem !important;
+    border-color: #c9d8ea !important;
+}
+
+body.aq-tool-fluid .panel,
+body.aq-tool-fluid .card,
+body.aq-tool-fluid .controls,
+body.aq-tool-fluid .preview,
+body.aq-tool-fluid .results-hero,
+body.aq-tool-fluid .report-hero,
+body.aq-tool-fluid .upload-option-card,
+body.aq-tool-fluid .upload-validation,
+body.aq-tool-fluid .upload-info-card {
+    border: 1px solid var(--aq-tool-border) !important;
+    border-radius: 0.95rem !important;
+    background: var(--aq-tool-surface) !important;
+    box-shadow: 0 10px 22px rgba(20, 38, 63, 0.07) !important;
+}
+
+body.aq-tool-fluid .hero,
+body.aq-tool-fluid .upload-header,
+body.aq-tool-fluid .header {
+    border-radius: 0.95rem;
 }
 
 /* Core wrappers used by tools */
@@ -69,6 +145,15 @@ body.aq-tool-brandmanual .page {
     padding: clamp(12px, 1.8vw, 28px) !important;
 }
 
+/* FinalFrame */
+body.aq-tool-finalframe {
+    padding: clamp(10px, 1.4vw, 22px) !important;
+}
+
+body.aq-tool-finalframe .finalframe-page {
+    padding: clamp(12px, 1.8vw, 26px) !important;
+}
+
 /* Font Advisor */
 body.aq-tool-fontadvisor {
     padding: clamp(10px, 1.4vw, 22px) !important;
@@ -103,5 +188,551 @@ body.aq-tool-ocimage .preview {
     body.aq-tool-fluid {
         padding-left: 0 !important;
         padding-right: 0 !important;
+    }
+}
+
+/* Unified visual layer per tool (Quotia style) */
+body.aq-tool-fluid {
+    --aq-tool-brand-1: #0e2750;
+    --aq-tool-brand-2: #18447f;
+    --aq-tool-brand-3: #116d80;
+    --aq-tool-soft-border: #d8e3f2;
+    --aq-tool-soft-bg: #f4f8ff;
+    --aq-tool-soft-card: #ffffff;
+    --aq-tool-soft-text: #223249;
+    --aq-tool-soft-muted: #627a95;
+}
+
+body.aq-tool-fluid button,
+body.aq-tool-fluid .btn,
+body.aq-tool-fluid input,
+body.aq-tool-fluid textarea,
+body.aq-tool-fluid select {
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif !important;
+}
+
+/* Global secondary palette normalization (replace neutral gray tones) */
+body.aq-tool-fluid .btn-secondary,
+body.aq-tool-fluid .btn-outline-secondary,
+body.aq-tool-fluid button.ghost,
+body.aq-tool-fluid .ghost {
+    background: #e9f1ff !important;
+    border: 1px solid #c8dbf3 !important;
+    color: #0e2750 !important;
+}
+
+body.aq-tool-fluid .btn-secondary:hover,
+body.aq-tool-fluid .btn-outline-secondary:hover,
+body.aq-tool-fluid button.ghost:hover,
+body.aq-tool-fluid .ghost:hover {
+    background: #ddeaff !important;
+    border-color: #b7cfee !important;
+    color: #0b2245 !important;
+}
+
+body.aq-tool-fluid .result-toolbar,
+body.aq-tool-fluid .result-block,
+body.aq-tool-fluid .upload-area,
+body.aq-tool-fluid .feature-card,
+body.aq-tool-fluid .use-card {
+    border-color: #d5e2f3 !important;
+    background-color: #f7fbff !important;
+}
+
+body.aq-tool-fluid .header,
+body.aq-tool-fluid .upload-header {
+    box-shadow: 0 8px 24px rgba(12, 35, 63, 0.14);
+}
+
+body.aq-tool-fluid .hero {
+    border-radius: 1rem !important;
+}
+
+body.aq-tool-fluid .controls,
+body.aq-tool-fluid .image-preview-container,
+body.aq-tool-fluid .palette-display,
+body.aq-tool-fluid .color-details,
+body.aq-tool-fluid .panel,
+body.aq-tool-fluid .results-hero,
+body.aq-tool-fluid .report-hero,
+body.aq-tool-fluid .upload-option-card,
+body.aq-tool-fluid .upload-validation,
+body.aq-tool-fluid .upload-info-card {
+    border-radius: 1rem !important;
+}
+
+body.aq-tool-bgremove {
+    --primary: #18447f;
+    --primary-dark: #0e2750;
+    --success: #1f8b63;
+    --danger: #c03642;
+    --bg: #edf4fc;
+    --surface: #ffffff;
+    --text: #223249;
+    --text-muted: #5f7592;
+    --border: #d5e2f3;
+    background:
+        radial-gradient(900px 360px at -10% -12%, rgba(24, 68, 127, 0.15) 0%, rgba(24, 68, 127, 0) 64%),
+        radial-gradient(760px 280px at 110% -18%, rgba(17, 109, 128, 0.14) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+}
+
+body.aq-tool-bgremove .header h1 {
+    background: none !important;
+    -webkit-text-fill-color: #18447f !important;
+    color: #18447f !important;
+}
+
+body.aq-tool-bgremove .hero {
+    background: linear-gradient(128deg, #0e2750 0%, #18447f 62%, #116d80 100%) !important;
+}
+
+body.aq-tool-bgremove .main-content,
+body.aq-tool-bgremove .feature-card,
+body.aq-tool-bgremove .image-box {
+    border: 1px solid var(--aq-tool-soft-border) !important;
+    background: #ffffff !important;
+}
+
+body.aq-tool-colorpalette {
+    background:
+        radial-gradient(900px 360px at -8% -10%, rgba(24, 68, 127, 0.13) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(760px 290px at 108% -18%, rgba(17, 109, 128, 0.12) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+    color: var(--aq-tool-soft-text);
+}
+
+body.aq-tool-colorpalette header h1 {
+    color: #18447f !important;
+}
+
+body.aq-tool-colorpalette header p {
+    color: var(--aq-tool-soft-muted) !important;
+}
+
+body.aq-tool-colorpalette .controls,
+body.aq-tool-colorpalette .image-preview-container,
+body.aq-tool-colorpalette .palette-display,
+body.aq-tool-colorpalette .color-details {
+    border: 1px solid var(--aq-tool-soft-border) !important;
+    background: var(--aq-tool-soft-card) !important;
+}
+
+body.aq-tool-colorpalette .upload-button,
+body.aq-tool-colorpalette .palette-btn.active,
+body.aq-tool-colorpalette #applyBrandColors {
+    background: linear-gradient(135deg, #18447f 0%, #2166ac 100%) !important;
+    border-color: #18447f !important;
+    color: #ffffff !important;
+}
+
+body.aq-tool-colorpalette #randomColor {
+    background: linear-gradient(135deg, #0f5f76 0%, #1887a2 100%) !important;
+}
+
+body.aq-tool-colorpalette #exportPalette {
+    background: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%) !important;
+}
+
+body.aq-tool-coloradvisor {
+    --bg: #edf4fc;
+    --card: #ffffff;
+    --ink: #223249;
+    --ink-soft: #5f7592;
+    --line: #d6e2f3;
+    --accent: #18447f;
+    --accent-soft: #e7f0ff;
+    background:
+        radial-gradient(920px 360px at -10% -14%, rgba(24, 68, 127, 0.15) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(800px 300px at 110% -20%, rgba(17, 109, 128, 0.14) 0%, rgba(17, 109, 128, 0) 56%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+}
+
+body.aq-tool-coloradvisor .hero {
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%) !important;
+    padding: clamp(18px, 2.1vw, 28px) !important;
+}
+
+body.aq-tool-coloradvisor .hero h1,
+body.aq-tool-coloradvisor .hero p,
+body.aq-tool-coloradvisor .hero .eyebrow {
+    color: #f8fbff !important;
+}
+
+body.aq-tool-coloradvisor button {
+    background: linear-gradient(135deg, #18447f 0%, #2166ac 100%) !important;
+}
+
+body.aq-tool-coloradvisor button.ghost {
+    background: #edf4ff !important;
+    border: 1px solid #c9d9f0;
+    color: #23466f !important;
+}
+
+body.aq-tool-fontadvisor {
+    --fa-bg: #edf4fc;
+    --fa-card: #ffffff;
+    --fa-ink: #223249;
+    --fa-soft: #5f7592;
+    --fa-line: #d6e2f3;
+    --fa-accent: #18447f;
+    --fa-accent-soft: #e8f0ff;
+    background:
+        radial-gradient(900px 340px at -10% -14%, rgba(24, 68, 127, 0.13) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(760px 280px at 108% -20%, rgba(17, 109, 128, 0.12) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+}
+
+body.aq-tool-fontadvisor .hero {
+    background: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+body.aq-tool-fontadvisor .hero h1,
+body.aq-tool-fontadvisor .hero p,
+body.aq-tool-fontadvisor .hero .eyebrow {
+    color: #f8fbff !important;
+}
+
+body.aq-tool-fontadvisor button {
+    background: linear-gradient(135deg, #18447f 0%, #2166ac 100%) !important;
+}
+
+body.aq-tool-fontadvisor button.ghost {
+    border-color: #c8d9ef !important;
+    background: #edf4ff !important;
+    color: #23466f !important;
+}
+
+body.aq-tool-brandmanual {
+    --bg: #edf4fc;
+    --surface: #ffffff;
+    --surface-soft: #f6faff;
+    --ink: #223249;
+    --muted: #5f7592;
+    --line: #d6e2f3;
+    --brand: #18447f;
+    --brand-dark: #0e2750;
+    --ok: #1f8b63;
+    --warn: #9c6512;
+    background:
+        radial-gradient(920px 360px at -10% -12%, rgba(24, 68, 127, 0.14) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(800px 300px at 108% -20%, rgba(17, 109, 128, 0.12) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+}
+
+body.aq-tool-brandmanual .hero {
+    background: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%) !important;
+    box-shadow: 0 16px 36px rgba(14, 39, 80, 0.28) !important;
+}
+
+body.aq-tool-brandmanual .meta-tag {
+    background: #e8f0ff !important;
+    border-color: #c9d9f0 !important;
+    color: #1f436b !important;
+}
+
+body.aq-tool-brandmanual .template-card.is-active {
+    border-color: #18447f !important;
+    box-shadow: 0 12px 24px rgba(24, 68, 127, 0.16) !important;
+}
+
+body.aq-tool-brandmanual .panel .btn.ghost {
+    background: #edf4ff !important;
+    border-color: #c8d9ef !important;
+    color: #23466f !important;
+}
+
+body.aq-tool-brandmanual .panel .btn.ghost:hover {
+    background: #e2edff !important;
+    border-color: #b4cbe9 !important;
+}
+
+body.aq-tool-mockups {
+    --primary-color: #18447f;
+    --secondary-color: #f3f8ff;
+    --accent-color: #116d80;
+    --text-primary: #223249;
+    --text-secondary: #607894;
+    --border-color: #d6e2f3;
+    --background-light: #edf4fc;
+    --background-dark: #0e2750;
+    --gradient-primary: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%);
+    --gradient-secondary: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%);
+    background:
+        radial-gradient(900px 360px at -8% -12%, rgba(24, 68, 127, 0.14) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(760px 300px at 108% -20%, rgba(17, 109, 128, 0.13) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+}
+
+body.aq-tool-mockups .header,
+body.aq-tool-mockups .upload-header {
+    background: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+body.aq-tool-mockups .logo,
+body.aq-tool-mockups .upload-brand {
+    color: #ffffff !important;
+}
+
+body.aq-tool-mockups .nav-btn {
+    color: rgba(236, 245, 255, 0.86) !important;
+}
+
+body.aq-tool-mockups .nav-btn:hover {
+    color: #ffffff !important;
+    background: rgba(8, 26, 50, 0.34) !important;
+}
+
+body.aq-tool-mockups .nav-btn.active {
+    color: #ffffff !important;
+    background: rgba(8, 26, 50, 0.52) !important;
+}
+
+body.aq-tool-mockups .search-container input {
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.42) !important;
+    color: #ffffff !important;
+}
+
+body.aq-tool-mockups .search-container input::placeholder {
+    color: rgba(236, 245, 255, 0.78) !important;
+}
+
+body.aq-tool-mockups .search-container i {
+    color: rgba(236, 245, 255, 0.82) !important;
+}
+
+body.aq-tool-mockups .upload-header-link {
+    color: #ffffff !important;
+    background: rgba(8, 26, 50, 0.24) !important;
+    border-color: rgba(255, 255, 255, 0.42) !important;
+}
+
+body.aq-tool-mockups .upload-header-link:hover {
+    background: rgba(8, 26, 50, 0.38) !important;
+}
+
+body.aq-tool-ocimage {
+    background:
+        radial-gradient(920px 360px at -10% -12%, rgba(24, 68, 127, 0.14) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(800px 300px at 108% -20%, rgba(17, 109, 128, 0.12) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+    color: #223249;
+}
+
+body.aq-tool-ocimage .controls,
+body.aq-tool-ocimage .preview {
+    border: 1px solid var(--aq-tool-soft-border) !important;
+    background: #ffffff !important;
+    box-shadow: 0 10px 22px rgba(20, 38, 63, 0.08) !important;
+}
+
+body.aq-tool-ocimage .controls h1,
+body.aq-tool-ocimage .preview h2 {
+    color: #18447f !important;
+}
+
+body.aq-tool-ocimage .update-btn {
+    background: linear-gradient(135deg, #18447f 0%, #2166ac 100%) !important;
+}
+
+body.aq-tool-ocimage .export-btn {
+    background: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%) !important;
+}
+
+body.aq-tool-ocimage .code-btn {
+    background: linear-gradient(135deg, #0f5f76 0%, #1887a2 100%) !important;
+}
+
+body.aq-tool-ocimage .social-tab.active {
+    background: #e8f0ff !important;
+    color: #18447f !important;
+}
+
+body.aq-tool-ocimage .aq-workflow-assistant {
+    grid-column: 1 / -1;
+}
+
+/* Shared workflow assistant */
+body.aq-tool-fluid .aq-workflow-assistant {
+    margin: clamp(12px, 1.8vw, 22px) 0;
+    border: 1px solid #d7e3f3;
+    border-radius: 1rem;
+    background: linear-gradient(165deg, #fdfefe 0%, #f4f8ff 100%);
+    box-shadow: 0 12px 26px rgba(18, 42, 74, 0.09);
+    padding: clamp(14px, 1.9vw, 22px);
+}
+
+body.aq-tool-fluid .aq-workflow-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+}
+
+body.aq-tool-fluid .aq-workflow-head h3 {
+    margin: 0;
+    font-size: 1.06rem;
+    color: #173f74;
+}
+
+body.aq-tool-fluid .aq-workflow-head p {
+    margin: 0.32rem 0 0;
+    color: #4d6787;
+    font-size: 0.93rem;
+}
+
+body.aq-tool-fluid .aq-workflow-progress {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid #bbcee7;
+    background: #e7f0ff;
+    color: #123a6e;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+body.aq-tool-fluid .aq-workflow-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.65rem;
+}
+
+body.aq-tool-fluid .aq-workflow-step {
+    display: flex;
+    gap: 0.6rem;
+    border: 1px solid #d2dfef;
+    border-radius: 0.8rem;
+    background: #ffffff;
+    padding: 0.65rem;
+    min-height: 78px;
+}
+
+body.aq-tool-fluid .aq-workflow-step-index {
+    width: 1.55rem;
+    height: 1.55rem;
+    border-radius: 50%;
+    background: #dfeafa;
+    color: #194377;
+    font-size: 0.76rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+}
+
+body.aq-tool-fluid .aq-workflow-step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.24rem;
+}
+
+body.aq-tool-fluid .aq-workflow-step strong {
+    color: #193d68;
+    font-size: 0.87rem;
+    line-height: 1.2;
+}
+
+body.aq-tool-fluid .aq-workflow-step p {
+    margin: 0;
+    color: #5a7392;
+    font-size: 0.8rem;
+    line-height: 1.34;
+}
+
+body.aq-tool-fluid .aq-workflow-step.is-active {
+    border-color: #80a6d6;
+    box-shadow: inset 0 0 0 1px rgba(24, 68, 127, 0.16);
+}
+
+body.aq-tool-fluid .aq-workflow-step.is-active .aq-workflow-step-index {
+    background: #18447f;
+    color: #ffffff;
+}
+
+body.aq-tool-fluid .aq-workflow-step.is-done {
+    border-color: #9cc8b3;
+    background: #f0fbf6;
+}
+
+body.aq-tool-fluid .aq-workflow-step.is-done .aq-workflow-step-index {
+    background: #1f8b63;
+    color: #ffffff;
+}
+
+body.aq-tool-fluid .aq-workflow-step.is-done strong {
+    color: #1c5d45;
+}
+
+body.aq-tool-fluid .aq-workflow-actions {
+    margin-top: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.58rem;
+}
+
+body.aq-tool-fluid #aqWorkflowPrimaryAction,
+body.aq-tool-fluid #aqWorkflowSecondaryAction {
+    border: 1px solid transparent;
+    border-radius: 0.66rem;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+body.aq-tool-fluid #aqWorkflowPrimaryAction {
+    background: linear-gradient(135deg, #18447f 0%, #2363a4 100%);
+    color: #ffffff;
+}
+
+body.aq-tool-fluid #aqWorkflowPrimaryAction:hover {
+    filter: brightness(1.03);
+}
+
+body.aq-tool-fluid #aqWorkflowPrimaryAction:disabled {
+    background: #b4c9e3;
+    color: #f9fcff;
+    cursor: not-allowed;
+}
+
+body.aq-tool-fluid #aqWorkflowSecondaryAction {
+    background: #eef4ff;
+    color: #1f4f80;
+    border-color: #c5d7ef;
+}
+
+body.aq-tool-fluid #aqWorkflowSecondaryAction:hover {
+    background: #e2edff;
+}
+
+body.aq-tool-fluid .aq-workflow-hint {
+    margin: 0.62rem 0 0;
+    color: #5f7592;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 760px) {
+    body.aq-tool-fluid .aq-workflow-step {
+        min-height: 74px;
+    }
+
+    body.aq-tool-fluid .aq-workflow-actions {
+        flex-direction: column;
+    }
+
+    body.aq-tool-fluid #aqWorkflowPrimaryAction,
+    body.aq-tool-fluid #aqWorkflowSecondaryAction {
+        width: 100%;
     }
 }

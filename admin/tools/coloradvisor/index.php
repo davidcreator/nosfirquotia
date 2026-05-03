@@ -169,5 +169,6 @@ require_once dirname(__DIR__) . '/bootstrap.php';
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="../shared/brand-kit.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

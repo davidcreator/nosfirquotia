@@ -264,6 +264,281 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
     background: #1a4b8f;
 }
 
+.aq-entry {
+    --aq-entry-bg: #e8eef8;
+    --aq-entry-panel: #f9fcff;
+    --aq-entry-login: #122d57;
+    --aq-entry-form: #ebf3ff;
+    --aq-entry-primary: #1a4b8f;
+    --aq-entry-accent: #117f95;
+    --aq-entry-light-text: #f2f7ff;
+    --aq-entry-dark-text: #1a2f49;
+    --aq-entry-line: #d4dfef;
+    margin: 0;
+}
+
+.aq-entry-shell {
+    background:
+        radial-gradient(circle at 8% 8%, rgba(26, 75, 143, 0.15), transparent 36%),
+        radial-gradient(circle at 88% 12%, rgba(17, 127, 149, 0.16), transparent 34%),
+        var(--aq-entry-bg);
+    border-radius: 1.5rem;
+    padding: 1.4rem;
+    border: 1px solid #d8e3f3;
+    box-shadow: 0 16px 36px rgba(16, 39, 75, 0.13);
+}
+
+.aq-entry-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.95fr;
+    gap: 1.2rem;
+    align-items: stretch;
+}
+
+.aq-entry-panel {
+    background: var(--aq-entry-panel);
+    color: var(--aq-entry-dark-text);
+    border-radius: 1.25rem;
+    border: 1px solid var(--aq-entry-line);
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(22, 45, 78, 0.08);
+}
+
+.aq-entry-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.62rem;
+    margin-bottom: 0.45rem;
+}
+
+.aq-entry-brand strong {
+    display: block;
+    font-size: 1.12rem;
+    line-height: 1.1;
+    color: #153964;
+}
+
+.aq-entry-brand-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.65rem;
+    border: 1px solid #bfd3ec;
+    background: #ffffff;
+    color: #1a4b8f;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.aq-entry-brand-icon img {
+    width: 76%;
+    height: 76%;
+    object-fit: contain;
+    display: block;
+}
+
+.aq-entry-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid #cedef4;
+    border-radius: 999px;
+    padding: 0.44rem 0.74rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #ffffff;
+    color: #1e4c81;
+}
+
+.aq-entry-panel h1 {
+    margin: 1rem 0 0.75rem;
+    font-size: clamp(1.7rem, 4.2vw, 2.55rem);
+    line-height: 1.08;
+    color: #14355d;
+}
+
+.aq-entry-lead {
+    margin: 0 0 1.1rem;
+    max-width: 58ch;
+    line-height: 1.6;
+    color: rgba(26, 47, 73, 0.9);
+}
+
+.aq-entry-list {
+    margin: 0 0 1.2rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.58rem;
+}
+
+.aq-entry-list li {
+    background: #ffffff;
+    border: 1px solid var(--aq-entry-line);
+    border-radius: 0.75rem;
+    padding: 0.7rem 0.78rem;
+    line-height: 1.45;
+    color: #24456c;
+}
+
+.aq-entry-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.aq-entry-actions .btn {
+    min-width: 12.5rem;
+}
+
+.aq-entry-login {
+    background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01)),
+        linear-gradient(145deg, #0f2a53 0%, #163c72 54%, #0f5b77 100%);
+    color: var(--aq-entry-light-text);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(240, 248, 255, 0.2);
+    padding: 1.6rem;
+    box-shadow: 0 16px 38px rgba(8, 24, 47, 0.27);
+}
+
+.aq-entry-login h2 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.1;
+    color: #ffffff;
+}
+
+.aq-entry-login p {
+    margin: 0 0 1rem;
+    color: rgba(242, 247, 255, 0.86);
+}
+
+.aq-entry-form {
+    background: var(--aq-entry-form);
+    border: 1px solid rgba(13, 45, 85, 0.24);
+    border-radius: 0.92rem;
+    padding: 0.85rem 0.85rem 0.95rem;
+}
+
+.aq-entry-form label {
+    display: block;
+    margin: 0 0 0.32rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #16385f;
+}
+
+.aq-entry-form input {
+    width: 100%;
+    border: 1px solid #b8c9dd;
+    border-radius: 0.62rem;
+    background: #fbfdff;
+    color: #183a63;
+    padding: 0.62rem 0.75rem;
+    margin: 0 0 0.75rem;
+    outline: none;
+}
+
+.aq-entry-form input:focus {
+    border-color: #2277ae;
+    box-shadow: 0 0 0 0.2rem rgba(34, 119, 174, 0.2);
+}
+
+.aq-entry-submit {
+    width: 100%;
+    border: 0;
+    border-radius: 0.62rem;
+    background: linear-gradient(108deg, #1a4b8f 0%, #20819a 100%);
+    color: #f5fbff;
+    font-weight: 700;
+    padding: 0.7rem 0.85rem;
+    cursor: pointer;
+    transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.aq-entry-submit:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+}
+
+.aq-entry-login-links {
+    margin-top: 0.72rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.aq-entry-login-links a {
+    text-align: center;
+    border-radius: 0.62rem;
+    padding: 0.62rem 0.72rem;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.aq-entry-login-links .create-link {
+    border: 1px solid rgba(245, 251, 255, 0.3);
+    background: rgba(245, 251, 255, 0.08);
+    color: #f5fbff !important;
+}
+
+.aq-entry-login-links .forgot-link {
+    color: rgba(245, 251, 255, 0.84) !important;
+    border: 1px solid rgba(245, 251, 255, 0.2);
+    background: rgba(245, 251, 255, 0.04);
+}
+
+.aq-entry-login-links a:hover {
+    border-color: rgba(245, 251, 255, 0.5);
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.aq-entry-connected {
+    background: rgba(245, 251, 255, 0.09);
+    border: 1px solid rgba(245, 251, 255, 0.25);
+    border-radius: 0.92rem;
+    padding: 0.88rem;
+    display: grid;
+    gap: 0.56rem;
+}
+
+.aq-entry-connected .btn {
+    width: 100%;
+}
+
+.aq-entry-auth .aq-entry-shell {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.aq-entry-form-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.aq-entry-form-grid .aq-entry-field {
+    display: block;
+}
+
+.aq-entry-form-grid input {
+    margin: 0;
+}
+
+.aq-entry-form-row {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.aq-entry-form-row-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .aq-hero {
     border-radius: 1.2rem;
     box-shadow: 0 14px 34px rgba(16, 45, 87, 0.24);
@@ -592,6 +867,14 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
         gap: 0.42rem !important;
         flex-direction: column;
     }
+
+    .aq-entry-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .aq-entry-form-row-2 {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -693,5 +976,21 @@ body.aq-client-theme.aq-client-scrolled .aq-client-navbar {
     .aq-client-footer-links {
         justify-content: flex-start;
         gap: 0.55rem 0.85rem;
+    }
+
+    .aq-entry-shell {
+        padding: 0.9rem;
+        border-radius: 1.1rem;
+    }
+
+    .aq-entry-panel,
+    .aq-entry-login {
+        border-radius: 0.95rem;
+        padding: 1.12rem;
+    }
+
+    .aq-entry-actions .btn {
+        width: 100%;
+        min-width: 0;
     }
 }

@@ -49,9 +49,22 @@ require_once 'assets/common/header.php';
                     <button id="randomColor">Cor aleatoria</button>
                     <button id="applyBrandColors">Aplicar como Cores da Marca</button>
                     <button id="exportPalette">Exportar Paleta</button>
+                    <button id="exportCssTokens">Exportar Tokens CSS</button>
                 </div>
                 <p id="brandSyncStatus" class="brand-sync-status">Aguardando sincronizacao com o Brand Kit.</p>
             </div>
+
+            <section class="workflow-assistant">
+                <div class="workflow-head">
+                    <h3>Fluxo Guiado da Ferramenta</h3>
+                    <p id="workflowSummary">Organize o uso em 5 etapas para manter consistencia entre paleta, acessibilidade e BrandBook.</p>
+                </div>
+                <div id="workflowSteps" class="workflow-steps"></div>
+                <div class="workflow-actions">
+                    <button type="button" id="workflowPrimaryAction" class="tool-button">Executar proximo passo</button>
+                    <button type="button" id="workflowSecondaryAction" class="tool-button">Abrir BrandBook</button>
+                </div>
+            </section>
 
             <div class="image-preview-container" id="imagePreviewContainer">
                 <div class="image-preview-wrapper">
@@ -100,7 +113,157 @@ require_once 'assets/common/header.php';
             <div class="color-details">
                 <h3>Detalhes das Cores</h3>
                 <div class="color-list" id="colorList">
-                    <!-- Detalhes das cores serão exibidos aqui -->
+                    <!-- Detalhes das cores serao exibidos aqui -->
+                </div>
+                <div class="project-guidance">
+                    <section class="guidance-card">
+                        <h4>Papeis sugeridos para projeto</h4>
+                        <div id="roleSuggestions" class="role-suggestions"></div>
+                    </section>
+                    <section class="guidance-card">
+                        <h4>Auditoria de contraste e legibilidade</h4>
+                        <div id="contrastAudit" class="contrast-audit"></div>
+                    </section>
+                </div>
+                <div class="insight-guidance">
+                    <section class="guidance-card guidance-card-wide">
+                        <h4>Combinacoes e tendencias aplicadas</h4>
+                        <p id="insightSummary" class="guidance-intro">Aguardando analise de combinacoes e tendencias.</p>
+                        <div class="insight-columns">
+                            <div>
+                                <h5>Combinacoes recomendadas</h5>
+                                <div id="combinationSuggestions" class="insight-list"></div>
+                            </div>
+                            <div>
+                                <h5>Tendencias alinhadas</h5>
+                                <div id="trendSuggestions" class="insight-list"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="adobe-lab">
+                    <section class="guidance-card guidance-card-wide">
+                        <h4>Recursos Avancados Inspirados no Adobe Color</h4>
+                        <div class="adobe-grid">
+                            <article class="adobe-panel">
+                                <h5>Color Wheel e Harmonia</h5>
+                                <canvas id="colorWheelCanvas" width="260" height="260" aria-label="Roda de cores"></canvas>
+                                <p id="wheelInteractionHint" class="wheel-hint">
+                                    Clique e arraste no circulo para ajustar matiz/saturacao. Arraste os pontos da harmonia para rotacao/abertura e use scroll para abrir/fechar a harmonia. Segure Shift para ajuste fino.
+                                </p>
+                                <p id="wheelPointerInfo" class="wheel-pointer-info">Base: #3498DB</p>
+                                <div class="wheel-controls">
+                                    <label for="wheelHarmonyRule">Regra de harmonia</label>
+                                    <select id="wheelHarmonyRule">
+                                        <option value="monochromatic">Monocromatica</option>
+                                        <option value="analogous">Analogica</option>
+                                        <option value="complementary">Complementar</option>
+                                        <option value="triadic">Triadica</option>
+                                        <option value="tetradic">Tetradica</option>
+                                        <option value="splitComplementary">Split-complementar</option>
+                                    </select>
+                                    <label for="harmonySpread">Abertura da harmonia</label>
+                                    <input type="range" id="harmonySpread" min="12" max="120" step="2" value="30">
+                                    <span id="harmonySpreadValue">30deg</span>
+                                    <label for="wheelBaseLightness">Luminosidade base</label>
+                                    <input type="range" id="wheelBaseLightness" min="12" max="88" step="1" value="52">
+                                    <span id="wheelBaseLightnessValue">52%</span>
+                                    <button type="button" id="applyHarmonyRule" class="tool-button">Aplicar harmonia</button>
+                                    <label for="wheelRotation">Rotacao de harmonias</label>
+                                    <input type="range" id="wheelRotation" min="-180" max="180" value="0">
+                                    <div class="wheel-actions">
+                                        <span id="wheelRotationValue">0deg</span>
+                                        <button type="button" id="applyWheelRotation" class="tool-button">Aplicar rotacao</button>
+                                    </div>
+                                    <div class="wheel-quick-actions">
+                                        <button type="button" id="wheelRotateLeft" class="tool-button">-15deg</button>
+                                        <button type="button" id="wheelRotateRight" class="tool-button">+15deg</button>
+                                        <button type="button" id="wheelRandomizeHarmony" class="tool-button">Randomizar harmonia</button>
+                                    </div>
+                                    <label for="wheelDynamicsProfile">Perfil de composicao</label>
+                                    <select id="wheelDynamicsProfile">
+                                        <option value="balanced">Equilibrado</option>
+                                        <option value="vibrant">Vibrante</option>
+                                        <option value="soft">Suave</option>
+                                        <option value="highContrast">Alto contraste</option>
+                                    </select>
+                                    <label for="wheelDynamicsIntensity">Intensidade dinamica</label>
+                                    <input type="range" id="wheelDynamicsIntensity" min="0" max="100" step="1" value="55">
+                                    <span id="wheelDynamicsIntensityValue">55%</span>
+                                    <button type="button" id="applyDynamicsProfile" class="tool-button">Aplicar dinamica</button>
+                                </div>
+                            </article>
+                            <article class="adobe-panel">
+                                <h5>Extract Gradient</h5>
+                                <div class="gradient-controls">
+                                    <div class="gradient-selects">
+                                        <label for="gradientStart">Cor inicial</label>
+                                        <select id="gradientStart"></select>
+                                        <label for="gradientEnd">Cor final</label>
+                                        <select id="gradientEnd"></select>
+                                    </div>
+                                    <label for="gradientAngle">Angulo do gradiente</label>
+                                    <input type="range" id="gradientAngle" min="0" max="360" value="135">
+                                    <span id="gradientAngleValue">135deg</span>
+                                </div>
+                                <div id="gradientPreview" class="gradient-preview"></div>
+                                <pre id="gradientCssCode" class="gradient-code"></pre>
+                                <button type="button" id="copyGradientCss" class="tool-button">Copiar CSS do gradiente</button>
+                            </article>
+                            <article class="adobe-panel">
+                                <h5>Accessibility Tools</h5>
+                                <label for="colorVisionMode">Simulador de visao de cor</label>
+                                <select id="colorVisionMode">
+                                    <option value="normal">Normal</option>
+                                    <option value="protanopia">Protanopia</option>
+                                    <option value="deuteranopia">Deuteranopia</option>
+                                    <option value="tritanopia">Tritanopia</option>
+                                </select>
+                                <div class="vision-severity">
+                                    <label for="colorVisionSeverity">Severidade da simulacao</label>
+                                    <input type="range" id="colorVisionSeverity" min="0" max="100" value="100">
+                                    <span id="colorVisionSeverityValue">100%</span>
+                                </div>
+                                <div class="vision-lock">
+                                    <label class="vision-lock-toggle" for="lockPrimaryColor">
+                                        <input type="checkbox" id="lockPrimaryColor" checked>
+                                        <span>Travar cor primaria da marca</span>
+                                    </label>
+                                    <small>Sugestoes e ajuste automatico mudam apenas cores de apoio.</small>
+                                </div>
+                                <div id="visionSwatches" class="vision-swatches"></div>
+                                <ul id="visionConflicts" class="vision-conflicts"></ul>
+                                <div class="vision-actions">
+                                    <button type="button" id="autoFixConflicts" class="tool-button">Resolver conflitos automaticamente</button>
+                                </div>
+                                <div id="conflictSuggestions" class="conflict-suggestions"></div>
+                            </article>
+                            <article class="adobe-panel">
+                                <h5>Biblioteca de Temas</h5>
+                                <div class="theme-form">
+                                    <input type="text" id="themeNameInput" placeholder="Nome do tema">
+                                    <input type="text" id="themeTagsInput" placeholder="Tags (ex: fintech, moderno)">
+                                </div>
+                                <button type="button" id="saveThemeButton" class="tool-button">Salvar tema</button>
+                                <div id="savedThemesList" class="saved-themes-list"></div>
+                            </article>
+                            <article class="adobe-panel">
+                                <h5>Presets de Mercado</h5>
+                                <label for="sectorPresetSelect">Setor do projeto</label>
+                                <select id="sectorPresetSelect">
+                                    <option value="none">Sem preset</option>
+                                    <option value="saas">SaaS e Produtos Digitais</option>
+                                    <option value="ecommerce">E-commerce e Varejo</option>
+                                    <option value="health">Saude e Bem-estar</option>
+                                    <option value="education">Educacao e Cursos</option>
+                                    <option value="finance">Financas e Seguros</option>
+                                    <option value="fashion">Moda e Lifestyle</option>
+                                </select>
+                                <button type="button" id="applySectorPreset" class="tool-button">Aplicar preset</button>
+                                <p id="sectorPresetHint" class="saved-theme-meta">Selecione um preset para gerar harmonia, combinacoes e tendencias alinhadas ao setor.</p>
+                            </article>
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>
@@ -108,4 +271,3 @@ require_once 'assets/common/header.php';
 <?php 
 require_once 'assets/common/footer.php';
 ?>
-

@@ -1,11 +1,15 @@
-<section class="mb-3 d-flex justify-content-between align-items-center">
-    <div>
-        <h1 class="h3 mb-1">Solicitacao #<?= (int) $requestData['id'] ?></h1>
-        <p class="text-muted mb-0"><?= e($requestData['project_title']) ?></p>
-    </div>
-    <div class="d-flex gap-2">
-        <a class="btn btn-outline-info" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificacoes Email</a>
-        <a class="btn btn-outline-secondary" href="<?= e(url('/admin/orcamentos')) ?>">Voltar</a>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-lg-8">
+            <h1 class="aq-admin-page-hero-title">Solicitacao #<?= (int) $requestData['id'] ?></h1>
+            <p class="aq-admin-page-hero-subtitle"><?= e($requestData['project_title']) ?></p>
+        </div>
+        <div class="col-lg-4">
+            <div class="aq-admin-page-hero-meta">
+                <a class="btn btn-sm btn-outline-light" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificacoes Email</a>
+                <a class="btn btn-sm btn-outline-light" href="<?= e(url('/admin/orcamentos')) ?>">Voltar</a>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -40,7 +44,7 @@
     </div>
 </div>
 
-<section class="card border-0 shadow-sm mb-3">
+<section class="card border-0 shadow-sm mb-3 aq-admin-filter-bar">
     <div class="card-body py-3">
         <div class="row g-3 align-items-end">
             <div class="col-md-4 col-lg-3">
@@ -71,9 +75,14 @@
     </div>
 </section>
 
-<section class="card border-0 shadow-sm mb-3">
-    <div class="card-body">
-        <h2 class="h5 mb-3">Servicos solicitados</h2>
+<section class="aq-admin-panel aq-admin-table-card mb-3">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Servicos solicitados</h2>
+            <p class="aq-admin-panel-subtitle">Itens enviados pelo cliente e faixas de referencia.</p>
+        </div>
+    </div>
+    <div class="aq-admin-panel-body">
         <div class="table-responsive">
             <table class="table table-sm align-middle">
                 <thead class="table-light">
@@ -108,9 +117,14 @@
     </div>
 </section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h2 class="h5 mb-3">Relatorio de Orcamento (validade 90 dias)</h2>
+<section class="aq-admin-panel">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Relatorio de orcamento (validade 90 dias)</h2>
+            <p class="aq-admin-panel-subtitle">Edite precos, tributacao e detalhes para gerar a proposta final.</p>
+        </div>
+    </div>
+    <div class="aq-admin-panel-body">
         <div class="alert alert-secondary">
             Utilize a base completa de referencia para apoiar a precificacao:
             <a href="<?= e(url('/admin/referencias')) ?>">Precos e Servicos</a>.

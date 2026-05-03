@@ -1,77 +1,78 @@
-<section class="aq-client-home-hero p-4 p-lg-5 rounded-4 aq-hero mb-4">
-    <div class="row g-4 align-items-center">
-        <div class="col-lg-8">
-            <span class="badge rounded-pill text-bg-light mb-3">Atendimento inteligente para orcamentos</span>
-            <h1 class="display-6 fw-bold text-white mb-3">Solicite seu orcamento de Design de forma segura</h1>
-            <p class="text-white-50 mb-4">
-                No Quotia o cliente abre uma solicitacao com os servicos desejados.
-                O time administrativo analisa o pedido e gera um relatorio com valores, prazos, disponibilidade e validade de 90 dias.
-            </p>
-            <?php if (!empty($clientUser)): ?>
-                <a class="btn btn-light btn-lg" href="<?= e(url('/orcamento/novo')) ?>">
-                    <i class="fa-solid fa-pen-ruler me-2"></i>
-                    Nova solicitacao
-                </a>
-            <?php else: ?>
-                <a class="btn btn-light btn-lg" href="<?= e(url('/cliente/cadastro')) ?>">
-                    <i class="fa-solid fa-user-plus me-2"></i>
-                    Criar conta para solicitar
-                </a>
-            <?php endif; ?>
-        </div>
-        <div class="col-lg-4">
-            <div class="aq-highlight-card">
-                <h2 class="h5">Fluxo rapido</h2>
-                <ul class="mb-0">
-                    <li>Cadastro e autenticacao do cliente</li>
-                    <li>Solicitacao com servicos selecionados</li>
-                    <li>Relatorio gerado pelo admin</li>
+<section class="aq-entry">
+    <div class="aq-entry-shell">
+        <div class="aq-entry-grid">
+            <section class="aq-entry-panel">
+                <div class="aq-entry-brand">
+                    <span class="aq-entry-brand-icon"><img src="<?= e(asset('image/quotia_logo.png')) ?>" alt="Quotia"></span>
+                    <strong>Quotia</strong>
+                </div>
+
+                <h1>Solicite orcamentos de design com um fluxo simples, seguro e acompanhado em tempo real.</h1>
+                <p class="aq-entry-lead">
+                    O Quotia centraliza cadastro, solicitacao e acompanhamento do orcamento em um unico lugar.
+                    Seu pedido passa por analise administrativa e retorna com valores, prazos e validade de 90 dias.
+                </p>
+
+                <ul class="aq-entry-list">
+                    <li><strong>Solicitacao guiada:</strong> Escolha os servicos e descreva seu projeto com clareza.</li>
+                    <li><strong>Analise administrativa:</strong> O admin valida escopo, disponibilidade e custos por item.</li>
+                    <li><strong>Relatorio completo:</strong> Receba um resumo profissional com prazos e condicoes comerciais.</li>
+                    <li><strong>Acesso continuo:</strong> Consulte suas solicitacoes em qualquer dispositivo, quando precisar.</li>
                 </ul>
-            </div>
-        </div>
-    </div>
-</section>
 
-<section>
-    <div class="aq-client-page-head">
-        <div>
-            <h2 class="h4 mb-1">Como funciona</h2>
-            <p class="aq-client-page-subtitle">Um processo guiado para voce enviar e acompanhar seu orcamento.</p>
-        </div>
-        <?php if (!empty($clientUser)): ?>
-            <a class="btn btn-outline-primary btn-sm" href="<?= e(url('/orcamentos')) ?>">
-                <i class="fa-solid fa-list-check me-1"></i>
-                Minhas solicitacoes
-            </a>
-        <?php else: ?>
-            <a class="btn btn-outline-primary btn-sm" href="<?= e(url('/cliente/login')) ?>">
-                <i class="fa-solid fa-right-to-bracket me-1"></i>
-                Entrar
-            </a>
-        <?php endif; ?>
-    </div>
+                <div class="aq-entry-actions">
+                    <?php if (!empty($clientUser)): ?>
+                        <a class="btn btn-primary btn-lg" href="<?= e(url('/orcamento/novo')) ?>">
+                            <i class="fa-solid fa-pen-ruler me-2"></i>
+                            Nova solicitacao
+                        </a>
+                        <a class="btn btn-outline-primary btn-lg" href="<?= e(url('/orcamentos')) ?>">
+                            <i class="fa-solid fa-list-check me-2"></i>
+                            Minhas solicitacoes
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </section>
 
-    <div class="row g-3">
-        <?php
-        $steps = [
-            ['fa-solid fa-user-plus', 'Crie sua conta', 'O cadastro de cliente e obrigatorio para enviar solicitacoes.'],
-            ['fa-solid fa-wand-magic-sparkles', 'Escolha os servicos', 'Selecione os servicos que deseja cotar e detalhe seu projeto.'],
-            ['fa-solid fa-chart-line', 'Admin gera o relatorio', 'O admin define valores, prazos e disponibilidade por servico.'],
-            ['fa-solid fa-file-invoice-dollar', 'Receba seu orcamento', 'Relatorio com validade de 90 dias, visivel na area do cliente.'],
-        ];
-        foreach ($steps as $step):
-        ?>
-            <div class="col-md-6 col-xl-3">
-                <article class="card h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="aq-home-step-icon d-inline-flex align-items-center justify-content-center rounded-circle mb-3">
-                            <i class="<?= e($step[0]) ?>"></i>
-                        </div>
-                        <h3 class="h6 fw-bold"><?= e($step[1]) ?></h3>
-                        <p class="small text-muted mb-0"><?= e($step[2]) ?></p>
+            <aside class="aq-entry-login">
+                <?php if (!empty($clientUser)): ?>
+                    <h2>Voce ja esta conectado</h2>
+                    <p>Acesse suas solicitacoes e continue de onde parou no portal do cliente.</p>
+
+                    <div class="aq-entry-connected">
+                        <a class="btn btn-light" href="<?= e(url('/orcamento/novo')) ?>">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
+                            Criar nova solicitacao
+                        </a>
+                        <a class="btn btn-outline-light" href="<?= e(url('/orcamentos')) ?>">
+                            <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                            Ver historico de orcamentos
+                        </a>
+                        <a class="btn btn-outline-light" href="<?= e(url('/cliente/logout')) ?>">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                            Encerrar sessao
+                        </a>
                     </div>
-                </article>
-            </div>
-        <?php endforeach; ?>
+                <?php else: ?>
+                    <h2>Entrar na conta</h2>
+                    <p>Acesse para editar pedidos, acompanhar status e consultar seus relatorios de orcamento.</p>
+
+                    <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/login')) ?>">
+                        <label for="homeLoginEmail">Email</label>
+                        <input id="homeLoginEmail" name="email" type="email" autocomplete="username" required value="<?= e((string) old('email')) ?>">
+
+                        <label for="homeLoginPassword">Senha</label>
+                        <input id="homeLoginPassword" name="password" type="password" autocomplete="current-password" required>
+
+                        <button type="submit" class="aq-entry-submit">Entrar na conta</button>
+                    </form>
+
+                    <div class="aq-entry-login-links">
+                        <a class="create-link" href="<?= e(url('/cliente/cadastro')) ?>">Criar conta</a>
+                        <a class="forgot-link" href="<?= e(url('/cliente/esqueci-senha')) ?>">Esqueci minha senha</a>
+                    </div>
+                <?php endif; ?>
+            </aside>
+        </div>
     </div>
 </section>

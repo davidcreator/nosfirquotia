@@ -1,13 +1,25 @@
-<section class="mb-3 d-flex justify-content-between align-items-center">
-    <div>
-        <h1 class="h3 mb-1">Notificacoes de Email</h1>
-        <p class="text-muted mb-0">Historico de envio de emails do sistema para clientes e administradores.</p>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Notificacoes de email</h1>
+            <p class="aq-admin-page-hero-subtitle">Historico de envio de emails do sistema para clientes e administradores.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <a href="<?= e(url('/admin/orcamentos')) ?>" class="btn btn-sm btn-outline-light">Voltar para orcamentos</a>
+            </div>
+        </div>
     </div>
-    <a href="<?= e(url('/admin/orcamentos')) ?>" class="btn btn-outline-secondary btn-sm">Voltar para orcamentos</a>
 </section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
+<section class="aq-admin-panel aq-admin-table-card">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Historico de mensagens</h2>
+            <p class="aq-admin-panel-subtitle">Status de entrega e ocorrencias de notificacao.</p>
+        </div>
+    </div>
+    <div class="aq-admin-panel-body">
         <?php if ($logs === []): ?>
             <div class="alert alert-info mb-0">Nenhuma notificacao de email registrada ate o momento.</div>
         <?php else: ?>

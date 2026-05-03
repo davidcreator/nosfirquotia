@@ -3,5 +3,6 @@
 
     <script src="../shared/brand-kit.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

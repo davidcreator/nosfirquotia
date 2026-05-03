@@ -1,9 +1,35 @@
+<?php
+$metaAppName = (string) ($appName ?? 'Quotia');
+$metaDescription = 'Quotia - Sistema para solicitacao, analise e emissao de orcamentos de design.';
+$metaPath = (string) ($currentPath ?? app()->request()->path());
+$metaIsSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+$metaScheme = $metaIsSecure ? 'https' : 'http';
+$metaHost = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+$metaOrigin = $metaScheme . '://' . $metaHost;
+$metaCanonicalUrl = $metaOrigin . url($metaPath);
+$metaOgImagePath = asset('image/quotia_logo.png');
+$metaOgImage = $metaOrigin . $metaOgImagePath;
+$metaFavicon = asset('image/quotia.png');
+?>
 <!doctype html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($appName ?? 'Quotia') ?></title>
+    <title><?= e($metaAppName) ?></title>
+    <meta name="description" content="<?= e($metaDescription) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= e($metaAppName) ?>">
+    <meta property="og:description" content="<?= e($metaDescription) ?>">
+    <meta property="og:url" content="<?= e($metaCanonicalUrl) ?>">
+    <meta property="og:image" content="<?= e($metaOgImage) ?>">
+    <meta property="og:image:alt" content="<?= e($metaAppName . ' Logo') ?>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= e($metaAppName) ?>">
+    <meta name="twitter:description" content="<?= e($metaDescription) ?>">
+    <meta name="twitter:image" content="<?= e($metaOgImage) ?>">
+    <link rel="icon" type="image/png" href="<?= e($metaFavicon) ?>">
+    <link rel="apple-touch-icon" href="<?= e($metaFavicon) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -27,79 +53,89 @@ $isActivePath = static function (string $path) use ($currentClientPath): bool {
     }
     return str_starts_with($currentClientPath, $path . '/');
 };
+$clientAuthPaths = [
+    '/cliente/login',
+    '/cliente/cadastro',
+    '/cliente/esqueci-senha',
+    '/cliente/redefinir-senha',
+];
+$isClientAuthPage = in_array($currentClientPath, $clientAuthPaths, true);
+$showClientNavbar = $currentClientPath !== '/' && !$isClientAuthPage;
 ?>
 <div class="aq-client-shell">
-<nav class="navbar navbar-expand-lg navbar-dark aq-client-navbar" id="aqClientNavbar">
-    <div class="container aq-client-navbar-inner">
-        <a class="navbar-brand aq-client-brand" href="<?= e(url('/')) ?>">
-            <span class="aq-client-brand-icon"><i class="fa-brands fa-reamurcms" aria-hidden="true"></i></span>
-            <span>
-                <strong class="aq-client-brand-title">Quotia</strong>
-                <small class="aq-client-brand-subtitle">Portal do Cliente</small>
-            </span>
-        </a>
-        <button class="navbar-toggler aq-client-navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu" aria-controls="clientMenu" aria-expanded="false" aria-label="Alternar navegacao">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="clientMenu" data-client-nav-collapse>
-            <ul class="navbar-nav ms-auto aq-client-nav-list">
-                <li class="nav-item">
-                    <a class="nav-link aq-client-nav-link<?= $isActivePath('/') ? ' is-active' : '' ?>" href="<?= e(url('/')) ?>">
-                        <i class="fa-solid fa-house"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li>
+<?php if ($showClientNavbar): ?>
+    <nav class="navbar navbar-expand-lg navbar-dark aq-client-navbar" id="aqClientNavbar">
+        <div class="container aq-client-navbar-inner">
+            <a class="navbar-brand aq-client-brand" href="<?= e(url('/')) ?>">
+                <span class="aq-client-brand-icon"><i class="fa-brands fa-reamurcms" aria-hidden="true"></i></span>
+                <span>
+                    <strong class="aq-client-brand-title">Quotia</strong>
+                    <small class="aq-client-brand-subtitle">Portal do Cliente</small>
+                </span>
+            </a>
+            <button class="navbar-toggler aq-client-navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu" aria-controls="clientMenu" aria-expanded="false" aria-label="Alternar navegacao">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="clientMenu" data-client-nav-collapse>
+                <ul class="navbar-nav ms-auto aq-client-nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/') ? ' is-active' : '' ?>" href="<?= e(url('/')) ?>">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <?php if ($clientUser): ?>
+                        <li class="nav-item">
+                            <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamento/novo') ? ' is-active' : '' ?>" href="<?= e(url('/orcamento/novo')) ?>">
+                                <i class="fa-solid fa-pen-ruler"></i>
+                                <span>Nova Solicitacao</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamentos') ? ' is-active' : '' ?>" href="<?= e(url('/orcamentos')) ?>">
+                                <i class="fa-solid fa-list-check"></i>
+                                <span>Minhas Solicitacoes</span>
+                            </a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link aq-client-nav-link<?= $isActivePath('/cliente/cadastro') ? ' is-active' : '' ?>" href="<?= e(url('/cliente/cadastro')) ?>">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Criar Conta</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aq-client-nav-link<?= $isActivePath('/cliente/login') ? ' is-active' : '' ?>" href="<?= e(url('/cliente/login')) ?>">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                                <span>Entrar</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/admin') ? ' is-active' : '' ?>" href="<?= e(url('/admin')) ?>">
+                            <i class="fa-solid fa-shield"></i>
+                            <span>Admin</span>
+                        </a>
+                    </li>
+                    <?php if ($clientUser): ?>
+                        <li class="nav-item ms-lg-2">
+                            <a class="btn btn-sm aq-client-nav-logout" href="<?= e(url('/cliente/logout')) ?>">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i>
+                                Sair
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
                 <?php if ($clientUser): ?>
-                    <li class="nav-item">
-                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamento/novo') ? ' is-active' : '' ?>" href="<?= e(url('/orcamento/novo')) ?>">
-                            <i class="fa-solid fa-pen-ruler"></i>
-                            <span>Nova Solicitacao</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamentos') ? ' is-active' : '' ?>" href="<?= e(url('/orcamentos')) ?>">
-                            <i class="fa-solid fa-list-check"></i>
-                            <span>Minhas Solicitacoes</span>
-                        </a>
-                    </li>
-                <?php else: ?>
-                    <li class="nav-item">
-                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/cliente/cadastro') ? ' is-active' : '' ?>" href="<?= e(url('/cliente/cadastro')) ?>">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Criar Conta</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link aq-client-nav-link<?= $isActivePath('/cliente/login') ? ' is-active' : '' ?>" href="<?= e(url('/cliente/login')) ?>">
-                            <i class="fa-solid fa-right-to-bracket"></i>
-                            <span>Entrar</span>
-                        </a>
-                    </li>
+                    <div class="aq-client-user-chip ms-lg-3">
+                        <span class="aq-client-user-avatar"><i class="fa-solid fa-user"></i></span>
+                        <span class="aq-client-user-name"><?= e($clientName) ?></span>
+                    </div>
                 <?php endif; ?>
-                <li class="nav-item">
-                    <a class="nav-link aq-client-nav-link<?= $isActivePath('/admin') ? ' is-active' : '' ?>" href="<?= e(url('/admin')) ?>">
-                        <i class="fa-solid fa-shield"></i>
-                        <span>Admin</span>
-                    </a>
-                </li>
-                <?php if ($clientUser): ?>
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn btn-sm aq-client-nav-logout" href="<?= e(url('/cliente/logout')) ?>">
-                            <i class="fa-solid fa-right-from-bracket me-1"></i>
-                            Sair
-                        </a>
-                    </li>
-                <?php endif; ?>
-            </ul>
-            <?php if ($clientUser): ?>
-                <div class="aq-client-user-chip ms-lg-3">
-                    <span class="aq-client-user-avatar"><i class="fa-solid fa-user"></i></span>
-                    <span class="aq-client-user-name"><?= e($clientName) ?></span>
-                </div>
-            <?php endif; ?>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+<?php endif; ?>
 
 <main class="aq-client-main">
     <div class="container py-4 py-lg-5">

@@ -367,6 +367,65 @@ function syncBrandKitFromStrategy(result, inputs) {
         objective: inputs?.objective || ''
     }, 'coloradvisor');
 
+    if (typeof api.syncBrandInsights === 'function') {
+        const warmObjectives = new Set(['acao', 'atencao', 'diversao']);
+        const trends = [
+            {
+                label: 'Color Strategy Signal',
+                value: `Objetivo: ${String(inputs?.objective || 'geral')}`,
+                detail: 'Paleta recomendada com base nas regras psicologicas e no contexto de mercado.'
+            },
+            {
+                label: warmObjectives.has(String(inputs?.objective || ''))
+                    ? 'High-Energy Campaigns'
+                    : 'Trust and Clarity Systems',
+                value: `Contexto: ${String(inputs?.context || 'geral')}`,
+                detail: warmObjectives.has(String(inputs?.objective || ''))
+                    ? 'Recomendado para campanhas com foco em resposta rapida e destaque visual.'
+                    : 'Direcao para interfaces de confianca e leitura constante.'
+            }
+        ];
+
+        const combinations = [
+            {
+                label: 'Estrutura principal',
+                value: `${primary.toUpperCase()} / ${secondary.toUpperCase()} / ${accent.toUpperCase()}`,
+                detail: 'Aplicar regra 60-30-10 para manter consistencia entre secoes.'
+            },
+            {
+                label: 'Base neutra',
+                value: neutral.toUpperCase(),
+                detail: 'Usar para textos extensos, componentes de apoio e equilibrio da composicao.'
+            }
+        ];
+
+        const contrast = colors.slice(0, 8).map((hex) => ({
+            color: hex,
+            recommendedText: isDark(hex) ? '#F8FAFC' : '#111827',
+            ratio: 4.5,
+            level: 'AA'
+        }));
+
+        api.syncBrandInsights({
+            paletteType: 'strategy',
+            summary: result.summary || 'Paleta recomendada pelo Color Strategy Advisor.',
+            roles: {
+                primary,
+                secondary,
+                accent,
+                neutralLight: '#F8FAFC',
+                neutralDark: neutral
+            },
+            colors,
+            combinations,
+            trends,
+            contrast,
+            recommendations: Array.isArray(result.recommendations)
+                ? result.recommendations.slice(0, 6)
+                : []
+        }, 'coloradvisor');
+    }
+
     return true;
 }
 

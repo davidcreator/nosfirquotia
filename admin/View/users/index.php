@@ -1,16 +1,26 @@
-<section class="mb-3 d-flex justify-content-between align-items-center">
-    <div>
-        <h1 class="h3 mb-1">Usuarios Admin e Permissoes</h1>
-        <p class="text-muted mb-0">Controle de niveis de acesso do painel administrativo.</p>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Usuarios admin e permissoes</h1>
+            <p class="aq-admin-page-hero-subtitle">Controle de niveis de acesso do painel administrativo.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <span class="badge text-bg-light text-dark">Somente Administrador Geral</span>
+            </div>
+        </div>
     </div>
-    <span class="badge text-bg-primary">Somente Administrador Geral</span>
 </section>
 
 <section class="row g-3 mb-4">
     <div class="col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h2 class="h5 mb-3">Novo usuario administrativo</h2>
+        <div class="aq-admin-panel h-100">
+            <div class="aq-admin-panel-header">
+                <div>
+                    <h2 class="aq-admin-panel-title">Novo usuario administrativo</h2>
+                </div>
+            </div>
+            <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/usuarios')) ?>" class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label">Nome</label>
@@ -56,9 +66,13 @@
     </div>
 
     <div class="col-lg-6">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h2 class="h5 mb-3">Regras de seguranca</h2>
+        <div class="aq-admin-panel h-100">
+            <div class="aq-admin-panel-header">
+                <div>
+                    <h2 class="aq-admin-panel-title">Regras de seguranca</h2>
+                </div>
+            </div>
+            <div class="aq-admin-panel-body">
                 <ul class="mb-0">
                     <li>Administrador Geral tem acesso total ao sistema.</li>
                     <li>Somente Administrador Geral pode alterar permissoes de outros admins.</li>
@@ -71,9 +85,14 @@
     </div>
 </section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h2 class="h5 mb-3">Usuarios existentes</h2>
+<section class="aq-admin-panel">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Usuarios existentes</h2>
+            <p class="aq-admin-panel-subtitle">Atualize status, senha e permissoes por perfil.</p>
+        </div>
+    </div>
+    <div class="aq-admin-panel-body">
         <?php if ($users === []): ?>
             <div class="alert alert-info mb-0">Nenhum usuario administrativo cadastrado.</div>
         <?php else: ?>
@@ -85,7 +104,7 @@
                     $isActive = !empty($user['is_active']);
                     $userPermissions = is_array($user['permissions'] ?? null) ? $user['permissions'] : [];
                     ?>
-                    <article class="border rounded-3 p-3">
+                    <article class="aq-admin-user-article">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <strong><?= e((string) $user['name']) ?></strong>

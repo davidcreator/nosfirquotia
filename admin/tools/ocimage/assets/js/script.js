@@ -39,6 +39,93 @@ const CHAR_LIMITS = {
 // Variáveis globais
 let currentBackgroundImage = null;
 let currentImageFile = null;
+const OG_SETTINGS_STORAGE_KEY = 'ogImageSettings';
+
+function getBrandKitApi() {
+    return window.AQBrandKit || null;
+}
+
+function normalizeOgHex(value, fallback = '#667eea') {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (/^#[0-9a-f]{6}$/.test(normalized)) {
+        return normalized;
+    }
+    if (/^#[0-9a-f]{3}$/.test(normalized)) {
+        return `#${normalized[1]}${normalized[1]}${normalized[2]}${normalized[2]}${normalized[3]}${normalized[3]}`;
+    }
+    return String(fallback || '#667eea').toLowerCase();
+}
+
+function getActiveTemplateId() {
+    const active = document.querySelector('.template-btn.active');
+    if (!active) {
+        return '';
+    }
+    return String(active.getAttribute('data-template') || '').trim();
+}
+
+function buildOgProfilePayload(partial = {}) {
+    const patch = partial && typeof partial === 'object' ? partial : {};
+    const titleElement = document.getElementById('title');
+    const descriptionElement = document.getElementById('description');
+    const brandElement = document.getElementById('brand');
+    const primaryColorElement = document.getElementById('primaryColor');
+    const secondaryColorElement = document.getElementById('secondaryColor');
+    const imageOpacityElement = document.getElementById('imageOpacity');
+    const overlayOpacityElement = document.getElementById('overlayOpacity');
+
+    const title = Object.prototype.hasOwnProperty.call(patch, 'title')
+        ? patch.title
+        : (titleElement ? titleElement.value : '');
+    const description = Object.prototype.hasOwnProperty.call(patch, 'description')
+        ? patch.description
+        : (descriptionElement ? descriptionElement.value : '');
+    const brand = Object.prototype.hasOwnProperty.call(patch, 'brand')
+        ? patch.brand
+        : (brandElement ? brandElement.value : '');
+    const primaryColor = Object.prototype.hasOwnProperty.call(patch, 'primaryColor')
+        ? patch.primaryColor
+        : (primaryColorElement ? primaryColorElement.value : '#667eea');
+    const secondaryColor = Object.prototype.hasOwnProperty.call(patch, 'secondaryColor')
+        ? patch.secondaryColor
+        : (secondaryColorElement ? secondaryColorElement.value : '#764ba2');
+    const imageOpacity = Object.prototype.hasOwnProperty.call(patch, 'imageOpacity')
+        ? patch.imageOpacity
+        : (imageOpacityElement ? imageOpacityElement.value : '0.8');
+    const overlayOpacity = Object.prototype.hasOwnProperty.call(patch, 'overlayOpacity')
+        ? patch.overlayOpacity
+        : (overlayOpacityElement ? overlayOpacityElement.value : '0.5');
+    const template = Object.prototype.hasOwnProperty.call(patch, 'template')
+        ? patch.template
+        : getActiveTemplateId();
+
+    const hasContent = Boolean(String(title || '').trim() || String(description || '').trim() || String(brand || '').trim());
+
+    return {
+        available: Object.prototype.hasOwnProperty.call(patch, 'available')
+            ? Boolean(patch.available)
+            : hasContent,
+        title: String(title || '').slice(0, 180),
+        description: String(description || '').slice(0, 500),
+        brand: String(brand || '').slice(0, 160),
+        template: String(template || '').slice(0, 80),
+        primaryColor: normalizeOgHex(primaryColor, '#667eea'),
+        secondaryColor: normalizeOgHex(secondaryColor, '#764ba2'),
+        imageOpacity: Number.parseFloat(imageOpacity),
+        overlayOpacity: Number.parseFloat(overlayOpacity)
+    };
+}
+
+function syncOgProfileState(partial = {}) {
+    const api = getBrandKitApi();
+    if (!api || typeof api.saveOgProfileState !== 'function') {
+        return false;
+    }
+
+    const payload = buildOgProfilePayload(partial);
+    api.saveOgProfileState(payload, 'ocimage');
+    return true;
+}
 
 // Função para atualizar o contador de caracteres
 function updateCharacterCounter(fieldId, limits) {
@@ -1248,6 +1335,9 @@ function copyMetaTags() {
 // Função para aplicar um template predefinido
 function applyTemplate(templateName) {
     const template = templates[templateName];
+    if (!template) {
+        return;
+    }
     
     // Atualiza os valores dos inputs de cor
     document.getElementById('primaryColor').value = template.primary;
@@ -1263,6 +1353,7 @@ function applyTemplate(templateName) {
     
     // Atualiza o preview
     updatePreview();
+    saveSettings();
 }
 
 // Função para lidar com o upload de imagem
@@ -1520,10 +1611,16 @@ function saveSettings() {
             primaryColor: primaryColorElement ? primaryColorElement.value : '#667eea',
             secondaryColor: secondaryColorElement ? secondaryColorElement.value : '#764ba2',
             imageOpacity: imageOpacityElement ? imageOpacityElement.value : '0.5',
-            overlayOpacity: overlayOpacityElement ? overlayOpacityElement.value : '0.5'
+            overlayOpacity: overlayOpacityElement ? overlayOpacityElement.value : '0.5',
+            selectedTemplate: getActiveTemplateId()
         };
         
-        localStorage.setItem('ogImageSettings', JSON.stringify(settings));
+        localStorage.setItem(OG_SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+        syncOgProfileState({
+            ...settings,
+            template: getActiveTemplateId(),
+            available: true
+        });
     } catch (error) {
         console.error('Erro ao salvar configurações:', error);
     }
@@ -1532,7 +1629,7 @@ function saveSettings() {
 // Função para carregar configurações do localStorage
 function loadSettings() {
     try {
-        const savedSettings = localStorage.getItem('ogImageSettings');
+        const savedSettings = localStorage.getItem(OG_SETTINGS_STORAGE_KEY);
         if (savedSettings) {
             const settings = JSON.parse(savedSettings);
             
@@ -1551,10 +1648,22 @@ function loadSettings() {
             if (secondaryColorElement) secondaryColorElement.value = settings.secondaryColor || '#764ba2';
             if (imageOpacityElement) imageOpacityElement.value = settings.imageOpacity || '0.5';
             if (overlayOpacityElement) overlayOpacityElement.value = settings.overlayOpacity || '0.5';
+
+            const selectedTemplate = String(settings.selectedTemplate || settings.template || '').trim();
+            if (selectedTemplate !== '') {
+                document.querySelectorAll('.template-btn').forEach((button) => {
+                    button.classList.toggle('active', button.getAttribute('data-template') === selectedTemplate);
+                });
+            }
             
             updatePreview();
             updateTitleCounter(); // Atualiza o contador do título após carregar
             updateDescriptionCounter(); // Atualiza o contador da descrição após carregar
+            syncOgProfileState({
+                ...settings,
+                template: settings.selectedTemplate || settings.template || getActiveTemplateId(),
+                available: true
+            });
         }
     } catch (error) {
         console.error('Erro ao carregar configurações:', error);
@@ -1592,7 +1701,18 @@ function resetSettings() {
             }
             
             // Remove do localStorage
-            localStorage.removeItem('ogImageSettings');
+            localStorage.removeItem(OG_SETTINGS_STORAGE_KEY);
+            syncOgProfileState({
+                available: false,
+                title: '',
+                description: '',
+                brand: '',
+                template: '',
+                primaryColor: '#667eea',
+                secondaryColor: '#764ba2',
+                imageOpacity: 0.8,
+                overlayOpacity: 0.5
+            });
             
             updatePreview();
             updateTitleCounter(); // Atualiza o contador do título após resetar
@@ -1845,6 +1965,7 @@ function initializeApp() {
         
         // Inicializa o contador de caracteres
         updateCharacterCounter();
+        syncOgProfileState();
         
         // Adiciona listener para salvar antes de sair da página
         window.addEventListener('beforeunload', saveSettings);

@@ -1,6 +1,15 @@
-<section class="mb-4">
-    <h1 class="h3 mb-1">Dashboard</h1>
-    <p class="text-muted mb-0">Bem-vindo, <?= e((string) ($adminUser['name'] ?? 'Administrador')) ?>.</p>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Dashboard administrativo</h1>
+            <p class="aq-admin-page-hero-subtitle">Bem-vindo, <?= e((string) ($adminUser['name'] ?? 'Administrador')) ?>. Veja os principais indicadores operacionais do Quotia.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <span class="aq-admin-link-chip"><i class="fa-solid fa-chart-line"></i> Visao geral</span>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="row g-3 mb-4">
@@ -38,7 +47,7 @@
     </div>
 </section>
 
-<section class="card border-0 shadow-sm mb-4">
+<section class="card border-0 shadow-sm mb-4 aq-admin-filter-bar">
     <div class="card-body d-flex flex-wrap gap-3 justify-content-between align-items-center">
         <div>
             <small class="text-muted d-block">Base de referencia carregada no banco</small>
@@ -61,9 +70,12 @@
     </div>
 </section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body pb-0 d-flex justify-content-between align-items-center">
-        <h2 class="h5 mb-0">Ultimas solicitacoes</h2>
+<section class="aq-admin-panel aq-admin-table-card">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Ultimas solicitacoes</h2>
+            <p class="aq-admin-panel-subtitle">Pedidos recentes para acompanhamento rapido.</p>
+        </div>
         <a class="btn btn-sm btn-outline-primary" href="<?= e(url('/admin/orcamentos')) ?>">Ver todos</a>
     </div>
     <div class="table-responsive">

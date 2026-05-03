@@ -1,9 +1,36 @@
+<?php
+$metaAppName = (string) ($appName ?? 'Nosfir Quotia');
+$metaPageTitle = 'Instalacao - ' . $metaAppName;
+$metaDescription = 'Instalador do Quotia para configuracao inicial do sistema.';
+$metaPath = (string) ($currentPath ?? app()->request()->path());
+$metaIsSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+$metaScheme = $metaIsSecure ? 'https' : 'http';
+$metaHost = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+$metaOrigin = $metaScheme . '://' . $metaHost;
+$metaCanonicalUrl = $metaOrigin . url($metaPath);
+$metaOgImagePath = asset('image/quotia_logo.png');
+$metaOgImage = $metaOrigin . $metaOgImagePath;
+$metaFavicon = asset('image/quotia.png');
+?>
 <!doctype html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Instalacao - <?= e($appName ?? 'Nosfir Quotia') ?></title>
+    <title><?= e($metaPageTitle) ?></title>
+    <meta name="description" content="<?= e($metaDescription) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= e($metaPageTitle) ?>">
+    <meta property="og:description" content="<?= e($metaDescription) ?>">
+    <meta property="og:url" content="<?= e($metaCanonicalUrl) ?>">
+    <meta property="og:image" content="<?= e($metaOgImage) ?>">
+    <meta property="og:image:alt" content="<?= e($metaAppName . ' Logo') ?>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= e($metaPageTitle) ?>">
+    <meta name="twitter:description" content="<?= e($metaDescription) ?>">
+    <meta name="twitter:image" content="<?= e($metaOgImage) ?>">
+    <link rel="icon" type="image/png" href="<?= e($metaFavicon) ?>">
+    <link rel="apple-touch-icon" href="<?= e($metaFavicon) ?>">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">

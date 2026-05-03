@@ -1,26 +1,46 @@
-<section class="aq-client-auth-shell row justify-content-center">
-    <div class="col-lg-5">
-        <div class="card border-0 shadow-sm aq-client-auth-card">
-            <div class="card-body p-4 p-lg-5">
-                <span class="aq-client-auth-badge"><i class="fa-solid fa-key"></i></span>
-                <h1 class="h3 mb-3">Recuperar senha</h1>
-                <p class="text-muted mb-4">Informe o email cadastrado para receber o link de redefinicao.</p>
-                <form method="post" action="<?= e(url('/cliente/esqueci-senha')) ?>" class="row g-3">
-                    <div class="col-12">
-                        <label class="form-label" for="forgotPasswordEmail">Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-envelope-open-text"></i></span>
-                            <input type="email" class="form-control" id="forgotPasswordEmail" name="email" required autocomplete="email" value="<?= e((string) old('email')) ?>">
-                        </div>
-                    </div>
-                    <div class="col-12 d-grid">
-                        <button class="btn btn-primary btn-lg" type="submit">Enviar link de recuperacao</button>
-                    </div>
-                </form>
-                <div class="mt-3 text-center aq-client-auth-links">
-                    <small><a href="<?= e(url('/cliente/login')) ?>">Voltar ao login</a></small>
+<section class="aq-entry aq-entry-auth">
+    <div class="aq-entry-shell">
+        <div class="aq-entry-grid">
+            <section class="aq-entry-panel">
+                <div class="aq-entry-brand">
+                    <span class="aq-entry-brand-icon"><img src="<?= e(asset('image/quotia_logo.png')) ?>" alt="Quotia"></span>
+                    <strong>Quotia</strong>
                 </div>
-            </div>
+
+                <h1>Recupere o acesso da sua conta com seguranca.</h1>
+                <p class="aq-entry-lead">
+                    Informe o email utilizado no cadastro para receber o link de redefinicao e voltar ao portal rapidamente.
+                </p>
+
+                <ul class="aq-entry-list">
+                    <li><strong>Fluxo protegido:</strong> O link e enviado somente para o email informado no cadastro.</li>
+                    <li><strong>Token temporario:</strong> A redefinicao possui validade limitada para maior seguranca.</li>
+                    <li><strong>Acesso restaurado:</strong> Depois de definir nova senha, voce pode entrar normalmente.</li>
+                </ul>
+
+                <div class="aq-entry-actions">
+                    <a class="btn btn-outline-primary btn-lg" href="<?= e(url('/cliente/login')) ?>">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>
+                        Voltar para login
+                    </a>
+                </div>
+            </section>
+
+            <aside class="aq-entry-login">
+                <h2>Esqueci minha senha</h2>
+                <p>Digite seu email para receber o link de redefinicao.</p>
+
+                <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/esqueci-senha')) ?>">
+                    <label for="forgotPasswordEmail">Email</label>
+                    <input type="email" id="forgotPasswordEmail" name="email" required autocomplete="email" value="<?= e((string) old('email')) ?>">
+
+                    <button class="aq-entry-submit" type="submit">Enviar link de recuperacao</button>
+                </form>
+
+                <div class="aq-entry-login-links">
+                    <a class="forgot-link" href="<?= e(url('/cliente/login')) ?>">Voltar ao login</a>
+                </div>
+            </aside>
         </div>
     </div>
 </section>

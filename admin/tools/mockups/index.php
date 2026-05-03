@@ -111,5 +111,6 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
     </main>
 
     <script src="./assets/js/upload-entry.js?v=<?php echo htmlspecialchars($uploadJsVersion, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

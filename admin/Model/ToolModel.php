@@ -33,6 +33,14 @@ final class ToolModel extends Model
             'name' => 'Brand Manual Report (MVP)',
             'description' => 'Consolida identidade visual (cores, tipografia, mockups e diretriz digital) em um unico relatorio.',
         ],
+        'brandbook' => [
+            'name' => 'BrandBook',
+            'description' => 'Relatorio robusto com paleta, tendencias, tipografia, OG e mockups sincronizados entre ferramentas.',
+        ],
+        'finalframe' => [
+            'name' => 'FinalFrame',
+            'description' => 'Relatorio final consolidado com dados de identidade, OG, mockups e background remover.',
+        ],
         'mockups' => [
             'name' => 'Mockups',
             'description' => 'Criacao e edicao de mockups para apresentacoes de design.',

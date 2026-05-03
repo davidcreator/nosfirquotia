@@ -129,5 +129,6 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
 
     <script src="../shared/brand-kit.js"></script>
     <script src="./assets/js/report.js?v=<?php echo htmlspecialchars($reportJsVersion, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

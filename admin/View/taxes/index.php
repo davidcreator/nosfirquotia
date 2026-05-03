@@ -27,18 +27,30 @@ if (!is_array($legalReferences)) {
 }
 ?>
 
-<section class="mb-3">
-    <h1 class="h3 mb-1">Central Fiscal</h1>
-    <p class="text-muted mb-0">Parametros tributarios com foco em conformidade brasileira para apoiar a formacao de orcamentos.</p>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Central fiscal</h1>
+            <p class="aq-admin-page-hero-subtitle">Parametros tributarios com foco em conformidade brasileira para apoiar a formacao de orcamentos.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <span class="aq-admin-link-chip"><i class="fa-solid fa-scale-balanced"></i> Compliance</span>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="row g-3 mb-3">
     <div class="col-lg-8">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h2 class="h5 mb-1">Configuracao de conformidade fiscal</h2>
-                <p class="small text-muted mb-3">Preencha o perfil tributario da agencia para reduzir risco fiscal e padronizar os relatorios.</p>
-
+        <div class="aq-admin-panel h-100">
+            <div class="aq-admin-panel-header">
+                <div>
+                    <h2 class="aq-admin-panel-title">Configuracao de conformidade fiscal</h2>
+                    <p class="aq-admin-panel-subtitle">Preencha o perfil tributario da agencia para reduzir risco fiscal e padronizar os relatorios.</p>
+                </div>
+            </div>
+            <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/tributos')) ?>" class="row g-3">
                     <div class="col-12">
                         <h3 class="h6 text-uppercase text-muted mb-2">1) Perfil tributario</h3>
@@ -98,7 +110,7 @@ if (!is_array($legalReferences)) {
                         <h3 class="h6 text-uppercase text-muted mb-2">3) Retencoes na fonte</h3>
                     </div>
                     <div class="col-md-6">
-                        <div class="border rounded-3 p-3 h-100">
+                        <div class="border rounded-3 p-3 h-100 aq-admin-tax-box">
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyIssWithholding" name="apply_iss_withholding" value="1"
                                        data-target="issWithholdingPercent" <?= $applyIssWithholding ? 'checked' : '' ?>>
@@ -110,7 +122,7 @@ if (!is_array($legalReferences)) {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="border rounded-3 p-3 h-100">
+                        <div class="border rounded-3 p-3 h-100 aq-admin-tax-box">
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyIrrfWithholding" name="apply_irrf_withholding" value="1"
                                        data-target="irrfWithholdingPercent" <?= $applyIrrfWithholding ? 'checked' : '' ?>>
@@ -122,7 +134,7 @@ if (!is_array($legalReferences)) {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="border rounded-3 p-3 h-100">
+                        <div class="border rounded-3 p-3 h-100 aq-admin-tax-box">
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyPccWithholding" name="apply_pcc_withholding" value="1"
                                        data-target="pccWithholdingPercent" <?= $applyPccWithholding ? 'checked' : '' ?>>
@@ -134,7 +146,7 @@ if (!is_array($legalReferences)) {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="border rounded-3 p-3 h-100">
+                        <div class="border rounded-3 p-3 h-100 aq-admin-tax-box">
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyInssWithholding" name="apply_inss_withholding" value="1"
                                        data-target="inssWithholdingPercent" <?= $applyInssWithholding ? 'checked' : '' ?>>
@@ -162,7 +174,7 @@ if (!is_array($legalReferences)) {
                         <textarea class="form-control" rows="3" name="legal_notes_text" placeholder="Ex.: Regras municipais de ISS e cenarios de retencao por tipo de contrato."><?= e($legalNotesText) ?></textarea>
                     </div>
                     <div class="col-12">
-                        <div class="border rounded-3 p-3 bg-light">
+                        <div class="border rounded-3 p-3 bg-light aq-admin-tax-box">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="checkRegime" name="check_regime" value="1" required <?= $checkRegime ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="checkRegime">Regime tributario revisado e coerente com o CNPJ ativo.</label>
@@ -191,9 +203,13 @@ if (!is_array($legalReferences)) {
     </div>
 
     <div class="col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h2 class="h5 mb-2">Assistente fiscal</h2>
+        <div class="aq-admin-panel h-100">
+            <div class="aq-admin-panel-header">
+                <div>
+                    <h2 class="aq-admin-panel-title">Assistente fiscal</h2>
+                </div>
+            </div>
+            <div class="aq-admin-panel-body">
                 <p class="small text-muted">Este painel ajuda na padronizacao interna. A validacao final deve ser feita por contador responsavel antes da proposta ao cliente.</p>
 
                 <div class="alert alert-warning small mb-3">
@@ -235,11 +251,14 @@ if (!is_array($legalReferences)) {
     </div>
 </section>
 
-<section class="card border-0 shadow-sm">
-    <div class="card-body">
-        <h2 class="h5 mb-1">Simulador fiscal de orcamento</h2>
-        <p class="small text-muted mb-3">Simule incidencia tributaria e efeito das retencoes para estimar valor bruto e recebimento liquido.</p>
-
+<section class="aq-admin-panel">
+    <div class="aq-admin-panel-header">
+        <div>
+            <h2 class="aq-admin-panel-title">Simulador fiscal de orcamento</h2>
+            <p class="aq-admin-panel-subtitle">Simule incidencia tributaria e efeito das retencoes para estimar valor bruto e liquido.</p>
+        </div>
+    </div>
+    <div class="aq-admin-panel-body">
         <div class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">Subtotal dos servicos (R$)</label>

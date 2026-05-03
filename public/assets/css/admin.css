@@ -78,6 +78,17 @@ body.aq-admin-theme.aq-admin-sidebar-collapsed {
     font-size: 1.03rem;
 }
 
+.aq-admin-brand-icon img {
+    width: 78%;
+    height: 78%;
+    object-fit: contain;
+    display: block;
+}
+
+.aq-admin-brand-icon-image {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .aq-admin-brand-logo {
     width: 1.7rem;
     height: 1.7rem;
@@ -527,6 +538,13 @@ body.aq-admin-theme.aq-admin-sidebar-collapsed {
     color: #ffffff;
 }
 
+.aq-admin-auth-brand-icon img {
+    width: 78%;
+    height: 78%;
+    object-fit: contain;
+    display: block;
+}
+
 .aq-admin-auth-brand-text {
     font-size: 1rem;
 }
@@ -729,5 +747,1247 @@ body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-icon {
 
     .aq-stat-box h2 {
         font-size: 1.52rem;
+    }
+}
+
+/* Solis-inspired refresh preserving Quotia colors */
+body.aq-admin-theme {
+    --aq-admin-primary: #18447f;
+    --aq-admin-primary-dark: #0e2750;
+    --aq-admin-primary-soft: #e7f0ff;
+    --aq-admin-accent: #116d80;
+    --aq-admin-text: #223249;
+    --aq-admin-muted: #627188;
+    --aq-admin-card: #ffffff;
+    --aq-admin-border: #d8e3f2;
+    --aq-admin-surface: #f3f7fd;
+    color: var(--aq-admin-text);
+    background:
+        radial-gradient(1100px 460px at -8% -16%, rgba(24, 68, 127, 0.18) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(880px 320px at 108% -18%, rgba(17, 109, 128, 0.16) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f8fc 0%, #eef4fb 56%, #ebf5f7 100%);
+}
+
+body.aq-admin-theme.aq-admin-bg,
+.aq-admin-app {
+    background: transparent;
+}
+
+.aq-admin-sidebar {
+    background: linear-gradient(182deg, var(--aq-admin-primary-dark) 0%, #133966 56%, #0f5c73 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 12px 0 30px rgba(8, 26, 50, 0.28);
+}
+
+.aq-admin-brand {
+    gap: 0.78rem;
+    padding: 1rem 1.08rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.aq-admin-brand-icon {
+    width: 2.75rem;
+    height: 2.2rem;
+    border-radius: 0.62rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.aq-admin-brand-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.2rem;
+}
+
+.aq-admin-brand-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.aq-admin-brand-text {
+    font-size: 1.03rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.aq-admin-brand-subtext {
+    color: rgba(236, 245, 255, 0.85);
+    font-size: 0.72rem;
+    line-height: 1.15;
+}
+
+.aq-admin-sidebar-search {
+    display: flex;
+    align-items: center;
+    gap: 0.56rem;
+    margin: 0.82rem 0.88rem 0.5rem;
+    padding: 0.54rem 0.68rem;
+    border-radius: 0.62rem;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    background: rgba(7, 21, 43, 0.24);
+}
+
+.aq-admin-sidebar-search i {
+    color: rgba(244, 250, 255, 0.85);
+    font-size: 0.83rem;
+}
+
+.aq-admin-sidebar-search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    padding: 0;
+    color: #f8fcff;
+    font-size: 0.86rem;
+    background: transparent;
+}
+
+.aq-admin-sidebar-search input::placeholder {
+    color: rgba(240, 248, 255, 0.7);
+}
+
+.aq-admin-sidebar-section {
+    margin: 0.05rem 0.98rem 0.44rem;
+    color: rgba(231, 243, 255, 0.76);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.66rem;
+    font-weight: 700;
+}
+
+.aq-admin-menu {
+    padding-top: 0.1rem;
+}
+
+.aq-admin-menu-link {
+    margin: 0 0.62rem;
+    border-radius: 0.66rem;
+    padding: 0.62rem 0.86rem;
+    font-size: 0.89rem;
+}
+
+.aq-admin-menu-link:hover {
+    background: rgba(245, 251, 255, 0.16);
+}
+
+.aq-admin-menu-link.is-active {
+    background: linear-gradient(135deg, #2a66a8 0%, #167f9f 100%);
+    box-shadow: 0 10px 18px rgba(9, 30, 59, 0.28);
+}
+
+.aq-admin-menu-empty {
+    margin: 0.72rem 1.06rem 0;
+    padding: 0.62rem 0.68rem;
+    border: 1px dashed rgba(255, 255, 255, 0.38);
+    border-radius: 0.55rem;
+    color: rgba(241, 248, 255, 0.86);
+    font-size: 0.79rem;
+}
+
+.aq-admin-user-panel {
+    margin: auto 0.88rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 0.82rem;
+    background: rgba(7, 21, 43, 0.2);
+    padding: 0.72rem;
+}
+
+.aq-admin-user-avatar {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: #f4f8fd;
+}
+
+.aq-admin-user-name {
+    font-size: 0.85rem;
+}
+
+.aq-admin-user-role {
+    font-size: 0.72rem;
+    color: rgba(225, 236, 248, 0.82);
+}
+
+.aq-admin-sidebar-footer {
+    margin: 0.72rem 0.88rem 0.92rem;
+    padding: 0.72rem;
+    border-radius: 0.74rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(7, 18, 36, 0.24);
+    color: rgba(230, 241, 253, 0.9);
+}
+
+.aq-admin-sidebar-footer p {
+    margin: 0;
+    font-size: 0.72rem;
+}
+
+.aq-admin-sidebar-footer strong {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.76rem;
+    color: #f8fcff;
+}
+
+.aq-admin-topbar {
+    min-height: 62px;
+    padding: 0.62rem 1rem;
+    border-bottom: 1px solid var(--aq-admin-border);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 14px rgba(12, 35, 63, 0.06);
+}
+
+.aq-admin-topbar-heading {
+    color: #163962;
+    font-size: 1.04rem;
+    font-weight: 700;
+}
+
+.aq-admin-topbar-meta {
+    color: #5f748e;
+    font-size: 0.72rem;
+}
+
+.aq-admin-toggle {
+    border-radius: 0.56rem;
+    background: var(--aq-admin-primary-soft);
+    color: var(--aq-admin-primary);
+    border: 1px solid #c7d9f3;
+}
+
+.aq-admin-toggle:hover {
+    background: #d8e8ff;
+    color: #123868;
+}
+
+.aq-admin-topbar-actions {
+    gap: 0.55rem;
+}
+
+.aq-admin-topbar-actions .btn {
+    border-radius: 0.56rem;
+}
+
+.aq-admin-topbar-actions [data-admin-sidebar-pin] {
+    border-color: #cbdcf1;
+    color: #2f4d6f;
+    background: #f6f9fe;
+}
+
+.aq-admin-topbar-actions [data-admin-sidebar-pin].is-active {
+    background: var(--aq-admin-primary);
+    border-color: var(--aq-admin-primary);
+}
+
+.aq-admin-topbar-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid #cedef2;
+    background: #f9fbff;
+    padding: 0.2rem 0.52rem 0.2rem 0.2rem;
+    border-radius: 999px;
+}
+
+.aq-admin-topbar-avatar {
+    width: 1.64rem;
+    height: 1.64rem;
+    border-radius: 50%;
+    background: linear-gradient(140deg, var(--aq-admin-primary) 0%, #2166ac 100%);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aq-admin-topbar-user-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+}
+
+.aq-admin-topbar-user-meta strong {
+    color: #2b4363;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.aq-admin-topbar-user-meta small {
+    color: #6f8399;
+    font-size: 0.68rem;
+}
+
+.aq-admin-topbar-logout {
+    border-color: #cfddf0;
+    color: #335272;
+    background: #fbfdff;
+}
+
+.aq-admin-topbar-logout:hover {
+    border-color: #b9cce5;
+    color: #203b5c;
+    background: #f0f5fd;
+}
+
+.aq-admin-content {
+    padding: 1.3rem 1.3rem 1rem;
+}
+
+.aq-admin-theme .card {
+    border: 1px solid var(--aq-admin-border);
+    border-radius: 1rem;
+    box-shadow: 0 8px 22px rgba(20, 38, 63, 0.06);
+}
+
+.aq-admin-theme .card .card-body {
+    padding: 1.08rem;
+}
+
+.aq-admin-theme .table > :not(caption) > * > * {
+    padding: 0.74rem 0.76rem;
+    border-bottom-color: #e7eef8;
+}
+
+.aq-admin-theme .table thead th {
+    color: #5f7188;
+    font-size: 0.72rem;
+}
+
+.aq-admin-theme .form-label {
+    color: #3b5877;
+}
+
+.aq-admin-theme .form-control,
+.aq-admin-theme .form-select,
+.aq-admin-theme .input-group-text {
+    border-radius: 0.56rem;
+    border-color: #ccdaec;
+    color: #2f425c;
+}
+
+.aq-admin-theme .form-control:focus,
+.aq-admin-theme .form-select:focus {
+    border-color: #8cb3df;
+    box-shadow: 0 0 0 0.2rem rgba(24, 68, 127, 0.14);
+}
+
+.aq-admin-theme .btn {
+    border-radius: 0.56rem;
+    font-weight: 600;
+}
+
+.aq-admin-theme .btn-primary {
+    background: linear-gradient(135deg, #194a88 0%, #2469af 100%);
+    border-color: #1c4f8e;
+}
+
+.aq-admin-theme .btn-primary:hover {
+    background: linear-gradient(135deg, #163e73 0%, #1f5994 100%);
+    border-color: #163e73;
+}
+
+.aq-admin-theme .btn-success {
+    background: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%);
+    border-color: #1e855f;
+}
+
+.aq-admin-theme .btn-success:hover {
+    background: linear-gradient(135deg, #1a7855 0%, #25946c 100%);
+    border-color: #1a7855;
+}
+
+.aq-admin-theme .alert {
+    border-radius: 0.72rem;
+}
+
+.aq-stat-box {
+    border-radius: 0.96rem;
+    box-shadow: 0 14px 26px rgba(14, 33, 57, 0.18);
+}
+
+.aq-stat-box-primary {
+    background: linear-gradient(130deg, #0f3a71 0%, #1b5ba0 100%);
+}
+
+.aq-stat-box-warning {
+    background: linear-gradient(130deg, #0e5f76 0%, #1786a3 100%);
+}
+
+.aq-stat-box-success {
+    background: linear-gradient(130deg, #247b5b 0%, #2d9f75 100%);
+}
+
+.aq-stat-box-info {
+    background: linear-gradient(130deg, #246188 0%, #3484b6 100%);
+}
+
+.aq-admin-footer,
+.aq-admin-auth-footer {
+    border-top-color: var(--aq-admin-border);
+    background: rgba(255, 255, 255, 0.88);
+}
+
+.aq-admin-footer-links a {
+    color: #5a718d;
+}
+
+.aq-admin-footer-links a:hover {
+    color: #18447f;
+}
+
+body.aq-admin-theme.aq-admin-auth-page {
+    background:
+        radial-gradient(920px 360px at 12% -12%, rgba(24, 68, 127, 0.24) 0%, rgba(24, 68, 127, 0) 64%),
+        radial-gradient(760px 300px at 92% -16%, rgba(17, 109, 128, 0.24) 0%, rgba(17, 109, 128, 0) 62%),
+        linear-gradient(180deg, #f4f8ff 0%, #ecf3fc 100%);
+}
+
+.aq-admin-auth-shell {
+    padding: 2rem 1rem 1rem;
+}
+
+.aq-admin-auth-wrap {
+    max-width: 1020px;
+    margin: 0 auto;
+}
+
+.aq-admin-auth-card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid var(--aq-admin-border);
+    border-radius: 1.15rem;
+    box-shadow: 0 24px 45px rgba(16, 37, 64, 0.12);
+    overflow: hidden;
+}
+
+.aq-admin-auth-card-split {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(340px, 1fr);
+}
+
+.aq-admin-auth-info {
+    background: linear-gradient(160deg, #0f2f5f 0%, #18447f 54%, #0f6479 100%);
+    color: #f5faff;
+    padding: 2.05rem 1.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.aq-admin-auth-brand {
+    margin: 0;
+    color: #f5fbff;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.aq-admin-auth-brand-icon {
+    width: 2.48rem;
+    height: 2.1rem;
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.aq-admin-auth-brand-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.2rem;
+}
+
+.aq-admin-auth-brand-text {
+    font-size: 0.97rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.aq-admin-auth-info h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.52rem;
+    font-weight: 700;
+}
+
+.aq-admin-auth-info h1 i {
+    margin-right: 0.35rem;
+}
+
+.aq-admin-auth-info p {
+    margin: 0;
+    font-size: 0.93rem;
+    line-height: 1.5;
+    color: rgba(236, 245, 255, 0.9);
+}
+
+.aq-admin-auth-feature-list {
+    margin: 0.2rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.52rem;
+}
+
+.aq-admin-auth-feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.46rem;
+    padding: 0.48rem 0.58rem;
+    border-radius: 0.6rem;
+    background: rgba(5, 20, 39, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: rgba(244, 250, 255, 0.94);
+    font-size: 0.82rem;
+}
+
+.aq-admin-auth-feature-list li i {
+    font-size: 0.82rem;
+}
+
+.aq-admin-auth-feature-list strong {
+    color: #ffffff;
+}
+
+.aq-admin-auth-form {
+    padding: 2.05rem 1.9rem;
+    display: grid;
+    gap: 0.64rem;
+    align-content: center;
+    background: #ffffff;
+}
+
+.aq-admin-auth-form label {
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: #385575;
+}
+
+.aq-admin-auth-form input {
+    border: 1px solid #c9d8ea;
+    border-radius: 0.62rem;
+    padding: 0.66rem 0.78rem;
+    font-size: 0.92rem;
+    color: #2d4662;
+    outline: none;
+}
+
+.aq-admin-auth-form input:focus {
+    border-color: #8ab1de;
+    box-shadow: 0 0 0 0.2rem rgba(24, 68, 127, 0.13);
+}
+
+.aq-admin-auth-form .btn {
+    margin-top: 0.15rem;
+    width: 100%;
+}
+
+.aq-admin-auth-form .btn i {
+    margin-right: 0.36rem;
+}
+
+.aq-admin-auth-links {
+    margin-top: 0.28rem;
+}
+
+.aq-admin-auth-links a {
+    color: #194d89;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.aq-admin-auth-links a:hover {
+    color: #133d6e;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-copy,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar-search,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar-section,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel > div,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-label,
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar-footer {
+    opacity: 0;
+    width: 0;
+    min-width: 0;
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand {
+    justify-content: center;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-icon {
+    width: 2.3rem;
+    height: 1.95rem;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel {
+    justify-content: center;
+    padding-left: 0.48rem;
+    padding-right: 0.48rem;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-link {
+    justify-content: center;
+    padding-left: 0.56rem;
+    padding-right: 0.56rem;
+    gap: 0;
+}
+
+body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-empty {
+    display: none !important;
+}
+
+@media (max-width: 1199.98px) {
+    .aq-admin-topbar-user-meta {
+        display: none;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .aq-admin-sidebar {
+        width: min(86vw, 286px);
+        min-width: min(86vw, 286px);
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-copy,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar-search,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar-section,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel > div,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-label,
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-sidebar-footer {
+        opacity: 1;
+        width: auto;
+        min-width: 0;
+        max-height: none;
+        overflow: visible;
+        pointer-events: auto;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand {
+        justify-content: flex-start;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-brand-icon {
+        width: 2.75rem;
+        height: 2.2rem;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-user-panel {
+        justify-content: flex-start;
+        padding-left: 0.72rem;
+        padding-right: 0.72rem;
+    }
+
+    body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-link {
+        justify-content: flex-start;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+        gap: 0.7rem;
+    }
+
+    .aq-admin-topbar {
+        padding: 0.56rem 0.8rem;
+    }
+
+    .aq-admin-content {
+        padding: 1rem 0.86rem 0.86rem;
+    }
+
+    .aq-admin-auth-card-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .aq-admin-topbar-actions .aq-admin-topbar-user {
+        display: none;
+    }
+
+    .aq-admin-topbar-title {
+        max-width: 210px;
+    }
+
+    .aq-admin-auth-shell {
+        padding-top: 1.25rem;
+    }
+
+    .aq-admin-auth-info,
+    .aq-admin-auth-form {
+        padding: 1.4rem 1.15rem;
+    }
+
+    .aq-admin-auth-info h1 {
+        font-size: 1.3rem;
+    }
+}
+
+.aq-admin-page-hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #d6e4f7;
+    border-radius: 1rem;
+    background: linear-gradient(120deg, #0f325f 0%, #1b4d87 58%, #10667a 100%);
+    color: #f6fbff;
+    box-shadow: 0 16px 28px rgba(12, 32, 57, 0.2);
+    padding: 1rem 1.15rem;
+    margin-bottom: 1rem;
+}
+
+.aq-admin-page-hero::after {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    right: -120px;
+    top: -138px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 72%);
+    pointer-events: none;
+}
+
+.aq-admin-page-hero-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.aq-admin-page-hero-subtitle {
+    margin: 0.24rem 0 0;
+    color: rgba(238, 247, 255, 0.9);
+    font-size: 0.86rem;
+    line-height: 1.35;
+}
+
+.aq-admin-page-hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.aq-admin-page-hero-kpi {
+    background: rgba(8, 26, 50, 0.26);
+    border: 1px solid rgba(255, 255, 255, 0.23);
+    border-radius: 0.66rem;
+    padding: 0.36rem 0.58rem;
+    color: #f7fcff;
+    font-size: 0.72rem;
+    line-height: 1.2;
+    text-align: right;
+}
+
+.aq-admin-page-hero-kpi strong {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.1;
+}
+
+.aq-admin-panel {
+    border: 1px solid var(--aq-admin-border);
+    border-radius: 1rem;
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(20, 38, 63, 0.06);
+}
+
+.aq-admin-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    padding: 0.82rem 1rem;
+    border-bottom: 1px solid #e4edf9;
+    background: linear-gradient(180deg, #fbfdff 0%, #f4f8fe 100%);
+}
+
+.aq-admin-panel-title {
+    margin: 0;
+    color: #2f4767;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.aq-admin-panel-subtitle {
+    margin: 0.2rem 0 0;
+    color: #6b7f96;
+    font-size: 0.8rem;
+}
+
+.aq-admin-panel-body {
+    padding: 1rem;
+}
+
+.aq-admin-table-card .table thead th {
+    background: #f5f9ff;
+}
+
+.aq-admin-filter-bar {
+    border: 1px solid #d9e6f7;
+    border-radius: 0.9rem;
+    background: linear-gradient(180deg, #fbfdff 0%, #f5f9ff 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.aq-admin-soft-note {
+    border: 1px dashed #bdd4ef;
+    border-radius: 0.8rem;
+    padding: 0.66rem 0.78rem;
+    background: #f4f9ff;
+    color: #476586;
+    font-size: 0.81rem;
+}
+
+.aq-admin-tools-card {
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.aq-admin-tools-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 24px rgba(20, 38, 63, 0.1);
+}
+
+.aq-admin-user-article {
+    border: 1px solid #dce8f7;
+    border-radius: 0.9rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    padding: 0.9rem;
+}
+
+.aq-admin-tax-box {
+    border-color: #d7e4f3 !important;
+    background: #f9fcff;
+}
+
+.aq-admin-link-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.36rem;
+    border: 1px solid #cadcf0;
+    border-radius: 999px;
+    padding: 0.18rem 0.55rem;
+    color: #325476;
+    background: #f6faff;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.aq-admin-link-chip:hover {
+    color: #1d446f;
+    border-color: #afc9e6;
+    background: #ecf4ff;
+}
+
+@media (max-width: 767px) {
+    .aq-admin-page-hero {
+        padding: 0.9rem;
+    }
+
+    .aq-admin-page-hero-meta {
+        justify-content: flex-start;
+        margin-top: 0.65rem;
+    }
+}
+
+.aq-admin-tool-hero .aq-admin-page-hero-meta .btn {
+    border-color: rgba(255, 255, 255, 0.52);
+    color: #ffffff;
+    background: rgba(8, 26, 50, 0.22);
+}
+
+.aq-admin-tool-hero .aq-admin-page-hero-meta .btn:hover {
+    border-color: rgba(255, 255, 255, 0.74);
+    background: rgba(8, 26, 50, 0.36);
+    color: #ffffff;
+}
+
+.aq-admin-tool-panel {
+    min-height: calc(100vh - 205px);
+    display: flex;
+    flex-direction: column;
+}
+
+.aq-admin-tool-panel-body {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.aq-admin-tool-embedded-host {
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    --aq-tool-primary: #18447f;
+    --aq-tool-primary-dark: #0e2750;
+    --aq-tool-accent: #116d80;
+    --aq-tool-text: #223249;
+    --aq-tool-muted: #5f7592;
+    --aq-tool-border: #d8e3f2;
+    --aq-tool-surface: #ffffff;
+    --aq-tool-soft: #f3f8ff;
+    --primary: #18447f;
+    --primary-dark: #0e2750;
+    --accent: #116d80;
+    --primary-color: #18447f;
+    --secondary-color: #f3f8ff;
+    --accent-color: #116d80;
+    --background-light: #edf4fc;
+    --background-dark: #0e2750;
+    --text-primary: #223249;
+    --text-secondary: #5f7592;
+    --border-color: #d8e3f2;
+    color: var(--aq-tool-text);
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+}
+
+.aq-admin-tool-embedded-host :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    small,
+    label,
+    li,
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    span,
+    div
+):not(.material-symbols-outlined):not(.fa):not(.fas):not(.far):not(.fal):not(.fab):not([class*="fa-"]) {
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif !important;
+}
+
+.aq-admin-tool-embedded-host .material-symbols-outlined {
+    font-family: "Material Symbols Outlined" !important;
+}
+
+.aq-admin-tool-embedded-host > :first-child {
+    margin-top: 0 !important;
+}
+
+/* Unified tools readability and theme consistency */
+.aq-admin-tool-embedded-host {
+    font-size: 16px;
+    line-height: 1.55;
+    background:
+        radial-gradient(980px 380px at -10% -14%, rgba(24, 68, 127, 0.13) 0%, rgba(24, 68, 127, 0) 62%),
+        radial-gradient(820px 320px at 108% -20%, rgba(17, 109, 128, 0.11) 0%, rgba(17, 109, 128, 0) 58%),
+        linear-gradient(180deg, #f5f9ff 0%, #edf4fc 100%) !important;
+}
+
+.aq-admin-tool-embedded-host,
+.aq-admin-tool-embedded-host :where(
+    p,
+    li,
+    label,
+    small,
+    td,
+    th,
+    .summary,
+    .subtitle,
+    .muted,
+    .notes,
+    .file-name,
+    .upload-status,
+    .upload-option-note,
+    .swatch-role,
+    .swatch-meta
+) {
+    color: #4f6784 !important;
+}
+
+.aq-admin-tool-embedded-host :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    strong,
+    .mockup-title,
+    .panel h2,
+    .panel h3
+) {
+    color: #1f3f63 !important;
+    line-height: 1.24;
+}
+
+.aq-admin-tool-embedded-host :where(pre, code, kbd, samp, .code-container) {
+    font-family: Consolas, "Courier New", monospace !important;
+}
+
+.aq-admin-tool-embedded-host :is(.hero, .header, .upload-header) {
+    background: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%) !important;
+}
+
+.aq-admin-tool-embedded-host :is(.hero, .header, .upload-header) :where(
+    h1,
+    h2,
+    h3,
+    p,
+    small,
+    strong,
+    .eyebrow,
+    .logo,
+    .upload-brand
+) {
+    color: #f5fbff !important;
+}
+
+.aq-admin-tool-embedded-host :is(
+    .panel,
+    .controls,
+    .preview,
+    .main-content,
+    .image-preview-container,
+    .palette-display,
+    .color-details,
+    .upload-option-card,
+    .upload-validation,
+    .upload-info-card,
+    .font-type-card,
+    .font-card,
+    .swatch,
+    .stat-card,
+    .project-card,
+    .template-card,
+    .mockup-card,
+    .report-card,
+    .report-brand-card,
+    .editor-container,
+    .editor-controls,
+    .editor-preview,
+    .editor-sidebar,
+    .control-panel,
+    .work-intake-form-wrap,
+    .work-intake-media,
+    .work-intake-preview-surface,
+    .pairing-preview,
+    .upload-validation-preview,
+    .color-item,
+    .image-box
+) {
+    background: #ffffff !important;
+    border: 1px solid #d7e4f3 !important;
+    box-shadow: 0 10px 22px rgba(20, 38, 63, 0.08) !important;
+    border-radius: 0.95rem !important;
+}
+
+.aq-admin-tool-embedded-host :is(
+    .btn,
+    .btn-primary,
+    .upload-button,
+    .update-btn,
+    .export-btn,
+    .code-btn,
+    .upload-option-button,
+    .upload-option-link,
+    .upload-btn,
+    .tool-button
+) {
+    background: linear-gradient(135deg, #18447f 0%, #2166ac 100%) !important;
+    border: 1px solid #18447f !important;
+    color: #ffffff !important;
+    border-radius: 0.68rem !important;
+    font-weight: 700;
+}
+
+.aq-admin-tool-embedded-host :is(
+    .btn-secondary,
+    .ghost,
+    .btn.ghost,
+    .upload-header-link,
+    .btn-inline,
+    .btn-toggle
+) {
+    background: #edf4ff !important;
+    border: 1px solid #c8d9ef !important;
+    color: #23466f !important;
+}
+
+.aq-admin-tool-embedded-host :is(
+    input:not([type="color"]):not([type="range"]),
+    select,
+    textarea
+) {
+    background: #ffffff !important;
+    color: #223249 !important;
+    border: 1px solid #c9d8ea !important;
+    border-radius: 0.62rem !important;
+}
+
+.aq-admin-tool-embedded-host :is(
+    input:not([type="color"]):not([type="range"]),
+    select,
+    textarea
+)::placeholder {
+    color: #7890ad !important;
+}
+
+.aq-admin-tool-embedded-host :is(
+    input:not([type="color"]):not([type="range"]),
+    select,
+    textarea
+):focus {
+    border-color: #2166ac !important;
+    box-shadow: 0 0 0 0.2rem rgba(33, 102, 172, 0.14) !important;
+    outline: none !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-bgremove .tolerance-control,
+.aq-admin-tool-embedded-host.aq-tool-bgremove .upload-area,
+.aq-admin-tool-embedded-host.aq-tool-bgremove .image-box {
+    background: #f5f9ff !important;
+    border-color: #d4e2f3 !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-bgremove .btn-success {
+    background: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%) !important;
+    border-color: #1f8b63 !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-bgremove .btn-secondary {
+    background: #eaf1fb !important;
+    color: #23466f !important;
+    border-color: #c8d9ef !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-colorpalette .upload-button,
+.aq-admin-tool-embedded-host.aq-tool-colorpalette .palette-btn.active,
+.aq-admin-tool-embedded-host.aq-tool-colorpalette #applyBrandColors {
+    background: linear-gradient(135deg, #18447f 0%, #2166ac 100%) !important;
+    border-color: #18447f !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-colorpalette #randomColor {
+    background: linear-gradient(135deg, #0f5f76 0%, #1887a2 100%) !important;
+    border-color: #0f5f76 !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-colorpalette #exportPalette {
+    background: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%) !important;
+    border-color: #1f8b63 !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-ocimage .container {
+    max-width: min(1220px, 100%) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-ocimage .template-btn.active,
+.aq-admin-tool-embedded-host.aq-tool-ocimage .social-tab.active {
+    background: #e8f0ff !important;
+    color: #1d4370 !important;
+    border-color: #c9d9f0 !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-mockups {
+    --primary-color: #18447f;
+    --secondary-color: #f3f8ff;
+    --accent-color: #116d80;
+    --text-primary: #223249;
+    --text-secondary: #5f7592;
+    --border-color: #d6e2f3;
+    --background-light: #edf4fc;
+    --background-dark: #0e2750;
+    --gradient-primary: linear-gradient(126deg, #0e2750 0%, #18447f 58%, #116d80 100%);
+    --gradient-secondary: linear-gradient(135deg, #1f8b63 0%, #2ea97d 100%);
+}
+
+.aq-admin-tool-embedded-host.aq-tool-mockups.mockup-upload-page {
+    --upload-bg: #edf4fc;
+    --upload-bg-soft: #f3f8ff;
+    --upload-card: #ffffff;
+    --upload-ink: #223249;
+    --upload-muted: #5f7592;
+    --upload-primary: #18447f;
+    --upload-accent: #116d80;
+    --upload-border: #d6e2f3;
+    --upload-success-bg: #e8f7ef;
+    --upload-success-ink: #176444;
+    --upload-error-bg: #feecef;
+    --upload-error-ink: #a03347;
+    --upload-pending-bg: #ecf2fb;
+    --upload-pending-ink: #284a72;
+    --upload-shadow: 0 12px 24px rgba(20, 38, 63, 0.09);
+}
+
+.aq-admin-tool-embedded-host.aq-tool-mockups .nav-btn {
+    color: rgba(236, 245, 255, 0.84) !important;
+}
+
+.aq-admin-tool-embedded-host.aq-tool-mockups .nav-btn.active,
+.aq-admin-tool-embedded-host.aq-tool-mockups .nav-btn:hover {
+    color: #ffffff !important;
+    background: rgba(8, 26, 50, 0.42) !important;
+}
+
+.aq-tool-frame-shell {
+    width: 100%;
+    min-height: calc(100vh - 315px);
+    border: 1px solid #d6e4f5;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    background: #eef3fa;
+}
+
+.aq-tool-iframe {
+    width: 100%;
+    min-height: calc(100vh - 317px);
+    background: #eef3fa;
+}
+
+@media (max-width: 991.98px) {
+    .aq-admin-tool-panel {
+        min-height: calc(100vh - 188px);
+    }
+
+    .aq-tool-frame-shell {
+        min-height: calc(100vh - 305px);
+    }
+
+    .aq-tool-iframe {
+        min-height: calc(100vh - 307px);
+    }
+}
+
+@media (max-width: 767px) {
+    .aq-admin-tool-panel {
+        min-height: calc(100vh - 176px);
+    }
+
+    .aq-admin-tool-panel-body {
+        padding: 0.76rem;
+    }
+
+    .aq-tool-frame-shell {
+        min-height: calc(100vh - 280px);
+        border-radius: 0.74rem;
+    }
+
+    .aq-tool-iframe {
+        min-height: calc(100vh - 282px);
     }
 }

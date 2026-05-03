@@ -1,37 +1,50 @@
-<section class="row justify-content-center">
-    <div class="col-lg-5">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4 p-lg-5">
-                <div class="aq-admin-auth-brand">
-                    <span class="aq-admin-auth-brand-icon"><i class="fa-solid fa-key"></i></span>
-                    <span class="aq-admin-auth-brand-text"><?= e($appName ?? 'Quotia') ?> Admin</span>
-                </div>
-                <h1 class="h3 mb-3">Redefinir senha admin</h1>
-                <p class="text-muted mb-4">Conta: <strong><?= e((string) ($email ?? '')) ?></strong></p>
-                <form method="post" action="<?= e(url('/admin/redefinir-senha')) ?>" class="row g-3">
-                    <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">
-                    <div class="col-12">
-                        <label class="form-label">Nova senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="password" minlength="6" required placeholder="Nova senha">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Confirmar nova senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="password_confirm" minlength="6" required placeholder="Confirme a nova senha">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                        </div>
-                    </div>
-                    <div class="col-12 d-grid">
-                        <button class="btn btn-success btn-lg" type="submit">Salvar nova senha</button>
-                    </div>
-                </form>
-                <div class="mt-3 text-center">
-                    <small><a href="<?= e(url('/admin')) ?>">Voltar ao login admin</a></small>
-                </div>
-            </div>
+<section class="aq-admin-auth-card aq-admin-auth-card-split">
+    <div class="aq-admin-auth-info">
+        <div class="aq-admin-auth-brand">
+            <span class="aq-admin-auth-brand-icon"><img src="<?= e(asset('image/quotia_logo_wt.png')) ?>" alt="Quotia"></span>
+            <span class="aq-admin-auth-brand-text"><?= e($appName ?? 'Quotia') ?> Admin</span>
         </div>
+        <h1><i class="fa-solid fa-user-lock"></i> Redefinir senha</h1>
+        <p>Crie uma nova senha para restaurar o acesso administrativo com seguranca e continuidade operacional.</p>
+        <ul class="aq-admin-auth-feature-list">
+            <li><i class="fa-solid fa-circle-user"></i> Conta vinculada: <strong><?= e((string) ($email ?? '')) ?></strong></li>
+            <li><i class="fa-solid fa-key"></i> Senha minima recomendada com 6 caracteres</li>
+            <li><i class="fa-solid fa-shield-halved"></i> Alteracao validada por token temporario</li>
+        </ul>
     </div>
+
+    <form method="post" action="<?= e(url('/admin/redefinir-senha')) ?>" class="aq-admin-auth-form">
+        <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">
+
+        <label for="adminResetPassword">Nova senha</label>
+        <input
+            type="password"
+            id="adminResetPassword"
+            name="password"
+            minlength="6"
+            required
+            autocomplete="new-password"
+            placeholder="Digite a nova senha"
+        >
+
+        <label for="adminResetPasswordConfirm">Confirmar nova senha</label>
+        <input
+            type="password"
+            id="adminResetPasswordConfirm"
+            name="password_confirm"
+            minlength="6"
+            required
+            autocomplete="new-password"
+            placeholder="Repita a nova senha"
+        >
+
+        <button class="btn btn-success" type="submit">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Salvar nova senha
+        </button>
+
+        <div class="aq-admin-auth-links">
+            <a href="<?= e(url('/admin')) ?>">Voltar para o login admin</a>
+        </div>
+    </form>
 </section>

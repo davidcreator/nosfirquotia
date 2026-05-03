@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+
+require_once dirname(__DIR__) . '/bootstrap.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -137,5 +139,6 @@ declare(strict_types=1);
 
     <script src="../shared/brand-kit.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>

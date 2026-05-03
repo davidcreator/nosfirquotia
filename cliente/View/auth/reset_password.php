@@ -1,34 +1,48 @@
-<section class="aq-client-auth-shell row justify-content-center">
-    <div class="col-lg-5">
-        <div class="card border-0 shadow-sm aq-client-auth-card">
-            <div class="card-body p-4 p-lg-5">
-                <span class="aq-client-auth-badge"><i class="fa-solid fa-unlock-keyhole"></i></span>
-                <h1 class="h3 mb-3">Redefinir senha</h1>
-                <p class="text-muted mb-4">Conta: <strong><?= e((string) ($email ?? '')) ?></strong></p>
-                <form method="post" action="<?= e(url('/cliente/redefinir-senha')) ?>" class="row g-3">
-                    <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">
-                    <div class="col-12">
-                        <label class="form-label" for="resetPassword">Nova senha</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" class="form-control" id="resetPassword" name="password" minlength="6" required autocomplete="new-password">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label" for="resetPasswordConfirm">Confirmar nova senha</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-solid fa-shield-halved"></i></span>
-                            <input type="password" class="form-control" id="resetPasswordConfirm" name="password_confirm" minlength="6" required autocomplete="new-password">
-                        </div>
-                    </div>
-                    <div class="col-12 d-grid">
-                        <button class="btn btn-success btn-lg" type="submit">Salvar nova senha</button>
-                    </div>
-                </form>
-                <div class="mt-3 text-center aq-client-auth-links">
-                    <small><a href="<?= e(url('/cliente/login')) ?>">Voltar ao login</a></small>
+<section class="aq-entry aq-entry-auth">
+    <div class="aq-entry-shell">
+        <div class="aq-entry-grid">
+            <section class="aq-entry-panel">
+                <div class="aq-entry-brand">
+                    <span class="aq-entry-brand-icon"><img src="<?= e(asset('image/quotia_logo.png')) ?>" alt="Quotia"></span>
+                    <strong>Quotia</strong>
                 </div>
-            </div>
+
+                <h1>Defina sua nova senha e recupere o acesso da conta.</h1>
+                <p class="aq-entry-lead">
+                    Conta vinculada: <strong><?= e((string) ($email ?? '')) ?></strong>. Escolha uma senha forte para manter seu portal seguro.
+                </p>
+
+                <ul class="aq-entry-list">
+                    <li><strong>Seguranca ativa:</strong> Use combinacoes de letras, numeros e simbolos.</li>
+                    <li><strong>Atualizacao imediata:</strong> A nova senha passa a valer assim que voce confirmar.</li>
+                    <li><strong>Retorno rapido:</strong> Apos salvar, basta entrar novamente com as novas credenciais.</li>
+                </ul>
+            </section>
+
+            <aside class="aq-entry-login">
+                <h2>Redefinir senha</h2>
+                <p>Cadastre sua nova senha para concluir a recuperacao.</p>
+
+                <form class="aq-entry-form aq-entry-form-grid" method="post" action="<?= e(url('/cliente/redefinir-senha')) ?>">
+                    <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">
+
+                    <div class="aq-entry-field">
+                        <label for="resetPassword">Nova senha</label>
+                        <input type="password" id="resetPassword" name="password" minlength="6" required autocomplete="new-password">
+                    </div>
+
+                    <div class="aq-entry-field">
+                        <label for="resetPasswordConfirm">Confirmar nova senha</label>
+                        <input type="password" id="resetPasswordConfirm" name="password_confirm" minlength="6" required autocomplete="new-password">
+                    </div>
+
+                    <button class="aq-entry-submit" type="submit">Salvar nova senha</button>
+                </form>
+
+                <div class="aq-entry-login-links">
+                    <a class="forgot-link" href="<?= e(url('/cliente/login')) ?>">Voltar ao login</a>
+                </div>
+            </aside>
         </div>
     </div>
 </section>

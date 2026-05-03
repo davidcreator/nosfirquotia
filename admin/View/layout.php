@@ -1,14 +1,50 @@
+<?php
+$metaAppName = (string) ($appName ?? 'Quotia');
+$metaPageTitle = $metaAppName . ' - Admin';
+$metaDescription = 'Quotia Admin - Painel para gerenciar solicitacoes, categorias e operacoes do sistema.';
+$metaPath = (string) ($currentPath ?? app()->request()->path());
+$metaIsSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+$metaScheme = $metaIsSecure ? 'https' : 'http';
+$metaHost = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+$metaOrigin = $metaScheme . '://' . $metaHost;
+$metaCanonicalUrl = $metaOrigin . url($metaPath);
+$metaOgImagePath = asset('image/quotia_logo.png');
+$metaOgImage = $metaOrigin . $metaOgImagePath;
+$metaFavicon = asset('image/quotia.png');
+$extraHeadBaseHref = trim((string) ($extraHeadBaseHref ?? ''));
+$extraHeadContent = (string) ($extraHeadContent ?? '');
+?>
 <!doctype html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($appName ?? 'Quotia') ?> - Admin</title>
+    <title><?= e($metaPageTitle) ?></title>
+    <meta name="description" content="<?= e($metaDescription) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= e($metaPageTitle) ?>">
+    <meta property="og:description" content="<?= e($metaDescription) ?>">
+    <meta property="og:url" content="<?= e($metaCanonicalUrl) ?>">
+    <meta property="og:image" content="<?= e($metaOgImage) ?>">
+    <meta property="og:image:alt" content="<?= e($metaAppName . ' Logo') ?>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= e($metaPageTitle) ?>">
+    <meta name="twitter:description" content="<?= e($metaDescription) ?>">
+    <meta name="twitter:image" content="<?= e($metaOgImage) ?>">
+    <?php if ($extraHeadBaseHref !== ''): ?>
+        <base href="<?= e($extraHeadBaseHref) ?>">
+    <?php endif; ?>
+    <link rel="icon" type="image/png" href="<?= e($metaFavicon) ?>">
+    <link rel="apple-touch-icon" href="<?= e($metaFavicon) ?>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="<?= e(asset('public/assets/vendor/reamur/css/all.min.css')) ?>" rel="stylesheet">
     <link href="<?= e(asset('public/assets/vendor/reamur/css/theme-switcher.css')) ?>" rel="stylesheet">
+    <?= $extraHeadContent ?>
     <link href="<?= e(asset('public/assets/css/app.css')) ?>" rel="stylesheet">
     <link href="<?= e(asset('public/assets/css/admin.css')) ?>" rel="stylesheet">
 </head>
@@ -16,13 +52,15 @@
 $isLoginPage = (bool) ($isLoginPage ?? false);
 $isToolWorkspace = (bool) ($isToolWorkspace ?? false);
 $currentAdminPath = (string) ($currentPath ?? app()->request()->path());
+$extraBodyClass = trim((string) ($extraBodyClass ?? ''));
 ?>
-<body class="aq-admin-theme aq-admin-bg<?= $isLoginPage ? ' aq-admin-auth-page' : '' ?><?= $isToolWorkspace ? ' aq-admin-tools-open' : '' ?>">
+<body class="aq-admin-theme aq-admin-bg<?= $isLoginPage ? ' aq-admin-auth-page' : '' ?><?= $isToolWorkspace ? ' aq-admin-tools-open' : '' ?><?= $extraBodyClass !== '' ? ' ' . e($extraBodyClass) : '' ?>">
 <?php if (!$isLoginPage): ?>
     <?php
     $adminUserData = admin_user();
     $adminName = (string) ($adminUserData['name'] ?? 'Administrador');
     $adminAccessLevel = (string) ($adminUserData['access_level'] ?? 'Administrador');
+    $adminInitial = strtoupper(substr(trim($adminName), 0, 1));
     $adminHomePath = app()->auth()->preferredAdminPath();
 
     $isActivePath = static function (string $pathPrefix) use ($currentAdminPath): bool {
@@ -107,24 +145,21 @@ $currentAdminPath = (string) ($currentPath ?? app()->request()->path());
     <div class="aq-admin-app">
         <aside class="aq-admin-sidebar" id="aqAdminSidebar">
             <a class="aq-admin-brand" href="<?= e(url($adminHomePath)) ?>">
-                <span class="aq-admin-brand-icon">
-                    <i class="fa-brands fa-reamurcms" aria-hidden="true"></i>
+                <span class="aq-admin-brand-icon aq-admin-brand-icon-image">
+                    <img src="<?= e(asset('image/quotia_logo_wt.png')) ?>" alt="Quotia">
                 </span>
-                <span class="aq-admin-brand-logo">
-                    <img src="<?= e(asset('public/assets/vendor/reamur/image/reamurcms.png')) ?>" alt="Reamur">
+                <span class="aq-admin-brand-copy">
+                    <strong class="aq-admin-brand-text"><?= e($appName ?? 'Quotia') ?></strong>
+                    <small class="aq-admin-brand-subtext">Painel Administrativo</small>
                 </span>
-                <span class="aq-admin-brand-text"><?= e($appName ?? 'Quotia') ?> Admin</span>
             </a>
 
-            <div class="aq-admin-user-panel">
-                <div class="aq-admin-user-avatar">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-                <div>
-                    <div class="aq-admin-user-name"><?= e($adminName) ?></div>
-                    <div class="aq-admin-user-role"><?= e($adminAccessLevel) ?></div>
-                </div>
+            <div class="aq-admin-sidebar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" placeholder="Buscar no menu..." data-admin-sidebar-search>
             </div>
+
+            <div class="aq-admin-sidebar-section">Navegacao</div>
 
             <nav class="aq-admin-menu">
                 <ul class="aq-admin-menu-list">
@@ -142,11 +177,26 @@ $currentAdminPath = (string) ($currentPath ?? app()->request()->path());
                     <?php endforeach; ?>
                 </ul>
             </nav>
+
+            <div class="aq-admin-user-panel">
+                <div class="aq-admin-user-avatar">
+                    <?= e($adminInitial !== '' ? $adminInitial : 'A') ?>
+                </div>
+                <div>
+                    <div class="aq-admin-user-name"><?= e($adminName) ?></div>
+                    <div class="aq-admin-user-role"><?= e($adminAccessLevel) ?></div>
+                </div>
+            </div>
+
+            <div class="aq-admin-sidebar-footer">
+                <p>Ambiente administrativo protegido</p>
+                <strong>Quotia Control Center</strong>
+            </div>
         </aside>
 
         <div class="aq-admin-main-shell">
             <nav class="aq-admin-topbar">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 aq-admin-topbar-start">
                     <button type="button" class="btn btn-link aq-admin-toggle" data-admin-sidebar-toggle aria-label="Alternar menu lateral">
                         <i class="fa-solid fa-bars"></i>
                     </button>
@@ -170,9 +220,15 @@ $currentAdminPath = (string) ($currentPath ?? app()->request()->path());
                             Ferramentas
                         </a>
                     <?php endif; ?>
-                    <a class="btn btn-outline-secondary btn-sm" href="<?= e(url('/admin/logout')) ?>">
-                        <i class="fa-solid fa-sign-out-alt me-1"></i>
-                        Sair
+                    <div class="aq-admin-topbar-user">
+                        <span class="aq-admin-topbar-avatar"><?= e($adminInitial !== '' ? $adminInitial : 'A') ?></span>
+                        <div class="aq-admin-topbar-user-meta">
+                            <strong><?= e($adminName) ?></strong>
+                            <small><?= e($adminAccessLevel) ?></small>
+                        </div>
+                    </div>
+                    <a class="btn btn-outline-secondary btn-sm aq-admin-topbar-logout" href="<?= e(url('/admin/logout')) ?>" title="Sair do admin">
+                        <i class="fa-solid fa-sign-out-alt"></i>
                     </a>
                 </div>
             </nav>

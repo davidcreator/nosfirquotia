@@ -16,9 +16,9 @@ return array (
         'driver' => 'mysql',
         'host' => 'localhost',
         'port' => 3306,
-        'database' => 'u163008030_nosfirquotia',
-        'username' => 'u163008030_quotiaadmin',
-        'password' => 'kP7%Tn)+99r,2026Ktb',
+        'database' => 'nosfirquotia',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8mb4',
       ),
       'mail' => 

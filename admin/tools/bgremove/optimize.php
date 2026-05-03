@@ -32,9 +32,16 @@ $outputPath = PROCESSED_DIR . $outputName;
 try {
     $ok = optimizeImage($inputPath, $outputPath, $format, $quality, $maxWidth);
     if ($ok) {
+        $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+        $scriptDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+        if ($scriptDir === '.' || $scriptDir === '/') {
+            $scriptDir = '';
+        }
+        $optimizedWebPath = ($scriptDir !== '' ? $scriptDir . '/' : '/') . 'processed/' . rawurlencode($outputName);
+
         echo json_encode([
             'success' => true,
-            'optimized' => 'processed/' . $outputName
+            'optimized' => $optimizedWebPath
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Falha ao otimizar imagem']);

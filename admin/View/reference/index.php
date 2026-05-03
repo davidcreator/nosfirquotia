@@ -1,16 +1,20 @@
-<section class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <h1 class="h3 mb-1">Base de Precos e Servicos</h1>
-        <p class="text-muted mb-0">Tabela de referencia para Design e Desenvolvimento.</p>
-    </div>
-    <div class="text-end">
-        <div><strong><?= (int) $totals['catalogs_total'] ?></strong> catalogos</div>
-        <div><strong><?= (int) $totals['items_total'] ?></strong> servicos</div>
+<section class="aq-admin-page-hero">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <h1 class="aq-admin-page-hero-title">Base de precos e servicos</h1>
+            <p class="aq-admin-page-hero-subtitle">Tabela de referencia para Design e Desenvolvimento.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="aq-admin-page-hero-meta">
+                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['catalogs_total'] ?></strong> catalogos</div>
+                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['items_total'] ?></strong> servicos</div>
+            </div>
+        </div>
     </div>
 </section>
 
-<div class="card border-0 shadow-sm mb-3">
-    <div class="card-body">
+<div class="aq-admin-panel aq-admin-filter-bar mb-3">
+    <div class="aq-admin-panel-body">
         <div class="row g-3">
             <div class="col-md-8">
                 <label class="form-label" for="referenceSearch">Buscar servico</label>
@@ -31,7 +35,7 @@
     </div>
 </div>
 
-<div class="accordion" id="referenceAccordion">
+<div class="accordion aq-admin-table-card" id="referenceAccordion">
     <?php $catalogIndex = 0; foreach ($catalogs as $catalog): $catalogIndex++; ?>
         <?php
         $catalogArea = (string) ($catalog['area'] ?? 'design');

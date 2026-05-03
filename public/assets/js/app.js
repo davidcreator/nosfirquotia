@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const mediaCompactDefault = window.matchMedia('(max-width: 1199.98px)');
   const sidebarStorageKey = 'aq_admin_sidebar_mode';
   const sidebarLinks = canUseSidebar ? [].slice.call(sidebar.querySelectorAll('.aq-admin-menu-link')) : [];
+  const sidebarItems = canUseSidebar ? [].slice.call(sidebar.querySelectorAll('.aq-admin-menu-item')) : [];
+  const sidebarSearchInput = canUseSidebar ? sidebar.querySelector('[data-admin-sidebar-search]') : null;
+  let sidebarNoResultsNotice = null;
 
   const readSidebarMode = () => {
     try {
@@ -65,6 +68,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  const normalizeMenuText = (value) => String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+
+  const filterSidebarMenu = () => {
+    if (!canUseSidebar || !sidebarSearchInput) {
+      return;
+    }
+
+    const query = normalizeMenuText(sidebarSearchInput.value);
+    let visibleCount = 0;
+
+    sidebarItems.forEach((item) => {
+      const link = item.querySelector('.aq-admin-menu-link');
+      if (!link) {
+        return;
+      }
+
+      const labelNode = link.querySelector('.aq-admin-menu-label');
+      const label = normalizeMenuText(labelNode ? labelNode.textContent : link.textContent);
+      const shouldShow = query === '' || label.includes(query);
+
+      item.hidden = !shouldShow;
+      item.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+
+      if (shouldShow) {
+        visibleCount += 1;
+      }
+    });
+
+    if (sidebarNoResultsNotice) {
+      sidebarNoResultsNotice.classList.toggle('d-none', visibleCount > 0);
+    }
+  };
+
   const syncSidebarPinUi = () => {
     if (!sidebarPinButton) {
       return;
@@ -104,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove('aq-admin-sidebar-collapsed');
       setMenuLinkLabels(false);
       syncSidebarPinUi();
+      filterSidebarMenu();
       return;
     }
 
@@ -121,9 +162,23 @@ document.addEventListener('DOMContentLoaded', () => {
     setCollapsedDesktop(collapsed);
     setMenuLinkLabels(collapsed);
     syncSidebarPinUi();
+    filterSidebarMenu();
   };
 
   if (canUseSidebar) {
+    if (sidebarSearchInput) {
+      const menuContainer = sidebar.querySelector('.aq-admin-menu');
+      if (menuContainer) {
+        sidebarNoResultsNotice = document.createElement('div');
+        sidebarNoResultsNotice.className = 'aq-admin-menu-empty d-none';
+        sidebarNoResultsNotice.textContent = 'Nenhum item encontrado.';
+        menuContainer.appendChild(sidebarNoResultsNotice);
+      }
+
+      sidebarSearchInput.addEventListener('input', filterSidebarMenu);
+      sidebarSearchInput.addEventListener('search', filterSidebarMenu);
+    }
+
     sidebarToggleButtons.forEach((button) => {
       button.addEventListener('click', () => {
         if (mediaMobile.matches) {
@@ -222,6 +277,219 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     applySidebarMode();
+    filterSidebarMenu();
+  }
+
+  const toolFrame = document.querySelector('[data-admin-tool-frame]');
+  const canUseToolFrame = !!toolFrame && document.body.classList.contains('aq-admin-tools-open');
+
+  if (canUseToolFrame) {
+    const applyToolWorkspaceChrome = () => {
+      let frameDoc = null;
+
+      try {
+        frameDoc = toolFrame.contentDocument || (toolFrame.contentWindow ? toolFrame.contentWindow.document : null);
+      } catch (error) {
+        return;
+      }
+
+      if (!frameDoc || !frameDoc.body) {
+        return;
+      }
+
+      const toolName = (toolFrame.getAttribute('data-tool-name')
+        || frameDoc.title
+        || 'Ferramenta').trim();
+      const toolListUrl = (toolFrame.getAttribute('data-tool-list-url') || '/admin/ferramentas').trim();
+      const toolOpenUrl = (toolFrame.getAttribute('data-tool-open-url')
+        || toolFrame.getAttribute('src')
+        || '#').trim();
+
+      frameDoc.documentElement.classList.add('aq-tool-embedded');
+      frameDoc.body.classList.add('aq-tool-embedded-body');
+
+      if (!frameDoc.getElementById('aqToolEmbeddedStyle')) {
+        const style = frameDoc.createElement('style');
+        style.id = 'aqToolEmbeddedStyle';
+        style.textContent = `
+html.aq-tool-embedded,
+body.aq-tool-embedded-body {
+  width: 100%;
+  min-height: 100%;
+}
+body.aq-tool-embedded-body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: linear-gradient(180deg, #f4f8ff 0%, #edf4fc 100%);
+  color: #223249;
+  font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif !important;
+}
+#aqToolChrome {
+  position: sticky;
+  top: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.56rem 0.84rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(92deg, #0e2750 0%, #18447f 62%, #116d80 100%);
+  color: #ffffff;
+}
+#aqToolChrome .aq-tool-chrome-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.52rem;
+  min-width: 0;
+}
+#aqToolChrome .aq-tool-chrome-dot {
+  width: 0.56rem;
+  height: 0.56rem;
+  border-radius: 50%;
+  background: #9be0ff;
+  box-shadow: 0 0 0 0.2rem rgba(155, 224, 255, 0.22);
+  flex: 0 0 auto;
+}
+#aqToolChrome .aq-tool-chrome-brand strong {
+  display: block;
+  font-size: 0.87rem;
+  line-height: 1.1;
+  color: #ffffff;
+}
+#aqToolChrome .aq-tool-chrome-brand small {
+  display: block;
+  color: rgba(233, 246, 255, 0.86);
+  font-size: 0.69rem;
+  line-height: 1.15;
+}
+#aqToolChrome .aq-tool-chrome-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+#aqToolChrome .aq-tool-chrome-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  padding: 0.24rem 0.62rem;
+  text-decoration: none;
+  color: #ffffff;
+  background: rgba(8, 26, 50, 0.18);
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+#aqToolChrome .aq-tool-chrome-link:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(8, 26, 50, 0.34);
+  color: #ffffff;
+}
+#aqToolChrome .aq-tool-chrome-link.is-secondary {
+  background: rgba(255, 255, 255, 0.1);
+}
+body.aq-tool-embedded-body .container,
+body.aq-tool-embedded-body .container-grid,
+body.aq-tool-embedded-body .page,
+body.aq-tool-embedded-body .main,
+body.aq-tool-embedded-body .main-content {
+  width: min(1260px, 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body.aq-tool-embedded-body .panel,
+body.aq-tool-embedded-body .card,
+body.aq-tool-embedded-body .upload-option-card,
+body.aq-tool-embedded-body .upload-validation,
+body.aq-tool-embedded-body .upload-info-card {
+  border-radius: 0.9rem !important;
+  border: 1px solid #d8e3f2 !important;
+  box-shadow: 0 8px 20px rgba(20, 38, 63, 0.08) !important;
+}
+body.aq-tool-embedded-body button,
+body.aq-tool-embedded-body .btn,
+body.aq-tool-embedded-body input,
+body.aq-tool-embedded-body textarea,
+body.aq-tool-embedded-body select {
+  border-radius: 0.62rem !important;
+}
+@media (max-width: 900px) {
+  #aqToolChrome {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+`;
+        (frameDoc.head || frameDoc.documentElement).appendChild(style);
+      }
+
+      let chrome = frameDoc.getElementById('aqToolChrome');
+      if (!chrome) {
+        chrome = frameDoc.createElement('div');
+        chrome.id = 'aqToolChrome';
+
+        const brand = frameDoc.createElement('div');
+        brand.className = 'aq-tool-chrome-brand';
+
+        const dot = frameDoc.createElement('span');
+        dot.className = 'aq-tool-chrome-dot';
+        dot.setAttribute('aria-hidden', 'true');
+        brand.appendChild(dot);
+
+        const brandMeta = frameDoc.createElement('div');
+        const titleNode = frameDoc.createElement('strong');
+        titleNode.setAttribute('data-tool-title', '');
+        brandMeta.appendChild(titleNode);
+        const subtitleNode = frameDoc.createElement('small');
+        subtitleNode.textContent = 'Quotia Tools Workspace';
+        brandMeta.appendChild(subtitleNode);
+        brand.appendChild(brandMeta);
+
+        const actions = frameDoc.createElement('div');
+        actions.className = 'aq-tool-chrome-actions';
+
+        const backLink = frameDoc.createElement('a');
+        backLink.className = 'aq-tool-chrome-link';
+        backLink.setAttribute('data-tool-back-link', '');
+        backLink.setAttribute('target', '_top');
+        backLink.textContent = 'Voltar para ferramentas';
+        actions.appendChild(backLink);
+
+        const openLink = frameDoc.createElement('a');
+        openLink.className = 'aq-tool-chrome-link is-secondary';
+        openLink.setAttribute('data-tool-open-link', '');
+        openLink.setAttribute('target', '_blank');
+        openLink.setAttribute('rel', 'noopener noreferrer');
+        openLink.textContent = 'Abrir fora do painel';
+        actions.appendChild(openLink);
+
+        chrome.appendChild(brand);
+        chrome.appendChild(actions);
+
+        frameDoc.body.insertBefore(chrome, frameDoc.body.firstChild);
+      }
+
+      const titleNode = chrome.querySelector('[data-tool-title]');
+      if (titleNode) {
+        titleNode.textContent = toolName;
+      }
+
+      const backLink = chrome.querySelector('[data-tool-back-link]');
+      if (backLink) {
+        backLink.setAttribute('href', toolListUrl);
+      }
+
+      const openLink = chrome.querySelector('[data-tool-open-link]');
+      if (openLink) {
+        openLink.setAttribute('href', toolOpenUrl);
+      }
+    };
+
+    toolFrame.addEventListener('load', applyToolWorkspaceChrome);
+    window.setTimeout(applyToolWorkspaceChrome, 120);
   }
 
   const clientNavCollapse = document.querySelector('[data-client-nav-collapse]');
