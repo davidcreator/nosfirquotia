@@ -21,7 +21,7 @@ const CATEGORY_DEFS = {
         label: 'Templates',
         theme: '#7c3aed',
         entries: [
-            ['Apresentacao Corporativa', 'horizontal', 'paper', 'slide,corporativo,pitch'],
+            ['Apresentação Corporativa', 'horizontal', 'paper', 'slide,corporativo,pitch'],
             ['Post Instagram', 'quadrada', 'frame', 'instagram,post,social'],
             ['Story Instagram', 'vertical', 'frame', 'story,instagram,campanha'],
             ['Banner de Campanha', 'horizontal', 'banner', 'banner,ads,midia'],
@@ -56,13 +56,13 @@ const CATEGORY_DEFS = {
             ['Cartao de Visita', 'horizontal', 'paper', 'cartao,visita,branding'],
             ['Papel Timbrado', 'vertical', 'paper', 'timbrado,empresa,documento'],
             ['Envelope Executivo', 'horizontal', 'paper', 'envelope,executivo,marca'],
-            ['Pasta Institucional', 'vertical', 'paper', 'pasta,apresentacao,empresa'],
+            ['Pasta Institucional', 'vertical', 'paper', 'pasta,apresentação,empresa'],
             ['Bloco de Notas', 'vertical', 'paper', 'bloco,escritorio,evento'],
             ['Carimbo Assinatura', 'horizontal', 'product', 'carimbo,assinatura,oficial'],
             ['Agenda Premium', 'vertical', 'paper', 'agenda,planner,papelaria'],
             ['Assinatura de Email', 'horizontal', 'screen', 'email,assinatura,corporativo'],
             ['Certificado Oficial', 'vertical', 'paper', 'certificado,premio,oficial'],
-            ['Folder Trifold', 'horizontal', 'paper', 'folder,trifold,divulgacao']
+            ['Folder Trifold', 'horizontal', 'paper', 'folder,trifold,divulgação']
         ]
     },
     vestuario: {
@@ -88,13 +88,13 @@ const CATEGORY_DEFS = {
             ['Capa do Manual de Marca', 'vertical', 'paper', 'manual de marca,capa,brandbook'],
             ['Conceito e Essencia da Marca', 'vertical', 'paper', 'conceito,proposito,essencia,brandbook'],
             ['Arquitetura da Marca', 'horizontal', 'paper', 'arquitetura,submarcas,sistema'],
-            ['Area de Protecao do Logo', 'horizontal', 'paper', 'logo,area de seguranca,aplicacao'],
+            ['Area de Protecao do Logo', 'horizontal', 'paper', 'logo,área de segurança,aplicação'],
             ['Usos Incorretos do Logo', 'horizontal', 'paper', 'logo,restricoes,manual'],
             ['Paleta de Cores Oficial', 'horizontal', 'paper', 'paleta,cores,cmyk,rgb'],
             ['Tipografia Institucional', 'horizontal', 'paper', 'tipografia,fontes,manual'],
-            ['Aplicacao em Fundos', 'horizontal', 'paper', 'fundos,contraste,logo'],
+            ['Aplicação em Fundos', 'horizontal', 'paper', 'fundos,contraste,logo'],
             ['Iconografia e Elementos', 'horizontal', 'paper', 'icones,elementos visuais,grid'],
-            ['Tom de Voz e Mensagens', 'vertical', 'paper', 'tom de voz,copy,comunicacao']
+            ['Tom de Voz e Mensagens', 'vertical', 'paper', 'tom de voz,copy,comunicação']
         ]
     },
     identidade_visual: {
@@ -105,12 +105,12 @@ const CATEGORY_DEFS = {
             ['Logo Horizontal Institucional', 'horizontal', 'frame', 'logo,horizontal,assinatura'],
             ['Monograma e Simbolo', 'quadrada', 'frame', 'monograma,simbolo,marca'],
             ['Pattern Institucional', 'quadrada', 'frame', 'pattern,textura,identidade'],
-            ['Kit Aplicacoes da Marca', 'horizontal', 'frame', 'aplicacoes,branding,apresentacao'],
-            ['Fachada Comercial', 'horizontal', 'sign', 'fachada,loja,sinalizacao,marca'],
-            ['Uniforme Corporativo', 'vertical', 'fabric', 'uniforme,corporativo,aplicacao'],
-            ['Assinatura de Apresentacao', 'horizontal', 'screen', 'apresentacao,pitch,marca'],
+            ['Kit Aplicações da Marca', 'horizontal', 'frame', 'aplicacoes,branding,apresentacao'],
+            ['Fachada Comercial', 'horizontal', 'sign', 'fachada,loja,sinalização,marca'],
+            ['Uniforme Corporativo', 'vertical', 'fabric', 'uniforme,corporativo,aplicação'],
+            ['Assinatura de Apresentação', 'horizontal', 'screen', 'apresentação,pitch,marca'],
             ['Kit de Icones da Marca', 'quadrada', 'frame', 'icones,sistema visual,ui'],
-            ['Moodboard de Identidade', 'horizontal', 'paper', 'moodboard,direcao criativa,identidade']
+            ['Moodboard de Identidade', 'horizontal', 'paper', 'moodboard,direção criativa,identidade']
         ]
     },
     redes_sociais: {
@@ -123,7 +123,7 @@ const CATEGORY_DEFS = {
             ['Capa Facebook', 'horizontal', 'screen', 'facebook,capa,cover'],
             ['Banner LinkedIn', 'horizontal', 'screen', 'linkedin,banner,corporativo'],
             ['Thumbnail YouTube', 'horizontal', 'screen', 'youtube,thumbnail,video'],
-            ['Pin Pinterest', 'vertical', 'screen', 'pinterest,pin,inspiracao'],
+            ['Pin Pinterest', 'vertical', 'screen', 'pinterest,pin,inspiração'],
             ['Post X Twitter', 'horizontal', 'screen', 'twitter,x,post,campanha'],
             ['Capa TikTok', 'vertical', 'screen', 'tiktok,perfil,capa'],
             ['Anuncio Vertical Ads', 'vertical', 'screen', 'ads,meta,google,performance']
@@ -149,15 +149,15 @@ const CATEGORY_DEFS = {
         label: 'Indoor',
         theme: '#ca8a04',
         entries: [
-            ['Quadro de Parede', 'horizontal', 'frame', 'quadro,parede,decoracao'],
-            ['Placa de Recepcao', 'horizontal', 'sign', 'recepcao,placa,sinalizacao'],
+            ['Quadro de Parede', 'horizontal', 'frame', 'quadro,parede,decoração'],
+            ['Placa de Recepcao', 'horizontal', 'sign', 'recepção,placa,sinalização'],
             ['Painel de Loja', 'horizontal', 'board', 'painel,loja,vendas'],
             ['Totem Interno', 'vertical', 'sign', 'totem,interno,evento'],
             ['Display de Mesa', 'vertical', 'stand', 'display,mesa,restaurante'],
             ['Adesivo de Vitrine', 'horizontal', 'frame', 'adesivo,vitrine,pdv'],
             ['Poster de Cinema', 'vertical', 'frame', 'poster,cinema,lancamento'],
             ['Menu Board', 'horizontal', 'board', 'menu,food,board'],
-            ['Sinalizacao de Corredor', 'vertical', 'sign', 'wayfinding,corredor,direcao'],
+            ['Sinalização de Corredor', 'vertical', 'sign', 'wayfinding,corredor,direcao'],
             ['Banner Rollup', 'vertical', 'banner', 'rollup,banner,evento']
         ]
     }
@@ -174,7 +174,7 @@ const CANVAS_PRESETS = {
     'feed-vertical': { width: 1080, height: 1350, label: 'Feed vertical' },
     story: { width: 1080, height: 1920, label: 'Story/Reels' },
     widescreen: { width: 1920, height: 1080, label: 'Widescreen' },
-    presentation: { width: 1600, height: 900, label: 'Apresentacao' },
+    presentation: { width: 1600, height: 900, label: 'Apresentação' },
     thumb: { width: 1280, height: 720, label: 'Miniatura' }
 };
 
@@ -486,8 +486,8 @@ function handleGridAction(event) {
             addToActiveCollection(id);
         }
     } catch (error) {
-        console.error('Erro ao executar acao do card de mockup:', error);
-        alert('Nao foi possivel concluir a acao do mockup. Atualize a pagina e tente novamente.');
+        console.error('Erro ao executar ação do card de mockup:', error);
+        alert('Não foi possível concluir a ação do mockup. Atualize a página e tente novamente.');
     }
 }
 
@@ -809,7 +809,7 @@ function createCollection() {
 
     const key = slugify(rawName);
     if (!key) {
-        alert('Nome de colecao invalido.');
+        alert('Nome de coleção inválido.');
         return;
     }
 
@@ -833,7 +833,7 @@ function createCollection() {
 function deleteCollection() {
     const current = libraryState.activeCollection || DEFAULT_COLLECTION_KEY;
     if (current === DEFAULT_COLLECTION_KEY) {
-        alert('A colecao principal nao pode ser removida.');
+        alert('A coleção principal não pode ser removida.');
         return;
     }
 
@@ -1615,7 +1615,7 @@ async function restoreUploadFromBridge() {
         if (expectsInitialUpload) {
             updateUploadFeedback({
                 status: 'error',
-                message: 'A imagem validada nao foi restaurada automaticamente. Clique em "Trocar imagem" para reenviar.'
+                message: 'A imagem validada não foi restaurada automaticamente. Clique em "Trocar imagem" para reenviar.'
             });
         }
         try {
@@ -1708,7 +1708,7 @@ function applyBrandKitToEditor(options = {}) {
 
     if (!api || !api.getIntegrationSnapshot) {
         if (notify && !silentIfUnavailable) {
-            alert('Brand Kit indisponivel no momento.');
+            alert('Brand Kit indisponível no momento.');
         }
         return false;
     }
@@ -2008,7 +2008,7 @@ async function processUploadedArtworkFile(file, options = {}) {
     if (!skipFormatValidation && !isSupportedUploadFile(file)) {
         updateUploadFeedback({
             status: 'error',
-            message: 'Formato nao suportado. Envie PNG, JPEG ou SVG.'
+            message: 'Formato não suportado. Envie PNG, JPEG ou SVG.'
         });
         return false;
     }
@@ -2058,7 +2058,7 @@ async function processUploadedArtworkFile(file, options = {}) {
         const hint = document.getElementById('editorHint');
         if (hint) {
             hint.textContent = isAppliedToEditor
-                ? 'Arte aplicada. Ajuste escala, posicao, rotacao e modos de repeticao/espelhamento.'
+                ? 'Arte aplicada. Ajuste escala, posição, rotação e modos de repetição/espelhamento.'
                 : 'Imagem pronta. Clique em "Editar" em um mockup para aplicar a arte.';
         }
 
@@ -2072,7 +2072,7 @@ async function processUploadedArtworkFile(file, options = {}) {
     } catch (error) {
         updateUploadFeedback({
             status: 'error',
-            message: 'Nao foi possivel carregar a imagem. Verifique o arquivo e tente novamente.'
+            message: 'Não foi possível carregar a imagem. Verifique o arquivo e tente novamente.'
         });
         return false;
     } finally {
@@ -2440,7 +2440,7 @@ function handleLogoUpload(event) {
         return;
     }
     if (!isSupportedUploadFile(file)) {
-        alert('Formato de logo nao suportado. Envie PNG, JPEG ou SVG.');
+        alert('Formato de logo não suportado. Envie PNG, JPEG ou SVG.');
         return;
     }
 
@@ -2451,7 +2451,7 @@ function handleLogoUpload(event) {
             renderCanvas();
         })
         .catch(() => {
-            alert('Nao foi possivel carregar a logo selecionada.');
+            alert('Não foi possível carregar a logo selecionada.');
         });
 }
 
@@ -3492,7 +3492,7 @@ function drawImage(context, frame, mockup = selectedMockup) {
         drawCanvasMessage(
             context,
             surfaceCanvas,
-            'Nao foi possivel renderizar essa imagem',
+            'Não foi possível renderizar essa imagem',
             'Tente ajustar escala/modo ou reenviar o arquivo.',
             targetArea.centerX,
             targetArea.centerY,
@@ -3844,7 +3844,7 @@ function persistSavedMockupEdits(list) {
     try {
         localStorage.setItem(SAVED_EDITS_STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SAVED_EDITS)));
     } catch (error) {
-        alert('Nao foi possivel salvar mais mockups. Limpe alguns itens salvos para continuar.');
+        alert('Não foi possível salvar mais mockups. Limpe alguns itens salvos para continuar.');
     }
 }
 
@@ -3939,7 +3939,7 @@ function saveMockupChanges(options = {}) {
     const snapshot = buildCurrentMockupSnapshot();
     if (!snapshot) {
         if (!silent) {
-            alert('Nao foi possivel salvar o mockup no momento.');
+            alert('Não foi possível salvar o mockup no momento.');
         }
         return false;
     }
@@ -3951,7 +3951,7 @@ function saveMockupChanges(options = {}) {
     syncBrandKitFromEditorState();
 
     if (!silent) {
-        alert('Alteracoes salvas com sucesso. Use "Ir para relatorio de orcamento" para anexar.');
+        alert('Alterações salvas com sucesso. Use "Ir para relatório de orçamento" para anexar.');
     }
     return true;
 }
@@ -4031,7 +4031,7 @@ async function finalizeMockupsForReport() {
 
     const saved = getSavedMockupEdits();
     if (!saved.length) {
-        alert('Salve ao menos um mockup antes de abrir o relatorio de orcamento.');
+        alert('Salve ao menos um mockup antes de abrir o relatório de orçamento.');
         return;
     }
 
@@ -4200,7 +4200,7 @@ function buildMockupCatalog() {
                     id,
                     category,
                     title: `${title} ${style.label}`,
-                    description: `Mockup ${style.label.toLowerCase()} para ${title.toLowerCase()} com foco em apresentacao profissional.`,
+                    description: `Mockup ${style.label.toLowerCase()} para ${title.toLowerCase()} com foco em apresentação profissional.`,
                     orientation,
                     frame,
                     quality: style.quality,

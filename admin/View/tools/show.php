@@ -17,7 +17,7 @@
     <div class="aq-admin-panel-header">
         <div>
             <h2 class="aq-admin-panel-title">Workspace da ferramenta</h2>
-            <p class="aq-admin-panel-subtitle">Padrao visual unificado com o painel administrativo.</p>
+            <p class="aq-admin-panel-subtitle">Padrão visual unificado com o painel administrativo.</p>
         </div>
     </div>
     <div class="aq-admin-panel-body aq-admin-tool-panel-body">

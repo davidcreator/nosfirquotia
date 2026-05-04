@@ -31,7 +31,7 @@ if (!is_array($legalReferences)) {
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
             <h1 class="aq-admin-page-hero-title">Central fiscal</h1>
-            <p class="aq-admin-page-hero-subtitle">Parametros tributarios com foco em conformidade brasileira para apoiar a formacao de orcamentos.</p>
+            <p class="aq-admin-page-hero-subtitle">Par�metros tributários com foco em conformidade brasileira para apoiar a formação de orçamentos.</p>
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
@@ -46,17 +46,17 @@ if (!is_array($legalReferences)) {
         <div class="aq-admin-panel h-100">
             <div class="aq-admin-panel-header">
                 <div>
-                    <h2 class="aq-admin-panel-title">Configuracao de conformidade fiscal</h2>
-                    <p class="aq-admin-panel-subtitle">Preencha o perfil tributario da agencia para reduzir risco fiscal e padronizar os relatorios.</p>
+                    <h2 class="aq-admin-panel-title">Configuração de conformidade fiscal</h2>
+                    <p class="aq-admin-panel-subtitle">Preencha o perfil tributário da agência para reduzir risco fiscal e padronizar os relatórios.</p>
                 </div>
             </div>
             <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/tributos')) ?>" class="row g-3">
                     <div class="col-12">
-                        <h3 class="h6 text-uppercase text-muted mb-2">1) Perfil tributario</h3>
+                        <h3 class="h6 text-uppercase text-muted mb-2">1) Perfil tributário</h3>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Regime tributario</label>
+                        <label class="form-label">Regime tributário</label>
                         <select class="form-select" name="tax_regime" id="taxRegimeField" required>
                             <option value="mei" <?= $taxRegime === 'mei' ? 'selected' : '' ?>>MEI</option>
                             <option value="simples_nacional" <?= $taxRegime === 'simples_nacional' ? 'selected' : '' ?>>Simples Nacional</option>
@@ -65,18 +65,18 @@ if (!is_array($legalReferences)) {
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Municipio de referencia do ISS</label>
+                        <label class="form-label">Município de referência do ISS</label>
                         <input class="form-control" name="municipality_name" value="<?= e($municipalityName) ?>" placeholder="Ex.: Sao Paulo/SP" required>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Aliquota de ISS (%)</label>
                         <input type="number" step="0.01" min="0" max="5" class="form-control" name="iss_percent" id="issPercentField"
                                value="<?= e(number_format($issPercent, 2, '.', '')) ?>" required>
-                        <div class="form-text" id="issHintText">Faixa legal comum para servicos: entre 2% e 5%.</div>
+                        <div class="form-text" id="issHintText">Faixa legal comum para serviços: entre 2% e 5%.</div>
                     </div>
 
                     <div class="col-12 pt-2">
-                        <h3 class="h6 text-uppercase text-muted mb-2">2) Parametros usados no relatorio de orcamento</h3>
+                        <h3 class="h6 text-uppercase text-muted mb-2">2) Parâmetros usados no relatório de orçamento</h3>
                     </div>
                     <div class="col-md-8">
                         <label class="form-label">Componente 1 (tributos)</label>
@@ -107,14 +107,14 @@ if (!is_array($legalReferences)) {
                     </div>
 
                     <div class="col-12 pt-2">
-                        <h3 class="h6 text-uppercase text-muted mb-2">3) Retencoes na fonte</h3>
+                        <h3 class="h6 text-uppercase text-muted mb-2">3) Retenções na fonte</h3>
                     </div>
                     <div class="col-md-6">
                         <div class="border rounded-3 p-3 h-100 aq-admin-tax-box">
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyIssWithholding" name="apply_iss_withholding" value="1"
                                        data-target="issWithholdingPercent" <?= $applyIssWithholding ? 'checked' : '' ?>>
-                                <label class="form-check-label fw-semibold" for="applyIssWithholding">Aplicar retencao de ISS</label>
+                                <label class="form-check-label fw-semibold" for="applyIssWithholding">Aplicar retenção de ISS</label>
                             </div>
                             <label class="form-label mb-1" for="issWithholdingPercent">Percentual (%)</label>
                             <input type="number" step="0.01" min="0" max="5" class="form-control" id="issWithholdingPercent" name="iss_withholding_percent"
@@ -126,7 +126,7 @@ if (!is_array($legalReferences)) {
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyIrrfWithholding" name="apply_irrf_withholding" value="1"
                                        data-target="irrfWithholdingPercent" <?= $applyIrrfWithholding ? 'checked' : '' ?>>
-                                <label class="form-check-label fw-semibold" for="applyIrrfWithholding">Aplicar retencao de IRRF</label>
+                                <label class="form-check-label fw-semibold" for="applyIrrfWithholding">Aplicar retenção de IRRF</label>
                             </div>
                             <label class="form-label mb-1" for="irrfWithholdingPercent">Percentual (%)</label>
                             <input type="number" step="0.01" min="0" max="100" class="form-control" id="irrfWithholdingPercent" name="irrf_withholding_percent"
@@ -150,7 +150,7 @@ if (!is_array($legalReferences)) {
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input js-toggle-percent" type="checkbox" id="applyInssWithholding" name="apply_inss_withholding" value="1"
                                        data-target="inssWithholdingPercent" <?= $applyInssWithholding ? 'checked' : '' ?>>
-                                <label class="form-check-label fw-semibold" for="applyInssWithholding">Aplicar retencao de INSS</label>
+                                <label class="form-check-label fw-semibold" for="applyInssWithholding">Aplicar retenção de INSS</label>
                             </div>
                             <label class="form-label mb-1" for="inssWithholdingPercent">Percentual (%)</label>
                             <input type="number" step="0.01" min="0" max="100" class="form-control" id="inssWithholdingPercent" name="inss_withholding_percent"
@@ -162,34 +162,34 @@ if (!is_array($legalReferences)) {
                         <h3 class="h6 text-uppercase text-muted mb-2">4) Governanca e checklist legal</h3>
                     </div>
                     <div class="col-md-7">
-                        <label class="form-label">Responsavel pela revisao fiscal</label>
+                        <label class="form-label">Responsável pela revisão fiscal</label>
                         <input class="form-control" name="legal_responsible_name" value="<?= e($legalResponsibleName) ?>" placeholder="Ex.: Contabilidade Parceira" required>
                     </div>
                     <div class="col-md-5">
-                        <label class="form-label">Data da ultima revisao</label>
+                        <label class="form-label">Data da última revisão</label>
                         <input type="date" class="form-control" name="legal_review_date" value="<?= e($legalReviewDate) ?>" required>
                     </div>
                     <div class="col-12">
                         <label class="form-label">Notas internas de conformidade</label>
-                        <textarea class="form-control" rows="3" name="legal_notes_text" placeholder="Ex.: Regras municipais de ISS e cenarios de retencao por tipo de contrato."><?= e($legalNotesText) ?></textarea>
+                        <textarea class="form-control" rows="3" name="legal_notes_text" placeholder="Ex.: Regras municipais de ISS e cenários de retenção por tipo de contrato."><?= e($legalNotesText) ?></textarea>
                     </div>
                     <div class="col-12">
                         <div class="border rounded-3 p-3 bg-light aq-admin-tax-box">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="checkRegime" name="check_regime" value="1" required <?= $checkRegime ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="checkRegime">Regime tributario revisado e coerente com o CNPJ ativo.</label>
+                                <label class="form-check-label" for="checkRegime">Regime tributário revisado e coerente com o CNPJ ativo.</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="checkIss" name="check_iss" value="1" required <?= $checkIss ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="checkIss">Aliquota de ISS validada conforme municipio e natureza do servico.</label>
+                                <label class="form-check-label" for="checkIss">Alíquota de ISS validada conforme município e natureza do serviço.</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="checkRetentions" name="check_retentions" value="1" required <?= $checkRetentions ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="checkRetentions">Retencoes na fonte revisadas conforme tomador, contrato e legislacao aplicavel.</label>
+                                <label class="form-check-label" for="checkRetentions">Retenções na fonte revisadas conforme tomador, contrato e legislacao aplicavel.</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="checkNfse" name="check_nfse" value="1" required <?= $checkNfse ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="checkNfse">Fluxo de emissao de NFS-e e obrigacoes acessorias confirmado para o municipio.</label>
+                                <label class="form-check-label" for="checkNfse">Fluxo de emissão de NFS-e e obrigações acessórias confirmado para o município.</label>
                             </div>
                         </div>
                     </div>
@@ -213,12 +213,12 @@ if (!is_array($legalReferences)) {
                 <p class="small text-muted">Este painel ajuda na padronizacao interna. A validacao final deve ser feita por contador responsavel antes da proposta ao cliente.</p>
 
                 <div class="alert alert-warning small mb-3">
-                    O sistema nao substitui consultoria contabil ou juridica. Use os campos para registrar revisao tecnica e rastreabilidade.
+                    O sistema não substitui consultoria contábil ou jurídica. Use os campos para registrar revisão técnica e rastreabilidade.
                 </div>
 
                 <h3 class="h6 text-uppercase text-muted mb-2">Referencias legais</h3>
                 <?php if ($legalReferences === []): ?>
-                    <p class="small text-muted mb-0">Nenhuma referencia cadastrada.</p>
+                    <p class="small text-muted mb-0">Nenhuma referência cadastrada.</p>
                 <?php else: ?>
                     <ul class="small mb-3 ps-3">
                         <?php foreach ($legalReferences as $reference): ?>
@@ -243,7 +243,7 @@ if (!is_array($legalReferences)) {
                 <h3 class="h6 text-uppercase text-muted mb-2">Boas praticas</h3>
                 <ul class="small mb-0 ps-3">
                     <li>Revisar regras municipais de ISS sempre que houver mudanca de tomador.</li>
-                    <li>Documentar retencoes para evitar divergencia entre proposta, nota e recebimento.</li>
+                    <li>Documentar retenções para evitar divergência entre proposta, nota e recebimento.</li>
                     <li>Atualizar esta central sempre que houver mudanca de regime ou de legislacao aplicavel.</li>
                 </ul>
             </div>
@@ -254,14 +254,14 @@ if (!is_array($legalReferences)) {
 <section class="aq-admin-panel">
     <div class="aq-admin-panel-header">
         <div>
-            <h2 class="aq-admin-panel-title">Simulador fiscal de orcamento</h2>
-            <p class="aq-admin-panel-subtitle">Simule incidencia tributaria e efeito das retencoes para estimar valor bruto e liquido.</p>
+            <h2 class="aq-admin-panel-title">Simulador fiscal de orçamento</h2>
+            <p class="aq-admin-panel-subtitle">Simule incidência tributária e efeito das retenções para estimar valor bruto e líquido.</p>
         </div>
     </div>
     <div class="aq-admin-panel-body">
         <div class="row g-3">
             <div class="col-md-3">
-                <label class="form-label">Subtotal dos servicos (R$)</label>
+                <label class="form-label">Subtotal dos serviços (R$)</label>
                 <input type="number" step="0.01" min="0" id="fiscalSubtotal" class="form-control" value="0.00">
             </div>
             <div class="col-md-3">
@@ -338,7 +338,7 @@ if (!is_array($legalReferences)) {
                     <td class="text-end" id="fiscalEncargoAmount">R$ 0,00</td>
                 </tr>
                 <tr>
-                    <td>Retencoes na fonte</td>
+                    <td>Retenções na fonte</td>
                     <td class="text-end text-danger" id="fiscalWithholdingAmount">R$ 0,00</td>
                 </tr>
                 <tr class="table-light">
@@ -374,7 +374,7 @@ if (!is_array($legalReferences)) {
             return;
         }
 
-        issHintText.textContent = 'Faixa legal comum para servicos: entre 2% e 5%.';
+        issHintText.textContent = 'Faixa legal comum para serviços: entre 2% e 5%.';
         issPercentField.setAttribute('min', '2');
         issPercentField.setAttribute('max', '5');
     };
@@ -493,3 +493,4 @@ if (!is_array($legalReferences)) {
     recalc();
 })();
 </script>
+

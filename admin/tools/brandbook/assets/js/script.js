@@ -3,19 +3,19 @@ const WORK_INFO_STORAGE_KEY = 'mockuphub_work_info_v1';
 const OG_SETTINGS_STORAGE_KEY = 'ogImageSettings';
 
 const ROLE_ORDER = [
-    ['primary', 'Primaria'],
-    ['secondary', 'Secundaria'],
+    ['primary', 'Primária'],
+    ['secondary', 'Secundária'],
     ['accent', 'Acento'],
     ['neutralLight', 'Neutra clara'],
     ['neutralDark', 'Neutra escura']
 ];
 
 const HARMONY_LABELS = {
-    monochromatic: 'Monocromatica',
-    analogous: 'Analogica',
+    monochromatic: 'Monocromática',
+    analogous: 'Análoga',
     complementary: 'Complementar',
-    triadic: 'Triadica',
-    tetradic: 'Tetradica',
+    triadic: 'Tríade',
+    tetradic: 'Tetrádica',
     splitComplementary: 'Split-complementar'
 };
 
@@ -23,9 +23,9 @@ const SECTOR_LABELS = {
     none: 'Sem preset',
     saas: 'SaaS e Produtos Digitais',
     ecommerce: 'E-commerce e Varejo',
-    health: 'Saude e Bem-estar',
-    education: 'Educacao e Cursos',
-    finance: 'Financas e Seguros',
+    health: 'Saúde e Bem-estar',
+    education: 'Educação e Cursos',
+    finance: 'Finanças e Seguros',
     fashion: 'Moda e Lifestyle'
 };
 
@@ -48,14 +48,14 @@ function bindEvents() {
 
     document.getElementById('copyPayloadBtn')?.addEventListener('click', async () => {
         if (!latestPayload) {
-            setStatus('Gere o relatorio antes de copiar o JSON.', 'warn');
+            setStatus('Gere o relatório antes de copiar o JSON.', 'warn');
             return;
         }
 
         const content = JSON.stringify(latestPayload, null, 2);
         try {
             await navigator.clipboard.writeText(content);
-            setStatus('Payload copiado para a area de transferencia.', 'ok');
+            setStatus('Payload copiado para a área de transferência.', 'ok');
         } catch (error) {
             const target = document.getElementById('brandbookPayload');
             if (target) {
@@ -64,7 +64,7 @@ function bindEvents() {
                 setStatus('Payload copiado com fallback.', 'ok');
                 return;
             }
-            setStatus('Nao foi possivel copiar automaticamente.', 'warn');
+            setStatus('Não foi possível copiar automaticamente.', 'warn');
         }
     });
 
@@ -88,8 +88,8 @@ function renderBrandBook() {
     renderProject(context.project);
     renderIntegration(context.integrationNotes);
     renderColorSystem(context);
-    renderInsightList('combinationList', context.combinations, 'Sem combinacoes no momento.');
-    renderInsightList('trendList', context.trends, 'Sem tendencias no momento.');
+    renderInsightList('combinationList', context.combinations, 'Sem combinações no momento.');
+    renderInsightList('trendList', context.trends, 'Sem tendências no momento.');
     renderTypography(context.typography);
     renderOg(context.og);
     renderMockups(context.mockups);
@@ -97,9 +97,9 @@ function renderBrandBook() {
 
     const warnCount = context.integrationNotes.filter((note) => note.level === 'warn').length;
     if (warnCount > 0) {
-        setStatus(`Relatorio atualizado com ${warnCount} alerta(s) de integracao.`, 'warn');
+        setStatus(`Relatório atualizado com ${warnCount} alerta(s) de integração.`, 'warn');
     } else {
-        setStatus('Relatorio BrandBook atualizado com sucesso.', 'ok');
+        setStatus('Relatório do BrandBook atualizado com sucesso.', 'ok');
     }
 }
 
@@ -118,7 +118,7 @@ function buildContext() {
         hasSnapshot: Boolean(snapshot?.brandKit || snapshot?.colorPalette || snapshot?.fontProfile),
         hasInsights: insights.combinations.length > 0 || insights.trends.length > 0,
         colorCount: colorSystem.paletteColors.length,
-        hasTypography: typography.primaryFontName !== 'Nao definido' || typography.secondaryFontName !== 'Nao definido',
+        hasTypography: typography.primaryFontName !== 'Não definido' || typography.secondaryFontName !== 'Não definido',
         mockupCount: mockups.length,
         hasOg: og.available
     });
@@ -243,20 +243,20 @@ function resolveInsights(snapshot, colorSystem) {
         ? sanitizeInsightList(brandInsights.trends, 8)
         : buildFallbackTrends(colorSystem);
     const summary = String(brandInsights.summary || '').trim() || (
-        `Paleta ${colorSystem.paletteType} com ${colorSystem.paletteColors.length} cor(es) consolidada para aplicacoes digitais e materiais de marca.`
+        `Paleta ${colorSystem.paletteType} com ${colorSystem.paletteColors.length} cor(es) consolidada para aplicações digitais e materiais de marca.`
     );
     const recommendations = Array.isArray(brandInsights.recommendations) && brandInsights.recommendations.length
         ? brandInsights.recommendations.map((item) => String(item || '').trim()).filter(Boolean).slice(0, 8)
         : [
-            'Priorize contraste AA/AAA em textos e componentes de acao.',
-            'Use a regra 60-30-10 para distribuir pesos visuais entre secoes.',
+            'Priorize contraste AA/AAA em textos e componentes de ação.',
+            'Use a regra 60-30-10 para distribuir pesos visuais entre seções.',
             'Mantenha o acento para destaques e chamadas, evitando excesso visual.'
         ];
 
     const harmonyLabel = colorSystem?.harmony?.label || HARMONY_LABELS.monochromatic;
     const harmonySpread = Number.isFinite(colorSystem?.harmony?.spread) ? colorSystem.harmony.spread : 24;
     if (recommendations.length < 8) {
-        recommendations.push(`Preserve a regra ${harmonyLabel} com abertura de ${harmonySpread}deg para manter consistencia da identidade visual.`);
+        recommendations.push(`Preserve a regra ${harmonyLabel} com abertura de ${harmonySpread}deg para manter consistência da identidade visual.`);
     }
     const sectorLabel = colorSystem?.sectorProfile?.label || SECTOR_LABELS.none;
     if (colorSystem?.sectorProfile?.key && colorSystem.sectorProfile.key !== 'none' && recommendations.length < 8) {
@@ -277,7 +277,7 @@ function buildFallbackCombinations(colorSystem) {
         {
             label: 'Estrutura 60-30-10',
             value: `${roleMap.primary.toUpperCase()} / ${roleMap.secondary.toUpperCase()} / ${roleMap.accent.toUpperCase()}`,
-            detail: 'Aplicar primaria como base, secundaria em blocos e acento em interacoes principais.'
+            detail: 'Aplicar primária como base, secundária em blocos e acento em interações principais.'
         },
         {
             label: 'Plano de superficie',
@@ -294,7 +294,7 @@ function buildFallbackTrends(colorSystem) {
         {
             label: 'Data-Driven UI',
             value: `${roleMap.primary.toUpperCase()} com fundos claros`,
-            detail: 'Tendencia forte em sistemas SaaS com foco em legibilidade e performance.'
+            detail: 'Tendência forte em sistemas SaaS com foco em legibilidade e performance.'
         }
     ];
 
@@ -308,13 +308,13 @@ function buildFallbackTrends(colorSystem) {
         trends.push({
             label: 'Sunset Conversion',
             value: `${roleMap.primary.toUpperCase()} com ${roleMap.accent.toUpperCase()}`,
-            detail: 'Direcao com energia para campanhas de venda e crescimento.'
+            detail: 'Direção com energia para campanhas de venda e crescimento.'
         });
     } else {
         trends.push({
             label: 'Editorial Balance',
             value: `${roleMap.neutralDark.toUpperCase()} com acentos pontuais`,
-            detail: 'Visual equilibrado para marcas premium e conteudo institucional.'
+            detail: 'Visual equilibrado para marcas premium e conteúdo institucional.'
         });
     }
 
@@ -322,13 +322,13 @@ function buildFallbackTrends(colorSystem) {
         trends.push({
             label: 'Soft Minimalism',
             value: `${roleMap.neutralLight.toUpperCase()} como superficie`,
-            detail: 'Tendencia minimalista para interfaces limpas e foco em conteudo.'
+            detail: 'Tendência minimalista para interfaces limpas e foco em conteúdo.'
         });
     } else {
         trends.push({
             label: 'High-Energy Blocks',
-            value: `${roleMap.accent.toUpperCase()} em componentes criticos`,
-            detail: 'Destaque de acao com energia cromatica controlada.'
+            value: `${roleMap.accent.toUpperCase()} em componentes críticos`,
+            detail: 'Destaque de ação com energia cromática controlada.'
         });
     }
 
@@ -350,10 +350,10 @@ function resolveTypography(snapshot) {
     const brandKitTypography = snapshot?.brandKit?.typography || {};
     const fontProfile = snapshot?.fontProfile || {};
     return {
-        primaryFontName: String(brandKitTypography.primaryFontName || fontProfile.primaryFontName || 'Nao definido'),
-        secondaryFontName: String(brandKitTypography.secondaryFontName || fontProfile.secondaryFontName || 'Nao definido'),
-        pairingStyle: String(brandKitTypography.pairingStyle || fontProfile.pairingStyle || 'Nao definido'),
-        tone: String(brandKitTypography.tone || fontProfile.tone || 'Nao definido'),
+        primaryFontName: String(brandKitTypography.primaryFontName || fontProfile.primaryFontName || 'Não definido'),
+        secondaryFontName: String(brandKitTypography.secondaryFontName || fontProfile.secondaryFontName || 'Não definido'),
+        pairingStyle: String(brandKitTypography.pairingStyle || fontProfile.pairingStyle || 'Não definido'),
+        tone: String(brandKitTypography.tone || fontProfile.tone || 'Não definido'),
         notes: String(brandKitTypography.notes || fontProfile.notes || ''),
         source: String(brandKitTypography.source || fontProfile.source || 'brandkit')
     };
@@ -408,7 +408,7 @@ function resolveOg(snapshot) {
 
 function resolveProject(workInfo, mockups) {
     const latest = mockups[0] || null;
-    const fallbackTitle = latest ? latest.title : 'Projeto sem titulo';
+    const fallbackTitle = latest ? latest.title : 'Projeto sem título';
     const tags = String(workInfo.supportingTags || '')
         .split(',')
         .map((tag) => tag.trim())
@@ -419,7 +419,7 @@ function resolveProject(workInfo, mockups) {
         title: String(workInfo.title || fallbackTitle),
         mainTag: String(workInfo.mainTag || (latest ? latest.categoryLabel : '')),
         supportingTags: tags,
-        description: String(workInfo.description || 'Descricao nao registrada nesta sessao.')
+        description: String(workInfo.description || 'Descrição não registrada nesta sessão.')
     };
 }
 
@@ -457,28 +457,28 @@ function getMockups() {
 function buildIntegrationNotes(context) {
     const notes = [];
     notes.push(context.hasSnapshot
-        ? { level: 'ok', message: 'Brand Kit detectado e usado na consolidacao.' }
-        : { level: 'warn', message: 'Brand Kit nao detectado. Relatorio usando fallback local.' });
+        ? { level: 'ok', message: 'Brand Kit detectado e usado na consolidação.' }
+        : { level: 'warn', message: 'Brand Kit não detectado. Relatório usando fallback local.' });
 
     notes.push(context.hasInsights
-        ? { level: 'ok', message: 'Insights de combinacoes e tendencias disponiveis para o BrandBook.' }
-        : { level: 'warn', message: 'Sem insights consolidados. Gere paleta no Color Palette para enriquecer o relatorio.' });
+        ? { level: 'ok', message: 'Insights de combinações e tendências disponíveis para o BrandBook.' }
+        : { level: 'warn', message: 'Sem insights consolidados. Gere paleta no Color Palette para enriquecer o relatório.' });
 
     notes.push(context.colorCount > 0
         ? { level: 'ok', message: `Sistema de cores consolidado com ${context.colorCount} cor(es).` }
         : { level: 'warn', message: 'Nenhuma cor consolidada encontrada.' });
 
     notes.push(context.hasTypography
-        ? { level: 'ok', message: 'Tipografia detectada no fluxo de integracao.' }
-        : { level: 'warn', message: 'Tipografia nao definida. Recomendado executar Font Strategy Advisor.' });
+        ? { level: 'ok', message: 'Tipografia detectada no fluxo de integração.' }
+        : { level: 'warn', message: 'Tipografia não definida. Recomendado executar Font Strategy Advisor.' });
 
     notes.push(context.mockupCount > 0
         ? { level: 'ok', message: `Mockups encontrados: ${context.mockupCount}.` }
-        : { level: 'warn', message: 'Sem mockups salvos nesta sessao.' });
+        : { level: 'warn', message: 'Sem mockups salvos nesta sessão.' });
 
     notes.push(context.hasOg
         ? { level: 'ok', message: 'Diretriz OG detectada e pronta para uso no projeto.' }
-        : { level: 'warn', message: 'Diretriz OG nao encontrada. Abra o OG Image Generator e salve configuracoes.' });
+        : { level: 'warn', message: 'Diretriz OG não encontrada. Abra o OG Image Generator e salve configurações.' });
 
     return notes;
 }
@@ -498,9 +498,9 @@ function renderProject(project) {
     }
 
     target.innerHTML = [
-        buildInfoCard('Titulo', project.title),
+        buildInfoCard('Título', project.title),
         buildInfoCard('Tag principal', project.mainTag ? `#${project.mainTag}` : 'Sem tag'),
-        buildInfoCard('Descricao', project.description, true),
+        buildInfoCard('Descrição', project.description, true),
         buildInfoCard('Tags de apoio', project.supportingTags.length ? project.supportingTags.join(', ') : 'Sem tags', true)
     ].join('');
 }
@@ -634,11 +634,11 @@ function renderTypography(typography) {
     }
 
     const rows = [
-        ['Fonte primaria', typography.primaryFontName],
-        ['Fonte secundaria', typography.secondaryFontName],
+        ['Fonte primária', typography.primaryFontName],
+        ['Fonte secundária', typography.secondaryFontName],
         ['Pairing', typography.pairingStyle],
         ['Tom', typography.tone],
-        ['Notas', typography.notes || 'Sem observacoes']
+        ['Notas', typography.notes || 'Sem observações']
     ];
 
     target.innerHTML = rows.map(([label, value]) => `
@@ -666,11 +666,11 @@ function renderOg(og) {
     }
 
     const rows = [
-        ['Marca', og.brand || 'Nao definido'],
-        ['Template', og.template || 'Nao definido'],
-        ['Titulo', og.title || 'Nao definido'],
-        ['Descricao', og.description || 'Nao definido'],
-        ['Cores', [og.primaryColor, og.secondaryColor].filter(Boolean).join(' | ') || 'Nao definido'],
+        ['Marca', og.brand || 'Não definido'],
+        ['Template', og.template || 'Não definido'],
+        ['Título', og.title || 'Não definido'],
+        ['Descrição', og.description || 'Não definido'],
+        ['Cores', [og.primaryColor, og.secondaryColor].filter(Boolean).join(' | ') || 'Não definido'],
         ['Opacidade', `Imagem ${og.imageOpacity ?? '-'} | Overlay ${og.overlayOpacity ?? '-'}`]
     ];
 
@@ -903,3 +903,4 @@ function escapeHtml(value) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 }
+

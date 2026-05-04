@@ -1,4 +1,4 @@
-﻿const SAVED_EDITS_STORAGE_KEY = 'mockuphub_saved_edits_v1';
+const SAVED_EDITS_STORAGE_KEY = 'mockuphub_saved_edits_v1';
 const WORK_INFO_STORAGE_KEY = 'mockuphub_work_info_v1';
 const OG_SETTINGS_STORAGE_KEY = 'ogImageSettings';
 const BRAND_MANUAL_CACHE_KEY = 'brand_manual_mvp_latest_v1';
@@ -16,6 +16,15 @@ const BOOK_MODE_MINI = 'mini';
 const SMART_TEMPLATE_METHOD_DEFAULT = 'smart_auto';
 const MINI_GUIDE_VARIANT_DEFAULT = 'corporate';
 const MINI_GUIDE_PRESET_NONE = 'none';
+const TEMPLATE_COLOR_LIMIT = 6;
+const TEMPLATE_COLOR_INPUT_IDS = [
+    'customTemplateColor1',
+    'customTemplateColor2',
+    'customTemplateColor3',
+    'customTemplateColor4',
+    'customTemplateColor5',
+    'customTemplateColor6'
+];
 
 const MINI_GUIDE_PRESETS = {
     brand_snapshot: {
@@ -56,11 +65,99 @@ const DESIGN_STUDIO_SCHEMA = 'brand_manual_design_studio_v1';
 const DESIGN_CANVAS_WIDTH = 1200;
 const DESIGN_CANVAS_HEIGHT = 760;
 const DESIGN_MIN_ELEMENT_SIZE = 24;
-const DESIGN_ELEMENT_TYPES = ['title', 'text', 'shape', 'logo_box', 'color_row', 'mockup_slot'];
+const DESIGN_ELEMENT_TYPES = [
+    'title',
+    'subtitle',
+    'text',
+    'bullet_list',
+    'shape',
+    'shape_rect',
+    'shape_round_rect',
+    'shape_parallelogram',
+    'shape_trapezoid',
+    'shape_ellipse',
+    'shape_triangle',
+    'shape_diamond',
+    'shape_pentagon',
+    'shape_hexagon',
+    'shape_octagon',
+    'shape_star',
+    'shape_heart',
+    'shape_cloud',
+    'shape_line',
+    'shape_arrow_right',
+    'shape_arrow_left',
+    'shape_arrow_up',
+    'shape_arrow_down',
+    'shape_chevron_right',
+    'shape_chevron_left',
+    'logo_box',
+    'color_row',
+    'mockup_slot',
+    'cta_button',
+    'divider',
+    'stat_card',
+    'tag_chip',
+    'info_card',
+    'quote_block',
+    'timeline_step',
+    'comparison_card'
+];
+const DESIGN_SHAPE_ONLY_TYPES = [
+    'shape',
+    'shape_rect',
+    'shape_round_rect',
+    'shape_parallelogram',
+    'shape_trapezoid',
+    'shape_ellipse',
+    'shape_triangle',
+    'shape_diamond',
+    'shape_pentagon',
+    'shape_hexagon',
+    'shape_octagon',
+    'shape_star',
+    'shape_heart',
+    'shape_cloud',
+    'shape_line',
+    'shape_arrow_right',
+    'shape_arrow_left',
+    'shape_arrow_up',
+    'shape_arrow_down',
+    'shape_chevron_right',
+    'shape_chevron_left'
+];
 const DESIGN_TEXT_TOKEN_HINT = '{{project.title}}';
 const DESIGN_KEYBOARD_NUDGE_STEP = 1;
 const DESIGN_KEYBOARD_FAST_NUDGE_STEP = 10;
 const DESIGN_RESIZE_BUTTON_STEP = 12;
+const DESIGN_SNAP_GRID_SIZE = 20;
+const DESIGN_SNAP_THRESHOLD = 8;
+const DESIGN_SNAP_PRESETS = {
+    precision: {
+        id: 'precision',
+        label: 'Precisão',
+        gridEnabled: true,
+        elementEnabled: true,
+        gridSize: 8,
+        threshold: 4
+    },
+    balanced: {
+        id: 'balanced',
+        label: 'Equilibrado',
+        gridEnabled: true,
+        elementEnabled: true,
+        gridSize: DESIGN_SNAP_GRID_SIZE,
+        threshold: DESIGN_SNAP_THRESHOLD
+    },
+    free: {
+        id: 'free',
+        label: 'Livre',
+        gridEnabled: false,
+        elementEnabled: false,
+        gridSize: 24,
+        threshold: 12
+    }
+};
 const FIGMA_IMPORT_SCHEMA = 'figma_file_json_v1';
 const DEFAULT_FIGMA_NAMING_PRESET_ID = 'balanced';
 const FIGMA_NAMING_PRESETS = {
@@ -79,11 +176,26 @@ const FIGMA_NAMING_PRESETS = {
         },
         elementAliases: {
             title: ['title', 'headline', 'titulo', 'h1'],
+            subtitle: ['subtitle', 'subtitulo', 'h2'],
             text: ['text', 'body', 'paragraph', 'descricao', 'copy'],
+            bullet_list: ['list', 'bullet', 'checklist'],
             shape: ['shape', 'card', 'panel', 'bloco'],
+            shape_rect: ['rect', 'rectangle', 'retangulo'],
+            shape_ellipse: ['ellipse', 'circle', 'oval', 'elipse'],
+            shape_triangle: ['triangle', 'triangulo'],
+            shape_diamond: ['diamond', 'losango', 'rhombus'],
+            shape_line: ['line', 'linha', 'divider'],
             logo_box: ['logo', 'logotipo', 'marca'],
             color_row: ['palette', 'paleta', 'color', 'swatch'],
-            mockup_slot: ['mockup', 'photo', 'image', 'preview']
+            mockup_slot: ['mockup', 'photo', 'image', 'preview'],
+            cta_button: ['cta', 'button', 'botao'],
+            divider: ['divider', 'line', 'separador'],
+            stat_card: ['kpi', 'stat', 'metric'],
+            tag_chip: ['chip', 'tag', 'label'],
+            info_card: ['info', 'content', 'card'],
+            quote_block: ['quote', 'testimonial', 'citacao'],
+            timeline_step: ['timeline', 'step', 'etapa'],
+            comparison_card: ['comparison', 'compare', 'antes', 'depois']
         },
         ignoreKeywords: ['hidden', 'guide', 'guides', 'grid', 'temp', 'debug'],
         titleMinSize: 40
@@ -103,11 +215,26 @@ const FIGMA_NAMING_PRESETS = {
         },
         elementAliases: {
             title: ['title', 'titulo', 'h1'],
+            subtitle: ['subtitle', 'subtitulo', 'h2'],
             text: ['text', 'body', 'descricao'],
+            bullet_list: ['list', 'bullet'],
             shape: ['shape', 'card'],
+            shape_rect: ['rect', 'rectangle'],
+            shape_ellipse: ['ellipse', 'circle'],
+            shape_triangle: ['triangle'],
+            shape_diamond: ['diamond', 'rhombus'],
+            shape_line: ['line'],
             logo_box: ['logo'],
             color_row: ['palette', 'color'],
-            mockup_slot: ['mockup']
+            mockup_slot: ['mockup'],
+            cta_button: ['cta', 'button'],
+            divider: ['divider', 'line'],
+            stat_card: ['kpi', 'stat'],
+            tag_chip: ['chip', 'tag'],
+            info_card: ['info', 'content'],
+            quote_block: ['quote', 'testimonial'],
+            timeline_step: ['timeline', 'step'],
+            comparison_card: ['comparison', 'compare']
         },
         ignoreKeywords: ['hidden', 'guide', 'grid', 'temp'],
         titleMinSize: 44
@@ -127,11 +254,26 @@ const FIGMA_NAMING_PRESETS = {
         },
         elementAliases: {
             title: ['headline', 'title', 'hook'],
+            subtitle: ['subtitle', 'subheadline'],
             text: ['caption', 'copy', 'text'],
+            bullet_list: ['list', 'bullet', 'checklist'],
             shape: ['shape', 'card', 'sticker'],
+            shape_rect: ['rect', 'rectangle'],
+            shape_ellipse: ['ellipse', 'circle', 'oval'],
+            shape_triangle: ['triangle'],
+            shape_diamond: ['diamond', 'rhombus'],
+            shape_line: ['line'],
             logo_box: ['logo', 'brand'],
             color_row: ['palette', 'color'],
-            mockup_slot: ['post', 'story', 'mockup', 'image']
+            mockup_slot: ['post', 'story', 'mockup', 'image'],
+            cta_button: ['cta', 'button'],
+            divider: ['divider', 'line'],
+            stat_card: ['kpi', 'metric'],
+            tag_chip: ['chip', 'tag', 'sticker'],
+            info_card: ['info', 'content', 'card'],
+            quote_block: ['quote', 'testimonial'],
+            timeline_step: ['timeline', 'step'],
+            comparison_card: ['comparison', 'versus']
         },
         ignoreKeywords: ['hidden', 'guide', 'grid'],
         titleMinSize: 36
@@ -151,11 +293,26 @@ const FIGMA_NAMING_PRESETS = {
         },
         elementAliases: {
             title: ['headline', 'title', 'h1'],
+            subtitle: ['subtitle', 'h2'],
             text: ['label', 'copy', 'body'],
+            bullet_list: ['list', 'bullet', 'menu'],
             shape: ['container', 'card', 'panel', 'section'],
+            shape_rect: ['rect', 'rectangle'],
+            shape_ellipse: ['ellipse', 'circle', 'oval'],
+            shape_triangle: ['triangle'],
+            shape_diamond: ['diamond', 'rhombus'],
+            shape_line: ['line', 'rule'],
             logo_box: ['logo', 'brand'],
             color_row: ['tokens', 'palette', 'swatch'],
-            mockup_slot: ['screen', 'mockup', 'device']
+            mockup_slot: ['screen', 'mockup', 'device'],
+            cta_button: ['button', 'cta', 'action'],
+            divider: ['divider', 'line', 'rule'],
+            stat_card: ['kpi', 'stat', 'metric'],
+            tag_chip: ['chip', 'tag', 'pill'],
+            info_card: ['info', 'content', 'card'],
+            quote_block: ['quote', 'testimonial'],
+            timeline_step: ['timeline', 'step'],
+            comparison_card: ['comparison', 'compare']
         },
         ignoreKeywords: ['hidden', 'guide', 'grid', 'measure'],
         titleMinSize: 34
@@ -258,13 +415,29 @@ let currentContext = {
     builderStructureIds: FULL_BRANDBOOK_STRUCTURE.slice(),
     builderModuleLayout: {},
     selectedBuilderModuleId: '',
+    templatePaletteTouched: false,
+    previewSync: {
+        status: 'idle',
+        source: 'init',
+        updatedAt: '',
+        pages: 0,
+        message: 'Aguardando primeira sincronizacao.'
+    },
     designStudio: null,
     designStudioEnabled: false,
     figmaNamingConfig: null,
+    designStyleClipboard: null,
+    designSnapSettings: {
+        gridEnabled: true,
+        elementEnabled: true,
+        gridSize: DESIGN_SNAP_GRID_SIZE,
+        threshold: DESIGN_SNAP_THRESHOLD
+    },
     designDragState: {
         active: false,
         mode: 'move',
         resizeHandle: '',
+        pointerId: null,
         pageId: '',
         elementId: '',
         pointerStartX: 0,
@@ -273,6 +446,18 @@ let currentContext = {
         elementStartY: 0,
         elementStartW: 0,
         elementStartH: 0,
+        selectionStartRects: {},
+        lastShiftX: 0,
+        lastShiftY: 0,
+        marqueeStartX: 0,
+        marqueeStartY: 0,
+        marqueeEndX: 0,
+        marqueeEndY: 0,
+        marqueeAdditive: false,
+        marqueeToggle: false,
+        marqueeBaseSelectionIds: [],
+        snapGuideX: null,
+        snapGuideY: null,
         moved: false
     },
     dragState: {
@@ -292,7 +477,10 @@ document.addEventListener('DOMContentLoaded', () => {
     syncCustomTemplateCards();
     updateBackupUiState();
     bindEvents();
+    setupDesignStudioRibbon();
+    setupDesignInspectorTabs();
     fillFigmaNamingConfigFields(currentContext.figmaNamingConfig);
+    renderPreviewSyncBadge();
     restoreTemplateSelection();
     refreshManual();
 });
@@ -348,6 +536,10 @@ function bindEvents() {
         openBrandbookWebRender();
     });
 
+    document.getElementById('previewSyncTestBtn')?.addEventListener('click', () => {
+        runPreviewSyncTest();
+    });
+
     document.getElementById('templateGrid')?.addEventListener('click', (event) => {
         const target = event.target;
         if (!(target instanceof Element)) {
@@ -377,7 +569,7 @@ function bindEvents() {
         renderTemplateBuilder();
         updateTemplateStrategyHint();
         refreshBrandbookPreviewFromBuilder();
-        setStatus('Estrutura padrao restaurada no Template Builder.', 'ok');
+        setStatus('Estrutura padrão restaurada no Template Builder.', 'ok');
     });
 
     document.getElementById('removeCustomTemplateBtn')?.addEventListener('click', () => {
@@ -416,10 +608,10 @@ function bindEvents() {
         const mode = getSelectedImportMode();
         if (mode === 'overwrite' && Object.keys(currentContext.customTemplates).length > 0) {
             const confirmed = window.confirm(
-                'A importacao em modo sobrescrever vai substituir todos os templates custom atuais. Deseja continuar?'
+                'A importação em modo sobrescrever vai substituir todos os templates custom atuais. Deseja continuar?'
             );
             if (!confirmed) {
-                setStatus('Importacao cancelada pelo usuario.', 'warn');
+                setStatus('Importação cancelada pelo usuário.', 'warn');
                 return;
             }
         }
@@ -470,8 +662,35 @@ function bindEvents() {
         });
     });
 
-    document.getElementById('customTemplateTheme')?.addEventListener('change', () => {
+    document.getElementById('customTemplateTheme')?.addEventListener('change', (event) => {
+        const target = event.target;
+        if (target instanceof HTMLSelectElement && !isTemplatePaletteTouched()) {
+            syncTemplatePaletteFromTheme(target.value);
+        }
         refreshBrandbookPreviewFromBuilder();
+    });
+
+    document.getElementById('customTemplateUsePaletteToggle')?.addEventListener('change', () => {
+        refreshBrandbookPreviewFromBuilder();
+    });
+
+    TEMPLATE_COLOR_INPUT_IDS.forEach((fieldId) => {
+        document.getElementById(fieldId)?.addEventListener('input', () => {
+            setTemplatePaletteTouched(true);
+            refreshBrandbookPreviewFromBuilder();
+        });
+        document.getElementById(fieldId)?.addEventListener('change', () => {
+            setTemplatePaletteTouched(true);
+            refreshBrandbookPreviewFromBuilder();
+        });
+    });
+
+    document.getElementById('useProjectPaletteBtn')?.addEventListener('click', () => {
+        syncTemplatePaletteFromProject();
+    });
+
+    document.getElementById('resetTemplatePaletteBtn')?.addEventListener('click', () => {
+        resetTemplatePaletteFromTheme();
     });
 
     document.getElementById('builderBlockTitleOverride')?.addEventListener('input', () => {
@@ -549,6 +768,7 @@ function bindEvents() {
         }
         const type = String(addButton.dataset.designAdd || 'text');
         addDesignElement(type);
+        closeAllDesignInsertLibraries();
     });
 
     document.getElementById('designElementText')?.addEventListener('input', () => {
@@ -567,22 +787,59 @@ function bindEvents() {
         updateSelectedDesignElementFromInspector({ h: valueOfField('designElementH') });
     });
     document.getElementById('designElementFontSize')?.addEventListener('input', () => {
-        updateSelectedDesignElementFromInspector({ fontSize: valueOfField('designElementFontSize') });
+        updateSelectedDesignElementFromInspector({ fontSize: valueOfField('designElementFontSize') }, { applyToSelection: true });
     });
     document.getElementById('designElementAlign')?.addEventListener('change', () => {
-        updateSelectedDesignElementFromInspector({ align: valueOfField('designElementAlign') });
+        updateSelectedDesignElementFromInspector({ align: valueOfField('designElementAlign') }, { applyToSelection: true });
     });
     document.getElementById('designElementColor')?.addEventListener('input', () => {
-        updateSelectedDesignElementFromInspector({ color: valueOfField('designElementColor') });
+        updateSelectedDesignElementFromInspector({ color: valueOfField('designElementColor') }, { applyToSelection: true });
     });
     document.getElementById('designElementBg')?.addEventListener('input', () => {
-        updateSelectedDesignElementFromInspector({ bg: valueOfField('designElementBg') });
+        updateSelectedDesignElementFromInspector({ bg: valueOfField('designElementBg') }, { applyToSelection: true });
     });
     document.getElementById('designElementRadius')?.addEventListener('input', () => {
-        updateSelectedDesignElementFromInspector({ radius: valueOfField('designElementRadius') });
+        updateSelectedDesignElementFromInspector({ radius: valueOfField('designElementRadius') }, { applyToSelection: true });
     });
     document.getElementById('designElementOpacity')?.addEventListener('input', () => {
-        updateSelectedDesignElementFromInspector({ opacity: valueOfField('designElementOpacity') });
+        updateSelectedDesignElementFromInspector({ opacity: valueOfField('designElementOpacity') }, { applyToSelection: true });
+    });
+
+    document.getElementById('designSelectAllBtn')?.addEventListener('click', () => {
+        selectAllDesignElements();
+    });
+    document.getElementById('designClearSelectionBtn')?.addEventListener('click', () => {
+        reduceDesignSelectionToPrimary();
+    });
+    document.getElementById('designSnapGridBtn')?.addEventListener('click', () => {
+        toggleDesignSnapMode('grid');
+    });
+    document.getElementById('designSnapElementBtn')?.addEventListener('click', () => {
+        toggleDesignSnapMode('element');
+    });
+    document.getElementById('designSnapGridSize')?.addEventListener('input', () => {
+        updateDesignSnapSetting('gridSize', valueOfField('designSnapGridSize'));
+    });
+    document.getElementById('designSnapGridSize')?.addEventListener('change', () => {
+        updateDesignSnapSetting('gridSize', valueOfField('designSnapGridSize'), { announce: true });
+    });
+    document.getElementById('designSnapThreshold')?.addEventListener('input', () => {
+        updateDesignSnapSetting('threshold', valueOfField('designSnapThreshold'));
+    });
+    document.getElementById('designSnapThreshold')?.addEventListener('change', () => {
+        updateDesignSnapSetting('threshold', valueOfField('designSnapThreshold'), { announce: true });
+    });
+    document.getElementById('designSnapResetBtn')?.addEventListener('click', () => {
+        resetDesignSnapSettings({ announce: true });
+    });
+    document.querySelectorAll('[data-snap-preset]').forEach((button) => {
+        if (!(button instanceof HTMLButtonElement)) {
+            return;
+        }
+        button.addEventListener('click', () => {
+            const presetKey = String(button.dataset.snapPreset || 'balanced');
+            applyDesignSnapPreset(presetKey, { announce: true });
+        });
     });
 
     document.getElementById('duplicateDesignElementBtn')?.addEventListener('click', () => {
@@ -618,6 +875,63 @@ function bindEvents() {
     document.getElementById('designLayerTopBtn')?.addEventListener('click', () => {
         reorderSelectedDesignElement('to_front');
     });
+    document.getElementById('designAlignLeftBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementToCanvas('left');
+    });
+    document.getElementById('designAlignCenterBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementToCanvas('center');
+    });
+    document.getElementById('designAlignRightBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementToCanvas('right');
+    });
+    document.getElementById('designAlignTopBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementToCanvas('top');
+    });
+    document.getElementById('designAlignMiddleBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementToCanvas('middle');
+    });
+    document.getElementById('designAlignBottomBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementToCanvas('bottom');
+    });
+    document.getElementById('designAlignSelLeftBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementsToSelection('left');
+    });
+    document.getElementById('designAlignSelCenterBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementsToSelection('center');
+    });
+    document.getElementById('designAlignSelRightBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementsToSelection('right');
+    });
+    document.getElementById('designAlignSelTopBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementsToSelection('top');
+    });
+    document.getElementById('designAlignSelMiddleBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementsToSelection('middle');
+    });
+    document.getElementById('designAlignSelBottomBtn')?.addEventListener('click', () => {
+        alignSelectedDesignElementsToSelection('bottom');
+    });
+    document.getElementById('designDistributeHBtn')?.addEventListener('click', () => {
+        distributeSelectedDesignElements('horizontal', 'edges');
+    });
+    document.getElementById('designDistributeVBtn')?.addEventListener('click', () => {
+        distributeSelectedDesignElements('vertical', 'edges');
+    });
+    document.getElementById('designDistributeCenterHBtn')?.addEventListener('click', () => {
+        distributeSelectedDesignElements('horizontal', 'centers');
+    });
+    document.getElementById('designDistributeCenterVBtn')?.addEventListener('click', () => {
+        distributeSelectedDesignElements('vertical', 'centers');
+    });
+    document.getElementById('designCopyStyleBtn')?.addEventListener('click', () => {
+        copySelectedDesignStyle();
+    });
+    document.getElementById('designPasteStyleBtn')?.addEventListener('click', () => {
+        pasteSelectedDesignStyle();
+    });
+    document.getElementById('designToggleLockBtn')?.addEventListener('click', () => {
+        toggleSelectedDesignElementLock();
+    });
 
     document.getElementById('importFigmaJsonBtn')?.addEventListener('click', () => {
         document.getElementById('importFigmaJsonFile')?.click();
@@ -633,7 +947,7 @@ function bindEvents() {
         const profile = buildFigmaNamingProfile(config);
         const moduleCount = Object.keys(profile.moduleAliases || {}).length;
         const elementCount = Object.keys(profile.elementAliases || {}).length;
-        setStatus(`Preset de nomenclatura aplicado (${moduleCount} modulos | ${elementCount} tipos).`, 'ok');
+        setStatus(`Preset de nomenclatura aplicado (${moduleCount} módulos | ${elementCount} tipos).`, 'ok');
     });
     document.getElementById('resetFigmaNamingRulesBtn')?.addEventListener('click', () => {
         currentContext.figmaNamingConfig = createDefaultFigmaNamingConfig();
@@ -724,6 +1038,128 @@ function getSelectedMiniPresetId() {
         : MINI_GUIDE_PRESET_NONE;
 }
 
+function normalizeTemplatePalette(rawPalette, fallbackPalette = null) {
+    const defaultPalette = Array.isArray(TEMPLATE_PRESETS[DEFAULT_TEMPLATE_ID]?.fallbackPalette)
+        ? TEMPLATE_PRESETS[DEFAULT_TEMPLATE_ID].fallbackPalette
+        : ['#0f1117', '#f8fafc', '#d1d5db', '#6b7280', '#111827', '#9ca3af'];
+    const baseSource = Array.isArray(fallbackPalette) && fallbackPalette.length
+        ? fallbackPalette
+        : defaultPalette;
+    const safeBase = [];
+
+    for (let index = 0; index < TEMPLATE_COLOR_LIMIT; index += 1) {
+        const defaultHex = normalizeHex(defaultPalette[index], '#0f1117');
+        const fallbackHex = normalizeHex(baseSource[index], defaultHex);
+        safeBase.push(fallbackHex);
+    }
+
+    const source = Array.isArray(rawPalette) ? rawPalette : [];
+    return safeBase.map((fallbackHex, index) => normalizeHex(source[index], fallbackHex));
+}
+
+function getThemePresetFallbackPalette(themeClassOrKey = DEFAULT_TEMPLATE_ID) {
+    const requested = String(themeClassOrKey || '').trim().toLowerCase();
+    const resolvedThemeKey = Object.prototype.hasOwnProperty.call(TEMPLATE_PRESETS, requested)
+        ? requested
+        : getThemeKeyFromThemeClass(themeClassOrKey);
+    const source = TEMPLATE_PRESETS[resolvedThemeKey] || TEMPLATE_PRESETS[DEFAULT_TEMPLATE_ID];
+    return normalizeTemplatePalette(source?.fallbackPalette);
+}
+
+function setTemplatePaletteTouched(value = true) {
+    currentContext.templatePaletteTouched = Boolean(value);
+}
+
+function isTemplatePaletteTouched() {
+    return Boolean(currentContext.templatePaletteTouched);
+}
+
+function isTemplateColorOverrideEnabled() {
+    const field = document.getElementById('customTemplateUsePaletteToggle');
+    return Boolean(field instanceof HTMLInputElement && field.checked);
+}
+
+function applyTemplatePaletteToForm(palette) {
+    const safePalette = normalizeTemplatePalette(palette);
+    TEMPLATE_COLOR_INPUT_IDS.forEach((fieldId, index) => {
+        const field = document.getElementById(fieldId);
+        if (field instanceof HTMLInputElement) {
+            field.value = safePalette[index];
+        }
+    });
+}
+
+function getTemplatePaletteFromForm(fallbackPalette = null) {
+    const rawPalette = TEMPLATE_COLOR_INPUT_IDS.map((fieldId) => {
+        const field = document.getElementById(fieldId);
+        return field instanceof HTMLInputElement ? field.value : '';
+    });
+    return normalizeTemplatePalette(rawPalette, fallbackPalette);
+}
+
+function syncTemplatePaletteFromTheme(themeClassOrKey = DEFAULT_TEMPLATE_ID) {
+    const palette = getThemePresetFallbackPalette(themeClassOrKey);
+    applyTemplatePaletteToForm(palette);
+    setTemplatePaletteTouched(false);
+}
+
+function syncTemplatePaletteFromProject() {
+    const themeField = document.getElementById('customTemplateTheme');
+    const basePalette = getThemePresetFallbackPalette(
+        themeField instanceof HTMLSelectElement ? themeField.value : DEFAULT_TEMPLATE_ID
+    );
+    const projectPalette = Array.isArray(currentContext.payload?.identity?.colors)
+        ? currentContext.payload.identity.colors
+            .map((item) => normalizeHex(item?.hex, ''))
+            .filter(Boolean)
+            .slice(0, TEMPLATE_COLOR_LIMIT)
+        : [];
+
+    if (!projectPalette.length) {
+        setStatus('O projeto ainda nao possui cores para aplicar no template.', 'warn');
+        return;
+    }
+
+    applyTemplatePaletteToForm(normalizeTemplatePalette(projectPalette, basePalette));
+    setTemplatePaletteTouched(true);
+    const forceToggle = document.getElementById('customTemplateUsePaletteToggle');
+    if (forceToggle instanceof HTMLInputElement) {
+        forceToggle.checked = true;
+    }
+    refreshBrandbookPreviewFromBuilder();
+    setStatus('Paleta do projeto aplicada no template.', 'ok');
+}
+
+function resetTemplatePaletteFromTheme() {
+    const themeField = document.getElementById('customTemplateTheme');
+    syncTemplatePaletteFromTheme(
+        themeField instanceof HTMLSelectElement ? themeField.value : DEFAULT_TEMPLATE_ID
+    );
+    refreshBrandbookPreviewFromBuilder();
+    setStatus('Paleta base do tema restaurada no template.', 'ok');
+}
+
+function buildPalettePresetFromBuilder(themeKey = '', activePreset = null) {
+    const safePreset = activePreset && typeof activePreset === 'object'
+        ? activePreset
+        : getTemplatePreset(currentContext.activeTemplateId);
+    const resolvedThemeKey = Object.prototype.hasOwnProperty.call(TEMPLATE_PRESETS, String(themeKey || '').toLowerCase())
+        ? String(themeKey || '').toLowerCase()
+        : getThemeKeyFromThemeClass(safePreset.themeClass);
+    const themeFallbackPalette = getThemePresetFallbackPalette(resolvedThemeKey);
+    const fallbackPalette = getTemplatePaletteFromForm(
+        Array.isArray(safePreset.fallbackPalette) && safePreset.fallbackPalette.length
+            ? safePreset.fallbackPalette
+            : themeFallbackPalette
+    );
+
+    return {
+        fallbackPalette,
+        colorOverrideEnabled: isTemplateColorOverrideEnabled(),
+        colorOverride: fallbackPalette
+    };
+}
+
 function getDefaultPracticalSettings() {
     return {
         logoClearspace: '1x altura do simbolo',
@@ -732,10 +1168,10 @@ function getDefaultPracticalSettings() {
         ratioPrimary: 60,
         ratioSecondary: 30,
         ratioAccent: 10,
-        voiceKeywords: 'claro, confiavel, objetivo',
-        ctaStyle: 'Verbo de acao + beneficio direto',
+        voiceKeywords: 'claro, confiável, objetivo',
+        ctaStyle: 'Verbo de ação + benefício direto',
         imageryDirection: 'Fotos reais com fundo limpo e boa luz',
-        iconStyle: 'Icones simples com cantos suaves',
+        iconStyle: 'Ícones simples com cantos suaves',
         channels: ['web', 'social'],
         requiredAssets: ['logo_color', 'logo_reverse', 'palette_tokens', 'pdf_manual'],
         ownerName: '',
@@ -890,7 +1326,7 @@ function savePracticalSettingsFromForm() {
     persistPracticalSettings(settings);
     renderPracticalPlaybook(settings, currentContext.payload, currentContext.displayMockups);
     refreshBrandbookPreviewFromBuilder();
-    setStatus('Playbook de execucao salvo com sucesso.', 'ok');
+    setStatus('Playbook de execução salvo com sucesso.', 'ok');
 }
 
 function resetPracticalSettings() {
@@ -900,7 +1336,7 @@ function resetPracticalSettings() {
     persistPracticalSettings(defaults);
     renderPracticalPlaybook(defaults, currentContext.payload, currentContext.displayMockups);
     refreshBrandbookPreviewFromBuilder();
-    setStatus('Playbook de execucao restaurado para padrao.', 'ok');
+    setStatus('Playbook de execução restaurado para padrão.', 'ok');
 }
 
 function renderPracticalPlaybook(settings, payload = null, displayMockups = null) {
@@ -936,16 +1372,16 @@ function evaluatePracticalCompleteness(settings, payload, displayMockups) {
     const colorCount = Array.isArray(payload?.identity?.colors) ? payload.identity.colors.length : 0;
 
     const items = [
-        { label: 'Regras de logo preenchidas (respiro e tamanho minimo)', done: Boolean(settings.logoClearspace && settings.logoMinDigital) },
-        { label: 'Proporcao de uso de cor definida (primaria/secundaria/acento)', done: Number(settings.ratioPrimary) + Number(settings.ratioSecondary) + Number(settings.ratioAccent) === 100 },
+        { label: 'Regras de logo preenchidas (respiro e tamanho mínimo)', done: Boolean(settings.logoClearspace && settings.logoMinDigital) },
+        { label: 'Proporção de uso de cor definida (primária/secundária/acento)', done: Number(settings.ratioPrimary) + Number(settings.ratioSecondary) + Number(settings.ratioAccent) === 100 },
         { label: 'Tom verbal documentado (palavras-chave e CTA)', done: Boolean(settings.voiceKeywords && settings.ctaStyle) },
-        { label: 'Direcao visual definida (imagery + iconografia)', done: Boolean(settings.imageryDirection && settings.iconStyle) },
+        { label: 'Direção visual definida (imagery + iconografia)', done: Boolean(settings.imageryDirection && settings.iconStyle) },
         { label: 'Canais de entrega selecionados', done: Array.isArray(settings.channels) && settings.channels.length >= 2 },
-        { label: 'Pacote minimo de ativos selecionado', done: Array.isArray(settings.requiredAssets) && settings.requiredAssets.length >= 4 },
+        { label: 'Pacote mínimo de ativos selecionado', done: Array.isArray(settings.requiredAssets) && settings.requiredAssets.length >= 4 },
         { label: 'Paleta consolidada no projeto', done: colorCount >= 3 },
-        { label: 'Mockups de aplicacao disponiveis', done: mockups.length >= 2 },
+        { label: 'Mockups de aplicação disponíveis', done: mockups.length >= 2 },
         { label: 'Diretriz OG configurada', done: hasOg },
-        { label: 'Responsavel e ciclo de revisao definidos', done: Boolean(settings.ownerName && settings.reviewCycleDays >= 7) }
+        { label: 'Responsável e ciclo de revisão definidos', done: Boolean(settings.ownerName && settings.reviewCycleDays >= 7) }
     ];
 
     const completed = items.filter((item) => item.done).length;
@@ -987,9 +1423,9 @@ async function copyCssTokensToClipboard() {
     const tokens = buildCssTokens(currentContext.practicalSettings || loadPracticalSettings(), currentContext.payload);
     try {
         await navigator.clipboard.writeText(tokens);
-        setStatus('Tokens CSS copiados para area de transferencia.', 'ok');
+        setStatus('Tokens CSS copiados para área de transferência.', 'ok');
     } catch (error) {
-        setStatus('Nao foi possivel copiar os tokens CSS automaticamente.', 'warn');
+        setStatus('Não foi possível copiar os tokens CSS automaticamente.', 'warn');
     }
 }
 
@@ -1016,7 +1452,7 @@ function buildExecutionBrief(settings, payload, displayMockups) {
             total: evaluation.total
         },
         ownership: {
-            ownerName: safe.ownerName || 'Nao definido',
+            ownerName: safe.ownerName || 'Não definido',
             reviewCycleDays: safe.reviewCycleDays
         },
         logo: {
@@ -1064,7 +1500,7 @@ function formatChannelLabel(channel) {
     if (channel === 'social') return 'Social';
     if (channel === 'ads') return 'Ads';
     if (channel === 'print') return 'Impresso';
-    if (channel === 'presentation') return 'Apresentacao';
+    if (channel === 'presentation') return 'Apresentação';
     return channel;
 }
 
@@ -1123,10 +1559,40 @@ function normalizeDesignElementType(value, fallback = 'text') {
 
 function getDesignElementTypeLabel(type) {
     if (type === 'title') return 'Título';
+    if (type === 'subtitle') return 'Subtítulo';
+    if (type === 'bullet_list') return 'Lista';
     if (type === 'shape') return 'Bloco';
+    if (type === 'shape_rect') return 'Retângulo';
+    if (type === 'shape_round_rect') return 'Retângulo Arredondado';
+    if (type === 'shape_parallelogram') return 'Paralelogramo';
+    if (type === 'shape_trapezoid') return 'Trapézio';
+    if (type === 'shape_ellipse') return 'Elipse';
+    if (type === 'shape_triangle') return 'Triângulo';
+    if (type === 'shape_diamond') return 'Losango';
+    if (type === 'shape_pentagon') return 'Pentágono';
+    if (type === 'shape_hexagon') return 'Hexágono';
+    if (type === 'shape_octagon') return 'Octógono';
+    if (type === 'shape_star') return 'Estrela';
+    if (type === 'shape_heart') return 'Coração';
+    if (type === 'shape_cloud') return 'Nuvem';
+    if (type === 'shape_line') return 'Linha';
+    if (type === 'shape_arrow_right') return 'Seta Direita';
+    if (type === 'shape_arrow_left') return 'Seta Esquerda';
+    if (type === 'shape_arrow_up') return 'Seta Cima';
+    if (type === 'shape_arrow_down') return 'Seta Baixo';
+    if (type === 'shape_chevron_right') return 'Chevron Direita';
+    if (type === 'shape_chevron_left') return 'Chevron Esquerda';
     if (type === 'logo_box') return 'Logo Box';
     if (type === 'color_row') return 'Linha de Paleta';
     if (type === 'mockup_slot') return 'Slot de Mockup';
+    if (type === 'cta_button') return 'Botão CTA';
+    if (type === 'divider') return 'Divisor';
+    if (type === 'stat_card') return 'Card Métrica';
+    if (type === 'tag_chip') return 'Tag';
+    if (type === 'info_card') return 'Info Card';
+    if (type === 'quote_block') return 'Citação';
+    if (type === 'timeline_step') return 'Etapa Timeline';
+    if (type === 'comparison_card') return 'Comparação';
     return 'Texto';
 }
 
@@ -1159,6 +1625,32 @@ function createDefaultDesignElement(type = 'text', position = {}) {
             opacity: 100,
             align: 'left'
         },
+        subtitle: {
+            x: 80,
+            y: 168,
+            w: 760,
+            h: 58,
+            text: 'Subtítulo estratégico',
+            fontSize: 32,
+            color: '#1f2b45',
+            bg: '#ffffff',
+            radius: 0,
+            opacity: 100,
+            align: 'left'
+        },
+        bullet_list: {
+            x: 80,
+            y: 320,
+            w: 640,
+            h: 180,
+            text: 'Ponto 1\\nPonto 2\\nPonto 3',
+            fontSize: 20,
+            color: '#243a60',
+            bg: '#ffffff',
+            radius: 0,
+            opacity: 100,
+            align: 'left'
+        },
         shape: {
             x: 80,
             y: 340,
@@ -1171,6 +1663,266 @@ function createDefaultDesignElement(type = 'text', position = {}) {
             radius: 14,
             opacity: 100,
             align: 'left'
+        },
+        shape_rect: {
+            x: 80,
+            y: 340,
+            w: 260,
+            h: 150,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#eaf2ff',
+            radius: 10,
+            opacity: 100,
+            align: 'left'
+        },
+        shape_round_rect: {
+            x: 360,
+            y: 340,
+            w: 260,
+            h: 150,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#eaf2ff',
+            radius: 32,
+            opacity: 100,
+            align: 'left'
+        },
+        shape_parallelogram: {
+            x: 640,
+            y: 340,
+            w: 240,
+            h: 150,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#e8f1ff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_trapezoid: {
+            x: 900,
+            y: 340,
+            w: 220,
+            h: 150,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#e2edff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_ellipse: {
+            x: 370,
+            y: 340,
+            w: 220,
+            h: 140,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#e6f0ff',
+            radius: 999,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_triangle: {
+            x: 620,
+            y: 340,
+            w: 200,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#dfeaff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_diamond: {
+            x: 850,
+            y: 340,
+            w: 170,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_pentagon: {
+            x: 80,
+            y: 520,
+            w: 180,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#e2edff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_hexagon: {
+            x: 280,
+            y: 520,
+            w: 200,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_octagon: {
+            x: 500,
+            y: 520,
+            w: 190,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_star: {
+            x: 710,
+            y: 520,
+            w: 190,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#dfebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_heart: {
+            x: 920,
+            y: 520,
+            w: 180,
+            h: 170,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#e2edff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_cloud: {
+            x: 80,
+            y: 560,
+            w: 240,
+            h: 150,
+            text: '',
+            fontSize: 16,
+            color: '#1d3968',
+            bg: '#e8f1ff',
+            radius: 62,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_line: {
+            x: 80,
+            y: 540,
+            w: 420,
+            h: 24,
+            text: '',
+            fontSize: 14,
+            color: '#2a4f8f',
+            bg: '#ffffff',
+            radius: 0,
+            opacity: 100,
+            align: 'left'
+        },
+        shape_arrow_right: {
+            x: 520,
+            y: 560,
+            w: 270,
+            h: 120,
+            text: '',
+            fontSize: 15,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_arrow_left: {
+            x: 810,
+            y: 560,
+            w: 270,
+            h: 120,
+            text: '',
+            fontSize: 15,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_arrow_up: {
+            x: 80,
+            y: 500,
+            w: 120,
+            h: 220,
+            text: '',
+            fontSize: 14,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_arrow_down: {
+            x: 220,
+            y: 500,
+            w: 120,
+            h: 220,
+            text: '',
+            fontSize: 14,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_chevron_right: {
+            x: 360,
+            y: 560,
+            w: 150,
+            h: 120,
+            text: '',
+            fontSize: 14,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
+        },
+        shape_chevron_left: {
+            x: 530,
+            y: 560,
+            w: 150,
+            h: 120,
+            text: '',
+            fontSize: 14,
+            color: '#1d3968',
+            bg: '#deebff',
+            radius: 0,
+            opacity: 100,
+            align: 'center'
         },
         logo_box: {
             x: 870,
@@ -1210,6 +1962,110 @@ function createDefaultDesignElement(type = 'text', position = {}) {
             radius: 12,
             opacity: 100,
             align: 'center'
+        },
+        cta_button: {
+            x: 80,
+            y: 540,
+            w: 260,
+            h: 56,
+            text: 'Acessar Brandbook',
+            fontSize: 18,
+            color: '#f8fbff',
+            bg: '#213fa9',
+            radius: 12,
+            opacity: 100,
+            align: 'center'
+        },
+        divider: {
+            x: 80,
+            y: 520,
+            w: 760,
+            h: 28,
+            text: '',
+            fontSize: 14,
+            color: '#4f6b94',
+            bg: '#ffffff',
+            radius: 0,
+            opacity: 100,
+            align: 'left'
+        },
+        stat_card: {
+            x: 860,
+            y: 120,
+            w: 260,
+            h: 150,
+            text: '92%\\nconsistência visual',
+            fontSize: 18,
+            color: '#17355f',
+            bg: '#edf3ff',
+            radius: 14,
+            opacity: 100,
+            align: 'left'
+        },
+        tag_chip: {
+            x: 80,
+            y: 610,
+            w: 220,
+            h: 42,
+            text: '#brand-governance',
+            fontSize: 15,
+            color: '#19388f',
+            bg: '#dfe9ff',
+            radius: 999,
+            opacity: 100,
+            align: 'center'
+        },
+        info_card: {
+            x: 80,
+            y: 240,
+            w: 360,
+            h: 170,
+            text: 'Título do card\\nTexto de apoio com contexto.',
+            fontSize: 18,
+            color: '#17345f',
+            bg: '#edf4ff',
+            radius: 14,
+            opacity: 100,
+            align: 'left'
+        },
+        quote_block: {
+            x: 470,
+            y: 240,
+            w: 420,
+            h: 180,
+            text: '"Marca forte nasce da consistencia visual."\\nEquipe Quotia',
+            fontSize: 20,
+            color: '#183760',
+            bg: '#f4f8ff',
+            radius: 14,
+            opacity: 100,
+            align: 'left'
+        },
+        timeline_step: {
+            x: 80,
+            y: 450,
+            w: 420,
+            h: 110,
+            text: 'Etapa 01\\nDefinir direção visual',
+            fontSize: 17,
+            color: '#1a3966',
+            bg: '#eef4ff',
+            radius: 12,
+            opacity: 100,
+            align: 'left'
+        },
+        comparison_card: {
+            x: 530,
+            y: 450,
+            w: 460,
+            h: 150,
+            text: 'Antes | Depois\\nBaixa consistencia | Sistema unificado',
+            fontSize: 16,
+            color: '#1a385f',
+            bg: '#eef4ff',
+            radius: 12,
+            opacity: 100,
+            align: 'left'
         }
     };
     const base = defaults[normalizedType] || defaults.text;
@@ -1226,8 +2082,367 @@ function createDefaultDesignElement(type = 'text', position = {}) {
         bg: normalizeHex(position.bg ?? base.bg, '#ffffff'),
         radius: clampNumber(position.radius, 0, 120, base.radius),
         opacity: clampNumber(position.opacity, 5, 100, base.opacity),
-        align: normalizeDesignAlign(position.align ?? base.align)
+        align: normalizeDesignAlign(position.align ?? base.align),
+        locked: Boolean(position.locked ?? false)
     };
+}
+
+function setActiveDesignRibbonTab(tabId = 'home') {
+    const ribbon = document.getElementById('designStudioRibbon');
+    if (!(ribbon instanceof HTMLElement)) {
+        return;
+    }
+    const tabs = Array.from(ribbon.querySelectorAll('[data-design-ribbon-tab]')).filter((item) => item instanceof HTMLButtonElement);
+    const panels = Array.from(ribbon.querySelectorAll('[data-design-ribbon-panel]')).filter((item) => item instanceof HTMLElement);
+    if (!tabs.length || !panels.length) {
+        return;
+    }
+
+    const preferredTab = String(tabId || '').toLowerCase();
+    const validTab = tabs.some((button) => String(button.dataset.designRibbonTab || '').toLowerCase() === preferredTab)
+        ? preferredTab
+        : String(tabs[0].dataset.designRibbonTab || 'home').toLowerCase();
+
+    tabs.forEach((button) => {
+        const key = String(button.dataset.designRibbonTab || '').toLowerCase();
+        const isActive = key === validTab;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    panels.forEach((panel) => {
+        const key = String(panel.dataset.designRibbonPanel || '').toLowerCase();
+        const isActive = key === validTab;
+        panel.classList.toggle('is-active', isActive);
+        panel.hidden = !isActive;
+    });
+    if (validTab !== 'insert') {
+        closeAllDesignInsertLibraries();
+    }
+}
+
+function getDesignInsertLibraries() {
+    return [
+        { key: 'text', toggleId: 'designInsertTextToggle', panelId: 'designInsertTextPanel' },
+        { key: 'shapes', toggleId: 'designInsertShapesToggle', panelId: 'designInsertShapesPanel' },
+        { key: 'elements', toggleId: 'designInsertElementsToggle', panelId: 'designInsertElementsPanel' },
+        { key: 'media', toggleId: 'designInsertMediaToggle', panelId: 'designInsertMediaPanel' }
+    ];
+}
+
+function setDesignInsertLibraryOpen(libraryKey, open) {
+    const key = String(libraryKey || '').toLowerCase();
+    const library = getDesignInsertLibraries().find((item) => item.key === key);
+    if (!library) {
+        return;
+    }
+    const panel = document.getElementById(library.panelId);
+    const toggle = document.getElementById(library.toggleId);
+    if (!(panel instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement)) {
+        return;
+    }
+    const isOpen = Boolean(open);
+    panel.hidden = !isOpen;
+    panel.classList.toggle('is-open', isOpen);
+    toggle.classList.toggle('is-active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function closeAllDesignInsertLibraries(exceptKey = '') {
+    const normalizedExcept = String(exceptKey || '').toLowerCase();
+    getDesignInsertLibraries().forEach((library) => {
+        if (normalizedExcept && library.key === normalizedExcept) {
+            return;
+        }
+        setDesignInsertLibraryOpen(library.key, false);
+    });
+}
+
+function setActiveDesignInspectorTab(tabId = 'content') {
+    const inspector = document.querySelector('#designerStudio .designer-inspector');
+    if (!(inspector instanceof HTMLElement)) {
+        return;
+    }
+    const tabs = Array.from(inspector.querySelectorAll('[data-design-inspector-tab]')).filter((item) => item instanceof HTMLButtonElement);
+    const panels = Array.from(inspector.querySelectorAll('[data-design-inspector-panel]')).filter((item) => item instanceof HTMLElement);
+    if (!tabs.length || !panels.length) {
+        return;
+    }
+    refreshDesignInspectorTabsAvailability();
+
+    const preferredTab = String(tabId || '').toLowerCase();
+    const visibleTabs = tabs.filter((button) => !button.hidden);
+    const sourceTabs = visibleTabs.length ? visibleTabs : tabs;
+    const validTab = sourceTabs.some((button) => String(button.dataset.designInspectorTab || '').toLowerCase() === preferredTab)
+        ? preferredTab
+        : String(sourceTabs[0].dataset.designInspectorTab || 'content').toLowerCase();
+
+    tabs.forEach((button) => {
+        const key = String(button.dataset.designInspectorTab || '').toLowerCase();
+        const isActive = key === validTab;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    panels.forEach((panel) => {
+        const key = String(panel.dataset.designInspectorPanel || '').toLowerCase();
+        const isActive = key === validTab;
+        panel.classList.toggle('is-active', isActive);
+        panel.hidden = !isActive;
+    });
+}
+
+function refreshDesignInspectorTabsAvailability() {
+    const inspector = document.querySelector('#designerStudio .designer-inspector');
+    if (!(inspector instanceof HTMLElement)) {
+        return;
+    }
+    const tabs = Array.from(inspector.querySelectorAll('[data-design-inspector-tab]')).filter((item) => item instanceof HTMLButtonElement);
+    const panels = Array.from(inspector.querySelectorAll('[data-design-inspector-panel]')).filter((item) => item instanceof HTMLElement);
+    if (!tabs.length || !panels.length) {
+        return;
+    }
+
+    tabs.forEach((button) => {
+        const key = String(button.dataset.designInspectorTab || '').toLowerCase();
+        const panel = panels.find((item) => String(item.dataset.designInspectorPanel || '').toLowerCase() === key) || null;
+        const hasContent = Boolean(panel?.querySelector('.builder-field, .actions .btn, .builder-meta'));
+        button.hidden = !hasContent;
+        button.disabled = !hasContent;
+        if (panel) {
+            panel.classList.toggle('is-empty', !hasContent);
+        }
+    });
+}
+
+function setupDesignInspectorTabs() {
+    const inspector = document.querySelector('#designerStudio .designer-inspector');
+    if (!(inspector instanceof HTMLElement)) {
+        return;
+    }
+    if (inspector.dataset.tabsReady === '1') {
+        return;
+    }
+
+    inspector.querySelectorAll('[data-design-inspector-tab]').forEach((tabButton) => {
+        if (!(tabButton instanceof HTMLButtonElement)) {
+            return;
+        }
+        tabButton.addEventListener('click', () => {
+            setActiveDesignInspectorTab(tabButton.dataset.designInspectorTab || 'content');
+        });
+    });
+    refreshDesignInspectorTabsAvailability();
+    setActiveDesignInspectorTab('content');
+    inspector.dataset.tabsReady = '1';
+}
+
+function mountDesignRibbonNode(targetId, node) {
+    const target = document.getElementById(String(targetId || ''));
+    if (!(target instanceof HTMLElement) || !(node instanceof HTMLElement)) {
+        return false;
+    }
+    target.appendChild(node);
+    return true;
+}
+
+function optimizeDesignRibbonCompactFields() {
+    const ribbon = document.getElementById('designStudioRibbon');
+    if (!(ribbon instanceof HTMLElement)) {
+        return;
+    }
+
+    ribbon.querySelectorAll('.builder-field').forEach((field) => {
+        if (!(field instanceof HTMLElement)) {
+            return;
+        }
+        field.classList.add('is-ribbon-compact-field');
+        const label = field.querySelector('span');
+        const labelText = label ? String(label.textContent || '').trim() : '';
+        const control = field.querySelector('input, select, textarea');
+        if (!control || !(control instanceof HTMLElement) || !labelText) {
+            return;
+        }
+        if (!control.getAttribute('title')) {
+            control.setAttribute('title', labelText);
+        }
+        if (!control.getAttribute('aria-label')) {
+            control.setAttribute('aria-label', labelText);
+        }
+    });
+
+    ribbon.querySelectorAll('.designer-snap-preset[data-tooltip]').forEach((button) => {
+        if (!(button instanceof HTMLButtonElement)) {
+            return;
+        }
+        const tooltip = String(button.dataset.tooltip || button.getAttribute('aria-label') || '').trim();
+        if (!tooltip) {
+            return;
+        }
+        button.setAttribute('title', tooltip);
+        if (!button.getAttribute('aria-label')) {
+            button.setAttribute('aria-label', tooltip);
+        }
+    });
+}
+
+function setupDesignInsertLibraries() {
+    const studio = document.getElementById('designerStudio');
+    if (!(studio instanceof HTMLElement)) {
+        return;
+    }
+    if (studio.dataset.insertLibrariesReady === '1') {
+        return;
+    }
+
+    const libraries = getDesignInsertLibraries().map((item) => ({
+        ...item,
+        toggle: document.getElementById(item.toggleId),
+        panel: document.getElementById(item.panelId)
+    })).filter((item) => item.toggle instanceof HTMLButtonElement && item.panel instanceof HTMLElement);
+
+    if (!libraries.length) {
+        return;
+    }
+
+    libraries.forEach((library) => {
+        const toggle = library.toggle;
+        const panel = library.panel;
+        if (!(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) {
+            return;
+        }
+        toggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+            if (isOpen) {
+                setDesignInsertLibraryOpen(library.key, false);
+                return;
+            }
+            closeAllDesignInsertLibraries(library.key);
+            setDesignInsertLibraryOpen(library.key, true);
+        });
+
+        panel.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) {
+                return;
+            }
+            const addButton = target.closest('[data-design-add]');
+            if (addButton) {
+                closeAllDesignInsertLibraries();
+            }
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return;
+        }
+        const isInsideLibrary = libraries.some((library) => {
+            const toggle = library.toggle;
+            const panel = library.panel;
+            return Boolean(toggle instanceof HTMLElement && panel instanceof HTMLElement && (toggle.contains(target) || panel.contains(target)));
+        });
+        if (isInsideLibrary) {
+            return;
+        }
+        closeAllDesignInsertLibraries();
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeAllDesignInsertLibraries();
+        }
+    });
+
+    closeAllDesignInsertLibraries();
+    studio.dataset.insertLibrariesReady = '1';
+}
+
+function setupDesignStudioRibbon() {
+    const studio = document.getElementById('designerStudio');
+    const ribbon = document.getElementById('designStudioRibbon');
+    if (!(studio instanceof HTMLElement) || !(ribbon instanceof HTMLElement)) {
+        return;
+    }
+    if (ribbon.dataset.ribbonReady === '1') {
+        return;
+    }
+
+    let movedAny = false;
+    const tryMount = (targetId, node) => {
+        const moved = mountDesignRibbonNode(targetId, node);
+        movedAny = movedAny || moved;
+    };
+
+    tryMount('designRibbonHomeCore', document.getElementById('designPageSelect')?.closest('.builder-field'));
+    tryMount('designRibbonHomeCore', document.getElementById('addDesignPageBtn')?.closest('.actions'));
+    tryMount('designRibbonHomeSnap', document.getElementById('designSnapResetBtn')?.closest('.designer-snap-panel'));
+
+    tryMount('designRibbonInsertText', document.getElementById('designInsertSourceText'));
+    tryMount('designRibbonInsertIllustrations', document.getElementById('designInsertSourceIllustrations'));
+    tryMount('designRibbonInsertElements', document.getElementById('designInsertSourceElements'));
+    tryMount('designRibbonInsertMedia', document.getElementById('designInsertSourceMedia'));
+
+    tryMount('designRibbonArrangeEdit', document.getElementById('duplicateDesignElementBtn')?.closest('.actions'));
+    tryMount('designRibbonArrangeResize', document.getElementById('designResizeWMinusBtn')?.closest('.actions'));
+    tryMount('designRibbonArrangeLayer', document.getElementById('designLayerBackBtn')?.closest('.actions'));
+
+    tryMount('designRibbonAlignCanvas', document.getElementById('designAlignLeftBtn')?.closest('.actions'));
+    tryMount('designRibbonAlignSelection', document.getElementById('designAlignSelLeftBtn')?.closest('.actions'));
+
+    tryMount('designRibbonStyleTools', document.getElementById('designCopyStyleBtn')?.closest('.actions'));
+    tryMount('designRibbonStyleHints', studio.querySelector('.designer-shortcuts-note'));
+
+    tryMount('designRibbonIntegrationMap', studio.querySelector('.designer-import .designer-mapping'));
+    tryMount('designRibbonIntegrationIo', document.getElementById('importFigmaJsonBtn')?.closest('.actions'));
+    tryMount('designRibbonTemplateOps', document.getElementById('createCustomTemplateBtn')?.closest('.icon-toolbar'));
+    tryMount('designRibbonPublishOps', document.getElementById('printTemplateBtn')?.closest('.icon-toolbar'));
+
+    const snapPresetBar = ribbon.querySelector('#designRibbonHomeSnap .designer-snap-presets');
+    if (snapPresetBar instanceof HTMLElement) {
+        ['designSnapGridBtn', 'designSnapElementBtn'].forEach((buttonId) => {
+            const button = document.getElementById(buttonId);
+            if (button instanceof HTMLElement) {
+                snapPresetBar.appendChild(button);
+            }
+        });
+    }
+
+    if (movedAny) {
+        studio.querySelectorAll('.designer-controls').forEach((block) => {
+            if (block instanceof HTMLElement) {
+                block.classList.add('is-ribbon-source-empty');
+            }
+        });
+        const sourceImport = studio.querySelector('.designer-import');
+        if (sourceImport instanceof HTMLElement) {
+            sourceImport.classList.add('is-ribbon-source-empty');
+        }
+    }
+
+    const shortcutsNote = ribbon.querySelector('#designRibbonStyleHints .designer-shortcuts-note');
+    if (shortcutsNote instanceof HTMLElement) {
+        const noteText = String(shortcutsNote.textContent || '').trim();
+        if (noteText && !shortcutsNote.getAttribute('title')) {
+            shortcutsNote.setAttribute('title', noteText);
+        }
+    }
+
+    refreshDesignInspectorTabsAvailability();
+
+    ribbon.querySelectorAll('[data-design-ribbon-tab]').forEach((tabButton) => {
+        if (!(tabButton instanceof HTMLButtonElement)) {
+            return;
+        }
+        tabButton.addEventListener('click', () => {
+            setActiveDesignRibbonTab(tabButton.dataset.designRibbonTab || 'home');
+        });
+    });
+    optimizeDesignRibbonCompactFields();
+    setupDesignInsertLibraries();
+    setActiveDesignRibbonTab('home');
+    ribbon.dataset.ribbonReady = '1';
 }
 
 function createDefaultDesignPage(name = 'Página 1', moduleId = 'cover') {
@@ -1248,7 +2463,8 @@ function createDefaultDesignStudio() {
         source: 'manual',
         pages: [page],
         selectedPageId: page.id,
-        selectedElementId: page.elements[0]?.id || ''
+        selectedElementId: page.elements[0]?.id || '',
+        selectedElementIds: page.elements[0]?.id ? [page.elements[0].id] : []
     });
 }
 
@@ -1419,20 +2635,60 @@ function fillFigmaNamingConfigFields(config = currentContext.figmaNamingConfig) 
 function sanitizeDesignElement(rawElement) {
     const source = rawElement && typeof rawElement === 'object' ? rawElement : {};
     const type = normalizeDesignElementType(source.type, 'text');
+    const defaultSize = {
+        title: { w: 760, h: 90, fontSize: 56, radius: 0, align: 'left' },
+        subtitle: { w: 760, h: 58, fontSize: 32, radius: 0, align: 'left' },
+        text: { w: 760, h: 120, fontSize: 22, radius: 0, align: 'left' },
+        bullet_list: { w: 640, h: 180, fontSize: 20, radius: 0, align: 'left' },
+        shape: { w: 320, h: 140, fontSize: 18, radius: 14, align: 'left' },
+        shape_rect: { w: 260, h: 150, fontSize: 16, radius: 10, align: 'left' },
+        shape_round_rect: { w: 260, h: 150, fontSize: 16, radius: 32, align: 'left' },
+        shape_parallelogram: { w: 240, h: 150, fontSize: 16, radius: 0, align: 'center' },
+        shape_trapezoid: { w: 220, h: 150, fontSize: 16, radius: 0, align: 'center' },
+        shape_ellipse: { w: 220, h: 140, fontSize: 16, radius: 999, align: 'center' },
+        shape_triangle: { w: 200, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_diamond: { w: 170, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_pentagon: { w: 180, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_hexagon: { w: 200, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_octagon: { w: 190, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_star: { w: 190, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_heart: { w: 180, h: 170, fontSize: 16, radius: 0, align: 'center' },
+        shape_cloud: { w: 240, h: 150, fontSize: 16, radius: 62, align: 'center' },
+        shape_line: { w: 420, h: 24, fontSize: 14, radius: 0, align: 'left' },
+        shape_arrow_right: { w: 270, h: 120, fontSize: 15, radius: 0, align: 'center' },
+        shape_arrow_left: { w: 270, h: 120, fontSize: 15, radius: 0, align: 'center' },
+        shape_arrow_up: { w: 120, h: 220, fontSize: 14, radius: 0, align: 'center' },
+        shape_arrow_down: { w: 120, h: 220, fontSize: 14, radius: 0, align: 'center' },
+        shape_chevron_right: { w: 150, h: 120, fontSize: 14, radius: 0, align: 'center' },
+        shape_chevron_left: { w: 150, h: 120, fontSize: 14, radius: 0, align: 'center' },
+        logo_box: { w: 240, h: 140, fontSize: 26, radius: 10, align: 'center' },
+        color_row: { w: 740, h: 70, fontSize: 14, radius: 10, align: 'left' },
+        mockup_slot: { w: 280, h: 300, fontSize: 16, radius: 12, align: 'center' },
+        cta_button: { w: 260, h: 56, fontSize: 18, radius: 12, align: 'center' },
+        divider: { w: 760, h: 28, fontSize: 14, radius: 0, align: 'left' },
+        stat_card: { w: 260, h: 150, fontSize: 18, radius: 14, align: 'left' },
+        tag_chip: { w: 220, h: 42, fontSize: 15, radius: 999, align: 'center' },
+        info_card: { w: 360, h: 170, fontSize: 18, radius: 14, align: 'left' },
+        quote_block: { w: 420, h: 180, fontSize: 20, radius: 14, align: 'left' },
+        timeline_step: { w: 420, h: 110, fontSize: 17, radius: 12, align: 'left' },
+        comparison_card: { w: 460, h: 150, fontSize: 16, radius: 12, align: 'left' }
+    };
+    const typeDefaults = defaultSize[type] || defaultSize.text;
     return {
         id: String(source.id || createLocalUid('el')),
         type,
         x: clampNumber(source.x, 0, 2400, 80),
         y: clampNumber(source.y, 0, 1600, 80),
-        w: clampNumber(source.w, 24, 2400, type === 'title' ? 760 : 320),
-        h: clampNumber(source.h, 24, 1600, type === 'title' ? 90 : 120),
+        w: clampNumber(source.w, DESIGN_MIN_ELEMENT_SIZE, 2400, typeDefaults.w),
+        h: clampNumber(source.h, DESIGN_MIN_ELEMENT_SIZE, 1600, typeDefaults.h),
         text: String(source.text || '').slice(0, 1200),
-        fontSize: clampNumber(source.fontSize, 8, 160, type === 'title' ? 56 : 22),
+        fontSize: clampNumber(source.fontSize, 8, 160, typeDefaults.fontSize),
         color: normalizeHex(source.color, '#142036'),
         bg: normalizeHex(source.bg, '#ffffff'),
-        radius: clampNumber(source.radius, 0, 160, type === 'shape' ? 14 : 0),
-        opacity: clampNumber(source.opacity, 5, 100, type === 'shape' ? 100 : 100),
-        align: normalizeDesignAlign(source.align, type === 'title' ? 'left' : 'left')
+        radius: clampNumber(source.radius, 0, 999, typeDefaults.radius),
+        opacity: clampNumber(source.opacity, 5, 100, 100),
+        align: normalizeDesignAlign(source.align, typeDefaults.align),
+        locked: Boolean(source.locked)
     };
 }
 
@@ -1481,13 +2737,33 @@ function sanitizeDesignStudio(rawStudio, options = {}) {
     const safeSelectedElementId = activePage && activePage.elements.some((el) => el.id === selectedElementIdRaw)
         ? selectedElementIdRaw
         : (activePage?.elements?.[0]?.id || '');
+    const rawSelectedIds = Array.isArray(source.selectedElementIds)
+        ? source.selectedElementIds.map((item) => String(item || '').trim()).filter(Boolean)
+        : [];
+    const validElementIds = new Set(Array.isArray(activePage?.elements) ? activePage.elements.map((item) => item.id) : []);
+    const safeSelectedIds = [];
+    rawSelectedIds.forEach((id) => {
+        if (!validElementIds.has(id)) {
+            return;
+        }
+        if (!safeSelectedIds.includes(id)) {
+            safeSelectedIds.push(id);
+        }
+    });
+    if (safeSelectedElementId && validElementIds.has(safeSelectedElementId) && !safeSelectedIds.includes(safeSelectedElementId)) {
+        safeSelectedIds.unshift(safeSelectedElementId);
+    }
+    if (!safeSelectedIds.length && safeSelectedElementId) {
+        safeSelectedIds.push(safeSelectedElementId);
+    }
 
     return {
         schema: DESIGN_STUDIO_SCHEMA,
         source: String(source.source || 'manual').slice(0, 40) || 'manual',
         pages,
         selectedPageId: safeSelectedPageId,
-        selectedElementId: safeSelectedElementId
+        selectedElementId: safeSelectedElementId,
+        selectedElementIds: safeSelectedIds
     };
 }
 
@@ -1505,8 +2781,220 @@ function getSelectedDesignElement() {
     if (!page) {
         return null;
     }
-    const selectedId = String(currentContext.designStudio?.selectedElementId || '');
+    const studio = sanitizeDesignStudio(currentContext.designStudio, { ensurePage: false });
+    const selectedId = String(studio.selectedElementId || '');
     return page.elements.find((item) => item.id === selectedId) || page.elements[0] || null;
+}
+
+function getSelectedDesignElementIds(studioInput = currentContext.designStudio) {
+    const studio = ensureDesignStudioSelection(sanitizeDesignStudio(studioInput, { ensurePage: false }));
+    const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+    if (!page) {
+        return [];
+    }
+    const allowed = new Set(page.elements.map((item) => item.id));
+    const selectedIds = Array.isArray(studio.selectedElementIds)
+        ? studio.selectedElementIds.filter((id) => allowed.has(id))
+        : [];
+    const primaryId = String(studio.selectedElementId || '');
+    if (primaryId && allowed.has(primaryId) && !selectedIds.includes(primaryId)) {
+        selectedIds.unshift(primaryId);
+    }
+    if (!selectedIds.length && primaryId && allowed.has(primaryId)) {
+        selectedIds.push(primaryId);
+    }
+    return selectedIds;
+}
+
+function getSelectedDesignElements(studioInput = currentContext.designStudio) {
+    const studio = ensureDesignStudioSelection(sanitizeDesignStudio(studioInput, { ensurePage: false }));
+    const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+    if (!page) {
+        return [];
+    }
+    const selectedIds = getSelectedDesignElementIds(studio);
+    const selectedIdSet = new Set(selectedIds);
+    return page.elements.filter((item) => selectedIdSet.has(item.id));
+}
+
+function getSelectedUnlockedDesignElements(studioInput = currentContext.designStudio) {
+    return getSelectedDesignElements(studioInput).filter((item) => !item.locked);
+}
+
+function sanitizeDesignSnapSettings(rawSettings = currentContext.designSnapSettings) {
+    const source = rawSettings && typeof rawSettings === 'object' ? rawSettings : {};
+    return {
+        gridEnabled: Boolean(source.gridEnabled),
+        elementEnabled: Boolean(source.elementEnabled),
+        gridSize: clampNumber(source.gridSize, 4, 120, DESIGN_SNAP_GRID_SIZE),
+        threshold: clampNumber(source.threshold, 2, 24, DESIGN_SNAP_THRESHOLD)
+    };
+}
+
+function updateDesignCanvasGridVisual(settingsInput = currentContext.designSnapSettings) {
+    const canvas = document.getElementById('designStudioCanvas');
+    if (!canvas) {
+        return;
+    }
+    const settings = sanitizeDesignSnapSettings(settingsInput);
+    const gridSize = Math.round(clampNumber(settings.gridSize, 4, 120, DESIGN_SNAP_GRID_SIZE));
+    canvas.style.setProperty('--designer-grid-size', `${gridSize}px`);
+    canvas.classList.toggle('is-grid-hidden', !settings.gridEnabled);
+}
+
+function getDesignSnapPreset(presetKey = 'balanced') {
+    const key = String(presetKey || '').toLowerCase();
+    return DESIGN_SNAP_PRESETS[key] || DESIGN_SNAP_PRESETS.balanced;
+}
+
+function matchDesignSnapPreset(settingsInput = currentContext.designSnapSettings) {
+    const settings = sanitizeDesignSnapSettings(settingsInput);
+    const presetEntries = Object.entries(DESIGN_SNAP_PRESETS);
+    for (let index = 0; index < presetEntries.length; index += 1) {
+        const [presetKey, preset] = presetEntries[index];
+        if (
+            settings.gridEnabled === Boolean(preset.gridEnabled)
+            && settings.elementEnabled === Boolean(preset.elementEnabled)
+            && Number(settings.gridSize) === Number(preset.gridSize)
+            && Number(settings.threshold) === Number(preset.threshold)
+        ) {
+            return presetKey;
+        }
+    }
+    return '';
+}
+
+function applyDesignSnapPreset(presetKey = 'balanced', options = {}) {
+    const settings = {
+        announce: false,
+        ...options
+    };
+    const preset = getDesignSnapPreset(presetKey);
+    currentContext.designSnapSettings = sanitizeDesignSnapSettings({
+        ...currentContext.designSnapSettings,
+        gridEnabled: Boolean(preset.gridEnabled),
+        elementEnabled: Boolean(preset.elementEnabled),
+        gridSize: Number(preset.gridSize),
+        threshold: Number(preset.threshold)
+    });
+    renderDesignSnapControls();
+
+    if (!settings.announce) {
+        return;
+    }
+    if (!preset.gridEnabled && !preset.elementEnabled) {
+        setStatus(`Preset ${preset.label} aplicado: snap desativado para movimento livre.`, 'ok');
+        return;
+    }
+    setStatus(`Preset ${preset.label} aplicado (${currentContext.designSnapSettings.gridSize}px grade | ${currentContext.designSnapSettings.threshold}px sensibilidade).`, 'ok');
+}
+
+function updateDesignSnapSetting(settingKey, rawValue, options = {}) {
+    const settings = {
+        announce: false,
+        ...options
+    };
+    const key = String(settingKey || '');
+    if (!key || !['gridSize', 'threshold'].includes(key)) {
+        return;
+    }
+    const previous = sanitizeDesignSnapSettings(currentContext.designSnapSettings);
+    const next = sanitizeDesignSnapSettings({
+        ...previous,
+        [key]: rawValue
+    });
+    currentContext.designSnapSettings = next;
+    renderDesignSnapControls();
+
+    if (!settings.announce || previous[key] === next[key]) {
+        return;
+    }
+    if (key === 'gridSize') {
+        setStatus(`Grade de snap ajustada para ${next.gridSize}px.`, 'ok');
+        return;
+    }
+    setStatus(`Sensibilidade de snap ajustada para ${next.threshold}px.`, 'ok');
+}
+
+function resetDesignSnapSettings(options = {}) {
+    const settings = {
+        announce: false,
+        ...options
+    };
+    applyDesignSnapPreset('balanced', { announce: false });
+    if (!settings.announce) {
+        return;
+    }
+    setStatus('Ajustes de snap restaurados para o padrão.', 'ok');
+}
+
+function renderDesignSnapControls() {
+    currentContext.designSnapSettings = sanitizeDesignSnapSettings(currentContext.designSnapSettings);
+    const settings = currentContext.designSnapSettings;
+    const gridBtn = document.getElementById('designSnapGridBtn');
+    const elementBtn = document.getElementById('designSnapElementBtn');
+    const gridSizeInput = document.getElementById('designSnapGridSize');
+    const thresholdInput = document.getElementById('designSnapThreshold');
+    const resetBtn = document.getElementById('designSnapResetBtn');
+    const activePresetKey = matchDesignSnapPreset(settings);
+
+    if (gridBtn instanceof HTMLButtonElement) {
+        const label = settings.gridEnabled ? 'Snap grade ativo' : 'Snap grade desligado';
+        gridBtn.classList.toggle('is-active', settings.gridEnabled);
+        gridBtn.setAttribute('aria-label', label);
+        gridBtn.setAttribute('title', label);
+        gridBtn.setAttribute('data-tooltip', label);
+    }
+    if (elementBtn instanceof HTMLButtonElement) {
+        const label = settings.elementEnabled ? 'Snap elementos ativo' : 'Snap elementos desligado';
+        elementBtn.classList.toggle('is-active', settings.elementEnabled);
+        elementBtn.setAttribute('aria-label', label);
+        elementBtn.setAttribute('title', label);
+        elementBtn.setAttribute('data-tooltip', label);
+    }
+    if (gridSizeInput instanceof HTMLInputElement) {
+        gridSizeInput.value = String(Math.round(settings.gridSize));
+        gridSizeInput.disabled = !settings.gridEnabled;
+    }
+    if (thresholdInput instanceof HTMLInputElement) {
+        thresholdInput.value = String(Math.round(settings.threshold));
+        thresholdInput.disabled = !settings.gridEnabled && !settings.elementEnabled;
+    }
+    if (resetBtn instanceof HTMLButtonElement) {
+        const isDefault = settings.gridEnabled
+            && settings.elementEnabled
+            && Number(settings.gridSize) === DESIGN_SNAP_GRID_SIZE
+            && Number(settings.threshold) === DESIGN_SNAP_THRESHOLD;
+        resetBtn.disabled = isDefault;
+    }
+    document.querySelectorAll('[data-snap-preset]').forEach((button) => {
+        if (!(button instanceof HTMLButtonElement)) {
+            return;
+        }
+        const presetKey = String(button.dataset.snapPreset || '').toLowerCase();
+        const isActive = Boolean(activePresetKey) && presetKey === activePresetKey;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    updateDesignCanvasGridVisual(settings);
+}
+
+function toggleDesignSnapMode(mode = 'grid') {
+    const normalized = String(mode || '').toLowerCase();
+    const settings = sanitizeDesignSnapSettings(currentContext.designSnapSettings);
+    if (normalized === 'grid') {
+        settings.gridEnabled = !settings.gridEnabled;
+        currentContext.designSnapSettings = settings;
+        renderDesignSnapControls();
+        setStatus(settings.gridEnabled ? 'Snap de grade ativado.' : 'Snap de grade desativado.', 'ok');
+        return;
+    }
+    if (normalized === 'element' || normalized === 'elements') {
+        settings.elementEnabled = !settings.elementEnabled;
+        currentContext.designSnapSettings = settings;
+        renderDesignSnapControls();
+        setStatus(settings.elementEnabled ? 'Snap entre elementos ativado.' : 'Snap entre elementos desativado.', 'ok');
+    }
 }
 
 function ensureDesignStudioSelection(studio) {
@@ -1522,6 +3010,17 @@ function ensureDesignStudioSelection(studio) {
     if (!hasSelectedElement) {
         safe.selectedElementId = activePage.elements[0]?.id || '';
     }
+    const elementIds = new Set(activePage.elements.map((item) => item.id));
+    const selectedIds = Array.isArray(safe.selectedElementIds)
+        ? safe.selectedElementIds.filter((id) => elementIds.has(id))
+        : [];
+    if (safe.selectedElementId && elementIds.has(safe.selectedElementId) && !selectedIds.includes(safe.selectedElementId)) {
+        selectedIds.unshift(safe.selectedElementId);
+    }
+    if (!selectedIds.length && safe.selectedElementId) {
+        selectedIds.push(safe.selectedElementId);
+    }
+    safe.selectedElementIds = selectedIds;
     return safe;
 }
 
@@ -1572,7 +3071,9 @@ function setActiveTemplate(templateId, options = {}) {
     }
 
     if (settings.rerender && currentContext.payload) {
-        const sheets = renderBrandbook(currentContext.payload, currentContext.displayMockups, preset.id);
+        const sheets = renderBrandbook(currentContext.payload, currentContext.displayMockups, preset.id, {
+            source: 'template_select'
+        });
         applyTemplateMetadata(currentContext.payload, preset, sheets.length);
         persistLatestManualPayload(currentContext.payload);
         renderPayload(currentContext.payload);
@@ -1603,11 +3104,21 @@ function getTemplatePreset(templateId) {
     const designStudio = safeDesignStudio.pages.length ? safeDesignStudio : null;
     const designStudioEnabled = Boolean(rawPreset?.designStudioEnabled || fallbackPreset.designStudioEnabled);
     const figmaNamingConfig = sanitizeFigmaNamingConfig(rawPreset?.figmaNamingConfig || fallbackPreset.figmaNamingConfig);
+    const baseThemePreset = TEMPLATE_PRESETS[safeThemeKey] || TEMPLATE_PRESETS[DEFAULT_TEMPLATE_ID];
+    const fallbackPalette = normalizeTemplatePalette(
+        rawPreset?.fallbackPalette,
+        baseThemePreset?.fallbackPalette || fallbackPreset.fallbackPalette
+    );
+    const colorOverrideEnabled = Boolean(rawPreset?.colorOverrideEnabled);
+    const colorOverride = normalizeTemplatePalette(rawPreset?.colorOverride, fallbackPalette);
 
     return {
         ...fallbackPreset,
         ...rawPreset,
         themeClass: safeThemeClass,
+        fallbackPalette,
+        colorOverrideEnabled,
+        colorOverride,
         bookMode,
         smartMethod: resolveTemplateSmartMethod(rawPreset || fallbackPreset),
         miniGuideVariant: resolveTemplateMiniGuideVariant(rawPreset || fallbackPreset),
@@ -1639,11 +3150,21 @@ function normalizePresetCandidate(rawPreset) {
     const designStudio = safeDesignStudio.pages.length ? safeDesignStudio : null;
     const designStudioEnabled = Boolean(rawPreset?.designStudioEnabled || fallbackPreset.designStudioEnabled);
     const figmaNamingConfig = sanitizeFigmaNamingConfig(rawPreset?.figmaNamingConfig || fallbackPreset.figmaNamingConfig);
+    const baseThemePreset = TEMPLATE_PRESETS[safeThemeKey] || TEMPLATE_PRESETS[DEFAULT_TEMPLATE_ID];
+    const fallbackPalette = normalizeTemplatePalette(
+        rawPreset?.fallbackPalette,
+        baseThemePreset?.fallbackPalette || fallbackPreset.fallbackPalette
+    );
+    const colorOverrideEnabled = Boolean(rawPreset?.colorOverrideEnabled);
+    const colorOverride = normalizeTemplatePalette(rawPreset?.colorOverride, fallbackPalette);
 
     return {
         ...fallbackPreset,
         ...(rawPreset && typeof rawPreset === 'object' ? rawPreset : {}),
         themeClass: safeThemeClass,
+        fallbackPalette,
+        colorOverrideEnabled,
+        colorOverride,
         bookMode,
         smartMethod,
         miniGuideVariant,
@@ -1978,6 +3499,9 @@ function sanitizeCustomTemplate(id, rawTemplate) {
     const designStudio = safeDesignStudio.pages.length ? safeDesignStudio : null;
     const designStudioEnabled = Boolean(rawTemplate.designStudioEnabled && designStudio);
     const figmaNamingConfig = sanitizeFigmaNamingConfig(rawTemplate.figmaNamingConfig);
+    const fallbackPalette = normalizeTemplatePalette(rawTemplate.fallbackPalette, fallbackSource.fallbackPalette);
+    const colorOverrideEnabled = Boolean(rawTemplate.colorOverrideEnabled);
+    const colorOverride = normalizeTemplatePalette(rawTemplate.colorOverride, fallbackPalette);
 
     return {
         id: String(id),
@@ -1988,9 +3512,9 @@ function sanitizeCustomTemplate(id, rawTemplate) {
         smartMethod,
         miniGuideVariant,
         kicker: String(rawTemplate.kicker || fallbackSource.kicker).trim().slice(0, 90),
-        fallbackPalette: Array.isArray(rawTemplate.fallbackPalette) && rawTemplate.fallbackPalette.length
-            ? rawTemplate.fallbackPalette.slice(0, 6)
-            : fallbackSource.fallbackPalette.slice(0, 6),
+        fallbackPalette,
+        colorOverrideEnabled,
+        colorOverride,
         closing: String(rawTemplate.closing || fallbackSource.closing).trim().slice(0, 180),
         structure: resolvedStructure.map((moduleId, index) => ({
             id: moduleId,
@@ -2126,6 +3650,7 @@ function fillBuilderFields(preset) {
     const restoreBackupButton = document.getElementById('restoreTemplateBackupBtn');
     const downloadBackupButton = document.getElementById('downloadTemplateBackupBtn');
     const useDesignStudioField = document.getElementById('useDesignStudioTemplate');
+    const useTemplatePaletteToggle = document.getElementById('customTemplateUsePaletteToggle');
 
     if (nameField) {
         nameField.value = String(safePreset.name || '').slice(0, 90);
@@ -2151,6 +3676,18 @@ function fillBuilderFields(preset) {
     }
     if (miniPresetField) {
         miniPresetField.value = detectMiniPresetIdFromTemplate(safePreset);
+    }
+    const themeFallbackPalette = getThemePresetFallbackPalette(themeKey);
+    const resolvedPalette = normalizeTemplatePalette(
+        Array.isArray(safePreset.colorOverride) && safePreset.colorOverride.length
+            ? safePreset.colorOverride
+            : safePreset.fallbackPalette,
+        themeFallbackPalette
+    );
+    applyTemplatePaletteToForm(resolvedPalette);
+    setTemplatePaletteTouched(false);
+    if (useTemplatePaletteToggle instanceof HTMLInputElement) {
+        useTemplatePaletteToggle.checked = Boolean(safePreset.colorOverrideEnabled);
     }
     if (removeButton) {
         removeButton.disabled = !Boolean(safePreset.custom);
@@ -2393,7 +3930,7 @@ function clearSelectedBuilderBlockCustomization() {
     });
     syncBuilderCanvasBlock(selectedId);
     renderBuilderInspector();
-    setStatus('Personalizacao do bloco removida.', 'ok');
+    setStatus('Personalização do bloco removida.', 'ok');
 }
 
 function moveSelectedBuilderBlock(direction) {
@@ -2527,12 +4064,43 @@ function createDesignStudioFromStructure(structureIds = currentContext.builderSt
             fontSize: 22
         }));
 
+        if (moduleId === 'cover') {
+            elements.push(createDefaultDesignElement('subtitle', {
+                x: 80,
+                y: 290,
+                w: 860,
+                h: 56,
+                text: '{{project.tag}}'
+            }));
+            elements.push(createDefaultDesignElement('cta_button', {
+                x: 80,
+                y: 620,
+                text: 'Explorar diretrizes'
+            }));
+        }
+        if (moduleId === 'index') {
+            elements.push(createDefaultDesignElement('bullet_list', {
+                x: 80,
+                y: 320,
+                w: 760,
+                h: 260,
+                text: 'Capa\\nPaleta\\nTipografia\\nLogo\\nAplicações'
+            }));
+        }
+
         if (moduleId === 'palette' || moduleId === 'digital') {
             elements.push(createDefaultDesignElement('color_row', {
                 x: 80,
                 y: 630,
                 w: 860,
                 h: 68
+            }));
+        }
+        if (moduleId === 'palette') {
+            elements.push(createDefaultDesignElement('stat_card', {
+                x: 860,
+                y: 320,
+                text: '6\\ncores ativas'
             }));
         }
         if (moduleId === 'logo_system') {
@@ -2560,6 +4128,25 @@ function createDesignStudioFromStructure(structureIds = currentContext.builderSt
                 h: 240,
                 text: 'Checklist operacional e regras de execução'
             }));
+            elements.push(createDefaultDesignElement('bullet_list', {
+                x: 100,
+                y: 350,
+                w: 700,
+                h: 190,
+                text: 'Canal definido\\nCTA validado\\nArquivos exportados\\nResponsável aprovado'
+            }));
+        }
+        if (moduleId === 'digital') {
+            elements.push(createDefaultDesignElement('tag_chip', {
+                x: 80,
+                y: 564,
+                text: '#social #web #ads'
+            }));
+            elements.push(createDefaultDesignElement('divider', {
+                x: 80,
+                y: 530,
+                w: 860
+            }));
         }
 
         page.elements = elements;
@@ -2571,7 +4158,8 @@ function createDesignStudioFromStructure(structureIds = currentContext.builderSt
         source: 'structure',
         pages,
         selectedPageId: pages[0]?.id || '',
-        selectedElementId: pages[0]?.elements?.[0]?.id || ''
+        selectedElementId: pages[0]?.elements?.[0]?.id || '',
+        selectedElementIds: pages[0]?.elements?.[0]?.id ? [pages[0].elements[0].id] : []
     });
 }
 
@@ -2629,7 +4217,10 @@ function withDesignStudioMutation(mutator, options = {}) {
         });
     }
     if (settings.refreshPreview) {
-        refreshBrandbookPreviewFromBuilder();
+        refreshBrandbookPreviewFromBuilder({
+            syncDesignStudioCanvas: false,
+            source: 'design_studio'
+        });
     }
     if (settings.announce) {
         setStatus(settings.announce, settings.announceTone);
@@ -2644,7 +4235,9 @@ function selectDesignPage(pageId, refreshPreview = false) {
         }
         studio.selectedPageId = pageId;
         const page = studio.pages.find((item) => item.id === pageId) || null;
-        studio.selectedElementId = page?.elements?.[0]?.id || '';
+        const firstId = page?.elements?.[0]?.id || '';
+        studio.selectedElementId = firstId;
+        studio.selectedElementIds = firstId ? [firstId] : [];
         return studio;
     }, {
         refreshPreview,
@@ -2657,13 +4250,92 @@ function selectDesignPage(pageId, refreshPreview = false) {
 function selectDesignElement(elementId, options = {}) {
     const settings = {
         refreshPreview: false,
+        additive: false,
+        toggle: false,
         ...options
     };
     withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
+            return studio;
+        }
+        const exists = page.elements.some((item) => item.id === elementId);
+        if (!exists) {
+            return studio;
+        }
+        const currentIds = Array.isArray(studio.selectedElementIds)
+            ? studio.selectedElementIds.map((id) => String(id || '')).filter(Boolean)
+            : [];
+        if (settings.additive) {
+            const nextIds = currentIds.filter((id) => page.elements.some((item) => item.id === id));
+            if (settings.toggle) {
+                if (nextIds.includes(elementId) && nextIds.length > 1) {
+                    studio.selectedElementIds = nextIds.filter((id) => id !== elementId);
+                    studio.selectedElementId = studio.selectedElementIds[0] || elementId;
+                    return studio;
+                }
+                if (!nextIds.includes(elementId)) {
+                    nextIds.push(elementId);
+                }
+                const reordered = [elementId, ...nextIds.filter((id) => id !== elementId)];
+                studio.selectedElementIds = reordered;
+                studio.selectedElementId = elementId;
+                return studio;
+            }
+            if (!nextIds.includes(elementId)) {
+                nextIds.push(elementId);
+            }
+            studio.selectedElementIds = [elementId, ...nextIds.filter((id) => id !== elementId)];
+            studio.selectedElementId = elementId;
+            return studio;
+        }
         studio.selectedElementId = elementId;
+        studio.selectedElementIds = [elementId];
         return studio;
     }, {
         refreshPreview: settings.refreshPreview,
+        renderSelect: false,
+        renderCanvas: true,
+        renderInspector: true
+    });
+}
+
+function selectAllDesignElements() {
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page || !page.elements.length) {
+            return studio;
+        }
+        const ids = page.elements.map((item) => item.id);
+        studio.selectedElementId = ids[ids.length - 1] || ids[0] || '';
+        studio.selectedElementIds = studio.selectedElementId
+            ? [studio.selectedElementId, ...ids.filter((id) => id !== studio.selectedElementId)]
+            : ids;
+        return studio;
+    }, {
+        refreshPreview: false,
+        enableStudio: true,
+        renderSelect: false,
+        renderCanvas: true,
+        renderInspector: true,
+        announce: 'Todos os elementos da página foram selecionados.'
+    });
+}
+
+function reduceDesignSelectionToPrimary() {
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page || !page.elements.length) {
+            return studio;
+        }
+        const selectedId = page.elements.some((item) => item.id === studio.selectedElementId)
+            ? studio.selectedElementId
+            : (page.elements[0]?.id || '');
+        studio.selectedElementId = selectedId;
+        studio.selectedElementIds = selectedId ? [selectedId] : [];
+        return studio;
+    }, {
+        refreshPreview: false,
         renderSelect: false,
         renderCanvas: true,
         renderInspector: true
@@ -2700,21 +4372,76 @@ function updateSelectedDesignElementFromInspector(patch = {}, options = {}) {
     const settings = {
         renderInspector: false,
         refreshPreview: true,
+        allowLocked: false,
+        applyToSelection: false,
         ...options
     };
     withDesignStudioMutation((studio) => {
         const safeStudio = ensureDesignStudioSelection(studio);
-        const selectedElementId = String(safeStudio.selectedElementId || '');
-        const found = findDesignElementById(safeStudio, selectedElementId);
-        if (!found.page || found.index < 0 || !found.element) {
+        const page = safeStudio.pages.find((item) => item.id === safeStudio.selectedPageId) || safeStudio.pages[0] || null;
+        if (!page) {
             return safeStudio;
         }
-        const merged = sanitizeDesignElement({
-            ...found.element,
-            ...(patch && typeof patch === 'object' ? patch : {})
+        const selectedIds = settings.applyToSelection
+            ? getSelectedDesignElementIds(safeStudio)
+            : [String(safeStudio.selectedElementId || '')];
+        const allowedIds = selectedIds
+            .map((id) => String(id || '').trim())
+            .filter(Boolean)
+            .filter((id, index, list) => list.indexOf(id) === index);
+        if (!allowedIds.length) {
+            return safeStudio;
+        }
+        const nextSelection = [];
+        let hasMutation = false;
+        page.elements = page.elements.map((element) => {
+            if (!allowedIds.includes(element.id)) {
+                return element;
+            }
+            nextSelection.push(element.id);
+            if (element.locked && !settings.allowLocked) {
+                return element;
+            }
+            const merged = sanitizeDesignElement({
+                ...element,
+                ...(patch && typeof patch === 'object' ? patch : {})
+            });
+            if (
+                merged.x !== element.x
+                || merged.y !== element.y
+                || merged.w !== element.w
+                || merged.h !== element.h
+                || merged.text !== element.text
+                || merged.fontSize !== element.fontSize
+                || merged.color !== element.color
+                || merged.bg !== element.bg
+                || merged.radius !== element.radius
+                || merged.opacity !== element.opacity
+                || merged.align !== element.align
+                || merged.locked !== element.locked
+                || merged.type !== element.type
+            ) {
+                hasMutation = true;
+            }
+            return merged;
         });
-        found.page.elements[found.index] = merged;
-        safeStudio.selectedElementId = merged.id;
+        if (!nextSelection.length) {
+            const fallbackId = page.elements[0]?.id || '';
+            safeStudio.selectedElementId = fallbackId;
+            safeStudio.selectedElementIds = fallbackId ? [fallbackId] : [];
+            return safeStudio;
+        }
+        const primaryId = allowedIds.includes(String(safeStudio.selectedElementId || ''))
+            ? String(safeStudio.selectedElementId || '')
+            : nextSelection[0];
+        safeStudio.selectedElementId = primaryId;
+        safeStudio.selectedElementIds = [
+            primaryId,
+            ...nextSelection.filter((id) => id !== primaryId)
+        ];
+        if (!hasMutation) {
+            return safeStudio;
+        }
         return safeStudio;
     }, {
         refreshPreview: settings.refreshPreview,
@@ -2731,8 +4458,10 @@ function addDesignPage() {
         const moduleId = currentContext.builderStructureIds[position - 1] || '';
         const page = createDefaultDesignPage(`Página ${position}`, moduleId);
         studio.pages.push(page);
+        const firstId = page.elements[0]?.id || '';
         studio.selectedPageId = page.id;
-        studio.selectedElementId = page.elements[0]?.id || '';
+        studio.selectedElementId = firstId;
+        studio.selectedElementIds = firstId ? [firstId] : [];
         return studio;
     }, {
         enableStudio: true,
@@ -2758,8 +4487,10 @@ function duplicateActiveDesignPage() {
             }))
         }, `${current.name} Copy`);
         studio.pages.push(copy);
+        const firstId = copy.elements[0]?.id || '';
         studio.selectedPageId = copy.id;
-        studio.selectedElementId = copy.elements[0]?.id || '';
+        studio.selectedElementId = firstId;
+        studio.selectedElementIds = firstId ? [firstId] : [];
         return studio;
     }, {
         enableStudio: true,
@@ -2779,8 +4510,10 @@ function removeActiveDesignPage() {
             return studio;
         }
         studio.pages = nextPages;
+        const firstId = nextPages[0].elements?.[0]?.id || '';
         studio.selectedPageId = nextPages[0].id;
-        studio.selectedElementId = nextPages[0].elements?.[0]?.id || '';
+        studio.selectedElementId = firstId;
+        studio.selectedElementIds = firstId ? [firstId] : [];
         return studio;
     }, {
         enableStudio: true,
@@ -2801,6 +4534,7 @@ function addDesignElement(type = 'text') {
         });
         page.elements.push(element);
         studio.selectedElementId = element.id;
+        studio.selectedElementIds = [element.id];
         return studio;
     }, {
         enableStudio: true,
@@ -2810,19 +4544,35 @@ function addDesignElement(type = 'text') {
 
 function duplicateSelectedDesignElement() {
     withDesignStudioMutation((studio) => {
-        const selectedElementId = String(studio.selectedElementId || '');
-        const found = findDesignElementById(studio, selectedElementId);
-        if (!found.page || !found.element) {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
             return studio;
         }
-        const clone = sanitizeDesignElement({
-            ...found.element,
-            id: createLocalUid('el'),
-            x: clampNumber(found.element.x + 18, 0, DESIGN_CANVAS_WIDTH - 24, found.element.x),
-            y: clampNumber(found.element.y + 18, 0, DESIGN_CANVAS_HEIGHT - 24, found.element.y)
+        const selectedIds = getSelectedDesignElementIds(studio);
+        if (!selectedIds.length) {
+            return studio;
+        }
+        const selectedSet = new Set(selectedIds);
+        const clones = [];
+        page.elements.forEach((element) => {
+            if (!selectedSet.has(element.id) || element.locked) {
+                return;
+            }
+            clones.push(sanitizeDesignElement({
+                ...element,
+                id: createLocalUid('el'),
+                x: clampNumber(element.x + 18, 0, DESIGN_CANVAS_WIDTH - 24, element.x),
+                y: clampNumber(element.y + 18, 0, DESIGN_CANVAS_HEIGHT - 24, element.y),
+                locked: false
+            }));
         });
-        found.page.elements.push(clone);
-        studio.selectedElementId = clone.id;
+        if (!clones.length) {
+            return studio;
+        }
+        page.elements.push(...clones);
+        const primaryCloneId = clones[clones.length - 1]?.id || clones[0].id;
+        studio.selectedElementId = primaryCloneId;
+        studio.selectedElementIds = [primaryCloneId, ...clones.map((item) => item.id).filter((id) => id !== primaryCloneId)];
         return studio;
     }, {
         enableStudio: true,
@@ -2832,17 +4582,28 @@ function duplicateSelectedDesignElement() {
 
 function removeSelectedDesignElement() {
     withDesignStudioMutation((studio) => {
-        const selectedElementId = String(studio.selectedElementId || '');
-        const found = findDesignElementById(studio, selectedElementId);
-        if (!found.page || found.index < 0) {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
             return studio;
         }
-        if (found.page.elements.length <= 1) {
+        const selectedIds = getSelectedDesignElementIds(studio);
+        if (!selectedIds.length) {
+            return studio;
+        }
+        const selectedSet = new Set(selectedIds);
+        const removable = page.elements.filter((item) => selectedSet.has(item.id) && !item.locked);
+        if (!removable.length) {
+            return studio;
+        }
+        if (page.elements.length - removable.length < 1) {
             setStatus('A página precisa manter ao menos um elemento.', 'warn');
             return studio;
         }
-        found.page.elements.splice(found.index, 1);
-        studio.selectedElementId = found.page.elements[0]?.id || '';
+        const removableSet = new Set(removable.map((item) => item.id));
+        page.elements = page.elements.filter((item) => !removableSet.has(item.id));
+        const firstId = page.elements[0]?.id || '';
+        studio.selectedElementId = firstId;
+        studio.selectedElementIds = firstId ? [firstId] : [];
         return studio;
     }, {
         enableStudio: true,
@@ -2851,34 +4612,47 @@ function removeSelectedDesignElement() {
 }
 
 function resetSelectedDesignElementStyle() {
+    const selectedIds = getSelectedDesignElementIds();
+    if (!selectedIds.length) {
+        return;
+    }
+    const hasUnlockedSelection = getSelectedDesignElements().some((item) => !item.locked);
+    if (!hasUnlockedSelection) {
+        return;
+    }
     withDesignStudioMutation((studio) => {
-        const selectedElementId = String(studio.selectedElementId || '');
-        const found = findDesignElementById(studio, selectedElementId);
-        if (!found.page || found.index < 0 || !found.element) {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
             return studio;
         }
-        const base = createDefaultDesignElement(found.element.type, {
-            x: found.element.x,
-            y: found.element.y,
-            w: found.element.w,
-            h: found.element.h,
-            text: found.element.text
+        const idSet = new Set(getSelectedDesignElementIds(studio));
+        page.elements = page.elements.map((element) => {
+            if (!idSet.has(element.id) || element.locked) {
+                return element;
+            }
+            const base = createDefaultDesignElement(element.type, {
+                x: element.x,
+                y: element.y,
+                w: element.w,
+                h: element.h,
+                text: element.text
+            });
+            return sanitizeDesignElement({
+                ...element,
+                fontSize: base.fontSize,
+                color: base.color,
+                bg: base.bg,
+                radius: base.radius,
+                opacity: base.opacity,
+                align: base.align
+            });
         });
-        const next = sanitizeDesignElement({
-            ...found.element,
-            fontSize: base.fontSize,
-            color: base.color,
-            bg: base.bg,
-            radius: base.radius,
-            opacity: base.opacity,
-            align: base.align
-        });
-        found.page.elements[found.index] = next;
-        studio.selectedElementId = next.id;
         return studio;
     }, {
         enableStudio: true,
-        announce: 'Estilo do elemento resetado.'
+        announce: selectedIds.length > 1
+            ? 'Estilo dos elementos selecionados foi resetado.'
+            : 'Estilo do elemento resetado.'
     });
 }
 
@@ -2895,28 +4669,44 @@ function moveSelectedDesignElement(deltaX = 0, deltaY = 0, options = {}) {
     };
 
     withDesignStudioMutation((studio) => {
-        const selectedElementId = String(studio.selectedElementId || '');
-        const found = findDesignElementById(studio, selectedElementId);
-        if (!found.page || found.index < 0 || !found.element) {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
             return studio;
         }
-        const element = found.element;
-        const nextX = clampNumber(
-            element.x + shiftX,
-            0,
-            Math.max(0, DESIGN_CANVAS_WIDTH - Math.max(24, element.w)),
-            element.x
+        const selectedIds = getSelectedDesignElementIds(studio);
+        if (!selectedIds.length) {
+            return studio;
+        }
+        const idSet = new Set(selectedIds);
+        const movable = page.elements.filter((item) => idSet.has(item.id) && !item.locked);
+        if (!movable.length) {
+            return studio;
+        }
+        const minX = Math.min(...movable.map((item) => item.x));
+        const maxRight = Math.max(...movable.map((item) => item.x + item.w));
+        const minY = Math.min(...movable.map((item) => item.y));
+        const maxBottom = Math.max(...movable.map((item) => item.y + item.h));
+        const boundedShiftX = clampNumber(
+            shiftX,
+            -minX,
+            Math.max(0, DESIGN_CANVAS_WIDTH - maxRight),
+            0
         );
-        const nextY = clampNumber(
-            element.y + shiftY,
-            0,
-            Math.max(0, DESIGN_CANVAS_HEIGHT - Math.max(24, element.h)),
-            element.y
+        const boundedShiftY = clampNumber(
+            shiftY,
+            -minY,
+            Math.max(0, DESIGN_CANVAS_HEIGHT - maxBottom),
+            0
         );
-        found.page.elements[found.index] = sanitizeDesignElement({
-            ...element,
-            x: nextX,
-            y: nextY
+        page.elements = page.elements.map((element) => {
+            if (!idSet.has(element.id) || element.locked) {
+                return element;
+            }
+            return sanitizeDesignElement({
+                ...element,
+                x: element.x + boundedShiftX,
+                y: element.y + boundedShiftY
+            });
         });
         return studio;
     }, {
@@ -2941,20 +4731,28 @@ function resizeSelectedDesignElement(deltaW = 0, deltaH = 0, options = {}) {
     };
 
     withDesignStudioMutation((studio) => {
-        const selectedElementId = String(studio.selectedElementId || '');
-        const found = findDesignElementById(studio, selectedElementId);
-        if (!found.page || found.index < 0 || !found.element) {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
             return studio;
         }
-        const element = found.element;
-        const maxW = Math.max(24, DESIGN_CANVAS_WIDTH - Math.max(0, element.x));
-        const maxH = Math.max(24, DESIGN_CANVAS_HEIGHT - Math.max(0, element.y));
-        const nextW = clampNumber(element.w + shiftW, 24, maxW, element.w);
-        const nextH = clampNumber(element.h + shiftH, 24, maxH, element.h);
-        found.page.elements[found.index] = sanitizeDesignElement({
-            ...element,
-            w: nextW,
-            h: nextH
+        const selectedIds = getSelectedDesignElementIds(studio);
+        if (!selectedIds.length) {
+            return studio;
+        }
+        const idSet = new Set(selectedIds);
+        page.elements = page.elements.map((element) => {
+            if (!idSet.has(element.id) || element.locked) {
+                return element;
+            }
+            const maxW = Math.max(24, DESIGN_CANVAS_WIDTH - Math.max(0, element.x));
+            const maxH = Math.max(24, DESIGN_CANVAS_HEIGHT - Math.max(0, element.y));
+            const nextW = clampNumber(element.w + shiftW, 24, maxW, element.w);
+            const nextH = clampNumber(element.h + shiftH, 24, maxH, element.h);
+            return sanitizeDesignElement({
+                ...element,
+                w: nextW,
+                h: nextH
+            });
         });
         return studio;
     }, {
@@ -2969,39 +4767,70 @@ function resizeSelectedDesignElement(deltaW = 0, deltaH = 0, options = {}) {
 function reorderSelectedDesignElement(mode = 'forward') {
     const action = String(mode || 'forward');
     withDesignStudioMutation((studio) => {
-        const selectedElementId = String(studio.selectedElementId || '');
-        const found = findDesignElementById(studio, selectedElementId);
-        if (!found.page || found.index < 0 || !found.element) {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
             return studio;
         }
-        const elements = Array.isArray(found.page.elements) ? found.page.elements : [];
+        const selectedIds = getSelectedDesignElementIds(studio);
+        if (!selectedIds.length) {
+            return studio;
+        }
+        const selectedSet = new Set(selectedIds);
+        const hasUnlocked = page.elements.some((item) => selectedSet.has(item.id) && !item.locked);
+        if (!hasUnlocked) {
+            return studio;
+        }
+        const elements = Array.isArray(page.elements) ? page.elements : [];
         const maxIndex = elements.length - 1;
         if (maxIndex <= 0) {
             return studio;
         }
-
-        const swapItems = (indexA, indexB) => {
-            const temp = elements[indexA];
-            elements[indexA] = elements[indexB];
-            elements[indexB] = temp;
-        };
-
-        if (action === 'forward' && found.index < maxIndex) {
-            swapItems(found.index, found.index + 1);
+        const isSelectedUnlocked = (item) => selectedSet.has(item.id) && !item.locked;
+        const selectedIndices = elements
+            .map((item, index) => ({ item, index }))
+            .filter(({ item }) => isSelectedUnlocked(item))
+            .map(({ index }) => index);
+        if (!selectedIndices.length) {
             return studio;
         }
-        if (action === 'backward' && found.index > 0) {
-            swapItems(found.index, found.index - 1);
+        if (action === 'forward') {
+            selectedIndices.slice().reverse().forEach((index) => {
+                if (index >= maxIndex) {
+                    return;
+                }
+                if (isSelectedUnlocked(elements[index + 1])) {
+                    return;
+                }
+                const temp = elements[index];
+                elements[index] = elements[index + 1];
+                elements[index + 1] = temp;
+            });
             return studio;
         }
-        if (action === 'to_front' && found.index < maxIndex) {
-            const [item] = elements.splice(found.index, 1);
-            elements.push(item);
+        if (action === 'backward') {
+            selectedIndices.forEach((index) => {
+                if (index <= 0) {
+                    return;
+                }
+                if (isSelectedUnlocked(elements[index - 1])) {
+                    return;
+                }
+                const temp = elements[index];
+                elements[index] = elements[index - 1];
+                elements[index - 1] = temp;
+            });
             return studio;
         }
-        if (action === 'to_back' && found.index > 0) {
-            const [item] = elements.splice(found.index, 1);
-            elements.unshift(item);
+        if (action === 'to_front') {
+            const selected = elements.filter((item) => isSelectedUnlocked(item));
+            const rest = elements.filter((item) => !isSelectedUnlocked(item));
+            page.elements = [...rest, ...selected];
+            return studio;
+        }
+        if (action === 'to_back') {
+            const selected = elements.filter((item) => isSelectedUnlocked(item));
+            const rest = elements.filter((item) => !isSelectedUnlocked(item));
+            page.elements = [...selected, ...rest];
             return studio;
         }
         return studio;
@@ -3010,8 +4839,321 @@ function reorderSelectedDesignElement(mode = 'forward') {
         enableStudio: true,
         renderSelect: false,
         renderCanvas: true,
+        renderInspector: true,
+        announce: 'Elementos alinhados pela seleção.'
+    });
+}
+
+function alignSelectedDesignElementToCanvas(mode = 'left') {
+    const action = String(mode || 'left');
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
+            return studio;
+        }
+        const selectedIds = getSelectedDesignElementIds(studio);
+        if (!selectedIds.length) {
+            return studio;
+        }
+        const selectedSet = new Set(selectedIds);
+        const alignable = page.elements.filter((item) => selectedSet.has(item.id) && !item.locked);
+        if (!alignable.length) {
+            return studio;
+        }
+        const minX = Math.min(...alignable.map((item) => item.x));
+        const maxX = Math.max(...alignable.map((item) => item.x + item.w));
+        const minY = Math.min(...alignable.map((item) => item.y));
+        const maxY = Math.max(...alignable.map((item) => item.y + item.h));
+        let shiftX = 0;
+        let shiftY = 0;
+        if (action === 'left') {
+            shiftX = -minX;
+        } else if (action === 'center') {
+            const targetLeft = Math.round((DESIGN_CANVAS_WIDTH - (maxX - minX)) / 2);
+            shiftX = targetLeft - minX;
+        } else if (action === 'right') {
+            shiftX = Math.max(0, DESIGN_CANVAS_WIDTH - maxX);
+        } else if (action === 'top') {
+            shiftY = -minY;
+        } else if (action === 'middle') {
+            const targetTop = Math.round((DESIGN_CANVAS_HEIGHT - (maxY - minY)) / 2);
+            shiftY = targetTop - minY;
+        } else if (action === 'bottom') {
+            shiftY = Math.max(0, DESIGN_CANVAS_HEIGHT - maxY);
+        }
+        page.elements = page.elements.map((element) => {
+            if (!selectedSet.has(element.id) || element.locked) {
+                return element;
+            }
+            return sanitizeDesignElement({
+                ...element,
+                x: clampNumber(
+                    element.x + shiftX,
+                    0,
+                    Math.max(0, DESIGN_CANVAS_WIDTH - element.w),
+                    element.x
+                ),
+                y: clampNumber(
+                    element.y + shiftY,
+                    0,
+                    Math.max(0, DESIGN_CANVAS_HEIGHT - element.h),
+                    element.y
+                )
+            });
+        });
+        return studio;
+    }, {
+        refreshPreview: true,
+        enableStudio: true,
+        renderSelect: false,
+        renderCanvas: true,
+        renderInspector: true,
+        announce: targetAxis === 'horizontal'
+            ? 'Elementos distribuídos horizontalmente.'
+            : 'Elementos distribuídos verticalmente.'
+    });
+}
+
+function alignSelectedDesignElementsToSelection(mode = 'left') {
+    const action = String(mode || 'left');
+    const unlocked = getSelectedUnlockedDesignElements();
+    if (unlocked.length < 2) {
+        setStatus('Selecione ao menos 2 elementos desbloqueados para alinhar entre si.', 'warn');
+        return;
+    }
+
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
+            return studio;
+        }
+        const selectedSet = new Set(getSelectedDesignElementIds(studio));
+        const alignable = page.elements.filter((item) => selectedSet.has(item.id) && !item.locked);
+        if (alignable.length < 2) {
+            return studio;
+        }
+
+        const minX = Math.min(...alignable.map((item) => item.x));
+        const maxX = Math.max(...alignable.map((item) => item.x + item.w));
+        const minY = Math.min(...alignable.map((item) => item.y));
+        const maxY = Math.max(...alignable.map((item) => item.y + item.h));
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+
+        page.elements = page.elements.map((element) => {
+            if (!selectedSet.has(element.id) || element.locked) {
+                return element;
+            }
+            let nextX = element.x;
+            let nextY = element.y;
+
+            if (action === 'left') {
+                nextX = minX;
+            } else if (action === 'center') {
+                nextX = Math.round(centerX - (element.w / 2));
+            } else if (action === 'right') {
+                nextX = Math.round(maxX - element.w);
+            } else if (action === 'top') {
+                nextY = minY;
+            } else if (action === 'middle') {
+                nextY = Math.round(centerY - (element.h / 2));
+            } else if (action === 'bottom') {
+                nextY = Math.round(maxY - element.h);
+            }
+
+            return sanitizeDesignElement({
+                ...element,
+                x: clampNumber(nextX, 0, Math.max(0, DESIGN_CANVAS_WIDTH - element.w), element.x),
+                y: clampNumber(nextY, 0, Math.max(0, DESIGN_CANVAS_HEIGHT - element.h), element.y)
+            });
+        });
+        return studio;
+    }, {
+        refreshPreview: true,
+        enableStudio: true,
+        renderSelect: false,
+        renderCanvas: true,
         renderInspector: true
     });
+}
+
+function distributeSelectedDesignElements(axis = 'horizontal', strategy = 'edges') {
+    const targetAxis = String(axis || 'horizontal').toLowerCase() === 'vertical'
+        ? 'vertical'
+        : 'horizontal';
+    const targetStrategy = String(strategy || 'edges').toLowerCase() === 'centers'
+        ? 'centers'
+        : 'edges';
+    const unlocked = getSelectedUnlockedDesignElements();
+    if (unlocked.length < 3) {
+        setStatus('Selecione ao menos 3 elementos desbloqueados para distribuir.', 'warn');
+        return;
+    }
+
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
+            return studio;
+        }
+        const selectedSet = new Set(getSelectedDesignElementIds(studio));
+        const distributable = page.elements.filter((item) => selectedSet.has(item.id) && !item.locked);
+        if (distributable.length < 3) {
+            return studio;
+        }
+
+        const sorted = distributable.slice().sort((a, b) => (
+            targetAxis === 'horizontal'
+                ? ((a.x + (a.w / 2)) - (b.x + (b.w / 2)))
+                : ((a.y + (a.h / 2)) - (b.y + (b.h / 2)))
+        ));
+        const first = sorted[0];
+        const last = sorted[sorted.length - 1];
+
+        const nextPositionById = {};
+        if (targetStrategy === 'centers') {
+            const firstCenter = targetAxis === 'horizontal'
+                ? (first.x + (first.w / 2))
+                : (first.y + (first.h / 2));
+            const lastCenter = targetAxis === 'horizontal'
+                ? (last.x + (last.w / 2))
+                : (last.y + (last.h / 2));
+            const centerGap = (lastCenter - firstCenter) / (sorted.length - 1);
+
+            sorted.forEach((item, index) => {
+                if (index === 0) {
+                    nextPositionById[item.id] = { x: item.x, y: item.y };
+                    return;
+                }
+                if (index === sorted.length - 1) {
+                    nextPositionById[item.id] = { x: last.x, y: last.y };
+                    return;
+                }
+                const targetCenter = firstCenter + (centerGap * index);
+                if (targetAxis === 'horizontal') {
+                    nextPositionById[item.id] = {
+                        x: Math.round(targetCenter - (item.w / 2)),
+                        y: item.y
+                    };
+                } else {
+                    nextPositionById[item.id] = {
+                        x: item.x,
+                        y: Math.round(targetCenter - (item.h / 2))
+                    };
+                }
+            });
+        } else {
+            const start = targetAxis === 'horizontal' ? first.x : first.y;
+            const end = targetAxis === 'horizontal' ? (last.x + last.w) : (last.y + last.h);
+            const totalSize = sorted.reduce((acc, item) => acc + (targetAxis === 'horizontal' ? item.w : item.h), 0);
+            const gap = (end - start - totalSize) / (sorted.length - 1);
+            let cursor = start;
+
+            sorted.forEach((item, index) => {
+                if (index === 0) {
+                    nextPositionById[item.id] = { x: item.x, y: item.y };
+                    cursor = (targetAxis === 'horizontal' ? item.x + item.w : item.y + item.h) + gap;
+                    return;
+                }
+                if (index === sorted.length - 1) {
+                    nextPositionById[item.id] = {
+                        x: targetAxis === 'horizontal' ? last.x : item.x,
+                        y: targetAxis === 'horizontal' ? item.y : last.y
+                    };
+                    return;
+                }
+                if (targetAxis === 'horizontal') {
+                    nextPositionById[item.id] = { x: Math.round(cursor), y: item.y };
+                    cursor += item.w + gap;
+                } else {
+                    nextPositionById[item.id] = { x: item.x, y: Math.round(cursor) };
+                    cursor += item.h + gap;
+                }
+            });
+        }
+
+        page.elements = page.elements.map((element) => {
+            if (!selectedSet.has(element.id) || element.locked) {
+                return element;
+            }
+            const nextPos = nextPositionById[element.id];
+            if (!nextPos) {
+                return element;
+            }
+            return sanitizeDesignElement({
+                ...element,
+                x: clampNumber(nextPos.x, 0, Math.max(0, DESIGN_CANVAS_WIDTH - element.w), element.x),
+                y: clampNumber(nextPos.y, 0, Math.max(0, DESIGN_CANVAS_HEIGHT - element.h), element.y)
+            });
+        });
+        return studio;
+    }, {
+        refreshPreview: true,
+        enableStudio: true,
+        renderSelect: false,
+        renderCanvas: true,
+        renderInspector: true,
+        announce: targetAxis === 'horizontal'
+            ? (targetStrategy === 'centers'
+                ? 'Elementos distribuídos por centros na horizontal.'
+                : 'Elementos distribuídos horizontalmente.')
+            : (targetStrategy === 'centers'
+                ? 'Elementos distribuídos por centros na vertical.'
+                : 'Elementos distribuídos verticalmente.')
+    });
+}
+
+function copySelectedDesignStyle() {
+    const selected = getSelectedDesignElement();
+    if (!selected) {
+        return;
+    }
+    currentContext.designStyleClipboard = {
+        fontSize: selected.fontSize,
+        color: selected.color,
+        bg: selected.bg,
+        radius: selected.radius,
+        opacity: selected.opacity,
+        align: selected.align
+    };
+    setStatus('Estilo do elemento copiado.', 'ok');
+}
+
+function pasteSelectedDesignStyle() {
+    if (!currentContext.designStyleClipboard || typeof currentContext.designStyleClipboard !== 'object') {
+        setStatus('Nenhum estilo copiado para aplicar.', 'warn');
+        return;
+    }
+    updateSelectedDesignElementFromInspector({
+        ...currentContext.designStyleClipboard
+    }, {
+        renderInspector: true,
+        refreshPreview: true,
+        applyToSelection: true
+    });
+    const count = getSelectedDesignElementIds().length;
+    setStatus(count > 1 ? 'Estilo aplicado aos elementos selecionados.' : 'Estilo aplicado ao elemento selecionado.', 'ok');
+}
+
+function toggleSelectedDesignElementLock() {
+    const selectedElements = getSelectedDesignElements();
+    if (!selectedElements.length) {
+        return;
+    }
+    const shouldLockAll = !selectedElements.every((item) => item.locked);
+    updateSelectedDesignElementFromInspector({
+        locked: shouldLockAll
+    }, {
+        renderInspector: true,
+        refreshPreview: false,
+        allowLocked: true,
+        applyToSelection: true
+    });
+    const count = selectedElements.length;
+    if (shouldLockAll) {
+        setStatus(count > 1 ? 'Elementos selecionados bloqueados.' : 'Elemento bloqueado.', 'ok');
+    } else {
+        setStatus(count > 1 ? 'Elementos selecionados desbloqueados.' : 'Elemento desbloqueado.', 'ok');
+    }
 }
 
 function shouldIgnoreDesignStudioShortcutTarget(target) {
@@ -3044,32 +5186,58 @@ function initDesignStudioKeyboardInteractions() {
             return;
         }
 
+        const selectAllShortcut = (event.ctrlKey || event.metaKey) && key.toLowerCase() === 'a';
+        if (selectAllShortcut) {
+            event.preventDefault();
+            selectAllDesignElements();
+            return;
+        }
+        if (key === 'Escape') {
+            event.preventDefault();
+            reduceDesignSelectionToPrimary();
+            return;
+        }
+
         const selected = getSelectedDesignElement();
         if (!selected) {
             return;
         }
+        const selectedElements = getSelectedDesignElements();
+        const hasUnlockedSelection = selectedElements.some((item) => !item.locked);
 
         const step = event.shiftKey ? DESIGN_KEYBOARD_FAST_NUDGE_STEP : DESIGN_KEYBOARD_NUDGE_STEP;
         const resizeMode = event.altKey;
 
         if (key === 'Delete' || key === 'Backspace') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             removeSelectedDesignElement();
             return;
         }
 
         if (key === '[') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             reorderSelectedDesignElement(event.shiftKey ? 'to_back' : 'backward');
             return;
         }
         if (key === ']') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             reorderSelectedDesignElement(event.shiftKey ? 'to_front' : 'forward');
             return;
         }
 
         if (key === 'ArrowLeft') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             if (resizeMode) {
                 resizeSelectedDesignElement(-step, 0, { refreshPreview: false });
@@ -3079,6 +5247,9 @@ function initDesignStudioKeyboardInteractions() {
             return;
         }
         if (key === 'ArrowRight') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             if (resizeMode) {
                 resizeSelectedDesignElement(step, 0, { refreshPreview: false });
@@ -3088,6 +5259,9 @@ function initDesignStudioKeyboardInteractions() {
             return;
         }
         if (key === 'ArrowUp') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             if (resizeMode) {
                 resizeSelectedDesignElement(0, -step, { refreshPreview: false });
@@ -3097,6 +5271,9 @@ function initDesignStudioKeyboardInteractions() {
             return;
         }
         if (key === 'ArrowDown') {
+            if (!hasUnlockedSelection) {
+                return;
+            }
             event.preventDefault();
             if (resizeMode) {
                 resizeSelectedDesignElement(0, step, { refreshPreview: false });
@@ -3133,6 +5310,7 @@ function renderDesignStudioUi(options = {}) {
         renderDesignStudioInspector();
     }
     updateDesignStudioMeta();
+    renderDesignSnapControls();
 }
 
 function updateDesignStudioMeta() {
@@ -3145,7 +5323,8 @@ function updateDesignStudioMeta() {
         target.textContent = 'Sem página ativa';
         return;
     }
-    target.textContent = `${page.name} | ${page.elements.length} elemento(s)`;
+    const selectedCount = getSelectedDesignElementIds().length;
+    target.textContent = `${page.name} | ${page.elements.length} elemento(s) | ${selectedCount} selecionado(s)`;
 }
 
 function renderDesignStudioPageSelect() {
@@ -3195,14 +5374,25 @@ function resolveDesignTextTokens(input, payload = currentContext.payload, displa
     });
 }
 
-function buildDesignResizeHandlesHtml(isSelected) {
-    if (!isSelected) {
+function buildDesignResizeHandlesHtml(isSelected, isLocked = false) {
+    if (!isSelected || isLocked) {
         return '';
     }
     const handles = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
     return handles.map((handle) => (
         `<span class="design-resize-handle handle-${handle}" data-design-resize-handle="${handle}" aria-hidden="true"></span>`
     )).join('');
+}
+
+function buildDesignLockBadgeHtml(isLocked = false) {
+    if (!isLocked) {
+        return '';
+    }
+    return `
+        <span class="design-lock-badge" title="Elemento bloqueado" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="10" rx="2"></rect><path d="M8 10V8a4 4 0 0 1 8 0v2"></path></svg>
+        </span>
+    `;
 }
 
 function renderDesignStudioCanvas() {
@@ -3217,16 +5407,27 @@ function renderDesignStudioCanvas() {
         return;
     }
 
-    const selectedId = String(studio.selectedElementId || '');
+    const selectedIds = getSelectedDesignElementIds(studio);
+    const selectedSet = new Set(selectedIds);
+    const primarySelectedId = String(studio.selectedElementId || selectedIds[0] || '');
+    const allowResizeHandles = selectedIds.length === 1;
     const firstMockup = Array.isArray(currentContext.displayMockups)
         ? currentContext.displayMockups.find((item) => item.hasPreview && item.previewDataUrl)
         : null;
-    const palette = resolveTemplateColors(currentContext.payload?.identity?.colors, getTemplatePreset(currentContext.activeTemplateId));
+    const activePreset = getTemplatePreset(currentContext.activeTemplateId);
+    const palettePreset = {
+        ...activePreset,
+        ...buildPalettePresetFromBuilder(getThemeKeyFromThemeClass(activePreset.themeClass), activePreset)
+    };
+    const palette = resolveTemplateColors(currentContext.payload?.identity?.colors, palettePreset);
 
     canvas.innerHTML = page.elements.map((element) => {
         const resolvedText = resolveDesignTextTokens(element.text, currentContext.payload, currentContext.displayMockups);
-        const isSelected = selectedId === element.id;
-        const resizeHandles = buildDesignResizeHandlesHtml(isSelected);
+        const isSelected = selectedSet.has(element.id);
+        const isPrimary = primarySelectedId === element.id;
+        const isLocked = Boolean(element.locked);
+        const resizeHandles = buildDesignResizeHandlesHtml(isPrimary && allowResizeHandles, isLocked);
+        const lockBadge = buildDesignLockBadgeHtml(isLocked);
         const baseStyle = [
             `left:${Math.round(element.x)}px`,
             `top:${Math.round(element.y)}px`,
@@ -3247,11 +5448,11 @@ function renderDesignStudioCanvas() {
                 .join('');
             return `
                 <article
-                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}"
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
                     style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
-                >${swatches}${resizeHandles}</article>
+                >${swatches}${resizeHandles}${lockBadge}</article>
             `;
         }
 
@@ -3261,24 +5462,142 @@ function renderDesignStudioCanvas() {
                 : `<div class="mockup-placeholder">${escapeHtml(resolvedText || 'Mockup Slot')}</div>`;
             return `
                 <article
-                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}"
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
                     style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
-                >${content}${resizeHandles}</article>
+                >${content}${resizeHandles}${lockBadge}</article>
             `;
         }
 
-        const contentText = element.type === 'shape'
+        if (element.type === 'divider') {
+            const dividerLabel = resolvedText ? `<small>${escapeHtml(resolvedText)}</small>` : '';
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><span class="divider-line"></span>${dividerLabel}${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        if (element.type === 'bullet_list') {
+            const lines = String(resolvedText || '')
+                .split(/\r?\n|;/g)
+                .map((item) => item.trim())
+                .filter(Boolean)
+                .slice(0, 8);
+            const listItems = (lines.length ? lines : ['Item de lista']).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><ul>${listItems}</ul>${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        if (element.type === 'stat_card') {
+            const parts = String(resolvedText || '').split(/\r?\n/g).filter(Boolean);
+            const headline = parts[0] || '92%';
+            const caption = parts.slice(1).join(' ') || 'consistência visual';
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><strong>${escapeHtml(headline)}</strong><small>${escapeHtml(caption)}</small>${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        if (element.type === 'info_card') {
+            const parts = String(resolvedText || '').split(/\r?\n/g).filter(Boolean);
+            const heading = parts[0] || 'Título';
+            const body = parts.slice(1).join(' ') || 'Texto de apoio.';
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><strong>${escapeHtml(heading)}</strong><p>${escapeHtml(body)}</p>${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        if (element.type === 'quote_block') {
+            const parts = String(resolvedText || '').split(/\r?\n/g).filter(Boolean);
+            const quote = parts[0] || '"Mensagem da marca"';
+            const author = parts.slice(1).join(' ') || 'Equipe';
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><blockquote>${escapeHtml(quote)}</blockquote><cite>${escapeHtml(author)}</cite>${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        if (element.type === 'timeline_step') {
+            const parts = String(resolvedText || '').split(/\r?\n/g).filter(Boolean);
+            const phase = parts[0] || 'Etapa';
+            const detail = parts.slice(1).join(' ') || 'Descrição da etapa';
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><span class="timeline-dot" aria-hidden="true"></span><div class="timeline-copy"><strong>${escapeHtml(phase)}</strong><p>${escapeHtml(detail)}</p></div>${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        if (element.type === 'comparison_card') {
+            const lines = String(resolvedText || '').split(/\r?\n/g).filter(Boolean);
+            const headerParts = String(lines[0] || 'Antes | Depois').split('|').map((item) => item.trim()).filter(Boolean);
+            const bodyParts = String(lines[1] || 'Item A | Item B').split('|').map((item) => item.trim()).filter(Boolean);
+            const leftHeader = headerParts[0] || 'Antes';
+            const rightHeader = headerParts[1] || 'Depois';
+            const leftBody = bodyParts[0] || 'Contexto anterior';
+            const rightBody = bodyParts[1] || 'Contexto otimizado';
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                >
+                    <div class="comparison-col"><strong>${escapeHtml(leftHeader)}</strong><p>${escapeHtml(leftBody)}</p></div>
+                    <div class="comparison-col"><strong>${escapeHtml(rightHeader)}</strong><p>${escapeHtml(rightBody)}</p></div>
+                    ${resizeHandles}${lockBadge}
+                </article>
+            `;
+        }
+
+        if (element.type === 'shape_line') {
+            return `
+                <article
+                    class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
+                    style="${baseStyle}"
+                    data-design-element-id="${escapeHtml(element.id)}"
+                    data-design-element-type="${escapeHtml(element.type)}"
+                ><span class="shape-line-core"></span>${resizeHandles}${lockBadge}</article>
+            `;
+        }
+
+        const contentText = DESIGN_SHAPE_ONLY_TYPES.includes(String(element.type || ''))
             ? (resolvedText || '')
             : (resolvedText || DESIGN_TEXT_TOKEN_HINT);
         return `
             <article
-                class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}"
+                class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
                 style="${baseStyle}"
                 data-design-element-id="${escapeHtml(element.id)}"
                 data-design-element-type="${escapeHtml(element.type)}"
-            >${escapeHtml(contentText)}${resizeHandles}</article>
+            >${escapeHtml(contentText)}${resizeHandles}${lockBadge}</article>
         `;
     }).join('');
 }
@@ -3308,14 +5627,47 @@ function renderDesignStudioInspector() {
     const layerFrontBtn = document.getElementById('designLayerFrontBtn');
     const layerBottomBtn = document.getElementById('designLayerBottomBtn');
     const layerTopBtn = document.getElementById('designLayerTopBtn');
+    const alignLeftBtn = document.getElementById('designAlignLeftBtn');
+    const alignCenterBtn = document.getElementById('designAlignCenterBtn');
+    const alignRightBtn = document.getElementById('designAlignRightBtn');
+    const alignTopBtn = document.getElementById('designAlignTopBtn');
+    const alignMiddleBtn = document.getElementById('designAlignMiddleBtn');
+    const alignBottomBtn = document.getElementById('designAlignBottomBtn');
+    const alignSelLeftBtn = document.getElementById('designAlignSelLeftBtn');
+    const alignSelCenterBtn = document.getElementById('designAlignSelCenterBtn');
+    const alignSelRightBtn = document.getElementById('designAlignSelRightBtn');
+    const alignSelTopBtn = document.getElementById('designAlignSelTopBtn');
+    const alignSelMiddleBtn = document.getElementById('designAlignSelMiddleBtn');
+    const alignSelBottomBtn = document.getElementById('designAlignSelBottomBtn');
+    const distributeHBtn = document.getElementById('designDistributeHBtn');
+    const distributeVBtn = document.getElementById('designDistributeVBtn');
+    const distributeCenterHBtn = document.getElementById('designDistributeCenterHBtn');
+    const distributeCenterVBtn = document.getElementById('designDistributeCenterVBtn');
+    const copyStyleBtn = document.getElementById('designCopyStyleBtn');
+    const pasteStyleBtn = document.getElementById('designPasteStyleBtn');
+    const toggleLockBtn = document.getElementById('designToggleLockBtn');
 
     const selected = getSelectedDesignElement();
+    const selectedIds = getSelectedDesignElementIds();
+    const selectedElements = getSelectedDesignElements();
+    const selectedCount = selectedIds.length;
+    const lockedCount = selectedElements.filter((item) => item.locked).length;
+    const isMulti = selectedCount > 1;
     const disable = !selected;
+    const locked = Boolean(selected?.locked);
+    const hasUnlockedSelection = selectedElements.some((item) => !item.locked);
+    const unlockedSelectionCount = selectedElements.filter((item) => !item.locked).length;
 
-    const fields = [textField, xField, yField, wField, hField, fontSizeField, alignField, colorField, bgField, radiusField, opacityField];
-    fields.forEach((field) => {
+    const contentAndBoxFields = [textField, xField, yField, wField, hField];
+    contentAndBoxFields.forEach((field) => {
         if (field && 'disabled' in field) {
-            field.disabled = disable;
+            field.disabled = disable || locked || isMulti;
+        }
+    });
+    const styleFields = [fontSizeField, alignField, colorField, bgField, radiusField, opacityField];
+    styleFields.forEach((field) => {
+        if (field && 'disabled' in field) {
+            field.disabled = disable || !hasUnlockedSelection;
         }
     });
     [
@@ -3329,12 +5681,46 @@ function renderDesignStudioInspector() {
         layerBackBtn,
         layerFrontBtn,
         layerBottomBtn,
-        layerTopBtn
+        layerTopBtn,
+        alignLeftBtn,
+        alignCenterBtn,
+        alignRightBtn,
+        alignTopBtn,
+        alignMiddleBtn,
+        alignBottomBtn
     ].forEach((button) => {
+        if (button instanceof HTMLButtonElement) {
+            button.disabled = disable || !hasUnlockedSelection;
+        }
+    });
+    [
+        alignSelLeftBtn,
+        alignSelCenterBtn,
+        alignSelRightBtn,
+        alignSelTopBtn,
+        alignSelMiddleBtn,
+        alignSelBottomBtn
+    ].forEach((button) => {
+        if (button instanceof HTMLButtonElement) {
+            button.disabled = disable || unlockedSelectionCount < 2;
+        }
+    });
+    [distributeHBtn, distributeVBtn, distributeCenterHBtn, distributeCenterVBtn].forEach((button) => {
+        if (button instanceof HTMLButtonElement) {
+            button.disabled = disable || unlockedSelectionCount < 3;
+        }
+    });
+    [copyStyleBtn].forEach((button) => {
         if (button instanceof HTMLButtonElement) {
             button.disabled = disable;
         }
     });
+    if (pasteStyleBtn instanceof HTMLButtonElement) {
+        pasteStyleBtn.disabled = disable || !hasUnlockedSelection || !currentContext.designStyleClipboard;
+    }
+    if (toggleLockBtn instanceof HTMLButtonElement) {
+        toggleLockBtn.disabled = disable;
+    }
 
     if (!selected) {
         if (metaField) metaField.value = '';
@@ -3348,27 +5734,55 @@ function renderDesignStudioInspector() {
         if (bgField) bgField.value = '#ffffff';
         if (radiusField) radiusField.value = '';
         if (opacityField) opacityField.value = '';
+        if (toggleLockBtn instanceof HTMLButtonElement) {
+            toggleLockBtn.classList.remove('is-active');
+            toggleLockBtn.setAttribute('aria-label', 'Bloquear elemento');
+            toggleLockBtn.setAttribute('title', 'Bloquear elemento');
+            toggleLockBtn.setAttribute('data-tooltip', 'Bloquear elemento');
+        }
         return;
     }
 
-    if (metaField) metaField.value = `${getDesignElementTypeLabel(selected.type)} | ${selected.id}`;
-    if (textField) textField.value = selected.text || '';
-    if (xField) xField.value = String(Math.round(selected.x));
-    if (yField) yField.value = String(Math.round(selected.y));
-    if (wField) wField.value = String(Math.round(selected.w));
-    if (hField) hField.value = String(Math.round(selected.h));
+    if (isMulti) {
+        if (metaField) metaField.value = `${selectedCount} elementos selecionados | ${lockedCount} bloqueado(s)`;
+        if (textField) textField.value = '';
+        if (xField) xField.value = '';
+        if (yField) yField.value = '';
+        if (wField) wField.value = '';
+        if (hField) hField.value = '';
+    } else {
+        if (metaField) metaField.value = `${getDesignElementTypeLabel(selected.type)}${selected.locked ? ' | Bloqueado' : ''} | ${selected.id}`;
+        if (textField) textField.value = selected.text || '';
+        if (xField) xField.value = String(Math.round(selected.x));
+        if (yField) yField.value = String(Math.round(selected.y));
+        if (wField) wField.value = String(Math.round(selected.w));
+        if (hField) hField.value = String(Math.round(selected.h));
+    }
     if (fontSizeField) fontSizeField.value = String(Math.round(selected.fontSize));
     if (alignField instanceof HTMLSelectElement) alignField.value = selected.align;
     if (colorField) colorField.value = normalizeHex(selected.color, '#142036');
     if (bgField) bgField.value = normalizeHex(selected.bg, '#ffffff');
     if (radiusField) radiusField.value = String(Math.round(selected.radius));
     if (opacityField) opacityField.value = String(Math.round(selected.opacity));
+    if (toggleLockBtn instanceof HTMLButtonElement) {
+        const allLocked = selectedElements.length > 0 && selectedElements.every((item) => item.locked);
+        const label = allLocked
+            ? (isMulti ? 'Desbloquear seleção' : 'Desbloquear elemento')
+            : (isMulti ? 'Bloquear seleção' : 'Bloquear elemento');
+        toggleLockBtn.setAttribute('aria-label', label);
+        toggleLockBtn.setAttribute('title', label);
+        toggleLockBtn.setAttribute('data-tooltip', label);
+        toggleLockBtn.classList.toggle('is-active', allLocked);
+    }
 }
 
 function resetDesignDragState() {
+    hideDesignMarqueeOverlay();
+    hideDesignSnapGuides();
     currentContext.designDragState.active = false;
     currentContext.designDragState.mode = 'move';
     currentContext.designDragState.resizeHandle = '';
+    currentContext.designDragState.pointerId = null;
     currentContext.designDragState.pageId = '';
     currentContext.designDragState.elementId = '';
     currentContext.designDragState.pointerStartX = 0;
@@ -3377,6 +5791,18 @@ function resetDesignDragState() {
     currentContext.designDragState.elementStartY = 0;
     currentContext.designDragState.elementStartW = 0;
     currentContext.designDragState.elementStartH = 0;
+    currentContext.designDragState.selectionStartRects = {};
+    currentContext.designDragState.lastShiftX = 0;
+    currentContext.designDragState.lastShiftY = 0;
+    currentContext.designDragState.marqueeStartX = 0;
+    currentContext.designDragState.marqueeStartY = 0;
+    currentContext.designDragState.marqueeEndX = 0;
+    currentContext.designDragState.marqueeEndY = 0;
+    currentContext.designDragState.marqueeAdditive = false;
+    currentContext.designDragState.marqueeToggle = false;
+    currentContext.designDragState.marqueeBaseSelectionIds = [];
+    currentContext.designDragState.snapGuideX = null;
+    currentContext.designDragState.snapGuideY = null;
     currentContext.designDragState.moved = false;
 }
 
@@ -3408,36 +5834,581 @@ function resolveResizeRectFromHandle(handle, dx, dy, startX, startY, startW, sta
     };
 }
 
+function applyDesignResizeSnapFromDragState(rect, handle) {
+    const state = currentContext.designDragState;
+    const safeRect = rect && typeof rect === 'object'
+        ? {
+            x: Number(rect.x || 0),
+            y: Number(rect.y || 0),
+            w: Number(rect.w || DESIGN_MIN_ELEMENT_SIZE),
+            h: Number(rect.h || DESIGN_MIN_ELEMENT_SIZE)
+        }
+        : {
+            x: Number(state.elementStartX || 0),
+            y: Number(state.elementStartY || 0),
+            w: Number(state.elementStartW || DESIGN_MIN_ELEMENT_SIZE),
+            h: Number(state.elementStartH || DESIGN_MIN_ELEMENT_SIZE)
+        };
+    const resizeHandle = String(handle || '').toLowerCase();
+    const includesW = resizeHandle.includes('w');
+    const includesE = resizeHandle.includes('e');
+    const includesN = resizeHandle.includes('n');
+    const includesS = resizeHandle.includes('s');
+    if (!(includesW || includesE || includesN || includesS)) {
+        state.snapGuideX = null;
+        state.snapGuideY = null;
+        updateDesignSnapGuides(null, null);
+        return {
+            x: Math.round(safeRect.x),
+            y: Math.round(safeRect.y),
+            w: Math.round(safeRect.w),
+            h: Math.round(safeRect.h)
+        };
+    }
+
+    currentContext.designSnapSettings = sanitizeDesignSnapSettings(currentContext.designSnapSettings);
+    const snapSettings = currentContext.designSnapSettings;
+    if (!snapSettings.gridEnabled && !snapSettings.elementEnabled) {
+        state.snapGuideX = null;
+        state.snapGuideY = null;
+        updateDesignSnapGuides(null, null);
+        return {
+            x: Math.round(safeRect.x),
+            y: Math.round(safeRect.y),
+            w: Math.round(safeRect.w),
+            h: Math.round(safeRect.h)
+        };
+    }
+
+    const threshold = Number(snapSettings.threshold || DESIGN_SNAP_THRESHOLD);
+    const gridSize = Number(snapSettings.gridSize || DESIGN_SNAP_GRID_SIZE);
+    const pickBestSnap = (points, targets) => {
+        let best = null;
+        points.forEach((point) => {
+            targets.forEach((target) => {
+                const delta = Number(target) - Number(point);
+                const abs = Math.abs(delta);
+                if (abs > threshold) {
+                    return;
+                }
+                if (!best || abs < best.abs) {
+                    best = {
+                        delta,
+                        target: Number(target),
+                        abs
+                    };
+                }
+            });
+        });
+        return best;
+    };
+
+    let left = Number(safeRect.x);
+    let top = Number(safeRect.y);
+    let right = Number(safeRect.x) + Number(safeRect.w);
+    let bottom = Number(safeRect.y) + Number(safeRect.h);
+    const movedPointsX = [];
+    const movedPointsY = [];
+    if (includesW) movedPointsX.push(left);
+    if (includesE) movedPointsX.push(right);
+    if (includesN) movedPointsY.push(top);
+    if (includesS) movedPointsY.push(bottom);
+
+    let gridSnapX = null;
+    let gridSnapY = null;
+    if (snapSettings.gridEnabled) {
+        const gridTargetsX = movedPointsX.map((point) => Math.round(point / gridSize) * gridSize);
+        const gridTargetsY = movedPointsY.map((point) => Math.round(point / gridSize) * gridSize);
+        gridSnapX = pickBestSnap(movedPointsX, gridTargetsX);
+        gridSnapY = pickBestSnap(movedPointsY, gridTargetsY);
+    }
+
+    let objectSnapX = null;
+    let objectSnapY = null;
+    if (snapSettings.elementEnabled) {
+        const page = getActiveDesignPage();
+        const activeId = String(state.elementId || '');
+        const others = Array.isArray(page?.elements)
+            ? page.elements.filter((element) => element.id !== activeId)
+            : [];
+        if (others.length) {
+            const targetPointsX = [];
+            const targetPointsY = [];
+            others.forEach((element) => {
+                const ex = Number(element.x || 0);
+                const ey = Number(element.y || 0);
+                const ew = Number(element.w || DESIGN_MIN_ELEMENT_SIZE);
+                const eh = Number(element.h || DESIGN_MIN_ELEMENT_SIZE);
+                targetPointsX.push(ex, ex + (ew / 2), ex + ew);
+                targetPointsY.push(ey, ey + (eh / 2), ey + eh);
+            });
+            objectSnapX = pickBestSnap(movedPointsX, targetPointsX);
+            objectSnapY = pickBestSnap(movedPointsY, targetPointsY);
+        }
+    }
+
+    const chooseSnap = (gridSnap, objectSnap) => {
+        if (gridSnap && objectSnap) {
+            return objectSnap.abs <= gridSnap.abs ? objectSnap : gridSnap;
+        }
+        return objectSnap || gridSnap || null;
+    };
+
+    const bestSnapX = chooseSnap(gridSnapX, objectSnapX);
+    const bestSnapY = chooseSnap(gridSnapY, objectSnapY);
+    if (bestSnapX) {
+        if (includesW) {
+            left += bestSnapX.delta;
+        } else if (includesE) {
+            right += bestSnapX.delta;
+        }
+    }
+    if (bestSnapY) {
+        if (includesN) {
+            top += bestSnapY.delta;
+        } else if (includesS) {
+            bottom += bestSnapY.delta;
+        }
+    }
+
+    const minSize = DESIGN_MIN_ELEMENT_SIZE;
+    if (includesW) {
+        left = clampNumber(left, 0, right - minSize, left);
+    }
+    if (includesE) {
+        right = clampNumber(right, left + minSize, DESIGN_CANVAS_WIDTH, right);
+    }
+    if (includesN) {
+        top = clampNumber(top, 0, bottom - minSize, top);
+    }
+    if (includesS) {
+        bottom = clampNumber(bottom, top + minSize, DESIGN_CANVAS_HEIGHT, bottom);
+    }
+
+    const snappedRect = {
+        x: Math.round(left),
+        y: Math.round(top),
+        w: Math.round(Math.max(minSize, right - left)),
+        h: Math.round(Math.max(minSize, bottom - top))
+    };
+
+    state.snapGuideX = bestSnapX ? bestSnapX.target : null;
+    state.snapGuideY = bestSnapY ? bestSnapY.target : null;
+    updateDesignSnapGuides(state.snapGuideX, state.snapGuideY);
+    return snappedRect;
+}
+
+function getDesignCanvasPointerCoords(event, canvas) {
+    if (!canvas || !(event instanceof PointerEvent)) {
+        return { x: 0, y: 0 };
+    }
+    const rect = canvas.getBoundingClientRect();
+    const scrollWrap = canvas.closest('.designer-canvas-scroll');
+    const scrollLeft = scrollWrap instanceof HTMLElement ? scrollWrap.scrollLeft : 0;
+    const scrollTop = scrollWrap instanceof HTMLElement ? scrollWrap.scrollTop : 0;
+    const rawX = (event.clientX - rect.left) + scrollLeft;
+    const rawY = (event.clientY - rect.top) + scrollTop;
+    const x = clampNumber(rawX, 0, DESIGN_CANVAS_WIDTH, 0);
+    const y = clampNumber(rawY, 0, DESIGN_CANVAS_HEIGHT, 0);
+    return {
+        x: Math.round(x),
+        y: Math.round(y)
+    };
+}
+
+function buildNormalizedCanvasRect(x1, y1, x2, y2) {
+    const left = Math.min(x1, x2);
+    const right = Math.max(x1, x2);
+    const top = Math.min(y1, y2);
+    const bottom = Math.max(y1, y2);
+    return {
+        left,
+        top,
+        right,
+        bottom,
+        width: Math.max(0, right - left),
+        height: Math.max(0, bottom - top)
+    };
+}
+
+function rectIntersects(a, b) {
+    if (!a || !b) {
+        return false;
+    }
+    return !(a.left > b.right || a.right < b.left || a.top > b.bottom || a.bottom < b.top);
+}
+
+function getDesignMarqueeOverlay(canvas, createIfMissing = false) {
+    if (!canvas) {
+        return null;
+    }
+    const existing = canvas.querySelector('.design-selection-marquee');
+    if (existing instanceof HTMLElement) {
+        return existing;
+    }
+    if (!createIfMissing) {
+        return null;
+    }
+    const overlay = document.createElement('div');
+    overlay.className = 'design-selection-marquee';
+    overlay.setAttribute('aria-hidden', 'true');
+    canvas.appendChild(overlay);
+    return overlay;
+}
+
+function updateDesignMarqueeOverlay(canvas, startX, startY, endX, endY) {
+    if (!canvas) {
+        return;
+    }
+    const overlay = getDesignMarqueeOverlay(canvas, true);
+    if (!(overlay instanceof HTMLElement)) {
+        return;
+    }
+    const rect = buildNormalizedCanvasRect(startX, startY, endX, endY);
+    overlay.style.display = 'block';
+    overlay.style.left = `${Math.round(rect.left)}px`;
+    overlay.style.top = `${Math.round(rect.top)}px`;
+    overlay.style.width = `${Math.round(rect.width)}px`;
+    overlay.style.height = `${Math.round(rect.height)}px`;
+    canvas.classList.add('is-marquee-selecting');
+}
+
+function hideDesignMarqueeOverlay() {
+    const canvas = document.getElementById('designStudioCanvas');
+    if (!(canvas instanceof HTMLElement)) {
+        return;
+    }
+    const overlay = getDesignMarqueeOverlay(canvas, false);
+    if (overlay instanceof HTMLElement) {
+        overlay.style.display = 'none';
+        overlay.style.width = '0px';
+        overlay.style.height = '0px';
+    }
+    canvas.classList.remove('is-marquee-selecting');
+}
+
+function getDesignSnapGuideElement(canvas, axis = 'x', createIfMissing = false) {
+    if (!(canvas instanceof HTMLElement)) {
+        return null;
+    }
+    const className = axis === 'y' ? 'guide-y' : 'guide-x';
+    const existing = canvas.querySelector(`.design-snap-guide.${className}`);
+    if (existing instanceof HTMLElement) {
+        return existing;
+    }
+    if (!createIfMissing) {
+        return null;
+    }
+    const guide = document.createElement('span');
+    guide.className = `design-snap-guide ${className}`;
+    guide.setAttribute('aria-hidden', 'true');
+    canvas.appendChild(guide);
+    return guide;
+}
+
+function updateDesignSnapGuides(x = null, y = null) {
+    const canvas = document.getElementById('designStudioCanvas');
+    if (!(canvas instanceof HTMLElement)) {
+        return;
+    }
+    const guideX = getDesignSnapGuideElement(canvas, 'x', true);
+    const guideY = getDesignSnapGuideElement(canvas, 'y', true);
+
+    if (guideX instanceof HTMLElement) {
+        if (Number.isFinite(Number(x))) {
+            guideX.style.display = 'block';
+            guideX.style.left = `${Math.round(Number(x))}px`;
+        } else {
+            guideX.style.display = 'none';
+        }
+    }
+    if (guideY instanceof HTMLElement) {
+        if (Number.isFinite(Number(y))) {
+            guideY.style.display = 'block';
+            guideY.style.top = `${Math.round(Number(y))}px`;
+        } else {
+            guideY.style.display = 'none';
+        }
+    }
+}
+
+function hideDesignSnapGuides() {
+    updateDesignSnapGuides(null, null);
+}
+
+function applyDesignMoveFromDragState(deltaX = 0, deltaY = 0) {
+    const state = currentContext.designDragState;
+    const startRects = state.selectionStartRects && typeof state.selectionStartRects === 'object'
+        ? state.selectionStartRects
+        : {};
+    const movableIds = Object.keys(startRects).filter((id) => !startRects[id]?.locked);
+    if (!movableIds.length) {
+        return false;
+    }
+
+    const selectedIds = Object.keys(startRects);
+    const selectedSet = new Set(selectedIds);
+    const minX = Math.min(...movableIds.map((id) => Number(startRects[id].x || 0)));
+    const maxRight = Math.max(...movableIds.map((id) => Number(startRects[id].x || 0) + Number(startRects[id].w || DESIGN_MIN_ELEMENT_SIZE)));
+    const minY = Math.min(...movableIds.map((id) => Number(startRects[id].y || 0)));
+    const maxBottom = Math.max(...movableIds.map((id) => Number(startRects[id].y || 0) + Number(startRects[id].h || DESIGN_MIN_ELEMENT_SIZE)));
+    const minShiftX = -minX;
+    const maxShiftX = Math.max(0, DESIGN_CANVAS_WIDTH - maxRight);
+    const minShiftY = -minY;
+    const maxShiftY = Math.max(0, DESIGN_CANVAS_HEIGHT - maxBottom);
+    let shiftX = clampNumber(Number(deltaX || 0), minShiftX, maxShiftX, 0);
+    let shiftY = clampNumber(Number(deltaY || 0), minShiftY, maxShiftY, 0);
+
+    currentContext.designSnapSettings = sanitizeDesignSnapSettings(currentContext.designSnapSettings);
+    const snapSettings = currentContext.designSnapSettings;
+    let snapGuideX = null;
+    let snapGuideY = null;
+
+    if (snapSettings.gridEnabled || snapSettings.elementEnabled) {
+        const threshold = Number(snapSettings.threshold || DESIGN_SNAP_THRESHOLD);
+        const gridSize = Number(snapSettings.gridSize || DESIGN_SNAP_GRID_SIZE);
+
+        const groupLeft = minX + shiftX;
+        const groupRight = maxRight + shiftX;
+        const groupTop = minY + shiftY;
+        const groupBottom = maxBottom + shiftY;
+        const groupCenterX = (groupLeft + groupRight) / 2;
+        const groupCenterY = (groupTop + groupBottom) / 2;
+        const groupPointsX = [groupLeft, groupCenterX, groupRight];
+        const groupPointsY = [groupTop, groupCenterY, groupBottom];
+
+        const pickBestSnap = (points, targets) => {
+            let best = null;
+            points.forEach((point) => {
+                targets.forEach((target) => {
+                    const delta = Number(target) - Number(point);
+                    const abs = Math.abs(delta);
+                    if (abs > threshold) {
+                        return;
+                    }
+                    if (!best || abs < best.abs) {
+                        best = {
+                            delta,
+                            target: Number(target),
+                            abs
+                        };
+                    }
+                });
+            });
+            return best;
+        };
+
+        let gridSnapX = null;
+        let gridSnapY = null;
+        if (snapSettings.gridEnabled) {
+            const gridTargetsX = groupPointsX.map((point) => Math.round(point / gridSize) * gridSize);
+            const gridTargetsY = groupPointsY.map((point) => Math.round(point / gridSize) * gridSize);
+            gridSnapX = pickBestSnap(groupPointsX, gridTargetsX);
+            gridSnapY = pickBestSnap(groupPointsY, gridTargetsY);
+        }
+
+        let objectSnapX = null;
+        let objectSnapY = null;
+        if (snapSettings.elementEnabled) {
+            const page = getActiveDesignPage();
+            const others = Array.isArray(page?.elements)
+                ? page.elements.filter((element) => !selectedSet.has(element.id))
+                : [];
+            if (others.length) {
+                const targetPointsX = [];
+                const targetPointsY = [];
+                others.forEach((element) => {
+                    targetPointsX.push(Number(element.x || 0));
+                    targetPointsX.push(Number(element.x || 0) + (Number(element.w || DESIGN_MIN_ELEMENT_SIZE) / 2));
+                    targetPointsX.push(Number(element.x || 0) + Number(element.w || DESIGN_MIN_ELEMENT_SIZE));
+                    targetPointsY.push(Number(element.y || 0));
+                    targetPointsY.push(Number(element.y || 0) + (Number(element.h || DESIGN_MIN_ELEMENT_SIZE) / 2));
+                    targetPointsY.push(Number(element.y || 0) + Number(element.h || DESIGN_MIN_ELEMENT_SIZE));
+                });
+                objectSnapX = pickBestSnap(groupPointsX, targetPointsX);
+                objectSnapY = pickBestSnap(groupPointsY, targetPointsY);
+            }
+        }
+
+        const chooseSnap = (gridSnap, objectSnap) => {
+            if (gridSnap && objectSnap) {
+                return objectSnap.abs <= gridSnap.abs ? objectSnap : gridSnap;
+            }
+            return objectSnap || gridSnap || null;
+        };
+
+        const bestSnapX = chooseSnap(gridSnapX, objectSnapX);
+        const bestSnapY = chooseSnap(gridSnapY, objectSnapY);
+        if (bestSnapX) {
+            shiftX += bestSnapX.delta;
+            snapGuideX = bestSnapX.target;
+        }
+        if (bestSnapY) {
+            shiftY += bestSnapY.delta;
+            snapGuideY = bestSnapY.target;
+        }
+    }
+
+    shiftX = clampNumber(shiftX, minShiftX, maxShiftX, shiftX);
+    shiftY = clampNumber(shiftY, minShiftY, maxShiftY, shiftY);
+
+    if (shiftX === state.lastShiftX && shiftY === state.lastShiftY) {
+        return false;
+    }
+    state.lastShiftX = shiftX;
+    state.lastShiftY = shiftY;
+    state.snapGuideX = Number.isFinite(Number(snapGuideX)) ? Number(snapGuideX) : null;
+    state.snapGuideY = Number.isFinite(Number(snapGuideY)) ? Number(snapGuideY) : null;
+
+    const movableSet = new Set(movableIds);
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page) {
+            return studio;
+        }
+        page.elements = page.elements.map((element) => {
+            if (!movableSet.has(element.id)) {
+                return element;
+            }
+            const base = startRects[element.id];
+            if (!base) {
+                return element;
+            }
+            return sanitizeDesignElement({
+                ...element,
+                x: Number(base.x) + shiftX,
+                y: Number(base.y) + shiftY
+            });
+        });
+        return studio;
+    }, {
+        refreshPreview: false,
+        renderSelect: false,
+        renderCanvas: true,
+        renderInspector: true
+    });
+    updateDesignSnapGuides(state.snapGuideX, state.snapGuideY);
+    return true;
+}
+
+function applyMarqueeSelectionFromDragState() {
+    const state = currentContext.designDragState;
+    const selectionRect = buildNormalizedCanvasRect(
+        Number(state.marqueeStartX || 0),
+        Number(state.marqueeStartY || 0),
+        Number(state.marqueeEndX || 0),
+        Number(state.marqueeEndY || 0)
+    );
+
+    withDesignStudioMutation((studio) => {
+        const page = studio.pages.find((item) => item.id === studio.selectedPageId) || studio.pages[0] || null;
+        if (!page || !page.elements.length) {
+            return studio;
+        }
+        const orderedIds = page.elements.map((item) => item.id);
+        const hitIds = page.elements
+            .filter((element) => {
+                const elementRect = {
+                    left: Number(element.x || 0),
+                    top: Number(element.y || 0),
+                    right: Number(element.x || 0) + Number(element.w || DESIGN_MIN_ELEMENT_SIZE),
+                    bottom: Number(element.y || 0) + Number(element.h || DESIGN_MIN_ELEMENT_SIZE)
+                };
+                return rectIntersects(selectionRect, elementRect);
+            })
+            .map((element) => element.id);
+
+        const baseSelection = state.marqueeAdditive
+            ? (Array.isArray(state.marqueeBaseSelectionIds) ? state.marqueeBaseSelectionIds : [])
+                .filter((id) => orderedIds.includes(id))
+            : [];
+
+        const selectedSet = new Set(baseSelection);
+        if (!state.marqueeAdditive) {
+            selectedSet.clear();
+        }
+        if (state.marqueeAdditive && state.marqueeToggle) {
+            hitIds.forEach((id) => {
+                if (selectedSet.has(id)) {
+                    selectedSet.delete(id);
+                } else {
+                    selectedSet.add(id);
+                }
+            });
+        } else {
+            hitIds.forEach((id) => selectedSet.add(id));
+        }
+
+        let orderedSelection = orderedIds.filter((id) => selectedSet.has(id));
+        if (!orderedSelection.length) {
+            const fallbackId = page.elements[0]?.id || '';
+            studio.selectedElementId = fallbackId;
+            studio.selectedElementIds = fallbackId ? [fallbackId] : [];
+            return studio;
+        }
+
+        let primaryId = hitIds.length ? hitIds[hitIds.length - 1] : '';
+        if (!primaryId || !orderedSelection.includes(primaryId)) {
+            const currentPrimary = String(studio.selectedElementId || '');
+            primaryId = orderedSelection.includes(currentPrimary)
+                ? currentPrimary
+                : orderedSelection[orderedSelection.length - 1];
+        }
+        studio.selectedElementId = primaryId;
+        studio.selectedElementIds = [primaryId, ...orderedSelection.filter((id) => id !== primaryId)];
+        return studio;
+    }, {
+        refreshPreview: false,
+        renderSelect: false,
+        renderCanvas: true,
+        renderInspector: true
+    });
+}
+
 function initDesignStudioCanvasInteractions() {
     const canvas = document.getElementById('designStudioCanvas');
     if (!canvas) {
         return;
     }
 
-    canvas.addEventListener('click', (event) => {
-        const target = event.target;
-        if (!(target instanceof Element)) {
-            return;
-        }
-        const elementNode = target.closest('[data-design-element-id]');
-        if (!(elementNode instanceof HTMLElement)) {
-            return;
-        }
-        const elementId = String(elementNode.dataset.designElementId || '');
-        if (!elementId) {
-            return;
-        }
-        selectDesignElement(elementId, { refreshPreview: false });
-    });
-
     canvas.addEventListener('pointerdown', (event) => {
+        if (!(event instanceof PointerEvent)) {
+            return;
+        }
+        if (event.button !== 0) {
+            return;
+        }
         const target = event.target;
         if (!(target instanceof Element)) {
             return;
         }
         const handleNode = target.closest('[data-design-resize-handle]');
         const elementNode = target.closest('[data-design-element-id]');
+        const additive = Boolean(event.ctrlKey || event.metaKey || event.shiftKey);
+        const toggleModifier = Boolean(event.ctrlKey || event.metaKey);
+
         if (!(elementNode instanceof HTMLElement)) {
+            const pointer = getDesignCanvasPointerCoords(event, canvas);
+            hideDesignSnapGuides();
+            event.preventDefault();
+            currentContext.designDragState.active = true;
+            currentContext.designDragState.mode = 'marquee';
+            currentContext.designDragState.pointerId = event.pointerId;
+            currentContext.designDragState.pageId = String(getActiveDesignPage()?.id || '');
+            currentContext.designDragState.elementId = '';
+            currentContext.designDragState.pointerStartX = event.clientX;
+            currentContext.designDragState.pointerStartY = event.clientY;
+            currentContext.designDragState.marqueeStartX = pointer.x;
+            currentContext.designDragState.marqueeStartY = pointer.y;
+            currentContext.designDragState.marqueeEndX = pointer.x;
+            currentContext.designDragState.marqueeEndY = pointer.y;
+            currentContext.designDragState.marqueeAdditive = additive;
+            currentContext.designDragState.marqueeToggle = toggleModifier;
+            currentContext.designDragState.marqueeBaseSelectionIds = additive
+                ? getSelectedDesignElementIds()
+                : [];
+            currentContext.designDragState.moved = false;
+            updateDesignMarqueeOverlay(canvas, pointer.x, pointer.y, pointer.x, pointer.y);
             return;
         }
 
@@ -3446,48 +6417,127 @@ function initDesignStudioCanvasInteractions() {
             return;
         }
 
-        const selectedId = String(currentContext.designStudio?.selectedElementId || '');
-        if (selectedId !== elementId) {
-            selectDesignElement(elementId, { refreshPreview: false });
-        }
-
-        const current = getSelectedDesignElement();
-        if (!current) {
+        if (additive && !(handleNode instanceof HTMLElement)) {
+            selectDesignElement(elementId, {
+                refreshPreview: false,
+                additive: true,
+                toggle: true
+            });
             return;
         }
 
+        const selectedIds = getSelectedDesignElementIds();
+        const isAlreadySelected = selectedIds.includes(elementId);
+        if (!isAlreadySelected) {
+            selectDesignElement(elementId, { refreshPreview: false });
+        }
+
+        if (handleNode instanceof HTMLElement) {
+            const current = getSelectedDesignElement();
+            if (!current || current.locked) {
+                return;
+            }
+            hideDesignSnapGuides();
+            event.preventDefault();
+            currentContext.designDragState.active = true;
+            currentContext.designDragState.mode = 'resize';
+            currentContext.designDragState.pointerId = event.pointerId;
+            currentContext.designDragState.resizeHandle = String(handleNode.dataset.designResizeHandle || '').toLowerCase();
+            currentContext.designDragState.pageId = String(getActiveDesignPage()?.id || '');
+            currentContext.designDragState.elementId = current.id;
+            currentContext.designDragState.pointerStartX = event.clientX;
+            currentContext.designDragState.pointerStartY = event.clientY;
+            currentContext.designDragState.elementStartX = current.x;
+            currentContext.designDragState.elementStartY = current.y;
+            currentContext.designDragState.elementStartW = current.w;
+            currentContext.designDragState.elementStartH = current.h;
+            currentContext.designDragState.lastShiftX = 0;
+            currentContext.designDragState.lastShiftY = 0;
+            currentContext.designDragState.moved = false;
+            document.querySelectorAll(`#designStudioCanvas [data-design-element-id="${cssEscape(current.id)}"]`).forEach((item) => {
+                item.classList.add('is-dragging');
+            });
+            return;
+        }
+
+        const selectedElements = getSelectedDesignElements();
+        const hasMovableSelection = selectedElements.some((item) => !item.locked);
+        if (!hasMovableSelection) {
+            return;
+        }
+        const startRects = {};
+        selectedElements.forEach((element) => {
+            startRects[element.id] = {
+                x: Number(element.x || 0),
+                y: Number(element.y || 0),
+                w: Number(element.w || DESIGN_MIN_ELEMENT_SIZE),
+                h: Number(element.h || DESIGN_MIN_ELEMENT_SIZE),
+                locked: Boolean(element.locked)
+            };
+        });
+
         event.preventDefault();
         currentContext.designDragState.active = true;
-        currentContext.designDragState.mode = handleNode instanceof HTMLElement ? 'resize' : 'move';
-        currentContext.designDragState.resizeHandle = handleNode instanceof HTMLElement
-            ? String(handleNode.dataset.designResizeHandle || '').toLowerCase()
-            : '';
+        currentContext.designDragState.mode = 'move';
+        currentContext.designDragState.pointerId = event.pointerId;
+        currentContext.designDragState.resizeHandle = '';
         currentContext.designDragState.pageId = String(getActiveDesignPage()?.id || '');
-        currentContext.designDragState.elementId = current.id;
+        currentContext.designDragState.elementId = elementId;
         currentContext.designDragState.pointerStartX = event.clientX;
         currentContext.designDragState.pointerStartY = event.clientY;
-        currentContext.designDragState.elementStartX = current.x;
-        currentContext.designDragState.elementStartY = current.y;
-        currentContext.designDragState.elementStartW = current.w;
-        currentContext.designDragState.elementStartH = current.h;
+        currentContext.designDragState.selectionStartRects = startRects;
+        currentContext.designDragState.lastShiftX = 0;
+        currentContext.designDragState.lastShiftY = 0;
         currentContext.designDragState.moved = false;
-        elementNode.classList.add('is-dragging');
+        selectedElements
+            .filter((element) => !element.locked)
+            .forEach((element) => {
+                document.querySelectorAll(`#designStudioCanvas [data-design-element-id="${cssEscape(element.id)}"]`).forEach((item) => {
+                    item.classList.add('is-dragging');
+                });
+            });
     });
 
     window.addEventListener('pointermove', (event) => {
         if (!currentContext.designDragState.active) {
             return;
         }
+        if (
+            currentContext.designDragState.pointerId !== null
+            && Number.isFinite(Number(currentContext.designDragState.pointerId))
+            && event.pointerId !== currentContext.designDragState.pointerId
+        ) {
+            return;
+        }
         const dx = event.clientX - currentContext.designDragState.pointerStartX;
         const dy = event.clientY - currentContext.designDragState.pointerStartY;
         const mode = String(currentContext.designDragState.mode || 'move');
 
+        if (mode === 'marquee') {
+            hideDesignSnapGuides();
+            const pointer = getDesignCanvasPointerCoords(event, canvas);
+            currentContext.designDragState.marqueeEndX = pointer.x;
+            currentContext.designDragState.marqueeEndY = pointer.y;
+            updateDesignMarqueeOverlay(
+                canvas,
+                currentContext.designDragState.marqueeStartX,
+                currentContext.designDragState.marqueeStartY,
+                pointer.x,
+                pointer.y
+            );
+            if (Math.abs(pointer.x - currentContext.designDragState.marqueeStartX) >= 3 || Math.abs(pointer.y - currentContext.designDragState.marqueeStartY) >= 3) {
+                currentContext.designDragState.moved = true;
+            }
+            return;
+        }
+
         if (mode === 'resize') {
             const handle = String(currentContext.designDragState.resizeHandle || '');
             if (!handle) {
+                hideDesignSnapGuides();
                 return;
             }
-            const nextRect = resolveResizeRectFromHandle(
+            const baseRect = resolveResizeRectFromHandle(
                 handle,
                 dx,
                 dy,
@@ -3496,6 +6546,7 @@ function initDesignStudioCanvasInteractions() {
                 currentContext.designDragState.elementStartW,
                 currentContext.designDragState.elementStartH
             );
+            const nextRect = applyDesignResizeSnapFromDragState(baseRect, handle);
             const hasChanged = (
                 nextRect.x !== Math.round(currentContext.designDragState.elementStartX)
                 || nextRect.y !== Math.round(currentContext.designDragState.elementStartY)
@@ -3518,47 +6569,31 @@ function initDesignStudioCanvasInteractions() {
             return;
         }
 
-        const activeWidth = Math.max(DESIGN_MIN_ELEMENT_SIZE, Number(currentContext.designDragState.elementStartW || DESIGN_MIN_ELEMENT_SIZE));
-        const activeHeight = Math.max(DESIGN_MIN_ELEMENT_SIZE, Number(currentContext.designDragState.elementStartH || DESIGN_MIN_ELEMENT_SIZE));
-        const nextX = clampNumber(
-            currentContext.designDragState.elementStartX + dx,
-            0,
-            Math.max(0, DESIGN_CANVAS_WIDTH - activeWidth),
-            currentContext.designDragState.elementStartX
-        );
-        const nextY = clampNumber(
-            currentContext.designDragState.elementStartY + dy,
-            0,
-            Math.max(0, DESIGN_CANVAS_HEIGHT - activeHeight),
-            currentContext.designDragState.elementStartY
-        );
-        const hasMoved = (
-            nextX !== Math.round(currentContext.designDragState.elementStartX)
-            || nextY !== Math.round(currentContext.designDragState.elementStartY)
-        );
-        if (!hasMoved) {
-            return;
+        const changed = applyDesignMoveFromDragState(dx, dy);
+        if (changed && (currentContext.designDragState.lastShiftX !== 0 || currentContext.designDragState.lastShiftY !== 0)) {
+            currentContext.designDragState.moved = true;
         }
-        currentContext.designDragState.moved = true;
-        updateSelectedDesignElementFromInspector({
-            x: nextX,
-            y: nextY
-        }, {
-            renderInspector: true,
-            refreshPreview: false
-        });
     });
 
     window.addEventListener('pointerup', () => {
         if (!currentContext.designDragState.active) {
             return;
         }
+        const mode = String(currentContext.designDragState.mode || 'move');
         const moved = Boolean(currentContext.designDragState.moved);
+        const additive = Boolean(currentContext.designDragState.marqueeAdditive);
+        if (mode === 'marquee') {
+            if (moved) {
+                applyMarqueeSelectionFromDragState();
+            } else if (!additive) {
+                reduceDesignSelectionToPrimary();
+            }
+        }
         resetDesignDragState();
         document.querySelectorAll('#designStudioCanvas .design-element.is-dragging').forEach((item) => {
             item.classList.remove('is-dragging');
         });
-        if (moved) {
+        if (moved && mode !== 'marquee') {
             refreshBrandbookPreviewFromBuilder();
         }
     });
@@ -3577,7 +6612,7 @@ function initDesignStudioCanvasInteractions() {
 function exportDesignSceneJson() {
     const studio = sanitizeDesignStudio(currentContext.designStudio);
     if (!studio.pages.length) {
-        setStatus('Nao ha cena para exportar no Design Studio.', 'warn');
+        setStatus('Não há cena para exportar no Design Studio.', 'warn');
         return;
     }
     const payload = {
@@ -3612,7 +6647,7 @@ async function importDesignSceneFile(file) {
         refreshBrandbookPreviewFromBuilder();
         setStatus('Cena importada para o Design Studio.', 'ok');
     } catch (error) {
-        setStatus('Arquivo de cena invalido. Verifique o JSON.', 'warn');
+        setStatus('Arquivo de cena inválido. Verifique o JSON.', 'warn');
     }
 }
 
@@ -3723,6 +6758,90 @@ function detectElementTypeFromFigmaNode(node, namingProfile = buildFigmaNamingPr
     }
 
     const normalizedName = normalizeNameForMatching(name);
+    if (type === 'ELLIPSE') {
+        return 'shape_ellipse';
+    }
+    if (type === 'LINE') {
+        return 'shape_line';
+    }
+    if (type === 'RECTANGLE') {
+        if (normalizedName.includes('round') || normalizedName.includes('arredond')) {
+            return 'shape_round_rect';
+        }
+        if (normalizedName.includes('parallelogram') || normalizedName.includes('paralelogram')) {
+            return 'shape_parallelogram';
+        }
+        if (normalizedName.includes('trapezoid') || normalizedName.includes('trapez')) {
+            return 'shape_trapezoid';
+        }
+        if (normalizedName.includes('diamond') || normalizedName.includes('losango') || normalizedName.includes('rhombus')) {
+            return 'shape_diamond';
+        }
+        return 'shape_rect';
+    }
+    if (type === 'VECTOR' || type === 'POLYGON') {
+        if (normalizedName.includes('triangle') || normalizedName.includes('triangulo')) {
+            return 'shape_triangle';
+        }
+        if (normalizedName.includes('diamond') || normalizedName.includes('losango') || normalizedName.includes('rhombus')) {
+            return 'shape_diamond';
+        }
+        if (normalizedName.includes('pentagon') || normalizedName.includes('pentagono')) {
+            return 'shape_pentagon';
+        }
+        if (normalizedName.includes('hexagon') || normalizedName.includes('hexagono')) {
+            return 'shape_hexagon';
+        }
+        if (normalizedName.includes('octagon') || normalizedName.includes('octogono')) {
+            return 'shape_octagon';
+        }
+        if (normalizedName.includes('star') || normalizedName.includes('estrela')) {
+            return 'shape_star';
+        }
+    }
+    if (normalizedName.includes('heart') || normalizedName.includes('coracao')) {
+        return 'shape_heart';
+    }
+    if (normalizedName.includes('cloud') || normalizedName.includes('nuvem')) {
+        return 'shape_cloud';
+    }
+    if (normalizedName.includes('arrow') || normalizedName.includes('seta')) {
+        if (normalizedName.includes('left') || normalizedName.includes('esquer')) return 'shape_arrow_left';
+        if (normalizedName.includes('up') || normalizedName.includes('cima')) return 'shape_arrow_up';
+        if (normalizedName.includes('down') || normalizedName.includes('baixo')) return 'shape_arrow_down';
+        return 'shape_arrow_right';
+    }
+    if (normalizedName.includes('chevron')) {
+        if (normalizedName.includes('left') || normalizedName.includes('esquer')) return 'shape_chevron_left';
+        return 'shape_chevron_right';
+    }
+    if (normalizedName.includes('comparison') || normalizedName.includes('compare') || normalizedName.includes('antes') || normalizedName.includes('depois')) {
+        return 'comparison_card';
+    }
+    if (normalizedName.includes('timeline') || normalizedName.includes('step') || normalizedName.includes('etapa')) {
+        return 'timeline_step';
+    }
+    if (normalizedName.includes('quote') || normalizedName.includes('citacao') || normalizedName.includes('testimonial')) {
+        return 'quote_block';
+    }
+    if (normalizedName.includes('info card') || normalizedName.includes('infocard') || normalizedName.includes('content card')) {
+        return 'info_card';
+    }
+    if (normalizedName.includes('divider') || normalizedName.includes('line') || normalizedName.includes('separador')) {
+        return 'divider';
+    }
+    if (normalizedName.includes('button') || normalizedName.includes('cta')) {
+        return 'cta_button';
+    }
+    if (normalizedName.includes('list') || normalizedName.includes('bullet') || normalizedName.includes('check')) {
+        return 'bullet_list';
+    }
+    if (normalizedName.includes('metric') || normalizedName.includes('stat') || normalizedName.includes('kpi')) {
+        return 'stat_card';
+    }
+    if (normalizedName.includes('chip') || normalizedName.includes('tag')) {
+        return 'tag_chip';
+    }
     if (normalizedName.includes('mockup') || normalizedName.includes('photo') || normalizedName.includes('image')) {
         return 'mockup_slot';
     }
@@ -3732,7 +6851,7 @@ function detectElementTypeFromFigmaNode(node, namingProfile = buildFigmaNamingPr
     if (normalizedName.includes('logo')) {
         return 'logo_box';
     }
-    return 'shape';
+    return 'shape_rect';
 }
 
 function mapFigmaNodeToDesignElement(node, transform, fallbackPos, namingProfile = buildFigmaNamingProfile()) {
@@ -3755,7 +6874,7 @@ function mapFigmaNodeToDesignElement(node, transform, fallbackPos, namingProfile
 
     return sanitizeDesignElement({
         ...base,
-        text: type === 'shape' ? String(node?.name || '') : text,
+        text: DESIGN_SHAPE_ONLY_TYPES.includes(type) ? String(node?.name || '') : text,
         fontSize: Number(node?.style?.fontSize || base.fontSize),
         color: figmaColorToHex(node?.style?.fills?.[0]?.color || stroke?.color, base.color),
         bg: figmaColorToHex(fill?.color, base.bg),
@@ -3841,7 +6960,8 @@ function parseFigmaJsonToDesignStudio(parsed, namingProfile = buildFigmaNamingPr
         source: 'figma',
         pages,
         selectedPageId: pages[0]?.id || '',
-        selectedElementId: pages[0]?.elements?.[0]?.id || ''
+        selectedElementId: pages[0]?.elements?.[0]?.id || '',
+        selectedElementIds: pages[0]?.elements?.[0]?.id ? [pages[0].elements[0].id] : []
     });
 }
 
@@ -3853,7 +6973,7 @@ async function importDesignStudioFromFigmaFile(file) {
         const profile = buildFigmaNamingProfile(config);
         const studio = parseFigmaJsonToDesignStudio(parsed, profile);
         if (!studio || !studio.pages.length) {
-            setStatus('Nao foi possivel interpretar o JSON do Figma. Verifique se o arquivo contem frames.', 'warn');
+            setStatus('Não foi possível interpretar o JSON do Figma. Verifique se o arquivo contém frames.', 'warn');
             return;
         }
         currentContext.designStudio = studio;
@@ -3864,9 +6984,9 @@ async function importDesignStudioFromFigmaFile(file) {
         }
         renderDesignStudioUi();
         refreshBrandbookPreviewFromBuilder();
-        setStatus(`${studio.pages.length} pagina(s) importada(s) do Figma com preset "${config.presetId}".`, 'ok');
+        setStatus(`${studio.pages.length} página(s) importada(s) do Figma com preset "${config.presetId}".`, 'ok');
     } catch (error) {
-        setStatus('JSON do Figma invalido. Verifique o arquivo importado.', 'warn');
+        setStatus('JSON do Figma inválido. Verifique o arquivo importado.', 'warn');
     }
 }
 
@@ -3893,7 +7013,7 @@ function applySmartTemplateStructure() {
     updateMiniGuideVariantFieldState();
     updateTemplateStrategyHint();
     refreshBrandbookPreviewFromBuilder();
-    setStatus(`Metodo inteligente aplicado (${getBookModeLabel(bookMode)}).`, 'ok');
+    setStatus(`Método inteligente aplicado (${getBookModeLabel(bookMode)}).`, 'ok');
 }
 
 function applyMiniGuidePreset(presetId = getSelectedMiniPresetId(), options = {}) {
@@ -3973,6 +7093,7 @@ function buildDraftPresetFromBuilder() {
             : currentContext.designStudioEnabled
     );
     const figmaNamingConfig = persistFigmaNamingConfigFromForm();
+    const palettePreset = buildPalettePresetFromBuilder(themeKey, activePreset);
 
     return normalizePresetCandidate({
         ...activePreset,
@@ -3983,9 +7104,9 @@ function buildDraftPresetFromBuilder() {
         smartMethod,
         miniGuideVariant,
         kicker: String(kickerField?.value || activePreset.kicker || basePreset.kicker).trim().slice(0, 90) || basePreset.kicker,
-        fallbackPalette: Array.isArray(activePreset.fallbackPalette) && activePreset.fallbackPalette.length
-            ? activePreset.fallbackPalette.slice(0, 6)
-            : basePreset.fallbackPalette.slice(0, 6),
+        fallbackPalette: palettePreset.fallbackPalette,
+        colorOverrideEnabled: palettePreset.colorOverrideEnabled,
+        colorOverride: palettePreset.colorOverride,
         closing: String(closingField?.value || activePreset.closing || basePreset.closing).trim().slice(0, 180) || basePreset.closing,
         structure: structureIds.map((moduleId, index) => ({
             id: moduleId,
@@ -3999,8 +7120,19 @@ function buildDraftPresetFromBuilder() {
     });
 }
 
-function refreshBrandbookPreviewFromBuilder() {
+function refreshBrandbookPreviewFromBuilder(options = {}) {
+    const settings = {
+        syncDesignStudioCanvas: true,
+        source: 'builder',
+        ...options
+    };
     if (!currentContext.payload) {
+        updatePreviewSyncBadge({
+            status: 'warn',
+            source: settings.source,
+            pages: 0,
+            message: 'Sem payload para atualizar o preview.'
+        });
         return;
     }
 
@@ -4023,9 +7155,18 @@ function refreshBrandbookPreviewFromBuilder() {
     renderPracticalPlaybook(currentContext.practicalSettings, currentContext.payload, currentContext.displayMockups);
 
     const draftPreset = buildDraftPresetFromBuilder();
-    const sheets = renderBrandbook(currentContext.payload, currentContext.displayMockups, draftPreset);
+    const sheets = renderBrandbook(currentContext.payload, currentContext.displayMockups, draftPreset, {
+        source: settings.source
+    });
     applyTemplateMetadata(currentContext.payload, draftPreset, sheets.length);
     renderPayload(currentContext.payload);
+    if (settings.syncDesignStudioCanvas) {
+        renderDesignStudioUi({
+            renderSelect: false,
+            renderCanvas: true,
+            renderInspector: false
+        });
+    }
 }
 
 function suggestMiniVariantForSmartMethod(method) {
@@ -4145,7 +7286,7 @@ function updateTemplateStrategyHint() {
     const methodLabel = method === 'smart_identity'
         ? 'foco identidade'
         : method === 'smart_showcase'
-            ? 'foco apresentacao'
+            ? 'foco apresentação'
             : method === 'smart_digital'
                 ? 'foco digital'
                 : 'auto balanceado';
@@ -4156,7 +7297,7 @@ function updateTemplateStrategyHint() {
     const presetSegment = mode === BOOK_MODE_MINI && miniPresetId !== MINI_GUIDE_PRESET_NONE
         ? ` | preset ${getMiniPresetLabel(miniPresetId)}`
         : '';
-    target.textContent = `Estrategia ativa: ${getBookModeLabel(mode)} | ${methodLabel}${variantSegment}${presetSegment} | ${structureCount} modulo(s).`;
+    target.textContent = `Estratégia ativa: ${getBookModeLabel(mode)} | ${methodLabel}${variantSegment}${presetSegment} | ${structureCount} módulo(s).`;
 }
 
 function initTemplateBuilderDnD() {
@@ -4334,7 +7475,7 @@ function saveCustomTemplateFromBuilder() {
         bookMode
     );
     if (structureIds.length < 3) {
-        setStatus('Adicione pelo menos 3 modulos na estrutura para salvar o template.', 'warn');
+        setStatus('Adicione pelo menos 3 módulos na estrutura para salvar o template.', 'warn');
         return;
     }
 
@@ -4356,6 +7497,7 @@ function saveCustomTemplateFromBuilder() {
             : currentContext.designStudioEnabled
     );
     const figmaNamingConfig = persistFigmaNamingConfigFromForm();
+    const palettePreset = buildPalettePresetFromBuilder(baseThemeKey, activePreset);
 
     const customTemplate = {
         id: templateId,
@@ -4366,7 +7508,9 @@ function saveCustomTemplateFromBuilder() {
         smartMethod,
         miniGuideVariant,
         kicker: String(kickerField?.value || basePreset.kicker).trim().slice(0, 90) || basePreset.kicker,
-        fallbackPalette: basePreset.fallbackPalette.slice(0, 6),
+        fallbackPalette: palettePreset.fallbackPalette,
+        colorOverrideEnabled: palettePreset.colorOverrideEnabled,
+        colorOverride: palettePreset.colorOverride,
         closing: String(closingField?.value || basePreset.closing).trim().slice(0, 180) || basePreset.closing,
         structure: structureIds.map((moduleId, index) => ({
             id: moduleId,
@@ -4416,7 +7560,7 @@ function removeActiveCustomTemplate() {
 function duplicateActiveTemplate() {
     const sourcePreset = getTemplatePreset(currentContext.activeTemplateId);
     if (!sourcePreset || typeof sourcePreset !== 'object') {
-        setStatus('Nao foi possivel duplicar o template ativo.', 'warn');
+        setStatus('Não foi possível duplicar o template ativo.', 'warn');
         return;
     }
 
@@ -4428,9 +7572,9 @@ function duplicateActiveTemplate() {
     const desiredName = `${String(sourcePreset.name || 'Template')} Copy`;
     const templateName = buildUniqueCustomTemplateName(desiredName);
     const templateId = buildCustomTemplateId(templateName);
-    const fallbackPalette = Array.isArray(sourcePreset.fallbackPalette) && sourcePreset.fallbackPalette.length
-        ? sourcePreset.fallbackPalette.slice(0, 6)
-        : basePreset.fallbackPalette.slice(0, 6);
+    const fallbackPalette = normalizeTemplatePalette(sourcePreset.fallbackPalette, basePreset.fallbackPalette);
+    const colorOverrideEnabled = Boolean(sourcePreset.colorOverrideEnabled);
+    const colorOverride = normalizeTemplatePalette(sourcePreset.colorOverride, fallbackPalette);
     const layout = resolveTemplateLayoutMap(sourcePreset, structureIds);
     const designStudio = sanitizeDesignStudio(sourcePreset.designStudio, { ensurePage: false });
     const savedDesignStudio = designStudio.pages.length ? designStudio : null;
@@ -4447,6 +7591,8 @@ function duplicateActiveTemplate() {
         miniGuideVariant: resolveTemplateMiniGuideVariant(sourcePreset),
         kicker: String(sourcePreset.kicker || basePreset.kicker).trim().slice(0, 90) || basePreset.kicker,
         fallbackPalette,
+        colorOverrideEnabled,
+        colorOverride,
         closing: String(sourcePreset.closing || basePreset.closing).trim().slice(0, 180) || basePreset.closing,
         structure: structureIds.map((moduleId, index) => ({
             id: moduleId,
@@ -4477,7 +7623,7 @@ function exportCustomTemplatesJson() {
         .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR'));
 
     if (!templates.length) {
-        setStatus('Nao ha templates custom para exportar.', 'warn');
+        setStatus('Não há templates custom para exportar.', 'warn');
         return;
     }
 
@@ -4575,7 +7721,7 @@ function updateBackupUiState(snapshot = null) {
 
 function createManualTemplateBackup() {
     if (!Object.keys(currentContext.customTemplates || {}).length) {
-        setStatus('Nao ha templates custom para backup.', 'warn');
+        setStatus('Não há templates custom para backup.', 'warn');
         return;
     }
     const snapshot = createTemplateBackupSnapshot('manual_backup');
@@ -4589,7 +7735,7 @@ function createManualTemplateBackup() {
 function restoreTemplateBackup() {
     const backup = readTemplateBackupSnapshot();
     if (!backup || !backup.templates || typeof backup.templates !== 'object') {
-        setStatus('Nenhum backup disponivel para restaurar.', 'warn');
+        setStatus('Nenhum backup disponível para restaurar.', 'warn');
         return;
     }
 
@@ -4599,9 +7745,9 @@ function restoreTemplateBackup() {
         return;
     }
 
-    const confirmed = window.confirm('Restaurar backup ira substituir os templates custom atuais. Deseja continuar?');
+    const confirmed = window.confirm('Restaurar backup irá substituir os templates custom atuais. Deseja continuar?');
     if (!confirmed) {
-        setStatus('Restauracao de backup cancelada.', 'warn');
+        setStatus('Restauração de backup cancelada.', 'warn');
         return;
     }
 
@@ -4614,7 +7760,7 @@ function restoreTemplateBackup() {
     });
 
     if (!Object.keys(nextMap).length) {
-        setStatus('Backup invalido: nenhum template restauravel.', 'warn');
+        setStatus('Backup inválido: nenhum template restaurável.', 'warn');
         return;
     }
 
@@ -4635,7 +7781,7 @@ function restoreTemplateBackup() {
 function downloadTemplateBackupJson() {
     const backup = readTemplateBackupSnapshot();
     if (!backup || !backup.templates || !Object.keys(backup.templates).length) {
-        setStatus('Nenhum backup disponivel para download.', 'warn');
+        setStatus('Nenhum backup disponível para download.', 'warn');
         return;
     }
 
@@ -4649,7 +7795,7 @@ function downloadTemplateBackupJson() {
 
 async function importCustomTemplatesFromFile(file, mode = 'merge') {
     if (!(file instanceof File)) {
-        setStatus('Arquivo de importacao invalido.', 'warn');
+        setStatus('Arquivo de importação inválido.', 'warn');
         return;
     }
     const importMode = mode === 'overwrite' ? 'overwrite' : 'merge';
@@ -4658,7 +7804,7 @@ async function importCustomTemplatesFromFile(file, mode = 'merge') {
     try {
         rawContent = await file.text();
     } catch (error) {
-        setStatus('Falha ao ler o arquivo de importacao.', 'warn');
+        setStatus('Falha ao ler o arquivo de importação.', 'warn');
         return;
     }
 
@@ -4666,13 +7812,13 @@ async function importCustomTemplatesFromFile(file, mode = 'merge') {
     try {
         parsed = JSON.parse(rawContent);
     } catch (error) {
-        setStatus('JSON invalido. Verifique o arquivo de templates.', 'warn');
+        setStatus('JSON inválido. Verifique o arquivo de templates.', 'warn');
         return;
     }
 
     const candidates = collectImportedTemplateCandidates(parsed);
     if (!candidates.length) {
-        setStatus('Nenhum template custom valido foi encontrado no arquivo.', 'warn');
+        setStatus('Nenhum template custom válido foi encontrado no arquivo.', 'warn');
         return;
     }
 
@@ -4722,7 +7868,7 @@ async function importCustomTemplatesFromFile(file, mode = 'merge') {
     });
 
     if (!createdCount && !updatedCount) {
-        setStatus('Importacao concluida sem templates aproveitaveis.', 'warn');
+        setStatus('Importação concluída sem templates aproveitáveis.', 'warn');
         return;
     }
 
@@ -4742,7 +7888,7 @@ async function importCustomTemplatesFromFile(file, mode = 'merge') {
 
     const detail = skippedCount ? ` (${skippedCount} ignorado(s)).` : '.';
     const modeLabel = importMode === 'overwrite' ? 'sobrescrever' : 'mesclar';
-    setStatus(`Importacao (${modeLabel}) concluida: ${createdCount} novo(s), ${updatedCount} atualizado(s)${detail}`, 'ok');
+    setStatus(`Importação (${modeLabel}) concluída: ${createdCount} novo(s), ${updatedCount} atualizado(s)${detail}`, 'ok');
 }
 
 function collectImportedTemplateCandidates(parsed) {
@@ -4887,19 +8033,33 @@ function refreshManual() {
     renderNotes(context.payload.integrationNotes || []);
 
     const preset = getTemplatePreset(currentContext.activeTemplateId);
-    const sheets = renderBrandbook(context.payload, context.displayMockups, preset.id);
+    const sheets = renderBrandbook(context.payload, context.displayMockups, preset.id, {
+        source: context.fromCache ? 'manual_cache' : 'manual_refresh'
+    });
     applyTemplateMetadata(context.payload, preset, sheets.length);
 
     persistLatestManualPayload(context.payload);
     renderPayload(context.payload);
 
     if (context.fromCache) {
+        updatePreviewSyncBadge({
+            status: 'warn',
+            source: 'manual_cache',
+            pages: sheets.length,
+            message: 'Preview montado com dados de cache local.'
+        });
         setStatus('Manual carregado do cache local. Atualize as ferramentas para obter dados mais recentes.', 'warn');
         return;
     }
 
     const issues = context.payload.integrationNotes.filter((note) => note.level === 'warn').length;
     if (issues > 0) {
+        updatePreviewSyncBadge({
+            status: 'warn',
+            source: 'manual_refresh',
+            pages: sheets.length,
+            message: `${issues} alerta(s) de integracao detectado(s).`
+        });
         setStatus(`Manual atualizado com ${issues} alerta(s) de integração.`, 'warn');
         return;
     }
@@ -4943,7 +8103,12 @@ function applyTemplateMetadata(payload, preset, generatedSheets) {
     };
 }
 
-function renderBrandbook(payload, displayMockups, templateRef) {
+function renderBrandbook(payload, displayMockups, templateRef, options = {}) {
+    const settings = {
+        source: 'render',
+        syncBadge: true,
+        ...options
+    };
     const target = document.getElementById('brandbookPreview');
     if (!target) {
         return [];
@@ -4951,6 +8116,14 @@ function renderBrandbook(payload, displayMockups, templateRef) {
 
     if (!payload || typeof payload !== 'object') {
         target.innerHTML = '<p class="muted">Sem payload consolidado para gerar o brandbook.</p>';
+        if (settings.syncBadge) {
+            updatePreviewSyncBadge({
+                status: 'warn',
+                source: settings.source,
+                pages: 0,
+                message: 'Render interrompido: payload indisponivel.'
+            });
+        }
         return [];
     }
 
@@ -4964,12 +8137,20 @@ function renderBrandbook(payload, displayMockups, templateRef) {
         .map((sheet, index) => renderBrandbookSheet(sheet, preset, index + 1, totalPages))
         .join('');
 
-    const panelBadge = document.querySelector('#brandbookPanel .panel-header .meta-tag');
+    const panelBadge = document.getElementById('brandbookPagesBadge');
     if (panelBadge) {
-        panelBadge.textContent = `${totalPages} paginas | ${getBookModeLabel(resolveTemplateBookMode(preset))}`;
+        panelBadge.textContent = `${totalPages} páginas | ${getBookModeLabel(resolveTemplateBookMode(preset))}`;
     }
 
     currentContext.brandbookSheets = sheets;
+    if (settings.syncBadge) {
+        updatePreviewSyncBadge({
+            status: 'ok',
+            source: settings.source,
+            pages: totalPages,
+            message: 'Preview sincronizado com os dados atuais.'
+        });
+    }
     return sheets;
 }
 
@@ -5091,7 +8272,7 @@ function createBrandbookSheets(payload, displayMockups, preset) {
                         <p class="sheet-text">Uso recomendado para títulos e destaques.</p>
                     </article>
                     <article class="sheet-font-card">
-                        <small>Fonte secundaria</small>
+                        <small>Fonte secundária</small>
                         <div class="sheet-font-name">${escapeHtml(typography.secondaryFontName || 'Não definido')}</div>
                         <p class="sheet-text">Uso recomendado para textos corridos e informativos.</p>
                     </article>
@@ -5172,8 +8353,8 @@ function createBrandbookSheets(payload, displayMockups, preset) {
         {
             id: 'playbook',
             label: 'Playbook',
-            kicker: 'Aplicacao no Trabalho',
-            title: 'Playbook de Execucao',
+            kicker: 'Aplicação no Trabalho',
+            title: 'Playbook de Execução',
             text: `Aplicabilidade atual: ${playbookEvaluation.score}% (${playbookEvaluation.completed}/${playbookEvaluation.total} checks).`,
             contentHtml: buildPlaybookSheetContent(playbookSettings, playbookEvaluation)
         },
@@ -5290,6 +8471,42 @@ function buildDesignStudioSceneHtml(page, payload, displayMockups, preset, color
                 ? `<img src="${escapeHtml(firstMockup.previewDataUrl)}" alt="Mockup"/>`
                 : `<div class="scene-mockup-placeholder">${escapeHtml(resolveDesignTextTokens(element.text || 'Mockup', payload, displayMockups))}</div>`;
             return `<article class="scene-item type-mockup_slot" style="${style}">${content}</article>`;
+        }
+
+        if (element.type === 'shape_line') {
+            return `<article class="scene-item type-shape_line" style="${style}"><span class="shape-line-core"></span></article>`;
+        }
+
+        if (element.type === 'info_card') {
+            const parts = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
+            const heading = parts[0] || 'Título';
+            const body = parts.slice(1).join(' ') || 'Texto de apoio.';
+            return `<article class="scene-item type-info_card" style="${style}"><strong>${escapeHtml(heading)}</strong><p>${escapeHtml(body)}</p></article>`;
+        }
+
+        if (element.type === 'quote_block') {
+            const parts = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
+            const quote = parts[0] || '"Mensagem da marca"';
+            const author = parts.slice(1).join(' ') || 'Equipe';
+            return `<article class="scene-item type-quote_block" style="${style}"><blockquote>${escapeHtml(quote)}</blockquote><cite>${escapeHtml(author)}</cite></article>`;
+        }
+
+        if (element.type === 'timeline_step') {
+            const parts = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
+            const phase = parts[0] || 'Etapa';
+            const detail = parts.slice(1).join(' ') || 'Descrição da etapa';
+            return `<article class="scene-item type-timeline_step" style="${style}"><span class="timeline-dot" aria-hidden="true"></span><div class="timeline-copy"><strong>${escapeHtml(phase)}</strong><p>${escapeHtml(detail)}</p></div></article>`;
+        }
+
+        if (element.type === 'comparison_card') {
+            const lines = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
+            const headerParts = String(lines[0] || 'Antes | Depois').split('|').map((item) => item.trim()).filter(Boolean);
+            const bodyParts = String(lines[1] || 'Item A | Item B').split('|').map((item) => item.trim()).filter(Boolean);
+            const leftHeader = headerParts[0] || 'Antes';
+            const rightHeader = headerParts[1] || 'Depois';
+            const leftBody = bodyParts[0] || 'Contexto anterior';
+            const rightBody = bodyParts[1] || 'Contexto otimizado';
+            return `<article class="scene-item type-comparison_card" style="${style}"><div class="comparison-col"><strong>${escapeHtml(leftHeader)}</strong><p>${escapeHtml(leftBody)}</p></div><div class="comparison-col"><strong>${escapeHtml(rightHeader)}</strong><p>${escapeHtml(rightBody)}</p></div></article>`;
         }
 
         const text = resolveDesignTextTokens(element.text, payload, displayMockups);
@@ -5415,8 +8632,8 @@ function buildPlaybookSheetContent(settings, evaluation) {
                 <p class="sheet-text">Min impresso: ${escapeHtml(safe.logoMinPrint)}</p>
             </article>
             <article class="sheet-box">
-                <small>Distribuicao de cor</small>
-                <p class="sheet-text">Primaria ${safe.ratioPrimary}% | Secundaria ${safe.ratioSecondary}% | Acento ${safe.ratioAccent}%</p>
+                <small>Distribuição de cor</small>
+                <p class="sheet-text">Primária ${safe.ratioPrimary}% | Secundária ${safe.ratioSecondary}% | Acento ${safe.ratioAccent}%</p>
                 <p class="sheet-text">Canais: ${escapeHtml(channels)}</p>
             </article>
         </div>
@@ -5424,17 +8641,17 @@ function buildPlaybookSheetContent(settings, evaluation) {
             <small>Guia de linguagem</small>
             <p class="sheet-text">Palavras-chave: ${escapeHtml(safe.voiceKeywords)}</p>
             <p class="sheet-text">CTA: ${escapeHtml(safe.ctaStyle)}</p>
-            <p class="sheet-text">Direcao visual: ${escapeHtml(safe.imageryDirection)}</p>
+            <p class="sheet-text">Direção visual: ${escapeHtml(safe.imageryDirection)}</p>
         </article>
         <article class="sheet-box">
             <small>Pacote de entrega</small>
-            <p class="sheet-text">Ativos obrigatorios: ${escapeHtml(assets)}</p>
-            <p class="sheet-text">Responsavel: ${escapeHtml(safe.ownerName || 'Nao definido')} | Revisao: ${safe.reviewCycleDays} dias</p>
+            <p class="sheet-text">Ativos obrigatórios: ${escapeHtml(assets)}</p>
+            <p class="sheet-text">Responsável: ${escapeHtml(safe.ownerName || 'Não definido')} | Revisão: ${safe.reviewCycleDays} dias</p>
         </article>
         <ul class="sheet-list">
             ${topItems.length
         ? topItems.map((item) => `<li>${escapeHtml(item.label)} - ${item.done ? 'OK' : 'Pendente'}</li>`).join('')
-        : '<li>Checklist operacional indisponivel.</li>'}
+        : '<li>Checklist operacional indisponível.</li>'}
         </ul>
     `;
 }
@@ -5523,10 +8740,10 @@ function resolveDigitalColors(og, fallbackColors) {
         const primary = normalizeHex(og.primaryColor, '');
         const secondary = normalizeHex(og.secondaryColor, '');
         if (primary) {
-            resolved.push({ role: 'OG Primaria', hex: primary });
+            resolved.push({ role: 'OG Primária', hex: primary });
         }
         if (secondary) {
-            resolved.push({ role: 'OG Secundaria', hex: secondary });
+            resolved.push({ role: 'OG Secundária', hex: secondary });
         }
     }
 
@@ -5545,7 +8762,7 @@ function resolveDigitalColors(og, fallbackColors) {
 }
 
 function resolveTemplateColors(colors, preset) {
-    const valid = Array.isArray(colors)
+    const projectColors = Array.isArray(colors)
         ? colors
             .filter((item) => item && typeof item === 'object')
             .map((item) => ({
@@ -5555,14 +8772,27 @@ function resolveTemplateColors(colors, preset) {
             .filter((item) => item.hex)
         : [];
 
-    if (valid.length) {
-        return valid.slice(0, 6);
-    }
-
-    return preset.fallbackPalette.map((hex, index) => ({
+    const themeFallbackPalette = getThemePresetFallbackPalette(preset?.themeClass || DEFAULT_TEMPLATE_ID);
+    const templatePalette = normalizeTemplatePalette(
+        Array.isArray(preset?.colorOverride) && preset.colorOverride.length
+            ? preset.colorOverride
+            : preset?.fallbackPalette,
+        themeFallbackPalette
+    );
+    const mappedTemplatePalette = templatePalette.map((hex, index) => ({
         role: COLOR_ROLE_LABELS[index] || `Apoio ${index + 1}`,
         hex
     }));
+
+    if (Boolean(preset?.colorOverrideEnabled)) {
+        return mappedTemplatePalette;
+    }
+
+    if (projectColors.length) {
+        return projectColors.slice(0, TEMPLATE_COLOR_LIMIT);
+    }
+
+    return mappedTemplatePalette;
 }
 
 function normalizeTag(tag) {
@@ -5592,7 +8822,7 @@ function exportBrandbookHtml() {
         return;
     }
 
-    const preset = getTemplatePreset(currentContext.activeTemplateId);
+    const preset = buildDraftPresetFromBuilder();
     const totalPages = currentContext.brandbookSheets.length;
     const sheetsHtml = currentContext.brandbookSheets
         .map((sheet, index) => renderBrandbookSheet(sheet, preset, index + 1, totalPages))
@@ -5638,7 +8868,7 @@ function openBrandbookWebRender() {
     const opened = window.open(url, '_blank', 'noopener,noreferrer');
     if (!opened) {
         URL.revokeObjectURL(url);
-        setStatus('Nao foi possivel abrir nova aba para o render web.', 'warn');
+        setStatus('Não foi possível abrir nova aba para o render web.', 'warn');
         return;
     }
 
@@ -5995,6 +9225,89 @@ function getStandaloneBrandbookCss() {
             font-weight: 700;
             letter-spacing: 0.02em;
         }
+        .scene-item.type-shape_ellipse {
+            border-radius: 999px !important;
+        }
+        .scene-item.type-shape_triangle {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_diamond {
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_round_rect {
+            border-radius: 32px !important;
+        }
+        .scene-item.type-shape_parallelogram {
+            clip-path: polygon(18% 0%, 100% 0%, 82% 100%, 0% 100%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_trapezoid {
+            clip-path: polygon(14% 0%, 86% 0%, 100% 100%, 0% 100%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_pentagon {
+            clip-path: polygon(50% 0%, 95% 35%, 78% 100%, 22% 100%, 5% 35%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_hexagon {
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_octagon {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_heart {
+            clip-path: polygon(50% 93%, 24% 68%, 10% 47%, 11% 28%, 24% 16%, 40% 18%, 50% 30%, 60% 18%, 76% 16%, 89% 28%, 90% 47%, 76% 68%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_cloud {
+            border-radius: 44% 56% 48% 52% / 58% 40% 60% 42% !important;
+        }
+        .scene-item.type-shape_arrow_right {
+            clip-path: polygon(0% 26%, 66% 26%, 66% 0%, 100% 50%, 66% 100%, 66% 74%, 0% 74%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_arrow_left {
+            clip-path: polygon(100% 26%, 34% 26%, 34% 0%, 0% 50%, 34% 100%, 34% 74%, 100% 74%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_arrow_up {
+            clip-path: polygon(26% 100%, 26% 34%, 0% 34%, 50% 0%, 100% 34%, 74% 34%, 74% 100%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_arrow_down {
+            clip-path: polygon(26% 0%, 26% 66%, 0% 66%, 50% 100%, 100% 66%, 74% 66%, 74% 0%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_chevron_right {
+            clip-path: polygon(0% 0%, 46% 0%, 100% 50%, 46% 100%, 0% 100%, 55% 50%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_chevron_left {
+            clip-path: polygon(100% 0%, 54% 0%, 0% 50%, 54% 100%, 100% 100%, 45% 50%);
+            border-radius: 0 !important;
+        }
+        .scene-item.type-shape_line {
+            border: 0;
+            background: transparent !important;
+            box-shadow: none;
+            padding: 8px 0;
+        }
+        .scene-item.type-shape_line .shape-line-core {
+            display: block;
+            width: 100%;
+            height: 2px;
+            border-radius: 999px;
+            background: currentColor;
+            opacity: 0.6;
+        }
         .scene-item.type-logo_box {
             border-style: dashed;
             justify-content: center;
@@ -6024,6 +9337,63 @@ function getStandaloneBrandbookCss() {
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+        .scene-item.type-info_card,
+        .scene-item.type-quote_block {
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 6px;
+        }
+        .scene-item.type-info_card p,
+        .scene-item.type-quote_block blockquote,
+        .scene-item.type-quote_block cite {
+            margin: 0;
+        }
+        .scene-item.type-quote_block blockquote {
+            font-style: italic;
+        }
+        .scene-item.type-quote_block cite {
+            font-size: 0.82em;
+            color: #4d668e;
+        }
+        .scene-item.type-timeline_step {
+            align-items: flex-start;
+        }
+        .scene-item.type-timeline_step .timeline-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: currentColor;
+            margin-top: 5px;
+            flex: 0 0 auto;
+        }
+        .scene-item.type-timeline_step .timeline-copy {
+            display: grid;
+            gap: 4px;
+        }
+        .scene-item.type-timeline_step .timeline-copy p {
+            margin: 0;
+            font-size: 0.82em;
+            color: #4d668e;
+        }
+        .scene-item.type-comparison_card {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+        }
+        .scene-item.type-comparison_card .comparison-col {
+            border: 1px solid rgba(33, 63, 144, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.55);
+            padding: 6px;
+            display: grid;
+            gap: 4px;
+        }
+        .scene-item.type-comparison_card .comparison-col p {
+            margin: 0;
+            font-size: 0.8em;
+            color: #4d668e;
         }
         .scene-mockup-placeholder {
             width: 100%;
@@ -6160,7 +9530,7 @@ function persistLatestManualPayload(payload) {
     try {
         localStorage.setItem(BRAND_MANUAL_CACHE_KEY, JSON.stringify(payload));
     } catch (error) {
-        // Se o storage estiver indisponivel, segue sem bloqueio da tela.
+        // Se o storage estiver indisponível, segue sem bloqueio da tela.
     }
 }
 
@@ -6283,12 +9653,12 @@ function createManualContext() {
     if (playbookEvaluation.score < 70) {
         integrationNotes.push({
             level: 'warn',
-            message: `Playbook de execucao com aplicabilidade ${playbookEvaluation.score}%. Revise checklist operacional.`
+            message: `Playbook de execução com aplicabilidade ${playbookEvaluation.score}%. Revise checklist operacional.`
         });
     } else {
         integrationNotes.push({
             level: 'ok',
-            message: `Playbook de execucao pronto (${playbookEvaluation.score}%).`
+            message: `Playbook de execução pronto (${playbookEvaluation.score}%).`
         });
     }
 
@@ -6409,7 +9779,7 @@ function getDisplayMockups() {
 
 function resolveProjectInfo(workInfo, displayMockups) {
     const latestMockup = displayMockups[0] || null;
-    const fallbackTitle = latestMockup ? latestMockup.title : 'Projeto sem titulo';
+    const fallbackTitle = latestMockup ? latestMockup.title : 'Projeto sem título';
 
     const tags = String(workInfo.supportingTags || '')
         .split(',')
@@ -6722,14 +10092,14 @@ async function exportPdfBrandbookRender() {
 
     const jsPDFCtor = window.jspdf?.jsPDF;
     if (!jsPDFCtor) {
-        setStatus('Biblioteca de PDF indisponivel no momento.', 'warn');
+        setStatus('Biblioteca de PDF indisponível no momento.', 'warn');
         return;
     }
 
     const renderFn = window.html2canvas;
     const sheetNodes = Array.from(document.querySelectorAll('#brandbookPreview .brandbook-sheet'));
     if (typeof renderFn !== 'function' || !sheetNodes.length) {
-        setStatus('Renderizador visual indisponivel. Gerando PDF resumo textual.', 'warn');
+        setStatus('Renderizador visual indisponível. Gerando PDF resumo textual.', 'warn');
         exportPdfSummary();
         return;
     }
@@ -7038,6 +10408,111 @@ function setText(id, value) {
         return;
     }
     element.textContent = String(value || '');
+}
+
+function normalizePreviewSyncStatus(status) {
+    const value = String(status || '').toLowerCase();
+    if (value === 'ok' || value === 'warn' || value === 'idle') {
+        return value;
+    }
+    return 'idle';
+}
+
+function renderPreviewSyncBadge() {
+    const badge = document.getElementById('previewSyncBadge');
+    const meta = document.getElementById('previewSyncMeta');
+    const state = currentContext.previewSync && typeof currentContext.previewSync === 'object'
+        ? currentContext.previewSync
+        : {
+            status: 'idle',
+            source: 'init',
+            updatedAt: '',
+            pages: 0,
+            message: 'Aguardando primeira sincronizacao.'
+        };
+
+    const status = normalizePreviewSyncStatus(state.status);
+    const source = String(state.source || 'auto');
+    const pages = Number.isFinite(state.pages) ? state.pages : 0;
+    const updatedAtLabel = formatDate(state.updatedAt);
+    const message = String(state.message || '').trim() || 'Sem detalhes.';
+
+    if (badge) {
+        badge.classList.remove('is-ok', 'is-warn', 'is-idle');
+        badge.classList.add(`is-${status}`);
+        badge.textContent = status === 'ok'
+            ? 'Sync: ok'
+            : status === 'warn'
+                ? 'Sync: alerta'
+                : 'Sync: aguardando';
+        badge.setAttribute(
+            'title',
+            `${message} | Origem: ${source} | Ultima atualizacao: ${updatedAtLabel} | Paginas: ${pages}`
+        );
+    }
+
+    if (meta) {
+        meta.textContent = `Ultima atualizacao: ${updatedAtLabel} | Origem: ${source} | Paginas: ${pages}`;
+    }
+}
+
+function updatePreviewSyncBadge(state = {}) {
+    const sourceState = state && typeof state === 'object' ? state : {};
+    const pages = Number.isFinite(sourceState.pages)
+        ? Number(sourceState.pages)
+        : Array.isArray(currentContext.brandbookSheets)
+            ? currentContext.brandbookSheets.length
+            : 0;
+
+    currentContext.previewSync = {
+        status: normalizePreviewSyncStatus(sourceState.status || currentContext.previewSync?.status || 'idle'),
+        source: String(sourceState.source || currentContext.previewSync?.source || 'auto'),
+        updatedAt: String(sourceState.updatedAt || new Date().toISOString()),
+        pages,
+        message: String(sourceState.message || currentContext.previewSync?.message || '').slice(0, 220)
+    };
+    renderPreviewSyncBadge();
+}
+
+function runPreviewSyncTest() {
+    if (!currentContext.payload) {
+        updatePreviewSyncBadge({
+            status: 'warn',
+            source: 'manual_test',
+            pages: 0,
+            message: 'Teste manual cancelado: sem payload para render.'
+        });
+        setStatus('Teste de sync cancelado: atualize o manual antes de testar.', 'warn');
+        return;
+    }
+
+    updatePreviewSyncBadge({
+        status: 'idle',
+        source: 'manual_test',
+        message: 'Executando teste manual de sincronizacao.'
+    });
+
+    refreshBrandbookPreviewFromBuilder({
+        source: 'manual_test',
+        syncDesignStudioCanvas: true
+    });
+
+    const pages = Array.isArray(currentContext.brandbookSheets)
+        ? currentContext.brandbookSheets.length
+        : 0;
+
+    if (pages > 0) {
+        setStatus(`Teste de sync concluido: ${pages} pagina(s) sincronizada(s).`, 'ok');
+        return;
+    }
+
+    updatePreviewSyncBadge({
+        status: 'warn',
+        source: 'manual_test',
+        pages: 0,
+        message: 'Teste manual concluido sem paginas renderizadas.'
+    });
+    setStatus('Teste de sync concluido com alerta: nenhuma pagina renderizada.', 'warn');
 }
 
 function setStatus(message, tone = '') {

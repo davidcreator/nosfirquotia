@@ -21,7 +21,7 @@
                 <input id="referenceSearch" class="form-control" placeholder="Digite codigo, grupo ou nome do servico">
             </div>
             <div class="col-md-4">
-                <label class="form-label" for="referenceAreaFilter">Area</label>
+                <label class="form-label" for="referenceAreaFilter">Área</label>
                 <select id="referenceAreaFilter" class="form-select">
                     <option value="all">Todas as areas</option>
                     <option value="design">Design</option>
@@ -69,7 +69,7 @@
                                 <th>Codigo</th>
                                 <th>Grupo</th>
                                 <th>Servico</th>
-                                <th>Area</th>
+                                <th>Área</th>
                                 <th>Minimo</th>
                                 <th>Maximo</th>
                             </tr>
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (summary) {
-            const areaLabel = area === 'development' ? 'Desenvolvimento' : (area === 'design' ? 'Design' : 'Todas as areas');
+            const areaLabel = area === 'development' ? 'Desenvolvimento' : (area === 'design' ? 'Design' : 'Todas as áreas');
             summary.textContent = areaLabel + ': ' + visibleServices + (visibleServices === 1 ? ' servico visivel.' : ' servicos visiveis.');
         }
     };

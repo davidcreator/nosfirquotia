@@ -1,7 +1,7 @@
 <?php
 $metaAppName = (string) ($appName ?? 'Quotia');
 $metaPageTitle = $metaAppName . ' - Admin';
-$metaDescription = 'Quotia Admin - Painel para gerenciar solicitacoes, categorias e operacoes do sistema.';
+$metaDescription = 'Quotia Admin - Painel para gerenciar solicitações, categorias e operações do sistema.';
 $metaPath = (string) ($currentPath ?? app()->request()->path());
 $metaIsSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 $metaScheme = $metaIsSecure ? 'https' : 'http';
@@ -90,7 +90,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
             'active' => $isActivePath('/admin/orcamentos'),
         ];
         $menuItems[] = [
-            'label' => 'Notificacoes Email',
+            'label' => 'Notificações E-mail',
             'path' => '/admin/notificacoes-email',
             'icon' => 'fa-solid fa-envelope-open-text',
             'active' => $isActivePath('/admin/notificacoes-email'),
@@ -99,7 +99,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
 
     if (admin_can('references.view')) {
         $menuItems[] = [
-            'label' => 'Precos e Servicos',
+            'label' => 'Precos e Serviços',
             'path' => '/admin/referencias',
             'icon' => 'fa-solid fa-table',
             'active' => $isActivePath('/admin/referencias'),
@@ -159,7 +159,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
                 <input type="search" placeholder="Buscar no menu..." data-admin-sidebar-search>
             </div>
 
-            <div class="aq-admin-sidebar-section">Navegacao</div>
+            <div class="aq-admin-sidebar-section">Navegação</div>
 
             <nav class="aq-admin-menu">
                 <ul class="aq-admin-menu-list">
@@ -296,7 +296,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
     <div class="aq-cookie-content">
         <div>
             <strong>Consentimento de cookies</strong>
-            <p class="mb-0 small">Cookies essenciais sao usados para autenticacao, seguranca e operacao do sistema.</p>
+            <p class="mb-0 small">Cookies essenciais são usados para autenticação, segurança e operação do sistema.</p>
         </div>
         <div class="d-flex gap-2 flex-wrap">
             <button class="btn btn-sm btn-outline-light" type="button" data-cookie-consent="essential">Somente essenciais</button>
@@ -311,3 +311,4 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
 <script src="<?= e(asset('public/assets/vendor/reamur/js/modal-fix.js')) ?>"></script>
 </body>
 </html>
+

@@ -5,11 +5,11 @@
             <span class="aq-admin-auth-brand-text"><?= e($appName ?? 'Quotia') ?> Admin</span>
         </div>
         <h1><i class="fa-solid fa-user-lock"></i> Redefinir senha</h1>
-        <p>Crie uma nova senha para restaurar o acesso administrativo com seguranca e continuidade operacional.</p>
+        <p>Crie uma nova senha para restaurar o acesso administrativo com segurança e continuidade operacional.</p>
         <ul class="aq-admin-auth-feature-list">
             <li><i class="fa-solid fa-circle-user"></i> Conta vinculada: <strong><?= e((string) ($email ?? '')) ?></strong></li>
             <li><i class="fa-solid fa-key"></i> Senha minima recomendada com 6 caracteres</li>
-            <li><i class="fa-solid fa-shield-halved"></i> Alteracao validada por token temporario</li>
+            <li><i class="fa-solid fa-shield-halved"></i> Alteração validada por token temporário</li>
         </ul>
     </div>
 
@@ -48,3 +48,4 @@
         </div>
     </form>
 </section>
+

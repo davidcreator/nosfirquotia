@@ -2,7 +2,7 @@
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
             <h1 class="aq-admin-page-hero-title">Ferramentas de design</h1>
-            <p class="aq-admin-page-hero-subtitle">Area administrativa para acessar utilitarios compativeis com o Quotia.</p>
+            <p class="aq-admin-page-hero-subtitle">Área administrativa para acessar utilitários compatíveis com o Quotia.</p>
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
@@ -19,7 +19,7 @@
             <article class="card border-0 shadow-sm h-100 aq-admin-tools-card">
                 <div class="card-body d-flex flex-column">
                     <h2 class="h5 mb-2">Central Fiscal</h2>
-                    <p class="text-muted small flex-grow-1">Governanca fiscal brasileira com regime tributario, retencoes, checklist legal e simulador de impacto no orcamento.</p>
+                    <p class="text-muted small flex-grow-1">Governança fiscal brasileira com regime tributário, retenções, checklist legal e simulador de impacto no orçamento.</p>
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <span class="badge text-bg-primary">Recurso nativo</span>
                         <a class="btn btn-sm btn-primary" href="<?= e(url('/admin/tributos')) ?>">Abrir</a>

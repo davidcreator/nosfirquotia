@@ -53,9 +53,9 @@ async function initializeResultsPage() {
     setupResultsLazyRendering();
 
     if (resultsState.liveRenderEnabled) {
-        setResultsStatus('Renderizacao em alta qualidade iniciada. As amostras serao refinadas conforme a rolagem.');
+        setResultsStatus('Renderização em alta qualidade iniciada. As amostras serão refinadas conforme a rolagem.');
     } else {
-        setResultsStatus('Exibindo amostras salvas. Para renderizacao completa em alta qualidade, abra os resultados a partir do editor com a arte carregada.');
+        setResultsStatus('Exibindo amostras salvas. Para renderização completa em alta qualidade, abra os resultados a partir do editor com a arte carregada.');
     }
 }
 
@@ -82,7 +82,7 @@ function bindResultsEvents() {
     });
 
     document.getElementById('commentsTabBtn')?.addEventListener('click', () => {
-        alert('Comentarios ainda nao foram habilitados nesta pagina.');
+        alert('Comentários ainda não foram habilitados nesta página.');
     });
 
     document.getElementById('resultsSearchInput')?.addEventListener('input', () => {
@@ -344,7 +344,7 @@ function renderResultsHero(product) {
     const description = document.getElementById('resultsHeroDescription');
     if (description) {
         description.textContent = resultsState.workInfo.description
-            || 'Pagina de resultados com amostras prontas para aprovacao visual, publicacao e envio ao cliente.';
+            || 'Página de resultados com amostras prontas para aprovação visual, publicação e envio ao cliente.';
     }
 
     const tags = document.getElementById('resultsHeroTags');
@@ -456,7 +456,7 @@ function setupResultsLazyRendering(forceRerender = false) {
         }
 
         if (resultsState.renderedCount % 8 === 0) {
-            setResultsStatus(`Renderizacao em andamento: ${resultsState.renderedCount} amostras refinadas.`);
+            setResultsStatus(`Renderização em andamento: ${resultsState.renderedCount} amostras refinadas.`);
         }
     };
 
@@ -565,7 +565,7 @@ function getProductDisplayImage(product) {
         <svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700">
             <rect width="900" height="700" fill="#f1f5f9"/>
             <rect x="140" y="90" width="620" height="520" rx="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="8"/>
-            <text x="450" y="345" text-anchor="middle" font-family="Segoe UI, Arial" font-size="36" fill="#475569">Preview indisponivel</text>
+            <text x="450" y="345" text-anchor="middle" font-family="Segoe UI, Arial" font-size="36" fill="#475569">Preview indisponível</text>
         </svg>
     `);
 }
@@ -581,7 +581,7 @@ function isDataImage(value) {
 function downloadProductSample(product) {
     const source = getProductDisplayImage(product);
     if (!isDataImage(source)) {
-        alert('Amostra indisponivel para download neste item.');
+        alert('Amostra indisponível para download neste item.');
         return;
     }
 

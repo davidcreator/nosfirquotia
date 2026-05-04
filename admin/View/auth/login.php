@@ -5,11 +5,11 @@
             <span class="aq-admin-auth-brand-text"><?= e($appName ?? 'Quotia') ?> Admin</span>
         </div>
         <h1><i class="fa-solid fa-lock"></i> Acesso administrativo</h1>
-        <p>Area protegida para governanca do sistema, curadoria de dados e controle de niveis hierarquicos de usuarios.</p>
+        <p>Área protegida para governança do sistema, curadoria de dados e controle de níveis hierárquicos de usuários.</p>
         <ul class="aq-admin-auth-feature-list">
             <li><i class="fa-solid fa-sitemap"></i> Controle hierarquico de grupos administrativos</li>
-            <li><i class="fa-solid fa-users-gear"></i> Gestao de usuarios e permissoes por nivel</li>
-            <li><i class="fa-solid fa-shield-halved"></i> Acesso monitorado com trilha de seguranca</li>
+            <li><i class="fa-solid fa-users-gear"></i> Gestão de usuários e permissões por nível</li>
+            <li><i class="fa-solid fa-shield-halved"></i> Acesso monitorado com trilha de segurança</li>
         </ul>
     </div>
 
@@ -30,3 +30,4 @@
         </div>
     </form>
 </section>
+

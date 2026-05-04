@@ -1,6 +1,6 @@
 <?php
 /**
- * Remove o fundo de uma imagem usando transparÃªncia
+ * Remove o fundo de uma imagem usando transparência
  */
 function removeBackground($sourcePath, $outputPath, $tolerance = 10, $bgColorHex = null) {
     $imageInfo = @getimagesize($sourcePath);
@@ -13,7 +13,7 @@ function removeBackground($sourcePath, $outputPath, $tolerance = 10, $bgColorHex
     $width = imagesx($source);
     $height = imagesy($source);
     
-    // Criar imagem com transparÃªncia
+    // Criar imagem com transparência
     $output = imagecreatetruecolor($width, $height);
     imagesavealpha($output, true);
     $transparent = imagecolorallocatealpha($output, 0, 0, 0, 127);
@@ -33,7 +33,7 @@ function removeBackground($sourcePath, $outputPath, $tolerance = 10, $bgColorHex
             $color = imagecolorat($source, $x, $y);
             $rgb = imagecolorsforindex($source, $color);
             
-            // Calcular diferenÃ§a de cor
+            // Calcular diferença de cor
             $diff = abs($rgb['red'] - $bgRGB['red']) + 
                     abs($rgb['green'] - $bgRGB['green']) + 
                     abs($rgb['blue'] - $bgRGB['blue']);
@@ -47,7 +47,7 @@ function removeBackground($sourcePath, $outputPath, $tolerance = 10, $bgColorHex
         }
     }
     
-    // Salvar como PNG com transparÃªncia
+    // Salvar como PNG com transparência
     imagepng($output, $outputPath, 9);
     
     imagedestroy($source);
@@ -112,7 +112,7 @@ function optimizeImage($inputPath, $outputPath, $format = 'png', $quality = 80, 
         $newW = $maxWidth;
         $newH = (int) round($newW * $ratio);
         $resized = imagecreatetruecolor($newW, $newH);
-        // Preservar transparÃªncia
+        // Preservar transparência
         imagealphablending($resized, false);
         imagesavealpha($resized, true);
         imagecopyresampled($resized, $img, 0, 0, 0, 0, $newW, $newH, $w, $h);
@@ -131,7 +131,7 @@ function optimizeImage($inputPath, $outputPath, $format = 'png', $quality = 80, 
             break;
         case 'jpeg':
         case 'jpg':
-            // Fundo branco para JPEG (sem transparÃªncia)
+            // Fundo branco para JPEG (sem transparência)
             $bg = imagecreatetruecolor($w, $h);
             $white = imagecolorallocate($bg, 255, 255, 255);
             imagefilledrectangle($bg, 0, 0, $w, $h, $white);
@@ -141,7 +141,7 @@ function optimizeImage($inputPath, $outputPath, $format = 'png', $quality = 80, 
             break;
         case 'webp':
             if (function_exists('imagewebp')) {
-                // Preservar transparÃªncia
+                // Preservar transparência
                 imagesavealpha($img, true);
                 $ok = imagewebp($img, $outputPath, max(0, min(100, $quality)));
             } else {
@@ -187,7 +187,7 @@ function validateUpload($file) {
 }
 
 /**
- * Gera nome Ãºnico para arquivo
+ * Gera nome único para arquivo
  */
 function generateUniqueFilename($extension) {
     return uniqid('img_', true) . '_' . time() . '.' . $extension;
@@ -210,7 +210,7 @@ function cleanOldFiles() {
     }
 }
 
-// ===== Recursos avanÃ§ados de remoÃ§Ã£o =====
+// ===== Recursos avançados de remoção =====
 
 function rgbToHsv($r, $g, $b) {
     $r /= 255; $g /= 255; $b /= 255;
@@ -241,7 +241,7 @@ function colorDistance($rgb, $bg, $mode = 'rgb') {
         $ds = abs($hsv1['s'] - $hsv2['s']); // 0..1
         $dv = abs($hsv1['v'] - $hsv2['v']); // 0..1
 
-        // Em baixa saturaÃ§Ã£o (tons cinza/branco), hue deixa de ser confiÃ¡vel.
+        // Em baixa saturação (tons cinza/branco), hue deixa de ser confiável.
         $satAvg = ($hsv1['s'] + $hsv2['s']) / 2.0;
         $hueWeight = ($satAvg < 0.20) ? (0.12 + ($satAvg / 0.20) * 0.25) : 1.65;
         $satWeight = 1.20;

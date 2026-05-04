@@ -20,11 +20,11 @@ require_once dirname(__DIR__) . '/bootstrap.php';
         <section class="hero">
             <p class="eyebrow">Tipografia para Marca</p>
             <h1>Font Strategy Advisor</h1>
-            <p>Escolha o tipo de fonte ideal para o projeto, gere combinacoes de familias e sincronize com o fluxo de identidade visual.</p>
+            <p>Escolha o tipo de fonte ideal para o projeto, gere combinações de famílias e sincronize com o fluxo de identidade visual.</p>
         </section>
 
         <section class="panel">
-            <h2>Diagnostico Tipografico</h2>
+            <h2>Diagnóstico Tipográfico</h2>
             <form id="fontStrategyForm" class="font-form">
                 <label>
                     Segmento
@@ -33,10 +33,10 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                         <option value="tecnologia">Tecnologia</option>
                         <option value="moda">Moda / Beleza</option>
                         <option value="financeiro">Financeiro</option>
-                        <option value="saude">Saude / Bem-estar</option>
-                        <option value="educacao">Educacao</option>
+                        <option value="saude">Saúde / Bem-estar</option>
+                        <option value="educacao">Educação</option>
                         <option value="gastronomia">Gastronomia</option>
-                        <option value="criativo">Criativo / Agencia</option>
+                        <option value="criativo">Criativo / Agência</option>
                     </select>
                 </label>
 
@@ -46,7 +46,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                         <option value="equilibrado">Equilibrado</option>
                         <option value="corporativo">Corporativo</option>
                         <option value="premium">Premium</option>
-                        <option value="amigavel">Amigavel</option>
+                        <option value="amigavel">Amigável</option>
                         <option value="inovador">Inovador</option>
                         <option value="editorial">Editorial</option>
                     </select>
@@ -57,7 +57,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                     <select id="channel" required>
                         <option value="digital">Digital</option>
                         <option value="impresso">Impresso</option>
-                        <option value="hibrido">Hibrido</option>
+                        <option value="hibrido">Híbrido</option>
                     </select>
                 </label>
 
@@ -65,13 +65,13 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                     Legibilidade desejada
                     <select id="readability" required>
                         <option value="alta">Alta</option>
-                        <option value="media">Media</option>
+                        <option value="media">Média</option>
                         <option value="expressiva">Expressiva</option>
                     </select>
                 </label>
 
                 <label>
-                    Estilo de combinacao
+                    Estilo de combinação
                     <select id="pairingStyle" required>
                         <option value="modern-serif">Moderno + Serifado</option>
                         <option value="sans-sans">Sans + Sans</option>
@@ -81,17 +81,17 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 </label>
 
                 <label>
-                    Observacoes do projeto
+                    Observações do projeto
                     <textarea id="projectNotes" rows="3" placeholder="Ex: marca jovem, foco mobile, precisa de destaque em embalagens."></textarea>
                 </label>
 
                 <div class="form-actions">
-                    <button type="submit" id="generateFontStrategyBtn">Gerar recomendacao</button>
+                    <button type="submit" id="generateFontStrategyBtn">Gerar recomendação</button>
                     <button type="button" class="ghost" id="applyFontProfileBtn">Aplicar ao Brand Kit</button>
                     <button type="button" class="ghost" id="exportFontProfileBtn">Exportar JSON</button>
                 </div>
             </form>
-            <p id="fontSyncStatus" class="sync-status">Aguardando configuracao do perfil tipografico.</p>
+            <p id="fontSyncStatus" class="sync-status">Aguardando configuração do perfil tipográfico.</p>
         </section>
 
         <section class="panel">
@@ -99,34 +99,34 @@ require_once dirname(__DIR__) . '/bootstrap.php';
             <div class="font-types-grid">
                 <article class="font-type-card">
                     <h3>Sans Serif</h3>
-                    <p>Sem terminais nas extremidades. Excelente para interfaces digitais e leitura rapida.</p>
+                    <p>Sem terminais nas extremidades. Excelente para interfaces digitais e leitura rápida.</p>
                     <small>Uso comum: UI, app, dashboards, e-commerce.</small>
                 </article>
                 <article class="font-type-card">
                     <h3>Serif</h3>
-                    <p>Com terminais classicos. Passa tradicao, autoridade e valor editorial.</p>
-                    <small>Uso comum: titulo institucional, marcas premium, publicacoes.</small>
+                    <p>Com terminais clássicos. Passa tradição, autoridade e valor editorial.</p>
+                    <small>Uso comum: título institucional, marcas premium, publicações.</small>
                 </article>
                 <article class="font-type-card">
                     <h3>Display</h3>
-                    <p>Fonte de impacto para destaque visual. Deve ser usada com moderacao.</p>
+                    <p>Fonte de impacto para destaque visual. Deve ser usada com moderação.</p>
                     <small>Uso comum: campanhas, hero, chamadas principais.</small>
                 </article>
                 <article class="font-type-card">
                     <h3>Monospace</h3>
-                    <p>Caracteres em largura fixa. Boa para tecnologia, dados e linguagem tecnica.</p>
-                    <small>Uso comum: labels tecnicos, interfaces dev, codigos curtos.</small>
+                    <p>Caracteres em largura fixa. Boa para tecnologia, dados e linguagem técnica.</p>
+                    <small>Uso comum: labels técnicos, interfaces dev, códigos curtos.</small>
                 </article>
             </div>
         </section>
 
         <section class="panel split">
             <div>
-                <h2>Combinacao Recomendada</h2>
-                <p class="summary" id="fontStrategySummary">Preencha o diagnostico para gerar um par tipografico recomendado.</p>
+                <h2>Combinação Recomendada</h2>
+                <p class="summary" id="fontStrategySummary">Preencha o diagnóstico para gerar um par tipográfico recomendado.</p>
                 <div class="pairing-preview" id="pairingPreview">
-                    <p class="pairing-primary" id="pairingPrimarySample">Titulo de exemplo da marca</p>
-                    <p class="pairing-secondary" id="pairingSecondarySample">Subtitulo e apoio visual com boa hierarquia para telas e materiais impressos.</p>
+                    <p class="pairing-primary" id="pairingPrimarySample">Título de exemplo da marca</p>
+                    <p class="pairing-secondary" id="pairingSecondarySample">Subtítulo e apoio visual com boa hierarquia para telas e materiais impressos.</p>
                 </div>
                 <div class="pairing-meta" id="pairingMeta"></div>
             </div>
@@ -142,3 +142,4 @@ require_once dirname(__DIR__) . '/bootstrap.php';
     <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>
+

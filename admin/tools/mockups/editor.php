@@ -51,8 +51,8 @@ require_once 'assets/common/header.php';
 
                     <div class="work-intake-form">
                         <div class="work-form-group">
-                            <label for="workTitleInput">Titulo (obrigatorio)</label>
-                            <p>Use um titulo claro e descritivo para seu trabalho.</p>
+                            <label for="workTitleInput">Título (obrigatório)</label>
+                            <p>Use um título claro e descritivo para seu trabalho.</p>
                             <input type="text" id="workTitleInput" placeholder="Exemplo: Onda criativa da floresta" maxlength="120" required>
                         </div>
 
@@ -69,9 +69,9 @@ require_once 'assets/common/header.php';
                         </div>
 
                         <div class="work-form-group">
-                            <label for="workDescriptionInput">Descricao</label>
+                            <label for="workDescriptionInput">Descrição</label>
                             <p>Descreva rapidamente o objetivo ou conceito visual da arte.</p>
-                            <textarea id="workDescriptionInput" rows="4" placeholder="Exemplo: Ilustracao criada para campanha de redes sociais com foco em narrativa visual."></textarea>
+                            <textarea id="workDescriptionInput" rows="4" placeholder="Exemplo: Ilustração criada para campanha de redes sociais com foco em narrativa visual."></textarea>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ require_once 'assets/common/header.php';
 
         <section class="filters">
             <div class="filter-group">
-                <label>Orientacao:</label>
+                <label>Orientação:</label>
                 <select id="orientationFilter">
                     <option value="todas">Todas</option>
                     <option value="horizontal">Horizontal</option>
@@ -122,11 +122,11 @@ require_once 'assets/common/header.php';
                 </select>
             </div>
             <div class="filter-group">
-                <label>Ordenacao:</label>
+                <label>Ordenação:</label>
                 <select id="sortFilter">
                     <option value="popularidade">Popularidade</option>
-                    <option value="az">Titulo A-Z</option>
-                    <option value="za">Titulo Z-A</option>
+                    <option value="az">Título A-Z</option>
+                    <option value="za">Título Z-A</option>
                 </select>
             </div>
         </section>
@@ -191,7 +191,7 @@ require_once 'assets/common/header.php';
                                     <option value="feed-vertical">Feed vertical (1080x1350)</option>
                                     <option value="story">Story/Reels (1080x1920)</option>
                                     <option value="widescreen">Widescreen (1920x1080)</option>
-                                    <option value="presentation">Apresentacao (1600x900)</option>
+                                    <option value="presentation">Apresentação (1600x900)</option>
                                     <option value="thumb">Miniatura (1280x720)</option>
                                 </select>
                             </div>
@@ -212,7 +212,7 @@ require_once 'assets/common/header.php';
                                     <input type="color" id="bgColorStart" value="#dbeafe">
                                 </div>
                                 <div class="control-group">
-                                    <label>Cor secundaria:</label>
+                                    <label>Cor secundária:</label>
                                     <input type="color" id="bgColorEnd" value="#fee2e2">
                                 </div>
                             </div>
@@ -253,7 +253,7 @@ require_once 'assets/common/header.php';
                                 </select>
                             </div>
                             <div class="control-group">
-                                <label>Rotacao:</label>
+                                <label>Rotação:</label>
                                 <input type="range" id="rotationRange" min="-180" max="180" value="0">
                             </div>
                             <div class="control-row">
@@ -298,8 +298,8 @@ require_once 'assets/common/header.php';
                                 Exibir textos no mockup
                             </label>
                             <div class="control-group">
-                                <label>Titulo:</label>
-                                <input type="text" id="textPrimary" placeholder="Titulo principal do mockup">
+                                <label>Título:</label>
+                                <input type="text" id="textPrimary" placeholder="Título principal do mockup">
                             </div>
                             <div class="control-group">
                                 <label>Subtitulo:</label>
@@ -377,7 +377,7 @@ require_once 'assets/common/header.php';
                         </div>
 
                         <div class="control-panel">
-                            <h4>Exportacao</h4>
+                            <h4>Exportação</h4>
                             <div class="control-group">
                                 <label>Formato:</label>
                                 <select id="exportFormat">
@@ -391,7 +391,7 @@ require_once 'assets/common/header.php';
                                 <input type="range" id="exportQuality" min="55" max="100" step="1" value="92">
                             </div>
                             <div class="control-group">
-                                <label>Escala de exportacao:</label>
+                                <label>Escala de exportação:</label>
                                 <select id="exportScale">
                                     <option value="1">1x</option>
                                     <option value="2">2x</option>

@@ -39,7 +39,7 @@
         const nextStep = steps.find((step) => !step.done) || null;
 
         ui.title.textContent = workflow.title || 'Fluxo Guiado';
-        ui.summary.textContent = workflow.summary || 'Siga as etapas para manter consistencia da ferramenta.';
+        ui.summary.textContent = workflow.summary || 'Siga as etapas para manter consistência da ferramenta.';
         ui.progress.textContent = `${completed}/${total}`;
         ui.hint.textContent = workflow.hint || '';
 
@@ -59,7 +59,7 @@
         }).join('');
 
         ui.primaryButton.textContent = nextStep
-            ? (nextStep.actionLabel || `Executar: ${nextStep.title || 'proximo passo'}`)
+            ? (nextStep.actionLabel || `Executar: ${nextStep.title || 'próximo passo'}`)
             : 'Fluxo concluido';
         ui.primaryButton.disabled = !nextStep;
         ui.primaryButton.onclick = () => {
@@ -132,7 +132,7 @@
         }
         return {
             title: 'Fluxo Guiado',
-            summary: 'Fluxo generico aplicado nesta ferramenta.',
+            summary: 'Fluxo genérico aplicado nesta ferramenta.',
             hint: '',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => navigateTo('../brandbook/', 'opened_brandbook'),
@@ -151,39 +151,39 @@
 
         return {
             title: 'Fluxo Guiado - Color Strategy Advisor',
-            summary: 'Use o diagnostico, gere a estrategia e consolide os dados no BrandBook.',
-            hint: 'A logica segue: diagnosticar -> gerar -> sincronizar -> exportar -> consolidar.',
+            summary: 'Use o diagnóstico, gere a estratégia e consolide os dados no BrandBook.',
+            hint: 'A lógica segue: diagnosticar -> gerar -> sincronizar -> exportar -> consolidar.',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => h.navigateTo('../brandbook/', 'opened_brandbook'),
             steps: [
                 {
                     id: 'diagnostic',
-                    title: 'Ajustar diagnostico',
-                    description: 'Defina objetivo, publico, contexto e densidade de conteudo.',
+                    title: 'Ajustar diagnóstico',
+                    description: 'Defina objetivo, público, contexto e densidade de conteúdo.',
                     done: Boolean(h.flags.form_touched),
-                    actionLabel: 'Ir para diagnostico',
+                    actionLabel: 'Ir para diagnóstico',
                     action: () => focusSelector('#objective')
                 },
                 {
                     id: 'strategy',
-                    title: 'Gerar estrategia',
+                    title: 'Gerar estratégia',
                     description: 'Monte a paleta recomendada e ranking de cores.',
                     done: Boolean(h.flags.generated && paletteReady),
-                    actionLabel: 'Gerar estrategia',
+                    actionLabel: 'Gerar estratégia',
                     action: () => h.clickSelector('#strategyForm button[type="submit"]', 'generated')
                 },
                 {
                     id: 'sync',
                     title: 'Sincronizar Brand Kit',
-                    description: 'Enviar paleta e insights para integracao entre ferramentas.',
+                    description: 'Enviar paleta e insights para integração entre ferramentas.',
                     done: synced,
-                    actionLabel: 'Atualizar estrategia',
+                    actionLabel: 'Atualizar estratégia',
                     action: () => h.clickSelector('#strategyForm button[type="submit"]', 'generated')
                 },
                 {
                     id: 'export',
                     title: 'Exportar resultado',
-                    description: 'Gere JSON ou PDF para documentacao rapida.',
+                    description: 'Gere JSON ou PDF para documentação rápida.',
                     done: exported,
                     actionLabel: 'Exportar JSON',
                     action: () => h.clickSelector('#exportJsonBtn', 'export_json')
@@ -191,7 +191,7 @@
                 {
                     id: 'consolidate',
                     title: 'Consolidar no BrandBook',
-                    description: 'Validar tudo em um relatorio unico.',
+                    description: 'Validar tudo em um relatório único.',
                     done: Boolean(h.flags.opened_brandbook),
                     actionLabel: 'Abrir BrandBook',
                     action: () => h.navigateTo('../brandbook/', 'opened_brandbook')
@@ -210,25 +210,25 @@
 
         return {
             title: 'Fluxo Guiado - Font Strategy Advisor',
-            summary: 'Defina o perfil tipografico e sincronize com o ecossistema de marca.',
-            hint: 'Diagnostico tipografico -> recomendacao -> sync -> exportacao -> BrandBook.',
+            summary: 'Defina o perfil tipográfico e sincronize com o ecossistema de marca.',
+            hint: 'Diagnóstico tipográfico -> recomendação -> sincronização -> exportação -> BrandBook.',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => h.navigateTo('../brandbook/', 'opened_brandbook'),
             steps: [
                 {
                     id: 'diagnostic',
-                    title: 'Configurar diagnostico',
-                    description: 'Escolha segmento, tom, canal e nivel de legibilidade.',
+                    title: 'Configurar diagnóstico',
+                    description: 'Escolha segmento, tom, canal e nível de legibilidade.',
                     done: Boolean(h.flags.form_touched),
-                    actionLabel: 'Ir para diagnostico',
+                    actionLabel: 'Ir para diagnóstico',
                     action: () => focusSelector('#industry')
                 },
                 {
                     id: 'generate',
-                    title: 'Gerar recomendacao',
-                    description: 'Crie par tipografico e ranking das melhores fontes.',
+                    title: 'Gerar recomendação',
+                    description: 'Crie par tipográfico e ranking das melhores fontes.',
                     done: Boolean(h.flags.generated && rankingReady),
-                    actionLabel: 'Gerar recomendacao',
+                    actionLabel: 'Gerar recomendação',
                     action: () => h.clickSelector('#generateFontStrategyBtn', 'generated')
                 },
                 {
@@ -242,7 +242,7 @@
                 {
                     id: 'export',
                     title: 'Exportar perfil',
-                    description: 'Baixe o JSON tipografico para historico do projeto.',
+                    description: 'Baixe o JSON tipográfico para histórico do projeto.',
                     done: exported,
                     actionLabel: 'Exportar JSON',
                     action: () => h.clickSelector('#exportFontProfileBtn', 'exported_profile')
@@ -250,7 +250,7 @@
                 {
                     id: 'consolidate',
                     title: 'Consolidar no BrandBook',
-                    description: 'Conferir combinacao de fontes junto com cores e mockups.',
+                    description: 'Conferir combinação de fontes junto com cores e mockups.',
                     done: Boolean(h.flags.opened_brandbook),
                     actionLabel: 'Abrir BrandBook',
                     action: () => h.navigateTo('../brandbook/', 'opened_brandbook')
@@ -267,8 +267,8 @@
 
         return {
             title: 'Fluxo Guiado - Background Remover',
-            summary: 'Recorte, refine e consolide o resultado no relatorio final.',
-            hint: 'Upload -> ajuste de recorte -> resultado -> exportacao -> FinalFrame.',
+            summary: 'Recorte, refine e consolide o resultado no relatório final.',
+            hint: 'Upload -> ajuste de recorte -> resultado -> exportação -> FinalFrame.',
             secondaryLabel: 'Abrir FinalFrame',
             secondaryAction: () => h.navigateTo('../finalframe/', 'opened_finalframe'),
             steps: [
@@ -283,7 +283,7 @@
                 {
                     id: 'adjust',
                     title: 'Ajustar recorte',
-                    description: 'Configure tolerancia, modo e refinamentos manuais.',
+                    description: 'Configure tolerância, modo e refinamentos manuais.',
                     done: adjusted,
                     actionLabel: 'Ir para ajustes',
                     action: () => focusSelector('#tolerance')
@@ -299,7 +299,7 @@
                 {
                     id: 'export',
                     title: 'Exportar recorte',
-                    description: 'Baixe a versao pronta para aplicacao em materiais.',
+                    description: 'Baixe a versão pronta para aplicação em materiais.',
                     done: exported,
                     actionLabel: 'Baixar imagem',
                     action: () => {
@@ -311,7 +311,7 @@
                 {
                     id: 'handoff',
                     title: 'Consolidar no FinalFrame',
-                    description: 'Abra o relatorio final para validar o recorte junto aos demais modulos.',
+                    description: 'Abra o relatório final para validar o recorte junto aos demais módulos.',
                     done: Boolean(h.flags.opened_finalframe),
                     actionLabel: 'Abrir FinalFrame',
                     action: () => h.navigateTo('../finalframe/', 'opened_finalframe')
@@ -332,16 +332,16 @@
         return {
             title: 'Fluxo Guiado - OG Image',
             summary: 'Defina diretriz social, gere imagem OG e sincronize no ecossistema.',
-            hint: 'Conteudo -> visual -> sync OG -> exportacao -> BrandBook.',
+            hint: 'Conteúdo -> visual -> sincronização OG -> exportação -> BrandBook.',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => h.navigateTo('../brandbook/', 'opened_brandbook'),
             steps: [
                 {
                     id: 'content',
-                    title: 'Definir conteudo',
-                    description: 'Ajuste titulo, descricao e marca para o card social.',
+                    title: 'Definir conteúdo',
+                    description: 'Ajuste título, descrição e marca para o card social.',
                     done: contentReady,
-                    actionLabel: 'Ir para titulo',
+                    actionLabel: 'Ir para título',
                     action: () => focusSelector('#title')
                 },
                 {
@@ -349,7 +349,7 @@
                     title: 'Ajustar visual',
                     description: 'Escolha template, cores e elementos de fundo.',
                     done: visualReady,
-                    actionLabel: 'Atualizar preview',
+                    actionLabel: 'Atualizar pré-visualização',
                     action: () => {
                         if (!clickSelectorSafe('.update-btn')) {
                             clickSelectorSafe('#downloadButton');
@@ -359,15 +359,15 @@
                 {
                     id: 'sync',
                     title: 'Salvar diretriz OG',
-                    description: 'Persistir configuracoes para uso no BrandBook.',
+                    description: 'Persistir configurações para uso no BrandBook.',
                     done: ogSynced,
-                    actionLabel: 'Salvar configuracao',
+                    actionLabel: 'Salvar configuração',
                     action: () => clickSelectorSafe('.update-btn')
                 },
                 {
                     id: 'export',
                     title: 'Exportar ativo',
-                    description: 'Baixar imagem ou codigo para aplicacao imediata.',
+                    description: 'Baixar imagem ou código para aplicação imediata.',
                     done: exported,
                     actionLabel: 'Exportar imagem',
                     action: () => {
@@ -395,12 +395,12 @@
         const exported = Boolean(
             h.flags.exported_json || h.flags.exported_pdf || h.flags.exported_html || h.flags.printed
         );
-        const refreshed = Boolean(h.flags.refreshed || textValue('#statusLine') !== 'Aguardando consolidacao de dados.');
+        const refreshed = Boolean(h.flags.refreshed || textValue('#statusLine') !== 'Aguardando consolidação de dados.');
 
         return {
             title: 'Fluxo Guiado - Brand Manual',
-            summary: 'Consolide os dados de marca e gere materiais de apresentacao.',
-            hint: 'Atualizar -> template -> revisar integracoes -> exportar -> BrandBook.',
+            summary: 'Consolide os dados de marca e gere materiais de apresentação.',
+            hint: 'Atualizar -> template -> revisar integrações -> exportar -> BrandBook.',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => h.navigateTo('../brandbook/', 'opened_brandbook'),
             steps: [
@@ -422,10 +422,10 @@
                 },
                 {
                     id: 'integrate',
-                    title: 'Revisar integracoes',
-                    description: 'Verifique cores, tipografia e aplicacoes em mockups.',
+                    title: 'Revisar integrações',
+                    description: 'Verifique cores, tipografia e aplicações em mockups.',
                     done: integrationReady,
-                    actionLabel: 'Ir para painel de integracao',
+                    actionLabel: 'Ir para painel de integração',
                     action: () => scrollIntoViewSafe('#integrationNotes')
                 },
                 {
@@ -457,31 +457,31 @@
 
         return {
             title: 'Fluxo Guiado - BrandBook',
-            summary: 'Centralize as informacoes de marca e valide consistencia do projeto.',
-            hint: 'Atualizar -> revisar integracao -> checar insights -> exportar -> manual.',
+            summary: 'Centralize as informações de marca e valide consistência do projeto.',
+            hint: 'Atualizar -> revisar integração -> checar insights -> exportar -> manual.',
             secondaryLabel: 'Abrir Brand Manual',
             secondaryAction: () => h.navigateTo('../brandmanual/', 'opened_brandmanual'),
             steps: [
                 {
                     id: 'refresh',
-                    title: 'Atualizar relatorio',
+                    title: 'Atualizar relatório',
                     description: 'Recarregue dados consolidados do ecossistema.',
                     done: Boolean(h.flags.refreshed || colors > 0),
-                    actionLabel: 'Atualizar relatorio',
+                    actionLabel: 'Atualizar relatório',
                     action: () => h.clickSelector('#refreshReportBtn', 'refreshed')
                 },
                 {
                     id: 'integration',
-                    title: 'Revisar integracao',
+                    title: 'Revisar integração',
                     description: 'Validar estados de cor, fonte, mockups e OG.',
                     done: integrationItems > 0,
-                    actionLabel: 'Ver integracao',
+                    actionLabel: 'Ver integração',
                     action: () => scrollIntoViewSafe('#integrationStatus')
                 },
                 {
                     id: 'insights',
                     title: 'Checar insights',
-                    description: 'Confirmar combinacoes e tendencias alinhadas.',
+                    description: 'Confirmar combinações e tendências alinhadas.',
                     done: combinations > 0 && trends > 0,
                     actionLabel: 'Ver insights',
                     action: () => scrollIntoViewSafe('#combinationList')
@@ -497,7 +497,7 @@
                 {
                     id: 'handoff',
                     title: 'Abrir Brand Manual',
-                    description: 'Levar consolidacao para material final de apresentacao.',
+                    description: 'Levar consolidação para material final de apresentação.',
                     done: Boolean(h.flags.opened_brandmanual),
                     actionLabel: 'Abrir Brand Manual',
                     action: () => h.navigateTo('../brandmanual/', 'opened_brandmanual')
@@ -514,22 +514,22 @@
 
         return {
             title: 'Fluxo Guiado - FinalFrame',
-            summary: 'Relatorio final com visao integrada de marca, mockups, OG e recorte.',
-            hint: 'Atualizar -> validar integracoes -> exportar -> entregar.',
+            summary: 'Relatório final com visão integrada de marca, mockups, OG e recorte.',
+            hint: 'Atualizar -> validar integrações -> exportar -> entregar.',
             secondaryLabel: 'Abrir Brand Manual',
             secondaryAction: () => h.navigateTo('../brandmanual/', 'opened_brandmanual'),
             steps: [
                 {
                     id: 'refresh',
-                    title: 'Atualizar consolidacao',
+                    title: 'Atualizar consolidação',
                     description: 'Recarregue os dados mais recentes das ferramentas integradas.',
                     done: Boolean(h.flags.refreshed && payloadReady),
-                    actionLabel: 'Atualizar relatorio',
+                    actionLabel: 'Atualizar relatório',
                     action: () => h.clickSelector('#refreshReportBtn', 'refreshed')
                 },
                 {
                     id: 'validate',
-                    title: 'Validar integracoes',
+                    title: 'Validar integrações',
                     description: 'Confirme mockups e background remover presentes no pacote final.',
                     done: Boolean(hasBgremove && hasMockups),
                     actionLabel: 'Abrir mockups',
@@ -538,7 +538,7 @@
                 {
                     id: 'export',
                     title: 'Exportar JSON',
-                    description: 'Baixe ou copie o payload consolidado para documentacao e entrega.',
+                    description: 'Baixe ou copie o payload consolidado para documentação e entrega.',
                     done: exported,
                     actionLabel: 'Baixar JSON',
                     action: () => h.clickSelector('#downloadPayloadBtn', 'exported_json')
@@ -561,15 +561,15 @@
 
         return {
             title: 'Fluxo Guiado - Mockups (Entrada)',
-            summary: 'Valide a arte de entrada antes de seguir para edicao e relatorios.',
-            hint: 'Upload -> validacao -> editor -> resultados -> consolidacao.',
+            summary: 'Valide a arte de entrada antes de seguir para edição e relatórios.',
+            hint: 'Upload -> validação -> editor -> resultados -> consolidação.',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => h.navigateTo('../brandbook/', 'opened_brandbook'),
             steps: [
                 {
                     id: 'upload',
                     title: 'Enviar arquivo',
-                    description: 'Carregue arte em alta resolucao para validacao tecnica.',
+                    description: 'Carregue arte em alta resolução para validação técnica.',
                     done: previewVisible,
                     actionLabel: 'Selecionar arquivo',
                     action: () => clickSelectorSafe('#workFileInput')
@@ -577,15 +577,15 @@
                 {
                     id: 'validate',
                     title: 'Validar requisitos',
-                    description: 'Confirmar formato, tamanho e resolucao minima.',
+                    description: 'Confirmar formato, tamanho e resolução mínima.',
                     done: continueEnabled,
-                    actionLabel: 'Ver validacao',
+                    actionLabel: 'Ver validação',
                     action: () => scrollIntoViewSafe('#validationPanel')
                 },
                 {
                     id: 'editor',
                     title: 'Ir para editor',
-                    description: 'Abrir ambiente de composicao dos mockups.',
+                    description: 'Abrir ambiente de composição dos mockups.',
                     done: Boolean(h.flags.opened_editor),
                     actionLabel: 'Abrir editor',
                     action: () => h.navigateTo('./editor.php', 'opened_editor')
@@ -601,7 +601,7 @@
                 {
                     id: 'consolidate',
                     title: 'Consolidar no BrandBook',
-                    description: 'Conectar output dos mockups ao relatorio central.',
+                    description: 'Conectar output dos mockups ao relatório central.',
                     done: Boolean(h.flags.opened_brandbook),
                     actionLabel: 'Abrir BrandBook',
                     action: () => h.navigateTo('../brandbook/', 'opened_brandbook')
@@ -622,15 +622,15 @@
 
         return {
             title: 'Fluxo Guiado - Mockups (Editor)',
-            summary: 'Compose, salve e encaminhe os mockups para aprovacao e relatorio.',
-            hint: 'Briefing -> escolha do mockup -> salvar -> resultados -> relatorio.',
-            secondaryLabel: 'Abrir Relatorio',
+            summary: 'Componha, salve e encaminhe os mockups para aprovação e relatório.',
+            hint: 'Briefing -> escolha do mockup -> salvar -> resultados -> relatório.',
+            secondaryLabel: 'Abrir Relatório',
             secondaryAction: () => h.navigateTo('./report.php', 'opened_report'),
             steps: [
                 {
                     id: 'briefing',
                     title: 'Preencher briefing',
-                    description: 'Defina titulo, tags e descricao do trabalho.',
+                    description: 'Defina título, tags e descrição do trabalho.',
                     done: briefingReady,
                     actionLabel: 'Ir para briefing',
                     action: () => focusSelector('#workTitleInput')
@@ -638,15 +638,15 @@
                 {
                     id: 'select',
                     title: 'Selecionar mockup',
-                    description: 'Abra um modelo e entre no modo de edicao.',
+                    description: 'Abra um modelo e entre no modo de edição.',
                     done: editorVisible || Boolean(h.flags.selected_mockup),
                     actionLabel: 'Ir para biblioteca',
                     action: () => scrollIntoViewSafe('#mockupsGrid')
                 },
                 {
                     id: 'save',
-                    title: 'Salvar composicao',
-                    description: 'Persistir mockups finalizados para resultados e relatorio.',
+                    title: 'Salvar composição',
+                    description: 'Persistir mockups finalizados para resultados e relatório.',
                     done: saved || Boolean(h.flags.saved_mockup),
                     actionLabel: 'Salvar mockup',
                     action: () => clickSelectorSafe('button[onclick*="saveMockupChanges"]')
@@ -654,17 +654,17 @@
                 {
                     id: 'results',
                     title: 'Abrir resultados',
-                    description: 'Revisar mockups em layout de vitrine para aprovacao.',
+                    description: 'Revisar mockups em layout de vitrine para aprovação.',
                     done: Boolean(h.flags.opened_results || saved),
                     actionLabel: 'Ir para resultados',
                     action: () => clickSelectorSafe('button[onclick*="finalizeMockupsForReport"]')
                 },
                 {
                     id: 'report',
-                    title: 'Gerar relatorio',
-                    description: 'Consolidar mockups no relatorio de entrega/orcamento.',
+                    title: 'Gerar relatório',
+                    description: 'Consolidar mockups no relatório de entrega/orçamento.',
                     done: Boolean(h.flags.opened_report),
-                    actionLabel: 'Abrir relatorio',
+                    actionLabel: 'Abrir relatório',
                     action: () => h.navigateTo('./report.php', 'opened_report')
                 }
             ]
@@ -676,8 +676,8 @@
 
         return {
             title: 'Fluxo Guiado - Mockups (Resultados)',
-            summary: 'Revise o material final e avance para a etapa de consolidacao.',
-            hint: 'Carregar -> filtrar/revisar -> baixar amostra -> relatorio -> BrandBook.',
+            summary: 'Revise o material final e avance para a etapa de consolidação.',
+            hint: 'Carregar -> filtrar/revisar -> baixar amostra -> relatório -> BrandBook.',
             secondaryLabel: 'Abrir BrandBook',
             secondaryAction: () => h.navigateTo('../brandbook/', 'opened_brandbook'),
             steps: [
@@ -691,7 +691,7 @@
                 },
                 {
                     id: 'review',
-                    title: 'Revisar exibicao',
+                    title: 'Revisar exibição',
                     description: 'Use filtros e busca para validar o conjunto final.',
                     done: Boolean(h.flags.filtered || h.flags.refreshed),
                     actionLabel: 'Ir para filtros',
@@ -700,17 +700,17 @@
                 {
                     id: 'download',
                     title: 'Baixar amostra',
-                    description: 'Exportar preview principal para aprovacao rapida.',
+                    description: 'Exportar pré-visualização principal para aprovação rápida.',
                     done: Boolean(h.flags.downloaded_sample),
                     actionLabel: 'Baixar amostra',
                     action: () => h.clickSelector('#downloadHeroBtn', 'downloaded_sample')
                 },
                 {
                     id: 'report',
-                    title: 'Abrir relatorio',
+                    title: 'Abrir relatório',
                     description: 'Enviar mockups selecionados para etapa de anexo.',
                     done: Boolean(h.flags.opened_report),
-                    actionLabel: 'Abrir relatorio',
+                    actionLabel: 'Abrir relatório',
                     action: () => h.navigateTo('./report.php', 'opened_report')
                 },
                 {
@@ -732,7 +732,7 @@
         const exported = Boolean(h.flags.payload_downloaded || h.flags.payload_copied || h.flags.printed);
 
         return {
-            title: 'Fluxo Guiado - Mockups (Relatorio)',
+            title: 'Fluxo Guiado - Mockups (Relatório)',
             summary: 'Finalize anexos de mockup com dados de identidade visual.',
             hint: 'Revisar validade -> selecionar -> atualizar payload -> exportar -> manual.',
             secondaryLabel: 'Abrir BrandBook',
@@ -741,7 +741,7 @@
                 {
                     id: 'review',
                     title: 'Revisar validade',
-                    description: 'Confirme status do relatorio e volume de itens salvos.',
+                    description: 'Confirme status do relatório e volume de itens salvos.',
                     done: total > 0,
                     actionLabel: 'Atualizar resumo',
                     action: () => h.clickSelector('#refreshPayloadBtn', 'refreshed')
@@ -765,7 +765,7 @@
                 {
                     id: 'export',
                     title: 'Exportar ou imprimir',
-                    description: 'Baixar JSON, copiar resumo ou imprimir relatorio.',
+                    description: 'Baixar JSON, copiar resumo ou imprimir relatório.',
                     done: exported,
                     actionLabel: 'Baixar JSON',
                     action: () => h.clickSelector('#downloadPayloadBtn', 'payload_downloaded')
@@ -842,13 +842,13 @@
             <div class="aq-workflow-head">
                 <div>
                     <h3 id="aqWorkflowTitle">Fluxo Guiado</h3>
-                    <p id="aqWorkflowSummary">Siga as etapas para manter consistencia da ferramenta.</p>
+                    <p id="aqWorkflowSummary">Siga as etapas para manter consistência da ferramenta.</p>
                 </div>
                 <span class="aq-workflow-progress" id="aqWorkflowProgress">0/0</span>
             </div>
             <div class="aq-workflow-steps" id="aqWorkflowSteps"></div>
             <div class="aq-workflow-actions">
-                <button type="button" id="aqWorkflowPrimaryAction">Executar proximo passo</button>
+                <button type="button" id="aqWorkflowPrimaryAction">Executar próximo passo</button>
                 <button type="button" id="aqWorkflowSecondaryAction">Abrir BrandBook</button>
             </div>
             <p class="aq-workflow-hint" id="aqWorkflowHint"></p>
@@ -1380,3 +1380,4 @@
             .replace(/'/g, '&#039;');
     }
 }(window, document));
+

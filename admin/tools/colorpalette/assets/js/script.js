@@ -133,7 +133,7 @@ class ColorPaletteGenerator {
             this.colorVisionSeverityValue.textContent = `${this.colorVisionSeverityInput.value}%`;
         }
         this.generatePalette();
-        this.updateBrandSyncStatus('Paleta pronta para sincronizacao com o Brand Kit.');
+        this.updateBrandSyncStatus('Paleta pronta para sincronização com o Brand Kit.');
         this.renderWorkflowAssistant();
     }
 
@@ -491,7 +491,7 @@ class ColorPaletteGenerator {
             },
             {
                 key: 'strategy',
-                title: '2. Direcao',
+                title: '2. Direção',
                 detail: hasStrategy
                     ? (hasSector ? `Preset: ${sectorProfile.label}.` : `Harmonia: ${harmony.label}.`)
                     : 'Escolha preset setorial ou harmonia.',
@@ -503,7 +503,7 @@ class ColorPaletteGenerator {
                 detail: accessibilityDone
                     ? `Sem conflitos em ${mode}.`
                     : (mode === 'normal'
-                        ? 'Ative um modo de visao para validar.'
+                        ? 'Ative um modo de visão para validar.'
                         : `${conflictCount} conflito(s) para ajustar.`),
                 done: accessibilityDone
             },
@@ -562,7 +562,7 @@ class ColorPaletteGenerator {
         }).join('');
 
         if (!state.nextStep) {
-            this.workflowSummary.textContent = 'Fluxo concluido. Paleta pronta para publicacao e documentacao no BrandBook.';
+            this.workflowSummary.textContent = 'Fluxo concluído. Paleta pronta para publicação e documentação no BrandBook.';
         } else {
             this.workflowSummary.textContent = `Fluxo ${state.completed}/${state.total}. Proximo passo: ${state.nextStep.title}.`;
         }
@@ -570,13 +570,13 @@ class ColorPaletteGenerator {
         if (this.workflowPrimaryAction) {
             const labelMap = {
                 palette: 'Gerar paleta',
-                strategy: 'Definir direcao',
+                strategy: 'Definir direção',
                 accessibility: 'Validar acessibilidade',
                 library: 'Salvar tema',
                 sync: 'Sincronizar marca'
             };
             this.workflowPrimaryAction.textContent = state.nextStep
-                ? (labelMap[state.nextStep.key] || 'Executar proximo passo')
+                ? (labelMap[state.nextStep.key] || 'Executar próximo passo')
                 : 'Fluxo concluido';
             this.workflowPrimaryAction.disabled = !state.nextStep;
         }
@@ -607,7 +607,7 @@ class ColorPaletteGenerator {
                     this.colorVisionModeSelect.value = 'deuteranopia';
                     this.renderAccessibilityTools(this.currentColors);
                     this.drawColorWheel(this.currentColors);
-                    this.showNotification('Modo de visao ativado. Revise os conflitos e aplique ajustes.');
+                    this.showNotification('Modo de visão ativado. Revise os conflitos e aplique ajustes.');
                 } else {
                     this.autoFixAccessibilityConflicts();
                 }
@@ -643,42 +643,42 @@ class ColorPaletteGenerator {
                 rule: 'analogous',
                 spread: 28,
                 adjustments: { hue: -10, saturation: 8, lightness: -4 },
-                description: 'Direcao clean com confianca visual, ideal para dashboards e produto digital.'
+                description: 'Direção clean com confiança visual, ideal para dashboards e produto digital.'
             },
             ecommerce: {
                 label: 'E-commerce e Varejo',
                 rule: 'complementary',
                 spread: 54,
                 adjustments: { hue: 6, saturation: 12, lightness: 0 },
-                description: 'Contraste forte para destaque de oferta, preco e botoes de conversao.'
+                description: 'Contraste forte para destaque de oferta, preço e botões de conversão.'
             },
             health: {
                 label: 'Saude e Bem-estar',
                 rule: 'analogous',
                 spread: 24,
                 adjustments: { hue: 20, saturation: -8, lightness: 6 },
-                description: 'Atmosfera calma com foco em confianca e leitura confortavel.'
+                description: 'Atmosfera calma com foco em confiança e leitura confortável.'
             },
             education: {
-                label: 'Educacao e Cursos',
+                label: 'Educação e Cursos',
                 rule: 'triadic',
                 spread: 30,
                 adjustments: { hue: -4, saturation: 2, lightness: 4 },
-                description: 'Diversidade de tons para trilhas, modulos e destaque pedagogico.'
+                description: 'Diversidade de tons para trilhas, módulos e destaque pedagógico.'
             },
             finance: {
                 label: 'Financas e Seguros',
                 rule: 'splitComplementary',
                 spread: 34,
                 adjustments: { hue: -16, saturation: -4, lightness: -6 },
-                description: 'Paleta de confianca com acentos de acao controlados para performance.'
+                description: 'Paleta de confiança com acentos de ação controlados para performance.'
             },
             fashion: {
                 label: 'Moda e Lifestyle',
                 rule: 'tetradic',
                 spread: 26,
                 adjustments: { hue: 12, saturation: 10, lightness: -2 },
-                description: 'Expressao premium com variacao cromatica para campanhas e editoriais.'
+                description: 'Expressão premium com variação cromática para campanhas e editoriais.'
             }
         };
     }
@@ -742,7 +742,7 @@ class ColorPaletteGenerator {
             return;
         }
         if (!profile || !profile.key) {
-            this.sectorPresetHint.textContent = 'Selecione um preset para gerar harmonia, combinacoes e tendencias alinhadas ao setor.';
+            this.sectorPresetHint.textContent = 'Selecione um preset para gerar harmonia, combinações e tendências alinhadas ao setor.';
             return;
         }
         this.sectorPresetHint.textContent = `${profile.label}: ${profile.description}`;
@@ -763,7 +763,7 @@ class ColorPaletteGenerator {
         const preset = this.getSectorPresetCatalog()[selectedKey];
         if (!preset) {
             this.renderWorkflowAssistant();
-            this.showNotification('Preset setorial invalido.');
+            this.showNotification('Preset setorial inválido.');
             return;
         }
 
@@ -809,8 +809,8 @@ class ColorPaletteGenerator {
                 return [
                     {
                         label: 'Arquitetura SaaS',
-                        value: `${roleMap.primary.toUpperCase()} em navegacao e ${roleMap.accent.toUpperCase()} para CTAs`,
-                        detail: 'Mantenha fundo limpo e use cor de acao somente em eventos de conversao.'
+                        value: `${roleMap.primary.toUpperCase()} em navegação e ${roleMap.accent.toUpperCase()} para CTAs`,
+                        detail: 'Mantenha fundo limpo e use cor de ação somente em eventos de conversão.'
                     },
                     {
                         label: 'Leitura de dashboard',
@@ -822,8 +822,8 @@ class ColorPaletteGenerator {
                 return [
                     {
                         label: 'Hierarquia de compra',
-                        value: `${roleMap.accent.toUpperCase()} em preco, selo e botao comprar`,
-                        detail: 'Concentre contraste nos elementos de decisao para ganho de conversao.'
+                        value: `${roleMap.accent.toUpperCase()} em preço, selo e botão comprar`,
+                        detail: 'Concentre contraste nos elementos de decisão para ganho de conversão.'
                     },
                     {
                         label: 'Vitrine visual',
@@ -836,37 +836,37 @@ class ColorPaletteGenerator {
                     {
                         label: 'Conforto de leitura',
                         value: `${roleMap.neutralLight.toUpperCase()} + ${roleMap.secondary.toUpperCase()}`,
-                        detail: 'Priorize tons suaves e contraste consistente para conteudo clinico.'
+                        detail: 'Priorize tons suaves e contraste consistente para conteúdo clínico.'
                     },
                     {
-                        label: 'Sinalizacao positiva',
+                        label: 'Sinalização positiva',
                         value: `${roleMap.accent.toUpperCase()} em estados de sucesso e progresso`,
-                        detail: 'Use acento para reforcar orientacao sem gerar ansiedade visual.'
+                        detail: 'Use acento para reforçar orientação sem gerar ansiedade visual.'
                     }
                 ];
             case 'education':
                 return [
                     {
                         label: 'Mapa de trilhas',
-                        value: `${roleMap.primary.toUpperCase()} para base e ${roleMap.accent.toUpperCase()} para nivel`,
-                        detail: 'Ajuda a separar modulos e progresso por blocos de aprendizado.'
+                        value: `${roleMap.primary.toUpperCase()} para base e ${roleMap.accent.toUpperCase()} para nível`,
+                        detail: 'Ajuda a separar módulos e progresso por blocos de aprendizado.'
                     },
                     {
                         label: 'Aprendizado ativo',
                         value: `${roleMap.secondary.toUpperCase()} em exercicios e feedback`,
-                        detail: 'Cria ritmo visual para leitura, pratica e revisao.'
+                        detail: 'Cria ritmo visual para leitura, prática e revisão.'
                     }
                 ];
             case 'finance':
                 return [
                     {
-                        label: 'Confianca operacional',
-                        value: `${roleMap.primary.toUpperCase()} para navegacao e ${roleMap.neutralDark.toUpperCase()} em dados`,
-                        detail: 'Mantem seriedade e reduz ruido visual em telas de decisao.'
+                        label: 'Confiança operacional',
+                        value: `${roleMap.primary.toUpperCase()} para navegação e ${roleMap.neutralDark.toUpperCase()} em dados`,
+                        detail: 'Mantém seriedade e reduz ruído visual em telas de decisão.'
                     },
                     {
-                        label: 'Destaque de acao',
-                        value: `${roleMap.accent.toUpperCase()} apenas em eventos financeiros criticos`,
+                        label: 'Destaque de ação',
+                        value: `${roleMap.accent.toUpperCase()} apenas em eventos financeiros críticos`,
                         detail: 'Acento pontual melhora foco sem banalizar alertas importantes.'
                     }
                 ];
@@ -875,12 +875,12 @@ class ColorPaletteGenerator {
                     {
                         label: 'Editorial premium',
                         value: `${roleMap.neutralDark.toUpperCase()} com blocos ${roleMap.accent.toUpperCase()}`,
-                        detail: 'Direcao visual sofisticada para colecoes, lookbooks e campanhas.'
+                        detail: 'Direção visual sofisticada para coleções, lookbooks e campanhas.'
                     },
                     {
                         label: 'Destaque de colecao',
                         value: `${roleMap.primary.toUpperCase()} + ${roleMap.secondary.toUpperCase()}`,
-                        detail: 'Boa combinacao para diferenciar linhas de produto sem perder unidade.'
+                        detail: 'Boa combinação para diferenciar linhas de produto sem perder unidade.'
                     }
                 ];
             default:
@@ -899,8 +899,8 @@ class ColorPaletteGenerator {
                     },
                     {
                         label: 'Action Minimal',
-                        value: `${roleMap.accent.toUpperCase()} restrito aos gatilhos de acao`,
-                        detail: 'Reduz ruido e aumenta previsibilidade da interface.'
+                        value: `${roleMap.accent.toUpperCase()} restrito aos gatilhos de ação`,
+                        detail: 'Reduz ruído e aumenta previsibilidade da interface.'
                     }
                 ];
             case 'ecommerce':
@@ -921,11 +921,11 @@ class ColorPaletteGenerator {
                     {
                         label: 'Calm Clinical UI',
                         value: `${roleMap.neutralLight.toUpperCase()} + ${roleMap.primary.toUpperCase()}`,
-                        detail: 'Tendencia de experiencia acolhedora para servicos de saude digital.'
+                        detail: 'Tendencia de experiência acolhedora para serviços de saúde digital.'
                     },
                     {
                         label: 'Trust Micro-States',
-                        value: `${roleMap.accent.toUpperCase()} em progresso e orientacao`,
+                        value: `${roleMap.accent.toUpperCase()} em progresso e orientação`,
                         detail: 'Microestados claros melhoram adesao em jornadas longas.'
                     }
                 ];
@@ -947,11 +947,11 @@ class ColorPaletteGenerator {
                     {
                         label: 'Regulated Minimalism',
                         value: `${roleMap.neutralDark.toUpperCase()} com acentos controlados`,
-                        detail: 'Direcao dominante em bancos digitais, seguradoras e investimentos.'
+                        detail: 'Direção dominante em bancos digitais, seguradoras e investimentos.'
                     },
                     {
                         label: 'Signal-first Design',
-                        value: `${roleMap.accent.toUpperCase()} em alertas e recomendacoes`,
+                        value: `${roleMap.accent.toUpperCase()} em alertas e recomendações`,
                         detail: 'Evidencia risco e oportunidade sem quebrar sobriedade visual.'
                     }
                 ];
@@ -960,7 +960,7 @@ class ColorPaletteGenerator {
                     {
                         label: 'Neo Editorial',
                         value: `${roleMap.primary.toUpperCase()} com contraste de superficies`,
-                        detail: 'Referencia atual para colecoes, drops e campanhas premium.'
+                        detail: 'Referência atual para coleções, drops e campanhas premium.'
                     },
                     {
                         label: 'Lifestyle Contrast',
@@ -1064,7 +1064,7 @@ class ColorPaletteGenerator {
     applyCurrentPaletteToBrandKit() {
         const api = window.AQBrandKit;
         if (!api) {
-            this.updateBrandSyncStatus('Nao foi possivel sincronizar: Brand Kit indisponivel.', true);
+            this.updateBrandSyncStatus('Não foi possível sincronizar: Brand Kit indisponível.', true);
             this.renderWorkflowAssistant();
             return;
         }
@@ -1095,7 +1095,7 @@ class ColorPaletteGenerator {
             }, 'colorpalette');
         }
 
-        this.updateBrandSyncStatus('Cores sincronizadas com sucesso em Mockups, relatorio e Brand Kit.');
+        this.updateBrandSyncStatus('Cores sincronizadas com sucesso em Mockups, relatório e Brand Kit.');
         this.didManualSync = true;
         this.renderWorkflowAssistant();
     }
@@ -1317,8 +1317,8 @@ class ColorPaletteGenerator {
         }
 
         const labels = [
-            { key: 'primary', label: 'Primaria' },
-            { key: 'secondary', label: 'Secundaria' },
+            { key: 'primary', label: 'Primária' },
+            { key: 'secondary', label: 'Secundária' },
             { key: 'accent', label: 'Acento' },
             { key: 'neutralLight', label: 'Neutra clara' },
             { key: 'neutralDark', label: 'Neutra escura' }
@@ -1441,7 +1441,7 @@ class ColorPaletteGenerator {
         list.push({
             label: 'Regra 60-30-10',
             value: `${roleMap.primary.toUpperCase()} / ${roleMap.secondary.toUpperCase()} / ${roleMap.accent.toUpperCase()}`,
-            detail: 'Use primaria para fundo base, secundaria para blocos e acento em CTAs e icones.'
+            detail: 'Use primária para fundo base, secundária para blocos e acento em CTAs e ícones.'
         });
 
         const primaryText = this.pickTextColor(roleMap.primary);
@@ -1449,7 +1449,7 @@ class ColorPaletteGenerator {
         list.push({
             label: 'Par de leitura principal',
             value: `${roleMap.primary.toUpperCase()} + ${primaryText.text.toUpperCase()} (${primaryText.ratio.toFixed(2)}:1)`,
-            detail: `Para secoes de apoio, aplique ${roleMap.secondary.toUpperCase()} com ${secondaryText.text.toUpperCase()} para consistencia visual.`
+            detail: `Para seções de apoio, aplique ${roleMap.secondary.toUpperCase()} com ${secondaryText.text.toUpperCase()} para consistência visual.`
         });
 
         const harmonyMap = {
@@ -1463,19 +1463,19 @@ class ColorPaletteGenerator {
             },
             complementary: {
                 label: 'Contraste complementar',
-                detail: 'Combina pares de alto impacto para campanhas, banners e destaque de acao.'
+                detail: 'Combina pares de alto impacto para campanhas, banners e destaque de ação.'
             },
             triadic: {
-                label: 'Triade dinamica',
-                detail: 'Boa para produtos criativos com secoes bem separadas por funcao.'
+                label: 'Tríade dinâmica',
+                detail: 'Boa para produtos criativos com seções bem separadas por função.'
             },
             tetradic: {
                 label: 'Tetrade editorial',
-                detail: 'Paleta rica para sistemas com multiplas categorias de conteudo.'
+                detail: 'Paleta rica para sistemas com múltiplas categorias de conteúdo.'
             },
             splitComplementary: {
                 label: 'Split equilibrado',
-                detail: 'Mantem impacto sem agressividade excessiva, ideal para produtos digitais.'
+                detail: 'Mantém impacto sem agressividade excessiva, ideal para produtos digitais.'
             }
         };
         const harmony = harmonyMap[this.currentPaletteType] || harmonyMap.monochromatic;
@@ -1494,12 +1494,12 @@ class ColorPaletteGenerator {
         } else if (temperature.label === 'fria') {
             list.push({
                 label: 'Aquecimento de interface',
-                value: `${roleMap.accent.toUpperCase()} em pontos de acao`,
-                detail: 'Use acento quente em botoes para aumentar direcionamento de clique.'
+                value: `${roleMap.accent.toUpperCase()} em pontos de ação`,
+                detail: 'Use acento quente em botões para aumentar direcionamento de clique.'
             });
         } else {
             list.push({
-                label: 'Direcao equilibrada',
+                label: 'Direção equilibrada',
                 value: `${roleMap.secondary.toUpperCase()} como apoio`,
                 detail: 'Paleta neutra com acento controlado funciona bem para produtos multi-segmento.'
             });
@@ -1534,8 +1534,8 @@ class ColorPaletteGenerator {
         if (temperature.label === 'quente') {
             trends.push({
                 label: 'Digital Warmth',
-                value: `${roleMap.accent.toUpperCase()} em interacoes`,
-                detail: 'Combinacao quente para marcas proximas, creator economy e campanhas de conversao.'
+                value: `${roleMap.accent.toUpperCase()} em interações`,
+                detail: 'Combinação quente para marcas próximas, creator economy e campanhas de conversão.'
             });
         } else if (temperature.label === 'fria') {
             trends.push({
@@ -1555,19 +1555,19 @@ class ColorPaletteGenerator {
             trends.push({
                 label: 'High-Energy Branding',
                 value: 'Microblocos de acento + superficies claras',
-                detail: 'Aproveita saturacao alta para destacar ofertas e chamadas sem perder legibilidade.'
+                detail: 'Aproveita saturação alta para destacar ofertas e chamadas sem perder legibilidade.'
             });
         } else if (energy.level === 'suave') {
             trends.push({
                 label: 'Soft Minimalism',
                 value: `Base ${roleMap.neutralLight.toUpperCase()} com acento pontual`,
-                detail: 'Direcao minimalista para produtos premium e experiencias focadas em conteudo.'
+                detail: 'Direção minimalista para produtos premium e experiências focadas em conteúdo.'
             });
         } else {
             trends.push({
                 label: 'Balanced Conversion',
                 value: 'Estrutura neutra com CTA colorido',
-                detail: 'Padrao atual em e-commerce e plataformas de servico com foco em performance.'
+                detail: 'Padrão atual em e-commerce e plataformas de serviço com foco em performance.'
             });
         }
 
@@ -1605,7 +1605,7 @@ class ColorPaletteGenerator {
         }
 
         if (!Array.isArray(entries) || !entries.length) {
-            target.innerHTML = '<p class="insight-item"><strong>Sem dados</strong><span class="insight-meta">Gere uma paleta para ver recomendacoes.</span></p>';
+            target.innerHTML = '<p class="insight-item"><strong>Sem dados</strong><span class="insight-meta">Gere uma paleta para ver recomendações.</span></p>';
             return;
         }
 
@@ -1627,7 +1627,7 @@ class ColorPaletteGenerator {
         const sectorLine = sectorProfile?.label ? `Preset setorial ativo: ${sectorProfile.label}.` : 'Sem preset setorial ativo.';
 
         if (this.insightSummary) {
-            this.insightSummary.textContent = `Paleta ${this.currentPaletteType} com temperatura ${temperature.label} e energia ${energy.level}. ${sectorLine} Essas recomendacoes ja foram preparadas para o BrandBook.`;
+            this.insightSummary.textContent = `Paleta ${this.currentPaletteType} com temperatura ${temperature.label} e energia ${energy.level}. ${sectorLine} Essas recomendações já foram preparadas para o BrandBook.`;
         }
 
         this.renderInsightCards(this.combinationSuggestions, combinations);
@@ -1654,18 +1654,18 @@ class ColorPaletteGenerator {
         const harmonyProfile = this.getHarmonyProfile();
         const sectorProfile = this.getSectorProfile();
         const recommendations = [
-            'Aplique a regra 60-30-10 para manter consistencia entre telas.',
-            'Use o acento somente em pontos de acao para preservar hierarquia.',
-            'Valide contraste AA/AAA nos componentes de texto e botoes.'
+            'Aplique a regra 60-30-10 para manter consistência entre telas.',
+            'Use o acento somente em pontos de ação para preservar hierarquia.',
+            'Valide contraste AA/AAA nos componentes de texto e botões.'
         ];
         if (harmonyProfile.rule !== 'monochromatic') {
             recommendations.push(
-                `Mantenha a regra ${harmonyProfile.label} com abertura de ${harmonyProfile.spread}deg para consistencia entre telas.`
+                `Mantenha a regra ${harmonyProfile.label} com abertura de ${harmonyProfile.spread}deg para consistência entre telas.`
             );
         }
         if (sectorProfile?.label) {
             recommendations.push(
-                `Padrao setorial aplicado: ${sectorProfile.label}. Garanta consistencia entre campanha, produto e materiais de marca.`
+                `Padrão setorial aplicado: ${sectorProfile.label}. Garanta consistência entre campanha, produto e materiais de marca.`
             );
         }
 
@@ -1807,13 +1807,13 @@ class ColorPaletteGenerator {
     applyCurrentDynamicsProfile() {
         const label = this.getDynamicsProfileLabel();
         const intensity = Math.round(this.getDynamicsIntensity() * 100);
-        const currentTitle = String(document.getElementById('paletteTitle')?.textContent || 'Paleta Dinamica');
+        const currentTitle = String(document.getElementById('paletteTitle')?.textContent || 'Paleta Dinâmica');
         const currentDescription = String(document.getElementById('paletteDescription')?.textContent || '');
         const colors = this.applyCompositionDynamics(this.currentColors, { preserveBase: true });
-        const title = `${currentTitle} - Dinamica ${label}`;
-        const description = `${currentDescription} Dinamica ${label.toLowerCase()} aplicada em ${intensity}% de intensidade.`;
-        this.applyPaletteRendering(colors, title, description, `Dinamica ${label.toLowerCase()} aplicada com sucesso.`);
-        this.showNotification(`Dinamica ${label} aplicada na composicao.`);
+        const title = `${currentTitle} - Dinâmica ${label}`;
+        const description = `${currentDescription} Dinâmica ${label.toLowerCase()} aplicada em ${intensity}% de intensidade.`;
+        this.applyPaletteRendering(colors, title, description, `Dinâmica ${label.toLowerCase()} aplicada com sucesso.`);
+        this.showNotification(`Dinâmica ${label} aplicada na composição.`);
     }
 
     rotateBaseHue(offset = 0, options = {}) {
@@ -1832,7 +1832,7 @@ class ColorPaletteGenerator {
             notify: options.notify !== false,
             statusMessage: String(
                 options.statusMessage
-                || 'Rotacao aplicada na harmonizacao das cores.'
+                || 'Rotação aplicada na harmonização das cores.'
             )
         });
     }
@@ -1877,7 +1877,7 @@ class ColorPaletteGenerator {
         });
         this.applyHarmonyRule({
             notify: true,
-            statusMessage: 'Nova composicao randomizada e aplicada na paleta.'
+            statusMessage: 'Nova composição randomizada e aplicada na paleta.'
         });
     }
 
@@ -2079,7 +2079,7 @@ class ColorPaletteGenerator {
             this.lastWheelHarmonyInteractionAt = now;
             this.applyHarmonyRule({
                 notify: false,
-                statusMessage: 'Rotacao da harmonia ajustada pelos pontos da roda.'
+                statusMessage: 'Rotação da harmonia ajustada pelos pontos da roda.'
             });
             this.wheelHarmonyDragDirty = false;
             return;
@@ -2442,7 +2442,7 @@ class ColorPaletteGenerator {
         });
 
         const title = `Paleta ${labels[rule] || labels.monochromatic} (manual)`;
-        const description = `Regra ${labels[rule] || labels.monochromatic} aplicada com abertura de ${spread}deg. Dinamica ${dynamicsLabel.toLowerCase()} em ${dynamicsIntensity}%.`;
+        const description = `Regra ${labels[rule] || labels.monochromatic} aplicada com abertura de ${spread}deg. Dinâmica ${dynamicsLabel.toLowerCase()} em ${dynamicsIntensity}%.`;
         this.applyPaletteRendering(colors, title, description, statusMessage);
         if (notify) {
             this.showNotification(`Harmonia ${labels[rule] || labels.monochromatic} aplicada.`);
@@ -2538,19 +2538,19 @@ class ColorPaletteGenerator {
 
         const offset = Number.parseInt(this.wheelRotationInput.value, 10);
         if (!Number.isFinite(offset) || offset === 0) {
-            this.showNotification('Defina uma rotacao diferente de zero para aplicar.');
+            this.showNotification('Defina uma rotação diferente de zero para aplicar.');
             return;
         }
 
         this.rotateBaseHue(offset, {
             notify: false,
-            statusMessage: 'Rotacao aplicada na harmonizacao das cores.'
+            statusMessage: 'Rotação aplicada na harmonização das cores.'
         });
         this.wheelRotationInput.value = '0';
         if (this.wheelRotationValue) {
             this.wheelRotationValue.textContent = '0deg';
         }
-        this.showNotification('Rotacao aplicada na harmonizacao das cores.');
+        this.showNotification('Rotação aplicada na harmonização das cores.');
     }
 
     drawColorWheel(colors) {
@@ -2798,7 +2798,7 @@ class ColorPaletteGenerator {
         this.renderConflictSuggestions(suggestions);
 
         if (!conflicts.length) {
-            this.visionConflicts.innerHTML = '<li class="ok">Nenhum conflito critico encontrado para este modo de visao.</li>';
+            this.visionConflicts.innerHTML = '<li class="ok">Nenhum conflito crítico encontrado para este modo de visão.</li>';
             this.renderWorkflowAssistant();
             return;
         }
@@ -2951,7 +2951,7 @@ class ColorPaletteGenerator {
         }
 
         if (!Array.isArray(suggestions) || !suggestions.length) {
-            this.conflictSuggestions.innerHTML = '<p class="saved-theme-meta">Sem sugestoes no momento.</p>';
+            this.conflictSuggestions.innerHTML = '<p class="saved-theme-meta">Sem sugestões no momento.</p>';
             return;
         }
 
@@ -2961,7 +2961,7 @@ class ColorPaletteGenerator {
                 <p>Conflito com Cor ${item.sourceIndex + 1}. Distancia simulada: ${item.beforeDistance} -> ${item.afterDistance}.</p>
                 <div class="conflict-suggestion-meta">
                     <span class="conflict-suggestion-chip">Modo: ${this.escapeHtml(item.mode)} | Sev: ${Math.round((item.severity || 1) * 100)}%</span>
-                    ${item.primaryLocked ? '<span class="conflict-suggestion-chip">Primaria travada</span>' : ''}
+                    ${item.primaryLocked ? '<span class="conflict-suggestion-chip">Primária travada</span>' : ''}
                     <button type="button" data-conflict-apply="${item.id}">Aplicar sugestao</button>
                 </div>
             </article>
@@ -2982,14 +2982,14 @@ class ColorPaletteGenerator {
         if (this.isPrimaryColorLockEnabled()) {
             const primaryIndex = this.getPrimaryColorIndex(colors);
             if (suggestion.targetIndex === primaryIndex) {
-                this.showNotification('Cor primaria travada. Escolha outro ajuste.');
+                this.showNotification('Cor primária travada. Escolha outro ajuste.');
                 return;
             }
         }
 
         colors[suggestion.targetIndex] = suggestion.recommendedColor;
         const title = `Paleta ${this.currentPaletteType} (acessivel)`;
-        const description = `Ajuste aplicado para reduzir conflito de visao (${suggestion.mode} ${Math.round((suggestion.severity || 1) * 100)}%).`;
+        const description = `Ajuste aplicado para reduzir conflito de visão (${suggestion.mode} ${Math.round((suggestion.severity || 1) * 100)}%).`;
         this.applyPaletteRendering(colors, title, description, 'Ajuste de acessibilidade aplicado com sucesso.');
     }
 
@@ -3055,8 +3055,8 @@ class ColorPaletteGenerator {
         if (!hasChanges) {
             this.showNotification(
                 skippedByPrimaryLock
-                    ? 'Conflitos restantes dependem da cor primaria travada.'
-                    : 'Nenhum ajuste automatico necessario para esta simulacao.'
+                    ? 'Conflitos restantes dependem da cor primária travada.'
+                    : 'Nenhum ajuste automático necessário para esta simulação.'
             );
             return;
         }
@@ -3109,7 +3109,7 @@ class ColorPaletteGenerator {
         try {
             localStorage.setItem(this.savedThemesStorageKey, JSON.stringify(themes));
         } catch (error) {
-            // Mantem o fluxo visual sem bloquear em caso de limite de storage.
+            // Mantém o fluxo visual sem bloquear em caso de limite de storage.
         }
     }
 
@@ -3390,7 +3390,7 @@ class ColorPaletteGenerator {
         this.renderTrendAndCombinationInsights(roleMap, this.currentColors);
         this.refreshAdobeInspiredTools(this.currentColors);
         this.updateBrandSyncStatus(
-            statusMessage || 'Paleta sincronizada automaticamente com Mockups e relatorio geral.'
+            statusMessage || 'Paleta sincronizada automaticamente com Mockups e relatório geral.'
         );
         this.renderWorkflowAssistant();
     }
@@ -3435,7 +3435,7 @@ class ColorPaletteGenerator {
             default:
                 colors = this.generateMonochromaticPalette();
                 title = 'Paleta Monocromatica';
-                description = 'Variacoes de saturacao e luminosidade da mesma cor.';
+                description = 'Variações de saturação e luminosidade da mesma cor.';
                 this.currentPaletteType = 'monochromatic';
                 break;
         }
@@ -3469,8 +3469,8 @@ class ColorPaletteGenerator {
             const contrastBadge = this.getContrastBadge(recommendedText.ratio);
             const roleName = Object.entries(roleMap).find(([, value]) => value === color)?.[0] || '';
             const roleLabelMap = {
-                primary: 'Primaria',
-                secondary: 'Secundaria',
+                primary: 'Primária',
+                secondary: 'Secundária',
                 accent: 'Acento',
                 neutralLight: 'Neutra clara',
                 neutralDark: 'Neutra escura'
@@ -3845,5 +3845,6 @@ class ColorPaletteGenerator {
 document.addEventListener('DOMContentLoaded', () => {
     new ColorPaletteGenerator();
 });
+
 
 

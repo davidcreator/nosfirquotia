@@ -106,39 +106,39 @@ function evaluateStrategy(inputs) {
     applyRuleMap(scoreMap, OBJECTIVE_RULES[inputs.objective] || {}, 'Objetivo da marca');
 
     if (inputs.productType === 'utilitario') {
-        applyRuleMap(scoreMap, { blue: 3, green: 3, black: 2, brown: 1 }, 'Perfil utilitario');
+        applyRuleMap(scoreMap, { blue: 3, green: 3, black: 2, brown: 1 }, 'Perfil utilitário');
     } else {
-        applyRuleMap(scoreMap, { red: 3, purple: 3, pink: 3, orange: 2, yellow: 1 }, 'Perfil hedonico');
+        applyRuleMap(scoreMap, { red: 3, purple: 3, pink: 3, orange: 2, yellow: 1 }, 'Perfil hedônico');
     }
 
     if (inputs.messageFrame === 'gain') {
         applyRuleMap(scoreMap, { blue: 3, green: 2, purple: 1 }, 'Mensagem de ganho');
     } else if (inputs.messageFrame === 'prevention') {
-        applyRuleMap(scoreMap, { red: 3, yellow: 1, black: 1 }, 'Mensagem de prevencao');
+        applyRuleMap(scoreMap, { red: 3, yellow: 1, black: 1 }, 'Mensagem de prevenção');
     }
 
     if (inputs.audience === 'masculino') {
-        applyRuleMap(scoreMap, { blue: 2, green: 1, black: 1 }, 'Afinidade publico masculino');
+        applyRuleMap(scoreMap, { blue: 2, green: 1, black: 1 }, 'Afinidade público masculino');
     } else if (inputs.audience === 'feminino') {
-        applyRuleMap(scoreMap, { purple: 2, pink: 2, red: 1, blue: 1 }, 'Afinidade publico feminino');
+        applyRuleMap(scoreMap, { purple: 2, pink: 2, red: 1, blue: 1 }, 'Afinidade público feminino');
     } else {
-        applyRuleMap(scoreMap, { blue: 1, green: 1, purple: 1 }, 'Publico misto');
+        applyRuleMap(scoreMap, { blue: 1, green: 1, purple: 1 }, 'Público misto');
     }
 
     if (inputs.arousal === 'high') {
-        addBulkScore(scoreMap, WARM, 2, 'Excitacao alta');
-        addBulkScore(scoreMap, ['blue'], 1, 'Excitacao alta com controle');
+        addBulkScore(scoreMap, WARM, 2, 'Excitação alta');
+        addBulkScore(scoreMap, ['blue'], 1, 'Excitação alta com controle');
     } else if (inputs.arousal === 'low') {
-        addBulkScore(scoreMap, COOL, 2, 'Excitacao baixa');
-        addBulkScore(scoreMap, WARM, -1, 'Reduzir excesso de excitacao');
+        addBulkScore(scoreMap, COOL, 2, 'Excitação baixa');
+        addBulkScore(scoreMap, WARM, -1, 'Reduzir excesso de excitação');
     } else {
-        addBulkScore(scoreMap, ['blue', 'green'], 1, 'Equilibrio de excitacao');
+        addBulkScore(scoreMap, ['blue', 'green'], 1, 'Equilíbrio de excitação');
     }
 
     if (inputs.context === 'financas') {
         applyRuleMap(scoreMap, { blue: 3, green: 2, black: 1 }, 'Contexto financeiro');
     } else if (inputs.context === 'saude') {
-        applyRuleMap(scoreMap, { green: 3, blue: 2, white: 2 }, 'Contexto de saude');
+        applyRuleMap(scoreMap, { green: 3, blue: 2, white: 2 }, 'Contexto de saúde');
     } else if (inputs.context === 'educacao') {
         applyRuleMap(scoreMap, { blue: 2, green: 1, yellow: 1 }, 'Contexto educacional');
     } else if (inputs.context === 'moda') {
@@ -146,18 +146,18 @@ function evaluateStrategy(inputs) {
     } else if (inputs.context === 'namoro') {
         applyRuleMap(scoreMap, { red: 3, pink: 2, purple: 1 }, 'Contexto de relacionamento');
     } else if (inputs.context === 'avaliacao') {
-        applyRuleMap(scoreMap, { red: -3, blue: 2, green: 1 }, 'Contexto de avaliacao/performance');
+        applyRuleMap(scoreMap, { red: -3, blue: 2, green: 1 }, 'Contexto de avaliação/performance');
     }
 
     if (inputs.market === 'eastasia') {
         addScore(scoreMap, 'blue', -2, 'Ajuste cultural (Leste Asiatico)');
-        warnings.push('No Leste Asiatico, azul pode ter associacoes diferentes das ocidentais. Valide em pesquisa local.');
+        warnings.push('No Leste Asiático, azul pode ter associações diferentes das ocidentais. Valide em pesquisa local.');
     } else if (inputs.market === 'global') {
-        warnings.push('Para mercado global, valide a paleta por pais e evite assumir significados universais.');
+        warnings.push('Para mercado global, valide a paleta por país e evite assumir significados universais.');
     }
 
     if (inputs.context === 'avaliacao' && getScore(scoreMap, 'red') > 0) {
-        warnings.push('Em cenarios de avaliacao/performance, o vermelho pode elevar pressao e reduzir desempenho.');
+        warnings.push('Em cenários de avaliação/performance, o vermelho pode elevar pressão e reduzir desempenho.');
     }
 
     const ranked = Object.values(scoreMap).sort((a, b) => b.score - a.score);
@@ -165,19 +165,19 @@ function evaluateStrategy(inputs) {
     const palette = buildPalette(ranked, brandColorCount, inputs.objective);
 
     if (inputs.contentDensity === 'high') {
-        recommendations.push('Conteudo denso pede menos variacao cromatica: priorize 2-3 cores de marca.');
+        recommendations.push('Conteúdo denso pede menos variação cromática: priorize 2-3 cores de marca.');
     } else if (inputs.contentDensity === 'low') {
-        recommendations.push('Com layout limpo, voce pode usar variacao cromatica maior sem sobrecarga visual.');
+        recommendations.push('Com layout limpo, você pode usar variação cromática maior sem sobrecarga visual.');
     }
 
     if (inputs.productType === 'utilitario') {
-        recommendations.push('Produtos utilitarios tendem a ganhar clareza com paleta contida e tons de confianca.');
+        recommendations.push('Produtos utilitários tendem a ganhar clareza com paleta contida e tons de confiança.');
     } else {
-        recommendations.push('Produtos hedonicos aceitam maior expressividade cromatica e contrastes mais vivos.');
+        recommendations.push('Produtos hedônicos aceitam maior expressividade cromática e contrastes mais vivos.');
     }
 
-    recommendations.push('Garanta contraste forte entre primeiro plano e fundo para elevar percepcao de harmonia e legibilidade.');
-    recommendations.push('Significado da cor depende de experiencia, cultura e contexto: teste com publico real antes de fechar a identidade.');
+    recommendations.push('Garanta contraste forte entre primeiro plano e fundo para elevar percepção de harmonia e legibilidade.');
+    recommendations.push('Significado da cor depende de experiência, cultura e contexto: teste com público real antes de fechar a identidade.');
 
     const summary = `Top 3 cores: ${ranked.slice(0, 3).map((entry) => entry.label).join(', ')}. `
         + `Paleta de marca sugerida: ${brandColorCount} cor(es).`;
@@ -213,7 +213,7 @@ function buildPalette(ranked, brandColorCount, objective) {
 
     const roles = [];
     selected.forEach((entry, index) => {
-        const role = index === 0 ? 'Primaria' : index === 1 ? 'Secundaria' : index === 2 ? 'Acento' : `Apoio ${index - 2}`;
+        const role = index === 0 ? 'Primária' : index === 1 ? 'Secundária' : index === 2 ? 'Acento' : `Apoio ${index - 2}`;
         roles.push({ role, label: entry.label, hex: entry.hex });
     });
 
@@ -278,10 +278,10 @@ function renderResult(result, inputs = null) {
     renderSummary(result.summary);
     renderPalette(result.palette);
     renderScoreTable(result.ranked);
-    renderNotes('recommendationsList', result.recommendations, 'Nenhuma recomendacao adicional.');
-    renderNotes('warningsList', result.warnings, 'Sem alertas especificos para o contexto informado.');
+    renderNotes('recommendationsList', result.recommendations, 'Nenhuma recomendação adicional.');
+    renderNotes('warningsList', result.warnings, 'Sem alertas específicos para o contexto informado.');
     const synced = syncBrandKitFromStrategy(result, latestInputs || inputs || {});
-    setExportStatus(synced ? 'Paleta sincronizada com Mockups e relatorio geral.' : '');
+    setExportStatus(synced ? 'Paleta sincronizada com Mockups e relatório geral.' : '');
 }
 
 function renderSummary(text) {
@@ -381,8 +381,8 @@ function syncBrandKitFromStrategy(result, inputs) {
                     : 'Trust and Clarity Systems',
                 value: `Contexto: ${String(inputs?.context || 'geral')}`,
                 detail: warmObjectives.has(String(inputs?.objective || ''))
-                    ? 'Recomendado para campanhas com foco em resposta rapida e destaque visual.'
-                    : 'Direcao para interfaces de confianca e leitura constante.'
+                    ? 'Recomendado para campanhas com foco em resposta rápida e destaque visual.'
+                    : 'Direção para interfaces de confiança e leitura constante.'
             }
         ];
 
@@ -390,12 +390,12 @@ function syncBrandKitFromStrategy(result, inputs) {
             {
                 label: 'Estrutura principal',
                 value: `${primary.toUpperCase()} / ${secondary.toUpperCase()} / ${accent.toUpperCase()}`,
-                detail: 'Aplicar regra 60-30-10 para manter consistencia entre secoes.'
+                detail: 'Aplicar regra 60-30-10 para manter consistência entre seções.'
             },
             {
                 label: 'Base neutra',
                 value: neutral.toUpperCase(),
-                detail: 'Usar para textos extensos, componentes de apoio e equilibrio da composicao.'
+                detail: 'Usar para textos extensos, componentes de apoio e equilíbrio da composição.'
             }
         ];
 
@@ -482,7 +482,7 @@ function exportPdf() {
 
     const jsPDFCtor = window.jspdf?.jsPDF;
     if (!jsPDFCtor) {
-        setExportStatus('Biblioteca de PDF indisponivel no momento.', true);
+        setExportStatus('Biblioteca de PDF indisponível no momento.', true);
         return;
     }
 
@@ -494,7 +494,7 @@ function exportPdf() {
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(17);
-    doc.text('Color Strategy Advisor - Relatorio de Cores', margin, y);
+    doc.text('Color Strategy Advisor - Relatório de Cores', margin, y);
     y += 18;
 
     doc.setFont('helvetica', 'normal');
@@ -502,7 +502,7 @@ function exportPdf() {
     doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, margin, y);
     y += 18;
 
-    y = writeSectionTitle(doc, 'Diagnostico', margin, y);
+    y = writeSectionTitle(doc, 'Diagnóstico', margin, y);
     const inputLines = buildInputLines(latestInputs);
     inputLines.forEach((line) => {
         y = ensurePageSpace(doc, y, 24, margin);
@@ -511,7 +511,7 @@ function exportPdf() {
     });
 
     y += 6;
-    y = writeSectionTitle(doc, 'Resumo Estrategico', margin, y);
+    y = writeSectionTitle(doc, 'Resumo Estratégico', margin, y);
     const summaryLines = doc.splitTextToSize(latestResult.summary, pageWidth - margin * 2);
     summaryLines.forEach((line) => {
         y = ensurePageSpace(doc, y, 24, margin);
@@ -538,7 +538,7 @@ function exportPdf() {
         const reason = item.reasons.slice(0, 2).join(' | ');
         doc.text(`${index + 1}. ${item.label} - ${item.score} pts`, margin, y);
         y += 12;
-        const reasonLines = doc.splitTextToSize(reason || 'Sem regra especifica.', pageWidth - margin * 2 - 8);
+        const reasonLines = doc.splitTextToSize(reason || 'Sem regra específica.', pageWidth - margin * 2 - 8);
         reasonLines.forEach((line) => {
             y = ensurePageSpace(doc, y, 20, margin);
             doc.setFontSize(9);
@@ -613,38 +613,38 @@ function ensurePageSpace(doc, y, neededHeight, margin) {
 function buildInputLines(inputs) {
     const dictionary = {
         objective: {
-            confianca: 'Transmitir confianca',
-            atencao: 'Ganhar atencao',
-            acao: 'Estimular acao',
+            confianca: 'Transmitir confiança',
+            atencao: 'Ganhar atenção',
+            acao: 'Estimular ação',
             sofisticacao: 'Posicionamento sofisticado',
-            equilibrio: 'Bem-estar e equilibrio',
-            diversao: 'Energia e diversao',
+            equilibrio: 'Bem-estar e equilíbrio',
+            diversao: 'Energia e diversão',
         },
-        productType: { utilitario: 'Utilitario', hedonico: 'Hedonico' },
-        messageFrame: { gain: 'Ganho', prevention: 'Prevencao', neutral: 'Neutro' },
+        productType: { utilitario: 'Utilitário', hedonico: 'Hedônico' },
+        messageFrame: { gain: 'Ganho', prevention: 'Prevenção', neutral: 'Neutro' },
         audience: { mixed: 'Misto', masculino: 'Masculino', feminino: 'Feminino' },
-        arousal: { low: 'Baixo', medium: 'Medio', high: 'Alto' },
-        contentDensity: { high: 'Alta', medium: 'Media', low: 'Baixa' },
-        market: { brazil: 'Brasil/Latam', western: 'Ocidental', eastasia: 'Leste Asiatico', global: 'Global' },
+        arousal: { low: 'Baixo', medium: 'Médio', high: 'Alto' },
+        contentDensity: { high: 'Alta', medium: 'Média', low: 'Baixa' },
+        market: { brazil: 'Brasil/Latam', western: 'Ocidental', eastasia: 'Leste Asiático', global: 'Global' },
         context: {
             general: 'Geral',
-            financas: 'Financas/tecnologia',
-            saude: 'Saude e bem-estar',
-            educacao: 'Educacao',
+            financas: 'Finanças/tecnologia',
+            saude: 'Saúde e bem-estar',
+            educacao: 'Educação',
             moda: 'Moda/beleza',
-            namoro: 'Relacionamento/paixao',
-            avaliacao: 'Avaliacao/performance',
+            namoro: 'Relacionamento/paixão',
+            avaliacao: 'Avaliação/performance',
         },
-        paletteSize: { auto: 'Automatico', '2': '2', '3': '3', '4': '4', '5': '5' },
+        paletteSize: { auto: 'Automático', '2': '2', '3': '3', '4': '4', '5': '5' },
     };
 
     return [
         `Objetivo: ${dictionary.objective[inputs.objective] || inputs.objective}`,
         `Tipo de produto: ${dictionary.productType[inputs.productType] || inputs.productType}`,
         `Mensagem: ${dictionary.messageFrame[inputs.messageFrame] || inputs.messageFrame}`,
-        `Publico: ${dictionary.audience[inputs.audience] || inputs.audience}`,
-        `Excitacao: ${dictionary.arousal[inputs.arousal] || inputs.arousal}`,
-        `Densidade de conteudo: ${dictionary.contentDensity[inputs.contentDensity] || inputs.contentDensity}`,
+        `Público: ${dictionary.audience[inputs.audience] || inputs.audience}`,
+        `Excitação: ${dictionary.arousal[inputs.arousal] || inputs.arousal}`,
+        `Densidade de conteúdo: ${dictionary.contentDensity[inputs.contentDensity] || inputs.contentDensity}`,
         `Mercado: ${dictionary.market[inputs.market] || inputs.market}`,
         `Contexto: ${dictionary.context[inputs.context] || inputs.context}`,
         `Tamanho da paleta: ${dictionary.paletteSize[inputs.paletteSize] || inputs.paletteSize}`,
@@ -712,3 +712,4 @@ function setExportStatus(message, isError = false) {
     status.textContent = message;
     status.style.color = isError ? '#991b1b' : '#475569';
 }
+

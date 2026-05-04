@@ -34,7 +34,7 @@ final class QuoteController extends BaseAdminController
         $request = $model->find((int) $id);
 
         if ($request === null) {
-            $this->session->flash('error', 'Solicitacao nao encontrada.');
+            $this->session->flash('error', 'Solicitação não encontrada.');
             $this->redirect('/admin/orcamentos');
         }
 
@@ -74,14 +74,14 @@ final class QuoteController extends BaseAdminController
         $request = $model->find($requestId);
 
         if ($request === null) {
-            $this->session->flash('error', 'Solicitacao nao encontrada.');
+            $this->session->flash('error', 'Solicitação não encontrada.');
             $this->redirect('/admin/orcamentos');
         }
 
         $manual = $model->brandManual($requestId);
         $payloadJsonRaw = (string) ($manual['payload_json'] ?? '');
         if (trim($payloadJsonRaw) === '') {
-            $this->session->flash('warning', 'Nao existe manual da marca salvo para download nesta solicitacao.');
+            $this->session->flash('warning', 'Não existe manual da marca salvo para download nesta solicitação.');
             $this->redirect('/admin/orcamentos/' . $requestId);
         }
 
@@ -109,7 +109,7 @@ final class QuoteController extends BaseAdminController
         $request = $model->find($requestId);
 
         if ($request === null) {
-            $this->session->flash('error', 'Solicitacao nao encontrada.');
+            $this->session->flash('error', 'Solicitação não encontrada.');
             $this->redirect('/admin/orcamentos');
         }
 
@@ -123,7 +123,7 @@ final class QuoteController extends BaseAdminController
         }
 
         if ($services === []) {
-            $this->session->flash('error', 'A solicitacao nao possui servicos selecionados para o perfil informado.');
+            $this->session->flash('error', 'A solicitação não possui serviços selecionados para o perfil informado.');
             $this->redirect('/admin/orcamentos/' . $requestId);
         }
 
@@ -144,7 +144,7 @@ final class QuoteController extends BaseAdminController
             }
 
             if ($deadlineDays !== null && $deadlineDays < 1) {
-                $errors[] = 'Prazo invalido para o servico ' . $service['service_name'] . '.';
+                $errors[] = 'Prazo inválido para o serviço ' . $service['service_name'] . '.';
                 continue;
             }
 
@@ -194,7 +194,7 @@ final class QuoteController extends BaseAdminController
             $percent = $this->toFloat((string) $this->request->post('tax_percent_' . $key, (string) $definition['default_percent']));
 
             if ($label === '') {
-                $errors[] = 'Informe o nome do campo tributario: ' . $key . '.';
+                $errors[] = 'Informe o nome do campo tributário: ' . $key . '.';
                 continue;
             }
 
@@ -203,7 +203,7 @@ final class QuoteController extends BaseAdminController
             }
 
             if ($percent < 0 || $percent > 100) {
-                $errors[] = 'Percentual invalido para ' . $label . '. Use valores entre 0 e 100.';
+                $errors[] = 'Percentual inválido para ' . $label . '. Use valores entre 0 e 100.';
                 continue;
             }
 
@@ -227,7 +227,7 @@ final class QuoteController extends BaseAdminController
         $totalDeadlineRaw = trim((string) $this->request->post('total_deadline_days', ''));
         $totalDeadline = $totalDeadlineRaw !== '' ? (int) $totalDeadlineRaw : null;
         if ($totalDeadline !== null && $totalDeadline < 1) {
-            $this->session->flash('error', 'Prazo total do relatorio deve ser maior que zero.');
+            $this->session->flash('error', 'Prazo total do relatório deve ser maior que zero.');
             $this->redirect('/admin/orcamentos/' . $requestId);
         }
 
@@ -248,7 +248,7 @@ final class QuoteController extends BaseAdminController
 
             $decoded = json_decode($manualPayloadRaw, true);
             if (!is_array($decoded)) {
-                $this->session->flash('error', 'Payload do manual da marca invalido. Verifique o JSON antes de salvar.');
+                $this->session->flash('error', 'Payload do manual da marca inválido. Verifique o JSON antes de salvar.');
                 $this->redirect('/admin/orcamentos/' . $requestId);
             }
 
@@ -289,7 +289,7 @@ final class QuoteController extends BaseAdminController
             );
 
             if (!$manualSaved) {
-                $warnings[] = 'Relatorio salvo, mas nao foi possivel registrar o manual da marca no banco. Execute `php database/upgrade_brand_manual_mvp.php` e tente novamente.';
+                $warnings[] = 'Relatório salvo, mas não foi possível registrar o manual da marca no banco. Execute `php database/upgrade_brand_manual_mvp.php` e tente novamente.';
             }
         }
 
@@ -311,7 +311,7 @@ final class QuoteController extends BaseAdminController
                 'context_key' => 'quote_report_ready',
                 'recipient_name' => (string) ($request['client_name'] ?? 'Cliente'),
                 'recipient_email' => (string) ($request['client_email'] ?? ''),
-                'subject' => 'Seu orcamento esta pronto no Quotia',
+                'subject' => 'Seu orçamento está pronto no Quotia',
                 'html_body' => $html,
                 'text_body' => $text,
                 'related_type' => 'quote_request',
@@ -320,10 +320,10 @@ final class QuoteController extends BaseAdminController
         );
 
         $visibilityLabel = !empty($payload['show_tax_details'])
-            ? 'com detalhes de tributos visiveis para o cliente'
+            ? 'com detalhes de tributos visíveis para o cliente'
             : 'com detalhes de tributos ocultos para o cliente';
 
-        $message = 'Relatorio de orcamento gerado com validade de 90 dias, ' . $visibilityLabel . '.';
+        $message = 'Relatório de orçamento gerado com validade de 90 dias, ' . $visibilityLabel . '.';
         if ($manualSaved) {
             $message .= ' Manual da marca (MVP) atualizado com sucesso.';
         }
@@ -331,9 +331,9 @@ final class QuoteController extends BaseAdminController
         if ($emailStatus === 'sent') {
             $message .= ' Email enviado ao cliente com sucesso.';
         } elseif ($emailStatus === 'invalid_email') {
-            $warnings[] = 'Relatorio salvo, mas o email nao foi enviado porque o endereco do cliente e invalido.';
+            $warnings[] = 'Relatório salvo, mas o e-mail não foi enviado porque o endereço do cliente é inválido.';
         } else {
-            $warnings[] = 'Relatorio salvo, mas ocorreu problema no envio do email. Verifique em Notificacoes de Email.';
+            $warnings[] = 'Relatório salvo, mas ocorreu problema no envio do e-mail. Verifique em Notificações de E-mail.';
         }
 
         if ($warnings !== []) {
@@ -460,24 +460,24 @@ final class QuoteController extends BaseAdminController
 
         return <<<HTML
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-  <h2 style="margin: 0 0 12px 0;">Seu orcamento esta pronto</h2>
-  <p>Ola {$safeName},</p>
-  <p>Seu orcamento referente ao projeto <strong>{$safeProject}</strong> ja esta disponivel no Quotia.</p>
+  <h2 style="margin: 0 0 12px 0;">Seu orçamento está pronto</h2>
+  <p>Olá {$safeName},</p>
+  <p>Seu orçamento referente ao projeto <strong>{$safeProject}</strong> já está disponível no Quotia.</p>
   <p>Acesse sua conta para visualizar valores, prazos e disponibilidade:</p>
   <p>
     <a href="{$safeUrl}" style="display: inline-block; background: #1a4b8f; color: #fff; text-decoration: none; padding: 10px 14px; border-radius: 6px;">
       Acessar minha conta
     </a>
   </p>
-  <p>Se voce nao reconhece esta notificacao, entre em contato com a equipe de atendimento.</p>
+  <p>Se você não reconhece esta notificação, entre em contato com a equipe de atendimento.</p>
 </div>
 HTML;
     }
 
     private function buildClientReportReadyEmailText(string $name, string $projectTitle, string $accountUrl): string
     {
-        return "Ola {$name},\n\n" .
-            "Seu orcamento referente ao projeto \"{$projectTitle}\" ja esta disponivel no Quotia.\n" .
+        return "Olá {$name},\n\n" .
+            "Seu orçamento referente ao projeto \"{$projectTitle}\" já está disponível no Quotia.\n" .
             "Acesse sua conta para visualizar os detalhes:\n{$accountUrl}\n\n" .
             "Obrigado.\n";
     }

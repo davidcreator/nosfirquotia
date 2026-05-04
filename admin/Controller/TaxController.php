@@ -81,7 +81,7 @@ final class TaxController extends BaseAdminController
         }
 
         if (!in_array($payload['tax_regime'], self::ALLOWED_TAX_REGIMES, true)) {
-            $errors[] = 'Selecione um regime tributario valido.';
+            $errors[] = 'Selecione um regime tributário válido.';
         }
 
         if ($payload['municipality_name'] === '') {
@@ -141,11 +141,11 @@ final class TaxController extends BaseAdminController
         }
 
         if ($payload['legal_responsible_name'] === '') {
-            $errors[] = 'Informe o responsavel pela revisao fiscal.';
+            $errors[] = 'Informe o responsável pela revisão fiscal.';
         }
 
         if (!$this->isDateYmd($payload['legal_review_date'])) {
-            $errors[] = 'Informe uma data valida para a revisao fiscal.';
+            $errors[] = 'Informe uma data válida para a revisão fiscal.';
         }
 
         if (
@@ -237,8 +237,8 @@ final class TaxController extends BaseAdminController
                 'url' => 'https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm',
             ],
             [
-                'title' => 'NFS-e Padrao Nacional',
-                'description' => 'Boas praticas de emissao fiscal e padronizacao nacional.',
+                'title' => 'NFS-e Padrão Nacional',
+                'description' => 'Boas práticas de emissão fiscal e padronização nacional.',
                 'url' => 'https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2025/agosto/nota-fiscal-de-servico-eletronica-nfs-e-padrao-nacional-para-simplificar-o-cotidiano-das-empresas',
             ],
         ];

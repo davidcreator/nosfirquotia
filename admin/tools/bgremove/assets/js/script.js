@@ -619,9 +619,9 @@ function renderSmartDebug(meta) {
     }
 
     const signalLabels = [
-        ['satMean', 'Saturacao media'],
-        ['valMean', 'Luminosidade media'],
-        ['grayRatio', 'Razao de tons neutros'],
+        ['satMean', 'Saturação média'],
+        ['valMean', 'Luminosidade média'],
+        ['grayRatio', 'Razão de tons neutros'],
         ['edgeDensity', 'Densidade de bordas'],
         ['borderUniformity', 'Uniformidade do fundo'],
         ['uniqueNorm', 'Variedade normalizada'],
@@ -655,14 +655,14 @@ function renderSmartDebug(meta) {
     const confidenceText = confidencePct === null ? 'n/d' : `${confidencePct}%`;
 
     smartDebugPanelEl.innerHTML = `
-        <p class="smart-debug-title">Diagnostico IA | Confianca da escolha: <strong>${escapeHtml(confidenceText)}</strong></p>
+        <p class="smart-debug-title">Diagnóstico IA | Confiança da escolha: <strong>${escapeHtml(confidenceText)}</strong></p>
         <div class="smart-debug-grid">
             <section class="smart-debug-card">
                 <h6>Sinais da imagem</h6>
                 <ul class="smart-debug-list">${signalsRows}</ul>
             </section>
             <section class="smart-debug-card">
-                <h6>Pontuacao por preset</h6>
+                <h6>Pontuação por preset</h6>
                 <div class="smart-debug-list">${scoreRows}</div>
             </section>
         </div>
@@ -692,7 +692,7 @@ function renderPresetInfo(result) {
     const parts = [`Preset solicitado: ${requestedLabel}`, `Preset aplicado: ${appliedLabel} (${sourceLabel})`];
     if (meta.presetSource === 'smart' && typeof meta.smartConfidence === 'number' && Number.isFinite(meta.smartConfidence)) {
         const pct = Math.max(0, Math.min(100, Math.round(meta.smartConfidence * 100)));
-        parts.push(`Confianca: ${pct}%`);
+        parts.push(`Confiança: ${pct}%`);
     }
     presetResultInfoEl.textContent = parts.join(' | ');
     presetResultInfoEl.style.display = 'block';
@@ -941,7 +941,7 @@ comparePresetsBtn?.addEventListener('click', async () => {
             const formData = buildUploadFormData(file, task.overrides);
             const result = await sendUploadRequest(formData, 120000);
             if (result && result.redirect) {
-                showError(result.message || 'Sessao expirada. Redirecionando para login...');
+                showError(result.message || 'Sessão expirada. Redirecionando para login...');
                 setTimeout(() => {
                     window.location.href = result.redirect;
                 }, 1200);
@@ -957,7 +957,7 @@ comparePresetsBtn?.addEventListener('click', async () => {
 
         if (!results.length) {
             showSection('upload');
-            showError('Nao foi possivel comparar presets nesta imagem.');
+            showError('Não foi possível comparar presets nesta imagem.');
             return;
         }
 
@@ -967,7 +967,7 @@ comparePresetsBtn?.addEventListener('click', async () => {
         renderPresetComparison(results);
     } catch (error) {
         if (error && error.name === 'AbortError') {
-            showError('Comparacao demorou demais. Tente uma imagem menor.');
+            showError('Comparação demorou demais. Tente uma imagem menor.');
         } else {
             showError('Falha ao comparar presets.');
         }
@@ -982,14 +982,14 @@ function handleFile(file) {
     const lowerName = String(file.name || '').toLowerCase();
     const hasAllowedExtension = /\.(jpe?g|png)$/i.test(lowerName);
     if (!allowedTypes.includes(file.type) && !hasAllowedExtension) {
-        showError('Tipo de arquivo invalido. Use JPG ou PNG.');
+        showError('Tipo de arquivo inválido. Use JPG ou PNG.');
         return;
     }
 
     // Validar tamanho
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
-        showError('Arquivo muito grande. Maximo: 10MB');
+        showError('Arquivo muito grande. Máximo: 10MB');
         return;
     }
     lastSelectedFile = file;
@@ -1005,7 +1005,7 @@ function handleFile(file) {
 }
 // Upload e processamento
 async function uploadImage(file) {
-    // Mostrar secao de processamento
+    // Mostrar seção de processamento
     showSection('processing');
     hidePresetComparison();
 
@@ -1019,7 +1019,7 @@ async function uploadImage(file) {
             applyProcessingResult(result);
         } else {
             if (result.redirect) {
-                showError(result.message || 'Sessao expirada. Redirecionando para login...');
+                showError(result.message || 'Sessão expirada. Redirecionando para login...');
                 setTimeout(() => {
                     window.location.href = result.redirect;
                 }, 1200);
@@ -1030,7 +1030,7 @@ async function uploadImage(file) {
         }
     } catch (error) {
         if (error && error.message === 'INVALID_PROCESSED_FILE') {
-            showError('Arquivo processado invalido. Tente novamente.');
+            showError('Arquivo processado inválido. Tente novamente.');
             showSection('upload');
             return;
         }
@@ -1040,16 +1040,16 @@ async function uploadImage(file) {
             return;
         }
         if (error && error.message === 'SESSION_OR_ROUTING_HTML_RESPONSE') {
-            showError('Sessao expirada ou rota invalida do upload. Recarregue a pagina e tente novamente.');
+            showError('Sessão expirada ou rota inválida do upload. Recarregue a página e tente novamente.');
         } else if (error && error.message === 'INVALID_JSON_RESPONSE') {
-            showError('Resposta invalida do servidor ao processar imagem.');
+            showError('Resposta inválida do servidor ao processar imagem.');
         } else {
             showError('Erro ao processar imagem. Tente novamente.');
         }
         showSection('upload');
     }
 }
-// Gerenciar secoes
+// Gerenciar seções
 function showSection(section) {
     if (section === 'processing') {
         startProcessingFeedback();
@@ -1358,7 +1358,7 @@ optimizeBtn?.addEventListener('click', async () => {
         }
         const fileName = extractFileName(currentProcessed);
         if (!fileName) {
-            showError('Arquivo processado nao identificado.');
+            showError('Arquivo processado não identificado.');
             return;
         }
 
@@ -1396,11 +1396,11 @@ optimizeBtn?.addEventListener('click', async () => {
                 }
             });
         } else {
-            showError(data.message || 'Falha na otimizacao');
+            showError(data.message || 'Falha na otimização');
         }
     } catch (err) {
         if (err && err.name === 'AbortError') {
-            showError('Otimizacao demorou demais. Tente largura menor.');
+            showError('Otimização demorou demais. Tente largura menor.');
         } else {
             showError('Erro ao otimizar imagem');
         }

@@ -26,7 +26,7 @@
             baseColor: '#3498db',
             type: 'monochromatic',
             title: 'Paleta base',
-            description: 'Paleta padrao da marca.',
+            description: 'Paleta padrão da marca.',
             colors: ['#3498db', '#1f2937', '#f59e0b', '#f8fafc', '#111827'],
             updatedAt: null,
             source: 'system'
@@ -371,7 +371,7 @@
             baseColor: '#3498db',
             type: 'monochromatic',
             title: 'Paleta base',
-            description: 'Paleta padrao da marca.',
+            description: 'Paleta padrão da marca.',
             colors: ['#3498db', '#1f2937', '#f59e0b']
         };
         const raw = readState(COLOR_PALETTE_STATE_KEY, fallback);

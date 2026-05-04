@@ -17,7 +17,7 @@
         <div class="aq-admin-panel h-100">
             <div class="aq-admin-panel-header">
                 <div>
-                    <h2 class="aq-admin-panel-title">Novo usuario administrativo</h2>
+                    <h2 class="aq-admin-panel-title">Novo usuário administrativo</h2>
                 </div>
             </div>
             <div class="aq-admin-panel-body">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
-                        <button class="btn btn-primary" type="submit">Criar usuario admin</button>
+                        <button class="btn btn-primary" type="submit">Criar usuário admin</button>
                     </div>
                 </form>
             </div>
@@ -76,9 +76,9 @@
                 <ul class="mb-0">
                     <li>Administrador Geral tem acesso total ao sistema.</li>
                     <li>Somente Administrador Geral pode alterar permissoes de outros admins.</li>
-                    <li>Contas inativas nao conseguem efetuar login.</li>
-                    <li>Ajuste o nivel de acesso por modulo conforme a funcao de cada usuario.</li>
-                    <li>Evite compartilhar contas, mantenha um usuario por pessoa.</li>
+                    <li>Contas inativas não conseguem efetuar login.</li>
+                    <li>Ajuste o nível de acesso por módulo conforme a função de cada usuário.</li>
+                    <li>Evite compartilhar contas, mantenha um usuário por pessoa.</li>
                 </ul>
             </div>
         </div>
@@ -94,7 +94,7 @@
     </div>
     <div class="aq-admin-panel-body">
         <?php if ($users === []): ?>
-            <div class="alert alert-info mb-0">Nenhum usuario administrativo cadastrado.</div>
+            <div class="alert alert-info mb-0">Nenhum usuário administrativo cadastrado.</div>
         <?php else: ?>
             <div class="vstack gap-3">
                 <?php foreach ($users as $user): ?>
@@ -150,7 +150,7 @@
                             <?php if ($isGeneral): ?>
                                 <div class="col-12">
                                     <div class="alert alert-light border mb-0">
-                                        Este usuario foi definido como Administrador Geral (instalador) e possui acesso total fixo.
+                                        Este usuário foi definido como Administrador Geral (instalador) e possui acesso total fixo.
                                     </div>
                                 </div>
                             <?php else: ?>

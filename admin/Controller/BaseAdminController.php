@@ -11,7 +11,7 @@ abstract class BaseAdminController extends Controller
     protected function ensureAuthenticated(): void
     {
         if (!$this->auth()->check()) {
-            $this->session->flash('error', 'Faca login para acessar a area administrativa.');
+            $this->session->flash('error', 'Faça login para acessar a área administrativa.');
             $this->redirect('/admin');
         }
     }
@@ -24,7 +24,7 @@ abstract class BaseAdminController extends Controller
             return;
         }
 
-        $this->session->flash('error', 'Voce nao tem permissao para acessar este modulo.');
+        $this->session->flash('error', 'Você não tem permissão para acessar este módulo.');
         $this->redirect($this->auth()->preferredAdminPath());
     }
 

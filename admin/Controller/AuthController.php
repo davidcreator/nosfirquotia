@@ -15,7 +15,7 @@ final class AuthController extends Controller
         if ($this->auth()->check()) {
             $path = $this->auth()->preferredAdminPath();
             if ($path === '/admin/logout') {
-                $this->session->flash('error', 'Seu usuario nao possui permissoes ativas para acessar o painel.');
+                $this->session->flash('error', 'Seu usuário não possui permissões ativas para acessar o painel.');
             }
             $this->redirect($path);
         }
@@ -38,14 +38,14 @@ final class AuthController extends Controller
         }
 
         if (!$this->auth()->attempt($email, $password)) {
-            $this->session->flash('error', 'Credenciais invalidas ou usuario sem acesso ativo.');
+            $this->session->flash('error', 'Credenciais inválidas ou usuário sem acesso ativo.');
             $this->redirect('/admin');
         }
 
         $path = $this->auth()->preferredAdminPath();
         if ($path === '/admin/logout') {
             $this->auth()->logout();
-            $this->session->flash('error', 'Seu usuario nao possui permissoes ativas. Contate o Administrador Geral.');
+            $this->session->flash('error', 'Seu usuário não possui permissões ativas. Contate o Administrador Geral.');
             $this->redirect('/admin');
         }
 
@@ -56,7 +56,7 @@ final class AuthController extends Controller
     public function logout(): void
     {
         $this->auth()->logout();
-        $this->session->flash('success', 'Sessao encerrada.');
+        $this->session->flash('success', 'Sessão encerrada.');
         $this->redirect('/admin');
     }
 
@@ -101,7 +101,7 @@ final class AuthController extends Controller
         $tokenData = $this->resetService()->tokenData('admin', $token);
 
         if ($token === '' || $tokenData === null) {
-            $this->session->flash('error', 'Link de redefinicao invalido ou expirado.');
+            $this->session->flash('error', 'Link de redefinição inválido ou expirado.');
             $this->redirect('/admin/esqueci-senha');
         }
 
@@ -123,18 +123,18 @@ final class AuthController extends Controller
         $passwordConfirm = (string) $this->request->post('password_confirm', '');
 
         if ($password !== $passwordConfirm) {
-            $this->session->flash('error', 'As senhas nao conferem.');
+            $this->session->flash('error', 'As senhas não conferem.');
             $this->redirect('/admin/redefinir-senha?token=' . urlencode($token));
         }
 
         $result = $this->resetService()->resetPassword('admin', $token, $password);
         if (!$result['success']) {
-            $this->session->flash('error', (string) ($result['error'] ?? 'Nao foi possivel redefinir a senha.'));
+            $this->session->flash('error', (string) ($result['error'] ?? 'Não foi possível redefinir a senha.'));
             $this->redirect('/admin/esqueci-senha');
         }
 
         $this->session->forgetMany(['old_input']);
-        $this->session->flash('success', 'Senha redefinida com sucesso. Voce ja pode entrar com a nova senha.');
+        $this->session->flash('success', 'Senha redefinida com sucesso. Você já pode entrar com a nova senha.');
         $this->redirect('/admin');
     }
 

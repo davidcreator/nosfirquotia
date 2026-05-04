@@ -12,7 +12,7 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MockupHub - Upload e Verificacao</title>
+    <title>MockupHub - Upload e Verificação</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,7 +44,7 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
                         <i class="fas fa-upload"></i>
                     </div>
                     <h2>Upload new work</h2>
-                    <p>Envie uma imagem para verificar formato, peso e resolucao minima.</p>
+                    <p>Envie uma imagem para verificar formato, peso e resolução mínima.</p>
                     <label for="workFileInput" class="upload-option-button">Selecionar arquivo</label>
                     <input type="file" id="workFileInput" accept=".png,.jpg,.jpeg,image/png,image/jpeg" hidden>
                     <p class="upload-option-note">Formatos aceitos: PNG, JPG e JPEG.</p>
@@ -55,15 +55,15 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
                         <i class="fas fa-copy"></i>
                     </div>
                     <h2>Copy an existing work</h2>
-                    <p>Duplique um projeto ja existente para manter padrao visual e acelerar entregas.</p>
+                    <p>Duplique um projeto já existente para manter padrão visual e acelerar entregas.</p>
                     <a class="upload-option-link" href="./editor.php">Abrir biblioteca de mockups</a>
                 </article>
             </section>
 
             <section class="upload-validation" id="validationPanel" aria-live="polite">
                 <div class="upload-validation-content">
-                    <h3>Verificacao do arquivo</h3>
-                    <p class="upload-validation-status" id="validationStatus">Selecione um arquivo para iniciar a verificacao.</p>
+                    <h3>Verificação do arquivo</h3>
+                    <p class="upload-validation-status" id="validationStatus">Selecione um arquivo para iniciar a verificação.</p>
 
                     <ul class="upload-validation-list">
                         <li data-check="format" class="is-pending">
@@ -76,14 +76,14 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
                         </li>
                         <li data-check="resolution" class="is-pending">
                             <span class="state-dot" aria-hidden="true">-</span>
-                            <span>Resolucao minima de 5000 x 5000 px</span>
+                            <span>Resolução mínima de 5000 x 5000 px</span>
                         </li>
                     </ul>
 
                     <div class="upload-validation-meta" id="validationMeta" hidden>
                         <p><strong>Arquivo:</strong> <span id="metaName">-</span></p>
                         <p><strong>Tamanho:</strong> <span id="metaSize">-</span></p>
-                        <p><strong>Resolucao:</strong> <span id="metaResolution">-</span></p>
+                        <p><strong>Resolução:</strong> <span id="metaResolution">-</span></p>
                     </div>
 
                     <div class="upload-validation-actions">
@@ -100,11 +100,11 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
             <section class="upload-info-grid">
                 <article class="upload-info-card">
                     <h3>File requirements</h3>
-                    <p>Recomendamos imagens em alta resolucao com no minimo 5000 x 5000 px para manter qualidade no mockup final.</p>
+                    <p>Recomendamos imagens em alta resolução com no mínimo 5000 x 5000 px para manter qualidade no mockup final.</p>
                 </article>
                 <article class="upload-info-card">
                     <h3>What is this?</h3>
-                    <p>Esta etapa valida o arquivo antes da edicao. Assim voce evita retrabalho e garante encaixe correto no editor.</p>
+                    <p>Esta etapa valida o arquivo antes da edição. Assim você evita retrabalho e garante encaixe correto no editor.</p>
                 </article>
             </section>
         </div>

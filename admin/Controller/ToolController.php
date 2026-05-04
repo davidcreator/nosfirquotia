@@ -43,18 +43,18 @@ final class ToolController extends BaseAdminController
         $tool = $model->findTool($toolsPath, $slug);
 
         if ($tool === null) {
-            $this->session->flash('error', 'Ferramenta nao encontrada.');
+            $this->session->flash('error', 'Ferramenta não encontrada.');
             $this->redirect('/admin/ferramentas');
         }
 
         if (!$tool['has_entrypoint']) {
-            $this->session->flash('warning', 'Ferramenta sem entrypoint padrao. Ajuste manual necessario.');
+            $this->session->flash('warning', 'Ferramenta sem entrypoint padrão. Ajuste manual necessário.');
             $this->redirect('/admin/ferramentas');
         }
 
         $toolEntrypoint = $toolsPath . '/' . $tool['slug'] . '/index.php';
         if (!is_file($toolEntrypoint)) {
-            $this->session->flash('error', 'Entrypoint da ferramenta nao encontrado.');
+            $this->session->flash('error', 'Entrypoint da ferramenta não encontrado.');
             $this->redirect('/admin/ferramentas');
         }
 

@@ -150,7 +150,7 @@ function buildPairing(ranking, pairingStyle) {
     return {
         primary,
         secondary,
-        summary: `${primary.name} (titulos) + ${secondary.name} (textos de apoio).`
+        summary: `${primary.name} (títulos) + ${secondary.name} (textos de apoio).`
     };
 }
 
@@ -163,7 +163,7 @@ function renderRecommendation(payload) {
 
     if (!payload || !payload.pair || !payload.ranking) {
         if (summary) {
-            summary.textContent = 'Nao foi possivel montar recomendacao neste momento.';
+            summary.textContent = 'Não foi possível montar recomendação neste momento.';
         }
         return;
     }
@@ -201,18 +201,18 @@ function renderRecommendation(payload) {
         cards.innerHTML = payload.ranking.slice(0, 6).map((font, index) => renderFontCard(font, index)).join('');
     }
 
-    setSyncStatus('Recomendacao atualizada. Se desejar, aplique ao Brand Kit.', 'ok');
+    setSyncStatus('Recomendação atualizada. Se desejar, aplique ao Brand Kit.', 'ok');
 }
 
 function renderFontCard(font, index) {
     const reasons = Array.isArray(font.reasons) && font.reasons.length
         ? font.reasons.slice(0, 2).join(' | ')
-        : 'Sem regra especifica aplicada.';
+        : 'Sem regra específica aplicada.';
 
     return `
         <article class="font-card">
             <h4 style="font-family:${font.css};">${index + 1}. ${font.name}</h4>
-            <p>${capitalize(font.category)} | Pontuacao: ${font.score}</p>
+            <p>${capitalize(font.category)} | Pontuação: ${font.score}</p>
             <p>${escapeHtml(reasons)}</p>
             <div class="font-card-meta">
                 <span class="font-badge">${escapeHtml(capitalize(font.readability))}</span>
@@ -226,7 +226,7 @@ function applyTypographyToBrandKit(options = {}) {
     const silent = Boolean(options.silent);
     if (!latestRecommendation || !latestRecommendation.pair) {
         if (!silent) {
-            setSyncStatus('Gere uma recomendacao antes de aplicar ao Brand Kit.', 'error');
+            setSyncStatus('Gere uma recomendação antes de aplicar ao Brand Kit.', 'error');
         }
         return;
     }
@@ -234,7 +234,7 @@ function applyTypographyToBrandKit(options = {}) {
     const api = window.AQBrandKit;
     if (!api) {
         if (!silent) {
-            setSyncStatus('Integracao do Brand Kit indisponivel no momento.', 'error');
+            setSyncStatus('Integração do Brand Kit indisponível no momento.', 'error');
         }
         return;
     }
@@ -258,7 +258,7 @@ function applyTypographyToBrandKit(options = {}) {
 
     api.syncTypography(profilePayload, 'fontadvisor');
     if (!silent) {
-        setSyncStatus('Tipografia sincronizada com Brand Kit e relatorio geral.', 'ok');
+        setSyncStatus('Tipografia sincronizada com Brand Kit e relatório geral.', 'ok');
     }
 }
 
@@ -291,7 +291,7 @@ function saveDraftFontProfile() {
 
 function exportFontProfile() {
     if (!latestRecommendation) {
-        setSyncStatus('Nenhuma recomendacao para exportar.', 'error');
+        setSyncStatus('Nenhuma recomendação para exportar.', 'error');
         return;
     }
 
@@ -328,7 +328,7 @@ function exportFontProfile() {
     anchor.download = `font-strategy-${timestampForFile(new Date())}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
-    setSyncStatus('Perfil tipografico exportado com sucesso.', 'ok');
+    setSyncStatus('Perfil tipográfico exportado com sucesso.', 'ok');
 }
 
 function resolveBrandColors() {
@@ -426,3 +426,4 @@ function escapeHtml(value) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 }
+

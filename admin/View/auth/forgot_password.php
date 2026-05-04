@@ -9,7 +9,7 @@
         <ul class="aq-admin-auth-feature-list">
             <li><i class="fa-solid fa-envelope-circle-check"></i> Envio imediato para o email cadastrado</li>
             <li><i class="fa-solid fa-user-shield"></i> Processo protegido por token temporario</li>
-            <li><i class="fa-solid fa-lock"></i> Nova senha aplicada com seguranca</li>
+            <li><i class="fa-solid fa-lock"></i> Nova senha aplicada com segurança</li>
         </ul>
     </div>
 
@@ -27,7 +27,7 @@
 
         <button class="btn btn-primary" type="submit">
             <i class="fa-solid fa-paper-plane"></i>
-            Enviar link de recuperacao
+            Enviar link de recuperação
         </button>
 
         <div class="aq-admin-auth-links">
@@ -35,3 +35,4 @@
         </div>
     </form>
 </section>
+

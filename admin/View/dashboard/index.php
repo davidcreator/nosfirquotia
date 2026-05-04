@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
-                <span class="aq-admin-link-chip"><i class="fa-solid fa-chart-line"></i> Visao geral</span>
+                <span class="aq-admin-link-chip"><i class="fa-solid fa-chart-line"></i> Visão geral</span>
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
 <section class="row g-3 mb-4">
     <div class="col-md-6 col-xl-3">
         <article class="aq-stat-box aq-stat-box-primary">
-            <small>Total de solicitacoes</small>
+            <small>Total de solicitações</small>
             <h2><?= (int) $stats['total_requests'] ?></h2>
             <p>Pedidos recebidos</p>
             <span class="aq-stat-icon"><i class="fa-solid fa-inbox"></i></span>
@@ -23,23 +23,23 @@
     </div>
     <div class="col-md-6 col-xl-3">
         <article class="aq-stat-box aq-stat-box-warning">
-            <small>Solicitacoes pendentes</small>
+            <small>Solicitações pendentes</small>
             <h2><?= (int) $stats['pending_requests'] ?></h2>
-            <p>Aguardando analise</p>
+            <p>Aguardando análise</p>
             <span class="aq-stat-icon"><i class="fa-solid fa-hourglass-half"></i></span>
         </article>
     </div>
     <div class="col-md-6 col-xl-3">
         <article class="aq-stat-box aq-stat-box-success">
-            <small>Relatorios gerados</small>
+            <small>Relatórios gerados</small>
             <h2><?= (int) $stats['generated_reports'] ?></h2>
-            <p>Orcamentos emitidos</p>
+            <p>Orçamentos emitidos</p>
             <span class="aq-stat-icon"><i class="fa-solid fa-file-alt"></i></span>
         </article>
     </div>
     <div class="col-md-6 col-xl-3">
         <article class="aq-stat-box aq-stat-box-info">
-            <small>Volume no mes</small>
+            <small>Volume no mês</small>
             <h2>R$ <?= number_format((float) $stats['month_revenue'], 2, ',', '.') ?></h2>
             <p>Valor projetado</p>
             <span class="aq-stat-icon"><i class="fa-solid fa-dollar-sign"></i></span>
@@ -50,15 +50,15 @@
 <section class="card border-0 shadow-sm mb-4 aq-admin-filter-bar">
     <div class="card-body d-flex flex-wrap gap-3 justify-content-between align-items-center">
         <div>
-            <small class="text-muted d-block">Base de referencia carregada no banco</small>
-            <strong><?= (int) $stats['reference_items'] ?> servicos disponiveis para orcamento</strong>
+            <small class="text-muted d-block">Base de referência carregada no banco</small>
+            <strong><?= (int) $stats['reference_items'] ?> serviços disponíveis para orçamento</strong>
         </div>
         <div class="d-flex gap-2 flex-wrap">
             <?php if (admin_can('quotes.manage')): ?>
-                <a class="btn btn-outline-success btn-sm" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificacoes email</a>
+                <a class="btn btn-outline-success btn-sm" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificações e-mail</a>
             <?php endif; ?>
             <?php if (admin_can('references.view')): ?>
-                <a class="btn btn-outline-primary btn-sm" href="<?= e(url('/admin/referencias')) ?>">Ver precos e servicos</a>
+                <a class="btn btn-outline-primary btn-sm" href="<?= e(url('/admin/referencias')) ?>">Ver preços e serviços</a>
             <?php endif; ?>
             <?php if (admin_can('taxes.manage')): ?>
                 <a class="btn btn-outline-warning btn-sm" href="<?= e(url('/admin/tributos')) ?>">Central fiscal</a>
@@ -73,8 +73,8 @@
 <section class="aq-admin-panel aq-admin-table-card">
     <div class="aq-admin-panel-header">
         <div>
-            <h2 class="aq-admin-panel-title">Ultimas solicitacoes</h2>
-            <p class="aq-admin-panel-subtitle">Pedidos recentes para acompanhamento rapido.</p>
+            <h2 class="aq-admin-panel-title">Últimas solicitações</h2>
+            <p class="aq-admin-panel-subtitle">Pedidos recentes para acompanhamento rápido.</p>
         </div>
         <a class="btn btn-sm btn-outline-primary" href="<?= e(url('/admin/orcamentos')) ?>">Ver todos</a>
     </div>
@@ -85,17 +85,17 @@
                 <th>ID</th>
                 <th>Projeto</th>
                 <th>Cliente</th>
-                <th>Servicos</th>
+                <th>Serviços</th>
                 <th>Status</th>
-                <th>Relatorio</th>
+                <th>Relatório</th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($recent as $quote): ?>
                 <?php
                 $statusLabel = match ((string) $quote['status']) {
-                    'orcado' => 'Orcado',
-                    'em_analise' => 'Em analise',
+                    'orcado' => 'Orçado',
+                    'em_analise' => 'Em análise',
                     default => 'Pendente',
                 };
                 ?>
@@ -109,7 +109,7 @@
                         <?php if (!empty($quote['total_value'])): ?>
                             R$ <?= number_format((float) $quote['total_value'], 2, ',', '.') ?>
                         <?php else: ?>
-                            <span class="text-muted">Nao gerado</span>
+                            <span class="text-muted">Não gerado</span>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -118,3 +118,4 @@
         </table>
     </div>
 </section>
+

@@ -2,7 +2,7 @@
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
             <h1 class="aq-admin-page-hero-title">Solicitacoes e relatorios</h1>
-            <p class="aq-admin-page-hero-subtitle">Gestao central de pedidos, status de analise e emissao de propostas.</p>
+            <p class="aq-admin-page-hero-subtitle">Gestão central de pedidos, status de análise e emissão de propostas.</p>
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
@@ -29,7 +29,7 @@
                 <th>Email</th>
                 <th>Servicos</th>
                 <th>Status</th>
-                <th>Relatorio</th>
+                <th>Relatório</th>
                 <th>Validade</th>
                 <th>Acao</th>
             </tr>
@@ -39,7 +39,7 @@
                 <?php
                 $statusLabel = match ((string) $request['status']) {
                     'orcado' => 'Orcado',
-                    'em_analise' => 'Em analise',
+                    'em_analise' => 'Em análise',
                     default => 'Pendente',
                 };
                 ?>

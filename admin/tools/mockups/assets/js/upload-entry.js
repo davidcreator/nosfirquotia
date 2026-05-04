@@ -75,7 +75,7 @@
         resetValidationVisualState();
 
         if (!file) {
-            setStatus('Selecione um arquivo para iniciar a verificacao.', 'pending');
+            setStatus('Selecione um arquivo para iniciar a verificação.', 'pending');
             setContinue(false);
             clearBtn?.setAttribute('disabled', 'disabled');
             await clearUploadBridge();
@@ -88,7 +88,7 @@
         setCheckState('format', formatOk);
 
         if (!formatOk) {
-            setStatus('Formato invalido. Envie PNG, JPG ou JPEG.', 'fail');
+            setStatus('Formato inválido. Envie PNG, JPG ou JPEG.', 'fail');
             hidePreview();
             hideMeta();
             setContinue(false);
@@ -104,7 +104,7 @@
         try {
             dimensions = await readImageDimensions(file);
         } catch (error) {
-            setStatus('Nao foi possivel ler o arquivo. Tente outro arquivo de imagem.', 'fail');
+            setStatus('Não foi possível ler o arquivo. Tente outro arquivo de imagem.', 'fail');
             setCheckState('resolution', false);
             hidePreview();
             hideMeta();
@@ -135,7 +135,7 @@
         }
 
         if (!resolutionOk) {
-            setStatus(`Resolucao insuficiente. Minimo exigido: ${MIN_WIDTH} x ${MIN_HEIGHT} px.`, 'fail');
+            setStatus(`Resolução insuficiente. Mínimo exigido: ${MIN_WIDTH} x ${MIN_HEIGHT} px.`, 'fail');
             setContinue(false);
             clearValidationStorage();
             await clearUploadBridge();
@@ -144,14 +144,14 @@
 
         const persisted = await persistUploadToBridge(file);
         if (!persisted) {
-            setStatus('Nao foi possivel preparar a imagem para o editor. Tente novamente.', 'fail');
+            setStatus('Não foi possível preparar a imagem para o editor. Tente novamente.', 'fail');
             setContinue(false);
             clearValidationStorage();
             await clearUploadBridge();
             return;
         }
 
-        setStatus('Arquivo validado com sucesso. Voce pode seguir para o editor.', 'pass');
+        setStatus('Arquivo validado com sucesso. Você pode seguir para o editor.', 'pass');
         setContinue(true);
         persistValidationData({
             name: file.name,
@@ -296,7 +296,7 @@
         hideMeta();
         setContinue(false);
         clearBtn?.setAttribute('disabled', 'disabled');
-        setStatus('Selecione um arquivo para iniciar a verificacao.', 'pending');
+        setStatus('Selecione um arquivo para iniciar a verificação.', 'pending');
         clearValidationStorage();
         if (clearBridge) {
             void clearUploadBridge();

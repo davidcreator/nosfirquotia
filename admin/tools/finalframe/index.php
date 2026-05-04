@@ -22,7 +22,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <p class="hero-text">Relatorio final consolidado com identidade visual, OG, mockups e background remover em um unico payload.</p>
             </div>
             <div class="hero-actions">
-                <button type="button" class="btn" id="refreshReportBtn">Atualizar relatorio</button>
+                <button type="button" class="btn" id="refreshReportBtn">Atualizar relatório</button>
                 <button type="button" class="btn btn-ghost" id="copyPayloadBtn">Copiar JSON</button>
                 <button type="button" class="btn btn-ghost" id="downloadPayloadBtn">Baixar JSON</button>
                 <button type="button" class="btn btn-ghost" id="openBrandBookBtn">Abrir BrandBook</button>
@@ -62,7 +62,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <div id="projectInfoGrid" class="info-grid"></div>
             </article>
             <article>
-                <h2>Integracao</h2>
+                <h2>Integração</h2>
                 <ul id="integrationStatus" class="status-list"></ul>
             </article>
         </section>
@@ -84,10 +84,10 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <div id="bgremoveQualityBlock" class="detail-stack"></div>
             </article>
             <article>
-                <h2>Recomendacoes</h2>
+                <h2>Recomendações</h2>
                 <div class="panel-actions">
                     <button type="button" class="btn btn-inline" id="applyBgRecommendationBtn">Aplicar no BG Remove</button>
-                    <button type="button" class="btn btn-inline btn-outline" id="clearBgHistoryBtn">Limpar historico</button>
+                    <button type="button" class="btn btn-inline btn-outline" id="clearBgHistoryBtn">Limpar histórico</button>
                 </div>
                 <ul id="bgremoveRecommendations" class="status-list"></ul>
             </article>
@@ -110,3 +110,4 @@ require_once dirname(__DIR__) . '/bootstrap.php';
     <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>
+

@@ -22,10 +22,10 @@ require_once dirname(__DIR__) . '/bootstrap.php';
             <div>
                 <p class="eyebrow">Quotia Tools</p>
                 <h1>BrandBook</h1>
-                <p class="hero-text">Relatorio consolidado com cores, tendencias, combinacoes, tipografia, OG e mockups sincronizados entre ferramentas.</p>
+                <p class="hero-text">Relatório consolidado com cores, tendências, combinações, tipografia, OG e mockups sincronizados entre ferramentas.</p>
             </div>
             <div class="hero-actions">
-                <button type="button" class="btn" id="refreshReportBtn">Atualizar relatorio</button>
+                <button type="button" class="btn" id="refreshReportBtn">Atualizar relatório</button>
                 <button type="button" class="btn btn-ghost" id="copyPayloadBtn">Copiar JSON</button>
                 <button type="button" class="btn btn-ghost" id="downloadPayloadBtn">Baixar JSON</button>
             </div>
@@ -37,7 +37,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <strong id="metricColorCount">0</strong>
             </article>
             <article class="kpi-card">
-                <small>Combinacoes</small>
+                <small>Combinações</small>
                 <strong id="metricCombinationCount">0</strong>
             </article>
             <article class="kpi-card">
@@ -60,21 +60,21 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <div id="projectInfoGrid" class="info-grid"></div>
             </article>
             <article>
-                <h2>Integracao</h2>
+                <h2>Integração</h2>
                 <ul id="integrationStatus" class="status-list"></ul>
             </article>
         </section>
 
         <section class="panel">
             <h2>Sistema de Cores</h2>
-            <p id="paletteSummary" class="muted">Aguardando consolidacao de cores.</p>
+            <p id="paletteSummary" class="muted">Aguardando consolidação de cores.</p>
             <div id="paletteRoles" class="role-grid"></div>
             <div id="paletteSwatches" class="swatch-grid"></div>
         </section>
 
         <section class="panel two-col">
             <article>
-                <h2>Combinacoes recomendadas</h2>
+                <h2>Combinações recomendadas</h2>
                 <div id="combinationList" class="insight-list"></div>
             </article>
             <article>
@@ -111,3 +111,4 @@ require_once dirname(__DIR__) . '/bootstrap.php';
     <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>
+

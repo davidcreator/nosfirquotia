@@ -41,7 +41,7 @@ final class CategoryController extends BaseAdminController
         }
 
         if ($name === '' || $basePrice <= 0) {
-            $this->session->flash('error', 'Informe area, nome e valor base valido.');
+            $this->session->flash('error', 'Informe área, nome e valor base válido.');
             $this->redirect('/admin/categorias');
         }
 
@@ -50,7 +50,7 @@ final class CategoryController extends BaseAdminController
         try {
             $model->create($areaType, $name, $description, $basePrice);
         } catch (Throwable) {
-            $this->session->flash('error', 'Nao foi possivel criar categoria. Verifique se ja existe com este nome.');
+            $this->session->flash('error', 'Não foi possível criar categoria. Verifique se já existe com este nome.');
             $this->redirect('/admin/categorias');
         }
 

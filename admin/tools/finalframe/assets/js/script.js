@@ -37,14 +37,14 @@ function bindEvents() {
 
     document.getElementById('copyPayloadBtn')?.addEventListener('click', async () => {
         if (!latestPayload) {
-            setStatus('Gere o relatorio antes de copiar o JSON.', 'warn');
+            setStatus('Gere o relatório antes de copiar o JSON.', 'warn');
             return;
         }
 
         const content = JSON.stringify(latestPayload, null, 2);
         try {
             await navigator.clipboard.writeText(content);
-            setStatus('Payload copiado para a area de transferencia.', 'ok');
+            setStatus('Payload copiado para a área de transferência.', 'ok');
         } catch (error) {
             const target = document.getElementById('finalframePayload');
             if (target) {
@@ -53,7 +53,7 @@ function bindEvents() {
                 setStatus('Payload copiado com fallback.', 'ok');
                 return;
             }
-            setStatus('Nao foi possivel copiar automaticamente.', 'warn');
+            setStatus('Não foi possível copiar automaticamente.', 'warn');
         }
     });
 
@@ -79,7 +79,7 @@ function bindEvents() {
         clearBgremoveHistory();
         const empty = readBgremoveHistory();
         renderBgremoveHistory(empty);
-        setStatus('Historico de qualidade limpo.', 'ok');
+        setStatus('Histórico de qualidade limpo.', 'ok');
     });
 }
 
@@ -101,11 +101,11 @@ function renderFinalFrame() {
     const warnCount = context.integrationNotes.filter((note) => note.level === 'warn').length;
     const errorCount = context.integrationNotes.filter((note) => note.level === 'error').length;
     if (errorCount > 0) {
-        setStatus(`FinalFrame atualizado com ${errorCount} erro(s) de integracao.`, 'error');
+        setStatus(`FinalFrame atualizado com ${errorCount} erro(s) de integração.`, 'error');
     } else if (warnCount > 0) {
-        setStatus(`FinalFrame atualizado com ${warnCount} alerta(s) de integracao.`, 'warn');
+        setStatus(`FinalFrame atualizado com ${warnCount} alerta(s) de integração.`, 'warn');
     } else {
-        setStatus('Relatorio FinalFrame atualizado com sucesso.', 'ok');
+        setStatus('Relatório FinalFrame atualizado com sucesso.', 'ok');
     }
 }
 
@@ -245,7 +245,7 @@ function buildContext() {
 
 function resolveProject(workInfo, mockups) {
     const latest = mockups[0] || null;
-    const fallbackTitle = latest ? latest.title : 'Projeto sem titulo';
+    const fallbackTitle = latest ? latest.title : 'Projeto sem título';
     const tags = String(workInfo.supportingTags || '')
         .split(',')
         .map((tag) => tag.trim())
@@ -256,7 +256,7 @@ function resolveProject(workInfo, mockups) {
         title: String(workInfo.title || fallbackTitle),
         mainTag: String(workInfo.mainTag || (latest ? latest.categoryLabel : '')),
         supportingTags: tags,
-        description: String(workInfo.description || 'Descricao nao registrada nesta sessao.')
+        description: String(workInfo.description || 'Descrição não registrada nesta sessão.')
     };
 }
 
@@ -295,17 +295,17 @@ function resolveBrand(snapshot) {
 function resolveTypography(snapshot) {
     const brandKitTypography = snapshot?.brandKit?.typography || {};
     const fontProfile = snapshot?.fontProfile || {};
-    const primaryFontName = String(brandKitTypography.primaryFontName || fontProfile.primaryFontName || 'Nao definido');
-    const secondaryFontName = String(brandKitTypography.secondaryFontName || fontProfile.secondaryFontName || 'Nao definido');
-    const pairingStyle = String(brandKitTypography.pairingStyle || fontProfile.pairingStyle || 'Nao definido');
-    const tone = String(brandKitTypography.tone || fontProfile.tone || 'Nao definido');
+    const primaryFontName = String(brandKitTypography.primaryFontName || fontProfile.primaryFontName || 'Não definido');
+    const secondaryFontName = String(brandKitTypography.secondaryFontName || fontProfile.secondaryFontName || 'Não definido');
+    const pairingStyle = String(brandKitTypography.pairingStyle || fontProfile.pairingStyle || 'Não definido');
+    const tone = String(brandKitTypography.tone || fontProfile.tone || 'Não definido');
     return {
         primaryFontName,
         secondaryFontName,
         pairingStyle,
         tone,
         source: String(brandKitTypography.source || fontProfile.source || 'system'),
-        isConfigured: primaryFontName !== 'Nao definido' || secondaryFontName !== 'Nao definido'
+        isConfigured: primaryFontName !== 'Não definido' || secondaryFontName !== 'Não definido'
     };
 }
 
@@ -407,31 +407,31 @@ function buildIntegrationNotes(context) {
     const notes = [];
     notes.push(context.hasBrandKit
         ? { level: 'ok', message: 'Brand Kit detectado e sincronizado.' }
-        : { level: 'warn', message: 'Brand Kit nao detectado. Execute uma ferramenta de estrategia para sincronizar.' });
+        : { level: 'warn', message: 'Brand Kit não detectado. Execute uma ferramenta de estratégia para sincronizar.' });
 
     notes.push(context.hasColors
-        ? { level: 'ok', message: 'Sistema de cores consolidado para aplicacao.' }
+        ? { level: 'ok', message: 'Sistema de cores consolidado para aplicação.' }
         : { level: 'warn', message: 'Sem cores consolidadas no snapshot atual.' });
 
     notes.push(context.hasTypography
         ? { level: 'ok', message: 'Tipografia definida para o projeto.' }
-        : { level: 'warn', message: 'Tipografia nao definida. Recomendado executar Font Strategy Advisor.' });
+        : { level: 'warn', message: 'Tipografia não definida. Recomendado executar Font Strategy Advisor.' });
 
     notes.push(context.hasOg
         ? { level: 'ok', message: 'Diretriz OG detectada e pronta para uso.' }
-        : { level: 'warn', message: 'Diretriz OG nao encontrada. Atualize no OG Image Generator.' });
+        : { level: 'warn', message: 'Diretriz OG não encontrada. Atualize no OG Image Generator.' });
 
     notes.push(context.hasMockups
-        ? { level: 'ok', message: 'Mockups salvos encontrados para o relatorio.' }
-        : { level: 'warn', message: 'Nenhum mockup salvo nesta sessao.' });
+        ? { level: 'ok', message: 'Mockups salvos encontrados para o relatório.' }
+        : { level: 'warn', message: 'Nenhum mockup salvo nesta sessão.' });
 
     notes.push(context.hasBgremove
-        ? { level: 'ok', message: 'Recorte de fundo registrado e pronto para composicao.' }
+        ? { level: 'ok', message: 'Recorte de fundo registrado e pronto para composição.' }
         : { level: 'warn', message: 'Background remover sem resultado consolidado no momento.' });
 
     if (context.hasBgremove) {
         if (context.bgremoveQualityScore >= 70) {
-            notes.push({ level: 'ok', message: `Qualidade do recorte em bom nivel (${context.bgremoveQualityScore}/100).` });
+            notes.push({ level: 'ok', message: `Qualidade do recorte em bom nível (${context.bgremoveQualityScore}/100).` });
         } else if (context.bgremoveQualityScore >= 45) {
             notes.push({ level: 'warn', message: `Qualidade do recorte mediana (${context.bgremoveQualityScore}/100). Recomendado ajuste fino.` });
         } else {
@@ -461,9 +461,9 @@ function renderProject(project) {
     if (!target) return;
 
     target.innerHTML = [
-        buildInfoCard('Titulo', project.title),
+        buildInfoCard('Título', project.title),
         buildInfoCard('Tag principal', project.mainTag ? `#${project.mainTag}` : 'Sem tag'),
-        buildInfoCard('Descricao', project.description, true),
+        buildInfoCard('Descrição', project.description, true),
         buildInfoCard('Tags de apoio', project.supportingTags.length ? project.supportingTags.join(', ') : 'Sem tags', true)
     ].join('');
 }
@@ -483,12 +483,12 @@ function renderBrandSummary(context) {
     const rows = [
         ['Paleta', context.brand.paletteType],
         ['Cores consolidadas', String(context.brand.paletteColors.length)],
-        ['Cor primaria', context.brand.roleMap.primary.toUpperCase()],
-        ['Cor secundaria', context.brand.roleMap.secondary.toUpperCase()],
+        ['Cor primária', context.brand.roleMap.primary.toUpperCase()],
+        ['Cor secundária', context.brand.roleMap.secondary.toUpperCase()],
         ['Acento', context.brand.roleMap.accent.toUpperCase()],
-        ['Fonte primaria', context.typography.primaryFontName],
-        ['Fonte secundaria', context.typography.secondaryFontName],
-        ['OG template', context.og.template || 'Nao definido']
+        ['Fonte primária', context.typography.primaryFontName],
+        ['Fonte secundária', context.typography.secondaryFontName],
+        ['Template OG', context.og.template || 'Não definido']
     ];
 
     target.innerHTML = rows.map(([label, value]) => `
@@ -516,16 +516,16 @@ function renderBgremove(bgremove) {
 
     const details = [
         ['Status', bgremove.status || 'idle'],
-        ['Arquivo', bgremove.input.name || 'Nao informado'],
+        ['Arquivo', bgremove.input.name || 'Não informado'],
         ['Modo', bgremove.settings.mode || 'auto'],
         ['Preset', bgremove.settings.presetKey || 'auto'],
         ['Tolerancia', String(bgremove.settings.tolerance)],
-        ['Suavizacao', String(bgremove.settings.feather)],
-        ['Limpeza de ruido', String(bgremove.settings.noiseClean)],
+        ['Suavização', String(bgremove.settings.feather)],
+        ['Limpeza de ruído', String(bgremove.settings.noiseClean)],
         ['Preencher falhas', String(bgremove.settings.fillHoles)],
         ['Refino de borda', String(bgremove.settings.edgeTrim)],
-        ['Ajustado manual', bgremove.hasAdjusted ? 'Sim' : 'Nao'],
-        ['Ultima atualizacao', bgremove.updatedAt ? formatDate(bgremove.updatedAt) : 'Sem registro']
+        ['Ajustado manual', bgremove.hasAdjusted ? 'Sim' : 'Não'],
+        ['Última atualização', bgremove.updatedAt ? formatDate(bgremove.updatedAt) : 'Sem registro']
     ];
     if (bgremove.meta?.handoffAt) {
         details.push(['Handoff', `Enviado para ${bgremove.meta?.handoffTarget || 'finalframe'} em ${formatDate(bgremove.meta.handoffAt)}`]);
@@ -542,7 +542,7 @@ function renderBgremove(bgremove) {
     }
     if (Number.isFinite(smartConfidence)) {
         const pct = Math.max(0, Math.min(100, Math.round(smartConfidence * 100)));
-        metaLine = metaLine ? `${metaLine} | Confianca IA: ${pct}%` : `Confianca IA: ${pct}%`;
+        metaLine = metaLine ? `${metaLine} | Confiança IA: ${pct}%` : `Confiança IA: ${pct}%`;
     }
 
     target.innerHTML = `
@@ -554,7 +554,7 @@ function renderBgremove(bgremove) {
         `).join('')}
         ${metaLine ? `
             <article class="detail-item">
-                <small>Analise do preset</small>
+                <small>Análise do preset</small>
                 <strong>${escapeHtml(metaLine)}</strong>
             </article>
         ` : ''}
@@ -568,9 +568,9 @@ function buildBgremoveQuality(bgremove) {
         score: 0,
         grade: 'Sem dados',
         level: 'warn',
-        summary: 'Sem analise disponivel para o recorte.',
+        summary: 'Sem análise disponível para o recorte.',
         factors: [],
-        recommendations: [{ level: 'warn', message: 'Processe uma imagem no Background Remover para gerar a analise completa.' }]
+        recommendations: [{ level: 'warn', message: 'Processe uma imagem no Background Remover para gerar a análise completa.' }]
     };
 
     if (!bgremove || !bgremove.hasResult) {
@@ -600,12 +600,12 @@ function buildBgremoveQuality(bgremove) {
 
     const smartConfidence = toNumber(meta.smartConfidence, null);
     if (smartConfidence !== null) {
-        addFactor('Confianca da IA', smartConfidence * 100, 2.5, 'Confianca da selecao de preset inteligente.');
+        addFactor('Confiança da IA', smartConfidence * 100, 2.5, 'Confiança da seleção de preset inteligente.');
     }
 
     const scoreFromPreset = toNumber(smartScores[presetKey], null);
     if (scoreFromPreset !== null) {
-        addFactor('Aderencia do preset', scoreFromPreset * 100, 1.8, `Preset aplicado: ${presetKey}.`);
+        addFactor('Aderência do preset', scoreFromPreset * 100, 1.8, `Preset aplicado: ${presetKey}.`);
     }
 
     const edgeDensity = toNumber(signals.edgeDensity, null);
@@ -635,13 +635,13 @@ function buildBgremoveQuality(bgremove) {
         targetClosenessScore(toNumber(settings.edgeTrim, 5), presetTargets.edgeTrim, 10),
         targetClosenessScore(toNumber(settings.feather, 1), presetTargets.feather, 6)
     ]);
-    addFactor('Equilibrio de ajustes', settingsScore, 1.7, 'Comparacao dos controles com a faixa recomendada.');
+    addFactor('Equilíbrio de ajustes', settingsScore, 1.7, 'Comparação dos controles com a faixa recomendada.');
 
     const weightedTotal = factors.reduce((acc, factor) => acc + (factor.value * factor.weight), 0);
     const weightSum = factors.reduce((acc, factor) => acc + factor.weight, 0);
     const score = weightSum > 0 ? Math.round(weightedTotal / weightSum) : 0;
 
-    let grade = 'Critico';
+    let grade = 'Crítico';
     let level = 'error';
     if (score >= 85) {
         grade = 'Excelente';
@@ -691,10 +691,10 @@ function buildBgremoveRecommendations(context) {
     const pushRec = (level, message) => recs.push({ level, message: String(message) });
 
     if (context.smartConfidence !== null && context.smartConfidence < 0.12) {
-        pushRec('warn', 'Confianca da IA baixa. Use Comparar presets no Background Remover e valide visualmente o melhor recorte.');
+        pushRec('warn', 'Confiança da IA baixa. Use Comparar presets no Background Remover e valide visualmente o melhor recorte.');
     }
     if (toNumber(context.settings.noiseClean, 45) < 35) {
-        pushRec('warn', 'Aumente Limpeza de ruido para faixa de 45 a 65 para reduzir residuos no fundo.');
+        pushRec('warn', 'Aumente Limpeza de ruído para faixa de 45 a 65 para reduzir resíduos no fundo.');
     }
     if (toNumber(context.settings.fillHoles, 35) < 25) {
         pushRec('warn', 'Aumente Preencher falhas para faixa de 30 a 55 para fechar micro-buracos no objeto.');
@@ -703,17 +703,17 @@ function buildBgremoveRecommendations(context) {
         pushRec('warn', 'Aumente Refino de borda para 6 a 10 para reduzir halo em bordas complexas.');
     }
     if (toNumber(context.settings.feather, 1) === 0) {
-        pushRec('warn', 'Use Suavizacao entre 1 e 2 para evitar serrilhado perceptivel nas bordas.');
+        pushRec('warn', 'Use Suavização entre 1 e 2 para evitar serrilhado perceptível nas bordas.');
     }
     if (!context.hasAdjusted) {
         pushRec('ok', 'Aplique ajuste manual com pincel nas areas finas para melhorar acabamento final.');
     }
     if (String(context.meta?.presetSource || '') === 'custom' && !Boolean(context.settings.smartPreset)) {
-        pushRec('ok', 'Ative Preset inteligente para testar uma configuracao automatica antes do ajuste manual.');
+        pushRec('ok', 'Ative Preset inteligente para testar uma configuração automática antes do ajuste manual.');
     }
 
     if (!recs.length) {
-        pushRec('ok', 'Recorte consistente. Manter configuracao atual e seguir para composicao no mockup/OG.');
+        pushRec('ok', 'Recorte consistente. Manter configuração atual e seguir para composição no mockup/OG.');
     }
     return recs.slice(0, 7);
 }
@@ -740,14 +740,14 @@ function buildBgremoveSuggestion(context) {
     if (smartConfidence !== null && smartConfidence < 0.12) {
         suggestion.smartPreset = true;
         suggestion.presetKey = 'auto';
-        notes.push('Confianca IA baixa: reavaliar preset automaticamente.');
+        notes.push('Confiança IA baixa: reavaliar preset automaticamente.');
     }
 
     if (score < 70) {
         suggestion.noiseClean = Math.max(suggestion.noiseClean, 50);
         suggestion.fillHoles = Math.max(suggestion.fillHoles, 38);
         suggestion.feather = Math.max(suggestion.feather, 1);
-        notes.push('Elevar limpeza e fechamento para reduzir residuos e falhas internas.');
+        notes.push('Elevar limpeza e fechamento para reduzir resíduos e falhas internas.');
     }
 
     if (score < 55) {
@@ -762,13 +762,13 @@ function buildBgremoveSuggestion(context) {
 
     if (suggestion.feather === 0) {
         suggestion.feather = 1;
-        notes.push('Suavizacao minima aplicada para reduzir serrilhado.');
+        notes.push('Suavização mínima aplicada para reduzir serrilhado.');
     }
 
     suggestion.presetKey = normalizePresetKey(suggestion.presetKey);
     suggestion.reason = notes.length
         ? notes.join(' ')
-        : 'Parametros atuais mantidos por boa consistencia do recorte.';
+        : 'Parametros atuais mantidos por boa consistência do recorte.';
     return suggestion;
 }
 
@@ -786,12 +786,12 @@ function renderBgremoveQuality(quality) {
         qualityTarget.innerHTML = `
             <article class="detail-item">
                 <small>Status</small>
-                <strong>Sem analise de qualidade</strong>
-                <p>Processar imagem no Background Remover para habilitar score e recomendacoes.</p>
+                <strong>Sem análise de qualidade</strong>
+                <p>Processar imagem no Background Remover para habilitar score e recomendações.</p>
             </article>
         `;
         recsTarget.innerHTML = `
-            <li class="warn">Sem recomendacoes ate existir um recorte processado.</li>
+            <li class="warn">Sem recomendações até existir um recorte processado.</li>
         `;
         return;
     }
@@ -838,12 +838,12 @@ function renderBgremoveQuality(quality) {
 
 function applyBgRecommendation() {
     if (!latestContext || !latestContext.bgremove || !latestContext.bgremoveQuality?.available) {
-        setStatus('Nao ha recomendacoes de recorte para aplicar no momento.', 'warn');
+        setStatus('Não há recomendações de recorte para aplicar no momento.', 'warn');
         return;
     }
     const suggestion = latestBgSuggestion || latestContext.bgremoveQuality?.suggestion;
     if (!suggestion) {
-        setStatus('Nao foi possivel montar sugestao automatica para o BG Remove.', 'warn');
+        setStatus('Não foi possível montar sugestão automática para o BG Remove.', 'warn');
         return;
     }
 
@@ -967,7 +967,7 @@ function renderBgremoveHistory(history) {
     if (!list.length) {
         target.innerHTML = `
             <div class="history-empty">
-                Nenhum registro ainda. Gere recortes no Background Remover para montar o historico.
+                Nenhum registro ainda. Gere recortes no Background Remover para montar o histórico.
             </div>
         `;
         return;
@@ -985,8 +985,8 @@ function renderBgremoveHistory(history) {
                 </div>
                 <p class="history-meta">
                     <span>Preset: ${escapeHtml(entry.preset)}</span>
-                    <span>Confianca IA: ${escapeHtml(confidence)}</span>
-                    <span>Ajuste manual: ${entry.adjusted ? 'sim' : 'nao'}</span>
+                    <span>Confiança IA: ${escapeHtml(confidence)}</span>
+                    <span>Ajuste manual: ${entry.adjusted ? 'sim' : 'não'}</span>
                 </p>
             </article>
         `;
@@ -1240,3 +1240,4 @@ function formatDateForFile(date) {
     const minute = String(d.getMinutes()).padStart(2, '0');
     return `${year}${month}${day}-${hour}${minute}`;
 }
+

@@ -21,43 +21,43 @@ require_once dirname(__DIR__) . '/bootstrap.php';
         <section class="hero">
             <p class="eyebrow">Design Intelligence</p>
             <h1>Color Strategy Advisor</h1>
-            <p>Ferramenta de decisao para identidade visual baseada em psicologia das cores, objetivos de marketing e contexto de uso.</p>
+            <p>Ferramenta de decisão para identidade visual baseada em psicologia das cores, objetivos de marketing e contexto de uso.</p>
         </section>
 
         <section class="panel">
-            <h2>Diagnostico da Marca</h2>
+            <h2>Diagnóstico da Marca</h2>
             <form id="strategyForm" class="form-grid">
                 <label>
                     Objetivo principal
                     <select id="objective" required>
-                        <option value="confianca">Transmitir confianca</option>
-                        <option value="atencao">Ganhar atencao</option>
-                        <option value="acao">Estimular acao</option>
+                        <option value="confianca">Transmitir confiança</option>
+                        <option value="atencao">Ganhar atenção</option>
+                        <option value="acao">Estimular ação</option>
                         <option value="sofisticacao">Posicionamento sofisticado</option>
-                        <option value="equilibrio">Bem-estar e equilibrio</option>
-                        <option value="diversao">Energia e diversao</option>
+                        <option value="equilibrio">Bem-estar e equilíbrio</option>
+                        <option value="diversao">Energia e diversão</option>
                     </select>
                 </label>
 
                 <label>
-                    Tipo de produto/servico
+                    Tipo de produto/serviço
                     <select id="productType">
-                        <option value="utilitario">Utilitario</option>
-                        <option value="hedonico">Hedonico</option>
+                        <option value="utilitario">Utilitário</option>
+                        <option value="hedonico">Hedônico</option>
                     </select>
                 </label>
 
                 <label>
                     Enquadramento da mensagem
                     <select id="messageFrame">
-                        <option value="gain">Ganho (beneficio)</option>
-                        <option value="prevention">Prevencao (evitar perda)</option>
+                        <option value="gain">Ganho (benefício)</option>
+                        <option value="prevention">Prevenção (evitar perda)</option>
                         <option value="neutral">Neutro</option>
                     </select>
                 </label>
 
                 <label>
-                    Publico predominante
+                    Público predominante
                     <select id="audience">
                         <option value="mixed">Misto</option>
                         <option value="masculino">Masculino</option>
@@ -66,19 +66,19 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 </label>
 
                 <label>
-                    Nivel de excitacao desejado
+                    Nível de excitação desejado
                     <select id="arousal">
                         <option value="low">Baixo (calmo)</option>
-                        <option value="medium">Medio</option>
-                        <option value="high">Alto (energetico)</option>
+                        <option value="medium">Médio</option>
+                        <option value="high">Alto (energético)</option>
                     </select>
                 </label>
 
                 <label>
-                    Densidade de conteudo
+                    Densidade de conteúdo
                     <select id="contentDensity">
-                        <option value="high">Alta (muito texto/conteudo)</option>
-                        <option value="medium">Media</option>
+                        <option value="high">Alta (muito texto/conteúdo)</option>
+                        <option value="medium">Média</option>
                         <option value="low">Baixa (visual limpo)</option>
                     </select>
                 </label>
@@ -88,7 +88,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                     <select id="market">
                         <option value="brazil">Brasil/Latam</option>
                         <option value="western">Ocidental</option>
-                        <option value="eastasia">Leste Asiatico</option>
+                        <option value="eastasia">Leste Asiático</option>
                         <option value="global">Global (multimercado)</option>
                     </select>
                 </label>
@@ -97,19 +97,19 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                     Contexto de uso principal
                     <select id="context">
                         <option value="general">Geral</option>
-                        <option value="financas">Financas/tecnologia</option>
-                        <option value="saude">Saude e bem-estar</option>
-                        <option value="educacao">Educacao</option>
+                        <option value="financas">Finanças/tecnologia</option>
+                        <option value="saude">Saúde e bem-estar</option>
+                        <option value="educacao">Educação</option>
                         <option value="moda">Moda/beleza</option>
-                        <option value="namoro">Relacionamento/paixao</option>
-                        <option value="avaliacao">Avaliacao/performance</option>
+                        <option value="namoro">Relacionamento/paixão</option>
+                        <option value="avaliacao">Avaliação/performance</option>
                     </select>
                 </label>
 
                 <label>
                     Quantidade de cores
                     <select id="paletteSize">
-                        <option value="auto">Automatico</option>
+                        <option value="auto">Automático</option>
                         <option value="2">2 cores</option>
                         <option value="3">3 cores</option>
                         <option value="4">4 cores</option>
@@ -118,7 +118,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 </label>
 
                 <div class="actions">
-                    <button type="submit">Gerar Estrategia de Cores</button>
+                    <button type="submit">Gerar Estratégia de Cores</button>
                     <button type="button" id="resetBtn" class="ghost">Resetar</button>
                 </div>
             </form>
@@ -126,7 +126,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 
         <section class="panel">
             <h2>Paleta Recomendada</h2>
-            <p id="strategySummary" class="summary">Preencha o diagnostico e gere sua estrategia.</p>
+            <p id="strategySummary" class="summary">Preencha o diagnóstico e gere sua estratégia.</p>
             <div class="export-actions">
                 <button type="button" id="exportJsonBtn" class="ghost">Exportar JSON</button>
                 <button type="button" id="exportPdfBtn">Exportar PDF</button>
@@ -158,7 +158,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
         </section>
 
         <section class="panel">
-            <h2>Base de Referencia</h2>
+            <h2>Base de Referência</h2>
             <ul class="sources">
                 <li><a href="https://davidcreator.com/psicologia-das-cores-como-a-cor-influencia-nossa-vida/" target="_blank" rel="noopener noreferrer">Psicologia das cores: Como a cor influencia nossa vida</a></li>
                 <li><a href="https://davidcreator.com/cores-no-mundo-do-marketing/" target="_blank" rel="noopener noreferrer">Cores no Mundo do Marketing</a></li>
@@ -172,3 +172,4 @@ require_once dirname(__DIR__) . '/bootstrap.php';
     <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>
+

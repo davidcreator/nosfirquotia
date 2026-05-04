@@ -1,12 +1,12 @@
 <section class="aq-admin-page-hero">
     <div class="row g-2 align-items-center">
         <div class="col-lg-8">
-            <h1 class="aq-admin-page-hero-title">Solicitacao #<?= (int) $requestData['id'] ?></h1>
+            <h1 class="aq-admin-page-hero-title">Solicitação #<?= (int) $requestData['id'] ?></h1>
             <p class="aq-admin-page-hero-subtitle"><?= e($requestData['project_title']) ?></p>
         </div>
         <div class="col-lg-4">
             <div class="aq-admin-page-hero-meta">
-                <a class="btn btn-sm btn-outline-light" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificacoes Email</a>
+                <a class="btn btn-sm btn-outline-light" href="<?= e(url('/admin/notificacoes-email')) ?>">Notificações E-mail</a>
                 <a class="btn btn-sm btn-outline-light" href="<?= e(url('/admin/orcamentos')) ?>">Voltar</a>
             </div>
         </div>
@@ -19,8 +19,8 @@
             <div class="card-body">
                 <h2 class="h5 mb-3">Escopo enviado pelo cliente</h2>
                 <p class="mb-3"><?= nl2br(e((string) $requestData['scope'])) ?></p>
-                <p class="mb-1"><strong>Prazo desejado:</strong> <?= $requestData['desired_deadline_days'] ? (int) $requestData['desired_deadline_days'] . ' dias' : 'Nao informado' ?></p>
-                <p class="mb-0"><strong>Disponibilidade desejada:</strong> <?= e((string) ($requestData['requested_availability'] ?? 'Nao informada')) ?></p>
+                <p class="mb-1"><strong>Prazo desejado:</strong> <?= $requestData['desired_deadline_days'] ? (int) $requestData['desired_deadline_days'] . ' dias' : 'Não informado' ?></p>
+                <p class="mb-0"><strong>Disponibilidade desejada:</strong> <?= e((string) ($requestData['requested_availability'] ?? 'Não informada')) ?></p>
             </div>
         </div>
     </div>
@@ -30,11 +30,11 @@
                 <h2 class="h5 mb-3">Dados do cliente</h2>
                 <p class="mb-1"><strong>Nome:</strong> <?= e($requestData['client_name']) ?></p>
                 <p class="mb-1"><strong>Email:</strong> <?= e($requestData['client_email']) ?></p>
-                <p class="mb-3"><strong>Telefone:</strong> <?= e((string) ($requestData['client_phone'] ?? 'Nao informado')) ?></p>
+                <p class="mb-3"><strong>Telefone:</strong> <?= e((string) ($requestData['client_phone'] ?? 'Não informado')) ?></p>
                 <?php
                 $requestStatusLabel = match ((string) $requestData['status']) {
-                    'orcado' => 'Orcado',
-                    'em_analise' => 'Em analise',
+                    'orcado' => 'Orçado',
+                    'em_analise' => 'Em análise',
                     default => 'Pendente',
                 };
                 ?>
@@ -59,7 +59,7 @@
                 </select>
             </div>
             <div class="col-md-4 col-lg-3">
-                <label class="form-label mb-1" for="serviceAreaFilter">Filtro por area</label>
+                <label class="form-label mb-1" for="serviceAreaFilter">Filtro por área</label>
                 <select class="form-select form-select-sm" id="serviceAreaFilter" data-service-area-select>
                     <option value="all">Todas as areas</option>
                     <option value="design">Design</option>
@@ -68,7 +68,7 @@
             </div>
             <div class="col-md-4 col-lg-6">
                 <div class="small text-muted" data-company-profile-count aria-live="polite">
-                    Filtros visuais e de geracao de relatorio por perfil e area.
+                    Filtros visuais e de geração de relatório por perfil e área.
                 </div>
             </div>
         </div>
@@ -78,8 +78,8 @@
 <section class="aq-admin-panel aq-admin-table-card mb-3">
     <div class="aq-admin-panel-header">
         <div>
-            <h2 class="aq-admin-panel-title">Servicos solicitados</h2>
-            <p class="aq-admin-panel-subtitle">Itens enviados pelo cliente e faixas de referencia.</p>
+            <h2 class="aq-admin-panel-title">Serviços solicitados</h2>
+            <p class="aq-admin-panel-subtitle">Itens enviados pelo cliente e faixas de referência.</p>
         </div>
     </div>
     <div class="aq-admin-panel-body">
@@ -88,7 +88,7 @@
                 <thead class="table-light">
                 <tr>
                     <th>Servico</th>
-                    <th>Area</th>
+                    <th>Área</th>
                     <th>Referencia</th>
                     <th>Faixa referencial</th>
                 </tr>
@@ -120,21 +120,21 @@
 <section class="aq-admin-panel">
     <div class="aq-admin-panel-header">
         <div>
-            <h2 class="aq-admin-panel-title">Relatorio de orcamento (validade 90 dias)</h2>
-            <p class="aq-admin-panel-subtitle">Edite precos, tributacao e detalhes para gerar a proposta final.</p>
+            <h2 class="aq-admin-panel-title">Relatório de orçamento (validade 90 dias)</h2>
+            <p class="aq-admin-panel-subtitle">Edite preços, tributação e detalhes para gerar a proposta final.</p>
         </div>
     </div>
     <div class="aq-admin-panel-body">
         <div class="alert alert-secondary">
-            Utilize a base completa de referencia para apoiar a precificacao:
-            <a href="<?= e(url('/admin/referencias')) ?>">Precos e Servicos</a>.
+            Utilize a base completa de referência para apoiar a precificação:
+            <a href="<?= e(url('/admin/referencias')) ?>">Preços e Serviços</a>.
             Para padroes tributarios, acesse
             <a href="<?= e(url('/admin/tributos')) ?>">Central Fiscal</a>.
         </div>
 
         <?php if (!empty($requestData['report_id'])): ?>
             <div class="alert alert-success">
-                Relatorio gerado em <?= e(date('d/m/Y H:i', strtotime((string) $requestData['report_created_at']))) ?>
+                Relatório gerado em <?= e(date('d/m/Y H:i', strtotime((string) $requestData['report_created_at']))) ?>
                 por <?= e((string) ($requestData['report_admin_name'] ?? 'Admin')) ?>.
                 Valido ate <?= e(date('d/m/Y', strtotime((string) $requestData['valid_until']))) ?>.
                 Total atual: <strong>R$ <?= number_format((float) ($requestData['total_value'] ?? 0), 2, ',', '.') ?></strong>.
@@ -197,11 +197,11 @@
                         <thead class="table-light">
                         <tr>
                             <th>Servico</th>
-                            <th>Area</th>
+                            <th>Área</th>
                             <th>Valor (R$)</th>
                             <th>Prazo (dias)</th>
                             <th>Disponibilidade</th>
-                            <th>Observacoes</th>
+                            <th>Observações</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -244,7 +244,7 @@
                                 </td>
                                 <td>
                                     <input class="form-control form-control-sm" name="availability_<?= $serviceId ?>"
-                                           value="<?= e((string) ($reportItem['availability_label'] ?? 'Disponivel')) ?>">
+                                           value="<?= e((string) ($reportItem['availability_label'] ?? 'Disponível')) ?>">
                                 </td>
                                 <td>
                                     <input class="form-control form-control-sm" name="notes_<?= $serviceId ?>"
@@ -296,7 +296,7 @@
                         </tbody>
                         <tfoot class="table-light">
                         <tr>
-                            <th colspan="2">Subtotal dos servicos</th>
+                            <th colspan="2">Subtotal dos serviços</th>
                             <th class="text-end" id="reportSubtotalAmount">R$ 0,00</th>
                         </tr>
                         <tr>
@@ -304,7 +304,7 @@
                             <th class="text-end" id="reportTaxesAmount">R$ 0,00</th>
                         </tr>
                         <tr>
-                            <th colspan="2">Valor final do orcamento</th>
+                            <th colspan="2">Valor final do orçamento</th>
                             <th class="text-end" id="reportFinalAmount">R$ 0,00</th>
                         </tr>
                         </tfoot>
@@ -332,7 +332,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <label class="form-label">Observacoes gerais do relatorio</label>
+                <label class="form-label">Observações gerais do relatório</label>
                 <textarea class="form-control" rows="3" name="report_notes"><?= e((string) ($requestData['report_notes'] ?? '')) ?></textarea>
             </div>
             <div class="col-12">
@@ -396,7 +396,7 @@
             </div>
             <div class="col-12 d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">
-                    <?= !empty($requestData['report_id']) ? 'Atualizar relatorio' : 'Gerar relatorio' ?>
+                    <?= !empty($requestData['report_id']) ? 'Atualizar relatório' : 'Gerar relatório' ?>
                 </button>
             </div>
         </form>
@@ -532,8 +532,8 @@
 
         if (profileCountNode) {
             profileCountNode.textContent = selectedLabel + ' | ' + selectedAreaLabel + ': '
-                + requestedVisible + ' servicos exibidos na solicitacao e '
-                + reportVisible + ' servicos ativos no relatorio.';
+                + requestedVisible + ' serviços exibidos na solicitação e '
+                + reportVisible + ' serviços ativos no relatório.';
         }
 
         recalc();
@@ -568,7 +568,7 @@
             try {
                 const parsed = JSON.parse(raw);
                 if (!parsed || typeof parsed !== 'object') {
-                    setManualStatus('Payload invalido encontrado no armazenamento local.');
+                    setManualStatus('Payload inválido encontrado no armazenamento local.');
                     return;
                 }
 
@@ -585,7 +585,7 @@
                     + (generatedLabel !== '' ? ` Gerado em: ${generatedLabel}.` : '')
                 );
             } catch (error) {
-                setManualStatus('Falha ao importar payload do navegador: JSON invalido.');
+                setManualStatus('Falha ao importar payload do navegador: JSON inválido.');
             }
         });
     }
@@ -610,3 +610,4 @@
     }
 })();
 </script>
+

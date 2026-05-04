@@ -1,7 +1,7 @@
 <section class="aq-admin-page-hero">
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
-            <h1 class="aq-admin-page-hero-title">Categorias de orcamento</h1>
+            <h1 class="aq-admin-page-hero-title">Categorias de orçamento</h1>
             <p class="aq-admin-page-hero-subtitle">Gerencie os tipos de trabalho em Design e Desenvolvimento.</p>
         </div>
         <div class="col-md-4">
@@ -23,7 +23,7 @@
             <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/categorias')) ?>" class="row g-3">
                     <div class="col-12">
-                        <label class="form-label">Area</label>
+                        <label class="form-label">Área</label>
                         <select class="form-select" name="area_type" required>
                             <option value="design">Design</option>
                             <option value="development">Desenvolvimento</option>
@@ -34,7 +34,7 @@
                         <input class="form-control" name="name" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">Descricao</label>
+                        <label class="form-label">Descrição</label>
                         <textarea class="form-control" name="description" rows="3"></textarea>
                     </div>
                     <div class="col-12">
@@ -59,9 +59,9 @@
                 <table class="table mb-0 align-middle">
                     <thead class="table-light">
                     <tr>
-                        <th>Area</th>
+                        <th>Área</th>
                         <th>Nome</th>
-                        <th>Descricao</th>
+                        <th>Descrição</th>
                         <th>Preco Base</th>
                     </tr>
                     </thead>

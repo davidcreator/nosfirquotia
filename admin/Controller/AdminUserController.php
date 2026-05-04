@@ -52,11 +52,11 @@ final class AdminUserController extends BaseAdminController
         try {
             $model->create($payload, (int) ($this->adminUser()['id'] ?? 0));
         } catch (Throwable) {
-            $this->session->flash('error', 'Nao foi possivel criar o usuario admin. Verifique se o email ja existe.');
+            $this->session->flash('error', 'Não foi possível criar o usuário admin. Verifique se o e-mail já existe.');
             $this->redirect('/admin/usuarios');
         }
 
-        $this->session->flash('success', 'Usuario administrativo criado com sucesso.');
+        $this->session->flash('success', 'Usuário administrativo criado com sucesso.');
         $this->redirect('/admin/usuarios');
     }
 
@@ -66,7 +66,7 @@ final class AdminUserController extends BaseAdminController
 
         $adminId = (int) $id;
         if ($adminId < 1) {
-            $this->session->flash('error', 'Usuario invalido.');
+            $this->session->flash('error', 'Usuário inválido.');
             $this->redirect('/admin/usuarios');
         }
 
@@ -82,7 +82,7 @@ final class AdminUserController extends BaseAdminController
         $model = new AdminUserModel($this->app);
         $target = $model->find($adminId);
         if ($target === null) {
-            $this->session->flash('error', 'Usuario nao encontrado.');
+            $this->session->flash('error', 'Usuário não encontrado.');
             $this->redirect('/admin/usuarios');
         }
 
@@ -97,18 +97,18 @@ final class AdminUserController extends BaseAdminController
             && !$payload['is_active']
             && empty($target['is_general_admin'])
         ) {
-            $this->session->flash('error', 'Voce nao pode desativar sua propria conta logada.');
+            $this->session->flash('error', 'Você não pode desativar sua própria conta logada.');
             $this->redirect('/admin/usuarios');
         }
 
         try {
             $model->update($adminId, $payload);
         } catch (Throwable) {
-            $this->session->flash('error', 'Nao foi possivel atualizar o usuario. Verifique se o email ja existe.');
+            $this->session->flash('error', 'Não foi possível atualizar o usuário. Verifique se o e-mail já existe.');
             $this->redirect('/admin/usuarios');
         }
 
-        $this->session->flash('success', 'Permissoes e configuracoes do usuario atualizadas.');
+        $this->session->flash('success', 'Permissões e configurações do usuário atualizadas.');
         $this->redirect('/admin/usuarios');
     }
 
@@ -121,7 +121,7 @@ final class AdminUserController extends BaseAdminController
         }
 
         if (filter_var($payload['email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors[] = 'Email invalido.';
+            $errors[] = 'E-mail inválido.';
         }
 
         if (strlen((string) $payload['password']) < 6) {
@@ -129,7 +129,7 @@ final class AdminUserController extends BaseAdminController
         }
 
         if (($payload['permissions'] ?? []) === []) {
-            $errors[] = 'Selecione pelo menos uma permissao para o usuario.';
+            $errors[] = 'Selecione pelo menos uma permissão para o usuário.';
         }
 
         return $errors;
@@ -144,7 +144,7 @@ final class AdminUserController extends BaseAdminController
         }
 
         if (filter_var($payload['email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors[] = 'Email invalido.';
+            $errors[] = 'E-mail inválido.';
         }
 
         if ($payload['new_password'] !== '' && strlen((string) $payload['new_password']) < 6) {
@@ -152,7 +152,7 @@ final class AdminUserController extends BaseAdminController
         }
 
         if ($requirePermissions && ($payload['permissions'] ?? []) === []) {
-            $errors[] = 'Selecione pelo menos uma permissao para o usuario.';
+            $errors[] = 'Selecione pelo menos uma permissão para o usuário.';
         }
 
         return $errors;

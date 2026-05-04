@@ -24,7 +24,7 @@ function bindReportEvents() {
     document.getElementById('downloadPayloadBtn')?.addEventListener('click', downloadPayload);
     document.getElementById('printReportBtn')?.addEventListener('click', () => {
         if (isPrintBlocked()) {
-            alert('Impressao/PDF bloqueados para este relatorio.');
+            alert('Impressão/PDF bloqueados para este relatório.');
             return;
         }
         window.print();
@@ -43,7 +43,7 @@ function bindReportEvents() {
         }
         event.preventDefault();
         if (!hasShownCopyRestrictionAlert) {
-            alert('Copia de conteudo bloqueada para este relatorio.');
+            alert('Cópia de conteúdo bloqueada para este relatório.');
             hasShownCopyRestrictionAlert = true;
         }
     });
@@ -69,7 +69,7 @@ function bindReportEvents() {
 
         if (key === 'p' && isPrintBlocked()) {
             event.preventDefault();
-            alert('Impressao/PDF bloqueados para este relatorio.');
+            alert('Impressão/PDF bloqueados para este relatório.');
         }
     });
 }
@@ -234,7 +234,7 @@ function renderValidityInfo() {
             countdown.textContent = 'Prazo expirado';
             if (notice) {
                 notice.classList.add('is-locked');
-                notice.textContent = 'Prazo de 90 dias encerrado. O relatorio esta em modo consulta: copiar e gerar PDF/exportacoes estao bloqueados.';
+                notice.textContent = 'Prazo de 90 dias encerrado. O relatório está em modo consulta: copiar e gerar PDF/exportações estão bloqueados.';
             }
             currentAccessState.isExpired = true;
             currentAccessState.remainingMs = 0;
@@ -245,10 +245,10 @@ function renderValidityInfo() {
         if (notice) {
             if (FORCE_BLOCK_COPY_AND_PRINT) {
                 notice.classList.add('is-locked');
-                notice.textContent = `Copia e impressao/PDF estao bloqueados. Restam ${formatCountdown(msLeft)} para expiracao total do relatorio.`;
+                notice.textContent = `Cópia e impressão/PDF estão bloqueados. Restam ${formatCountdown(msLeft)} para expiração total do relatório.`;
             } else {
                 notice.classList.remove('is-locked');
-                notice.textContent = `Relatorio em periodo ativo. Restam ${formatCountdown(msLeft)} para operacoes de exportacao e copia.`;
+                notice.textContent = `Relatório em período ativo. Restam ${formatCountdown(msLeft)} para operações de exportação e cópia.`;
             }
         }
         currentAccessState.isExpired = false;
@@ -299,9 +299,9 @@ function renderBrandingSummary(entries) {
         `).join('');
     }
 
-    const primaryFont = typography.primaryFontName || typography.fontName || 'Nao definido';
-    const secondaryFont = typography.secondaryFontName || typography.secondary || 'Nao definido';
-    const tone = typography.tone || typography.pairingStyle || 'Nao definido';
+    const primaryFont = typography.primaryFontName || typography.fontName || 'Não definido';
+    const secondaryFont = typography.secondaryFontName || typography.secondary || 'Não definido';
+    const tone = typography.tone || typography.pairingStyle || 'Não definido';
     const source = typography.source || integration.source || 'sistema';
 
     typographyTarget.innerHTML = `
@@ -310,7 +310,7 @@ function renderBrandingSummary(entries) {
             <strong>${escapeHtml(primaryFont)}</strong>
         </article>
         <article class="report-typography-line">
-            <small>Fonte secundaria</small>
+            <small>Fonte secundária</small>
             <strong>${escapeHtml(secondaryFont)}</strong>
         </article>
         <article class="report-typography-line">
@@ -318,7 +318,7 @@ function renderBrandingSummary(entries) {
             <strong>${escapeHtml(tone)}</strong>
         </article>
         <article class="report-typography-line">
-            <small>Origem da sincronizacao</small>
+            <small>Origem da sincronização</small>
             <strong>${escapeHtml(source)}</strong>
         </article>
     `;
@@ -343,7 +343,7 @@ function getIntegrationContext(entries) {
 
         return {
             colors: colors.map((hex, index) => ({
-                role: ['Primaria', 'Secundaria', 'Acento', 'Neutra', 'Apoio 1', 'Apoio 2'][index] || `Apoio ${index - 1}`,
+                role: ['Primária', 'Secundária', 'Acento', 'Neutra', 'Apoio 1', 'Apoio 2'][index] || `Apoio ${index - 1}`,
                 hex
             })),
             typography,
@@ -354,15 +354,15 @@ function getIntegrationContext(entries) {
     const latestEntry = entries[0] || {};
     const fallbackColors = [];
     const branding = latestEntry.branding || {};
-    if (branding.colors?.primary) fallbackColors.push({ role: 'Primaria', hex: branding.colors.primary });
-    if (branding.colors?.secondary) fallbackColors.push({ role: 'Secundaria', hex: branding.colors.secondary });
+    if (branding.colors?.primary) fallbackColors.push({ role: 'Primária', hex: branding.colors.primary });
+    if (branding.colors?.secondary) fallbackColors.push({ role: 'Secundária', hex: branding.colors.secondary });
     if (branding.colors?.text) fallbackColors.push({ role: 'Texto', hex: branding.colors.text });
 
     return {
         colors: fallbackColors,
         typography: {
-            primaryFontName: branding.typography?.fontName || 'Nao definido',
-            secondaryFontName: branding.typography?.fontName || 'Nao definido',
+            primaryFontName: branding.typography?.fontName || 'Não definido',
+            secondaryFontName: branding.typography?.fontName || 'Não definido',
             source: 'mockups'
         },
         source: 'mockups'
@@ -394,7 +394,7 @@ function renderReportCard(entry) {
                 <div class="report-card-actions">
                     <label class="control-check">
                         <input type="checkbox" class="report-include" data-id="${escapeHtml(entry.id)}" ${checked} ${lockAttr}>
-                        Incluir no relatorio
+                        Incluir no relatório
                     </label>
                     <button type="button" class="btn-secondary report-remove" data-id="${escapeHtml(entry.id)}" ${lockAttr}>
                         <i class="fas fa-trash"></i>
@@ -443,11 +443,11 @@ function handleGridChange(event) {
 
 function clearSavedMockups() {
     if (isReadOnlyExpired()) {
-        alert('Prazo expirado. O relatorio esta em modo consulta e nao permite limpeza dos registros.');
+        alert('Prazo expirado. O relatório está em modo consulta e não permite limpeza dos registros.');
         return;
     }
 
-    const confirmed = window.confirm('Deseja realmente limpar todos os mockups salvos para relatorio?');
+    const confirmed = window.confirm('Deseja realmente limpar todos os mockups salvos para relatório?');
     if (!confirmed) {
         return;
     }
@@ -521,7 +521,7 @@ function refreshPayload() {
 
 async function copyPayload() {
     if (isCopyBlocked()) {
-        alert('Copia do relatorio foi desativada.');
+        alert('Cópia do relatório foi desativada.');
         return;
     }
 
@@ -532,7 +532,7 @@ async function copyPayload() {
 
     try {
         await navigator.clipboard.writeText(field.value);
-        alert('Resumo copiado para a area de transferencia.');
+        alert('Resumo copiado para a área de transferência.');
     } catch (error) {
         field.select();
         document.execCommand('copy');
@@ -542,13 +542,13 @@ async function copyPayload() {
 
 function downloadPayload() {
     if (isReadOnlyExpired()) {
-        alert('Prazo expirado. Exportacao foi desativada para este relatorio.');
+        alert('Prazo expirado. Exportação foi desativada para este relatório.');
         return;
     }
 
     const payload = buildReportPayload(true);
     if (!payload.items.length) {
-        alert('Selecione ao menos um mockup para baixar o relatorio.');
+        alert('Selecione ao menos um mockup para baixar o relatório.');
         return;
     }
 
@@ -556,7 +556,7 @@ function downloadPayload() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `relatorio-mockups-orcamento-${formatDateForFile(new Date())}.json`;
+    a.download = `relatório-mockups-orçamento-${formatDateForFile(new Date())}.json`;
     a.click();
     URL.revokeObjectURL(url);
 }
