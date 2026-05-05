@@ -3,6 +3,7 @@ const WORK_INFO_STORAGE_KEY = 'mockuphub_work_info_v1';
 const OG_SETTINGS_STORAGE_KEY = 'ogImageSettings';
 const BRAND_MANUAL_CACHE_KEY = 'brand_manual_mvp_latest_v1';
 const BRAND_MANUAL_TEMPLATE_KEY = 'brand_manual_mvp_template_v1';
+const BRAND_MANUAL_PDF_TEMPLATE_KEY = 'brand_manual_mvp_pdf_template_v1';
 const BRAND_MANUAL_CUSTOM_TEMPLATE_KEY = 'brand_manual_mvp_custom_templates_v1';
 const BRAND_MANUAL_CUSTOM_TEMPLATE_EXPORT_SCHEMA = 'brand_manual_custom_templates_v1';
 const BRAND_MANUAL_CUSTOM_TEMPLATE_BACKUP_KEY = 'brand_manual_mvp_custom_templates_backup_v1';
@@ -421,7 +422,7 @@ let currentContext = {
         source: 'init',
         updatedAt: '',
         pages: 0,
-        message: 'Aguardando primeira sincronizacao.'
+        message: 'Aguardando primeira sincronização.'
     },
     designStudio: null,
     designStudioEnabled: false,
@@ -482,6 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fillFigmaNamingConfigFields(currentContext.figmaNamingConfig);
     renderPreviewSyncBadge();
     restoreTemplateSelection();
+    hydrateBrandManualPdfTemplateMode();
     refreshManual();
 });
 
@@ -521,7 +523,21 @@ function bindEvents() {
     });
 
     document.getElementById('downloadPdfBtn')?.addEventListener('click', () => {
+        const mode = readBrandManualPdfTemplateMode();
+        if (mode === 'mini') {
+            exportMiniBrandGuidePdf();
+            return;
+        }
         exportPdfBrandbookRender();
+    });
+
+    document.getElementById('brandManualPdfTemplate')?.addEventListener('change', (event) => {
+        const mode = persistBrandManualPdfTemplateMode(event?.target?.value);
+        syncBrandManualPdfActionButton(mode);
+        setStatus(
+            `Modelo PDF selecionado: ${mode === 'mini' ? 'Mini Brand Guide' : 'Brandbook Completo'}.`,
+            'ok'
+        );
     });
 
     document.getElementById('printTemplateBtn')?.addEventListener('click', () => {
@@ -1116,7 +1132,7 @@ function syncTemplatePaletteFromProject() {
         : [];
 
     if (!projectPalette.length) {
-        setStatus('O projeto ainda nao possui cores para aplicar no template.', 'warn');
+        setStatus('O projeto ainda não possui cores para aplicar no template.', 'warn');
         return;
     }
 
@@ -2033,7 +2049,7 @@ function createDefaultDesignElement(type = 'text', position = {}) {
             y: 240,
             w: 420,
             h: 180,
-            text: '"Marca forte nasce da consistencia visual."\\nEquipe Quotia',
+            text: '"Marca forte nasce da consistência visual."\\nEquipe Quotia',
             fontSize: 20,
             color: '#183760',
             bg: '#f4f8ff',
@@ -2059,7 +2075,7 @@ function createDefaultDesignElement(type = 'text', position = {}) {
             y: 450,
             w: 460,
             h: 150,
-            text: 'Antes | Depois\\nBaixa consistencia | Sistema unificado',
+            text: 'Antes | Depois\\nBaixa consistência | Sistema unificado',
             fontSize: 16,
             color: '#1a385f',
             bg: '#eef4ff',
@@ -3043,6 +3059,69 @@ function restoreTemplateSelection() {
         rerender: false,
         announce: false
     });
+}
+
+function hydrateBrandManualPdfTemplateMode() {
+    const select = document.getElementById('brandManualPdfTemplate');
+    if (!(select instanceof HTMLSelectElement)) {
+        return;
+    }
+    const mode = readBrandManualPdfTemplateMode();
+    select.value = mode;
+    syncBrandManualPdfActionButton(mode);
+}
+
+function normalizeBrandManualPdfTemplateMode(value) {
+    return String(value || '').trim().toLowerCase() === 'mini' ? 'mini' : 'full';
+}
+
+function readBrandManualPdfTemplateMode() {
+    try {
+        const stored = String(localStorage.getItem(BRAND_MANUAL_PDF_TEMPLATE_KEY) || '').trim().toLowerCase();
+        if (stored === 'mini') {
+            return 'mini';
+        }
+    } catch (error) {
+        // Sem bloqueio: fallback para o valor em tela.
+    }
+
+    const selectValue = String(document.getElementById('brandManualPdfTemplate')?.value || '').trim().toLowerCase();
+    return selectValue === 'mini' ? 'mini' : 'full';
+}
+
+function persistBrandManualPdfTemplateMode(value) {
+    const normalized = normalizeBrandManualPdfTemplateMode(value);
+    const select = document.getElementById('brandManualPdfTemplate');
+    if (select instanceof HTMLSelectElement) {
+        select.value = normalized;
+    }
+
+    if (typeof localStorage !== 'undefined') {
+        try {
+            localStorage.setItem(BRAND_MANUAL_PDF_TEMPLATE_KEY, normalized);
+        } catch (error) {
+            // Sem bloqueio.
+        }
+    }
+    return normalized;
+}
+
+function syncBrandManualPdfActionButton(mode) {
+    const button = document.getElementById('downloadPdfBtn');
+    if (!(button instanceof HTMLButtonElement)) {
+        return;
+    }
+    const normalized = normalizeBrandManualPdfTemplateMode(mode);
+    const isMini = normalized === 'mini';
+    const label = isMini ? 'Baixar Mini PDF' : 'Baixar PDF Completo';
+    const title = isMini
+        ? 'Exportar Mini Brand Guide em PDF'
+        : 'Exportar Brandbook Completo em PDF';
+
+    button.textContent = label;
+    button.setAttribute('aria-label', title);
+    button.setAttribute('title', title);
+    button.dataset.pdfMode = normalized;
 }
 
 function setActiveTemplate(templateId, options = {}) {
@@ -8058,7 +8137,7 @@ function refreshManual() {
             status: 'warn',
             source: 'manual_refresh',
             pages: sheets.length,
-            message: `${issues} alerta(s) de integracao detectado(s).`
+            message: `${issues} alerta(s) de integração detectado(s).`
         });
         setStatus(`Manual atualizado com ${issues} alerta(s) de integração.`, 'warn');
         return;
@@ -10084,6 +10163,140 @@ function renderPayload(payload) {
     field.value = JSON.stringify(payload, null, 2);
 }
 
+function exportMiniBrandGuidePdf() {
+    if (!currentContext.payload) {
+        setStatus('Gere o manual antes de exportar PDF.', 'warn');
+        return;
+    }
+
+    const jsPDFCtor = window.jspdf?.jsPDF;
+    if (!jsPDFCtor) {
+        setStatus('Biblioteca de PDF indisponível no momento.', 'warn');
+        return;
+    }
+
+    const payload = currentContext.payload;
+    const doc = new jsPDFCtor({ unit: 'pt', format: 'a4' });
+    const pageWidth = 595.28;
+    const pageHeight = 841.89;
+    const margin = 40;
+    const contentWidth = pageWidth - (margin * 2);
+    const project = payload.identity?.project || {};
+    const colors = Array.isArray(payload.identity?.colors) ? payload.identity.colors : [];
+    const typography = payload.identity?.typography || {};
+    const notes = (Array.isArray(payload.integrationNotes) ? payload.integrationNotes : [])
+        .map((item) => String(item?.message || '').trim())
+        .filter(Boolean)
+        .slice(0, 4);
+    let y = 44;
+
+    doc.setFillColor(14, 75, 215);
+    doc.rect(0, 0, pageWidth, 160, 'F');
+    doc.setFillColor(10, 58, 168);
+    doc.rect(0, 156, pageWidth, 4, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13.5);
+    doc.text('QUOTIA | Brand Manual Report', margin, 38);
+    doc.setFontSize(28);
+    doc.text('Mini Brand Guide', margin, 82);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10.8);
+    doc.text('Versão resumida para alinhamento rápido do projeto.', margin, 104);
+
+    doc.setFillColor(219, 234, 254);
+    doc.roundedRect(pageWidth - margin - 170, 26, 170, 30, 8, 8, 'F');
+    doc.setTextColor(30, 58, 138);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text(`Gerado em ${formatDate(payload.generatedAt)}`, pageWidth - margin - 160, 45);
+
+    y = 196;
+    doc.setFillColor(248, 251, 255);
+    doc.setDrawColor(207, 222, 246);
+    doc.roundedRect(margin, y, contentWidth, 210, 12, 12, 'FD');
+
+    doc.setTextColor(30, 58, 138);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('Projeto', margin + 14, y + 24);
+    doc.setTextColor(17, 24, 39);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10.1);
+    const projectRows = [
+        `Título: ${project.title || 'Não definido'}`,
+        `Tag principal: ${project.mainTag || '-'}`,
+        `Descricao: ${project.description || '-'}`,
+        `Tags: ${(project.supportingTags || []).join(', ') || '-'}`
+    ];
+    let projectRowsY = y + 44;
+    projectRows.forEach((line) => {
+        const lines = doc.splitTextToSize(line, contentWidth - 28).slice(0, 2);
+        lines.forEach((chunk) => {
+            doc.text(chunk, margin + 14, projectRowsY);
+            projectRowsY += 14;
+        });
+    });
+
+    const confidenceText = `Template ativo: ${payload.template?.name || getTemplatePreset(currentContext.activeTemplateId).name}`;
+    doc.setTextColor(30, 58, 138);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10.2);
+    doc.text(confidenceText, margin + 14, Math.min(y + 186, projectRowsY + 8));
+
+    y = 426;
+    y = writeSectionTitle(doc, 'Paleta essencial', margin, y);
+    if (!colors.length) {
+        y = writeParagraph(doc, ['Sem cores consolidadas no momento.'], margin, y, 13, pageWidth);
+    } else {
+        colors.slice(0, 4).forEach((item) => {
+            y = ensurePageSpace(doc, y, 24, margin);
+            const rgb = hexToRgb(item.hex);
+            doc.setFillColor(rgb.r, rgb.g, rgb.b);
+            doc.rect(margin, y - 10, 16, 16, 'F');
+            doc.setTextColor(17, 24, 39);
+            doc.text(`${item.role}: ${item.hex}`, margin + 24, y + 2);
+            y += 20;
+        });
+    }
+
+    y += 2;
+    y = writeSectionTitle(doc, 'Tipografia', margin, y);
+    y = writeParagraph(
+        doc,
+        [
+            `Fonte principal: ${typography.primaryFontName || '-'}`,
+            `Fonte secundaria: ${typography.secondaryFontName || '-'}`,
+            `Pairing: ${typography.pairingStyle || '-'}`,
+            `Tom: ${typography.tone || '-'}`
+        ],
+        margin,
+        y,
+        13,
+        pageWidth
+    );
+
+    y += 2;
+    y = writeSectionTitle(doc, 'Próximas ações', margin, y);
+    const fallbackActions = [
+        'Validar o render web do brandbook com o time.',
+        'Aplicar tokens de cor e tipografia no projeto principal.',
+        'Conferir mockups e canais prioritarios antes da entrega.'
+    ];
+    y = writeParagraph(doc, (notes.length ? notes : fallbackActions).map((item) => `- ${item}`), margin, y, 13, pageWidth);
+
+    doc.setDrawColor(212, 224, 245);
+    doc.line(40, pageHeight - 34, pageWidth - 40, pageHeight - 34);
+    doc.setTextColor(75, 98, 132);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.8);
+    doc.text('Quotia Brand Manual | Mini Brand Guide', 40, pageHeight - 19);
+    doc.text('Página 1/1', pageWidth - 40, pageHeight - 19, { align: 'right' });
+
+    doc.save(`manual-marca-mvp-mini-${formatDateForFile(new Date())}.pdf`);
+    setStatus('PDF mini exportado com sucesso.', 'ok');
+}
+
 async function exportPdfBrandbookRender() {
     if (!currentContext.payload || !currentContext.brandbookSheets.length) {
         setStatus('Gere o brandbook antes de exportar PDF.', 'warn');
@@ -10099,12 +10312,12 @@ async function exportPdfBrandbookRender() {
     const renderFn = window.html2canvas;
     const sheetNodes = Array.from(document.querySelectorAll('#brandbookPreview .brandbook-sheet'));
     if (typeof renderFn !== 'function' || !sheetNodes.length) {
-        setStatus('Renderizador visual indisponível. Gerando PDF resumo textual.', 'warn');
+        setStatus('Renderizador visual indisponível. Gerando PDF resumo textual completo.', 'warn');
         exportPdfSummary();
         return;
     }
 
-    setStatus('Gerando PDF visual do brandbook. Aguarde...', 'warn');
+    setStatus('Gerando PDF visual do brandbook completo. Aguarde...', 'warn');
     const doc = new jsPDFCtor({
         unit: 'pt',
         format: 'a4',
@@ -10145,15 +10358,15 @@ async function exportPdfBrandbookRender() {
             }
         }
 
-        doc.save(`brandbook-render-${formatDateForFile(new Date())}.pdf`);
-        setStatus('PDF visual exportado com sucesso.', 'ok');
+        doc.save(`brandbook-render-full-${formatDateForFile(new Date())}.pdf`);
+        setStatus('PDF visual exportado com sucesso (Brandbook Completo).', 'ok');
     } catch (error) {
-        setStatus('Falha ao gerar PDF visual. Exportando resumo textual como fallback.', 'warn');
+        setStatus('Falha ao gerar PDF visual. Exportando resumo textual completo como fallback.', 'warn');
         exportPdfSummary();
     }
 }
 
-function exportPdfSummary() {
+function exportPdfSummary(mode = 'full') {
     if (!currentContext.payload) {
         setStatus('Gere o manual antes de exportar PDF.', 'warn');
         return;
@@ -10289,8 +10502,9 @@ function exportPdfSummary() {
         y = writeParagraph(doc, [`- ${note.message}`], margin, y, lineGap, pageWidth);
     });
 
-    doc.save(`manual-marca-mvp-${formatDateForFile(new Date())}.pdf`);
-    setStatus('PDF resumo exportado com sucesso.', 'ok');
+    const normalizedMode = String(mode || '').trim().toLowerCase() === 'mini' ? 'mini' : 'full';
+    doc.save(`manual-marca-mvp-${normalizedMode}-${formatDateForFile(new Date())}.pdf`);
+    setStatus(`PDF resumo exportado com sucesso (${normalizedMode === 'mini' ? 'Mini Brand Guide' : 'Brandbook Completo'}).`, 'ok');
 }
 
 function writeSectionTitle(doc, title, margin, y) {
@@ -10428,7 +10642,7 @@ function renderPreviewSyncBadge() {
             source: 'init',
             updatedAt: '',
             pages: 0,
-            message: 'Aguardando primeira sincronizacao.'
+            message: 'Aguardando primeira sincronização.'
         };
 
     const status = normalizePreviewSyncStatus(state.status);
@@ -10447,12 +10661,12 @@ function renderPreviewSyncBadge() {
                 : 'Sync: aguardando';
         badge.setAttribute(
             'title',
-            `${message} | Origem: ${source} | Ultima atualizacao: ${updatedAtLabel} | Paginas: ${pages}`
+            `${message} | Origem: ${source} | Última atualização: ${updatedAtLabel} | Páginas: ${pages}`
         );
     }
 
     if (meta) {
-        meta.textContent = `Ultima atualizacao: ${updatedAtLabel} | Origem: ${source} | Paginas: ${pages}`;
+        meta.textContent = `Última atualização: ${updatedAtLabel} | Origem: ${source} | Páginas: ${pages}`;
     }
 }
 
@@ -10489,7 +10703,7 @@ function runPreviewSyncTest() {
     updatePreviewSyncBadge({
         status: 'idle',
         source: 'manual_test',
-        message: 'Executando teste manual de sincronizacao.'
+        message: 'Executando teste manual de sincronização.'
     });
 
     refreshBrandbookPreviewFromBuilder({

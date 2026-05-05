@@ -1,4 +1,4 @@
-﻿# Integracao Das Ferramentas Para Manual Da Marca
+# Integracao Das Ferramentas Para Manual Da Marca
 
 ## Objetivo
 Mapear as ferramentas atuais do projeto e definir um caminho pratico para interligar tudo em um relatorio completo de Manual da Marca / Identidade Visual.
@@ -9,8 +9,19 @@ Mapear as ferramentas atuais do projeto e definir um caminho pratico para interl
 - Template Studio MVP implementado em 2026-04-20 com 3 temas visuais e geracao automatica de 8 paginas.
 - Endpoint de download seguro implementado em 2026-04-20: `/admin/orcamentos/{id}/manual-marca.json`.
 - Tabela `brand_manual_reports` adicionada com upgrade dedicado (`database/upgrade_brand_manual_mvp.php`).
+- Revisão PT-BR + normalização UTF-8 aplicada em 2026-05-04 nas interfaces de apoio ao fluxo integrado.
+- Camada de compatibilidade visual/mobile consolidada em 2026-05-05 para padronizacao de leitura, contraste e comportamento responsivo entre ferramentas.
 - Documentacao tecnica detalhada da entrega em:
   - `docs/MVP_MANUAL_MARCA_IMPLEMENTACAO.md`
+
+## Atualizacao desta documentacao (05/05/2026)
+- Registro da consolidacao de UX responsiva e legibilidade entre ferramentas administrativas.
+- Documentado o uso da folha compartilhada `admin/tools/compatibility.css` como camada de convergencia visual.
+- Confirmada preservacao de cores semanticas para status tecnicos e blocos de qualidade.
+
+## Atualizacao anterior (04/05/2026)
+- Registro do ciclo de correcao de acentuacao e consistencia textual.
+- Mantidas as chaves tecnicas internas (ex.: `confianca`, `avaliacao`) para evitar quebra de integracao entre ferramentas.
 
 ## Diagnostico Atual
 

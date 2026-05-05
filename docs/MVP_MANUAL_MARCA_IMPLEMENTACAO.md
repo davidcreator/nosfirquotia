@@ -5,6 +5,18 @@
 - 2026-04-19: evolucao para persistencia backend e vinculo direto ao fluxo de `/admin/orcamentos/{id}`.
 - 2026-04-20: implementacao do `Template Studio` com preview de brandbook em 8 paginas, impressao e export HTML standalone.
 - 2026-04-20: endpoint admin para download seguro do JSON persistido do manual da marca por solicitacao.
+- 2026-05-04: revisao de linguagem (PT-BR) e padronizacao UTF-8 nas interfaces e mensagens das ferramentas integradas.
+- 2026-05-05: consolidacao final de responsividade mobile e legibilidade nas ferramentas via `admin/tools/compatibility.css`, com preservacao de cores semanticas e contraste do tema Quotia.
+
+## Atualizacao desta documentacao (05/05/2026)
+- Inclui registro da consolidacao visual/mobile e da camada de compatibilidade compartilhada.
+- Formaliza os ajustes de contraste, espacos e tipografia nas ferramentas para reduzir divergencia entre layouts.
+- Preserva regras semanticas de cor em blocos de status/qualidade e blocos OG com texto branco.
+- Confirma validacoes tecnicas de consistencia de CSS (estrutura e regressao visual basica).
+
+## Atualizacao anterior (04/05/2026)
+- Inclui registro do ciclo de padronizacao textual/encoding.
+- Confirma validacoes tecnicas executadas apos os ajustes (`php -l` e `node --check`).
 
 ## Objetivo desta frente
 Disponibilizar um fluxo funcional de manual da marca com:
@@ -96,7 +108,7 @@ Disponibilizar um fluxo funcional de manual da marca com:
   - persiste manual quando payload informado;
   - unifica mensagens de warning para nao sobrescrever alertas.
 
-## Integrações de UI
+## Integracoes de UI
 
 ### Area de ferramentas
 - Cadastro da ferramenta no catalogo:
@@ -190,7 +202,7 @@ Disponibilizar um fluxo funcional de manual da marca com:
   - export HTML gera arquivo standalone com as paginas renderizadas
 
 ## Limitacoes conhecidas (estado atual)
-- Persistencia de captura ainda depende da sessao local para gerar payload inicial (fonte primária continua em `localStorage`).
+- Persistencia de captura ainda depende da sessao local para gerar payload inicial (fonte primaria continua em `localStorage`).
 - Nao existe versionamento historico por solicitacao (a tabela atual guarda ultima versao por `quote_request_id`).
 - Nao ha exibicao do manual para o cliente no portal (`cliente/*`) nesta fase.
 - `bgremove` e `ocimage` ainda nao publicam de forma nativa no `AQBrandKit` (OG entra via `ogImageSettings`).

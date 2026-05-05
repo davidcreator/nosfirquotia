@@ -653,7 +653,7 @@ class ColorPaletteGenerator {
                 description: 'Contraste forte para destaque de oferta, preço e botões de conversão.'
             },
             health: {
-                label: 'Saude e Bem-estar',
+                label: 'Saúde e Bem-estar',
                 rule: 'analogous',
                 spread: 24,
                 adjustments: { hue: 20, saturation: -8, lightness: 6 },
@@ -894,7 +894,7 @@ class ColorPaletteGenerator {
                 return [
                     {
                         label: 'Product-Led Visuals',
-                        value: `${roleMap.primary.toUpperCase()} com gradiente tecnico`,
+                        value: `${roleMap.primary.toUpperCase()} com gradiente técnico`,
                         detail: 'Tendencia forte em plataformas B2B, IA aplicada e analytics.'
                     },
                     {

@@ -1651,7 +1651,7 @@ body.aq-tool-mockups .work-form-group textarea:focus {
     }
 
     body.report-print-block::before {
-        content: "Impressao/PDF bloqueados para este relatorio.";
+        content: "Impressão/PDF bloqueados para este relatório.";
         visibility: visible !important;
         position: fixed;
         inset: 0;

@@ -3110,6 +3110,26 @@ textarea {
     gap: 8px;
 }
 
+.pdf-template-control {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #36517a;
+    min-width: 186px;
+}
+
+.pdf-template-control select {
+    border: 1px solid #bfd0f0;
+    border-radius: 10px;
+    padding: 0.46rem 0.58rem;
+    background: #eff6ff;
+    color: #1a3d79;
+    font: inherit;
+    font-size: 0.79rem;
+}
+
 .icon-toolbar {
     gap: 6px;
 }

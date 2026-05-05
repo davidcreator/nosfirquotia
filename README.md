@@ -2,6 +2,24 @@
 
 Sistema web para solicitacao e geracao de orcamentos na area de Design, construido em PHP com arquitetura MVCL.
 
+## Atualizacao recente (05/05/2026)
+
+- Consolidacao da padronizacao visual e de legibilidade mobile nas ferramentas administrativas.
+- Ajustes centralizados em `admin/tools/compatibility.css` para contraste, tipografia e espacos em telas pequenas.
+- Preservacao das cores semanticas (status/qualidade) e das variacoes OG onde o contexto visual exige destaque.
+- Revisao de seguranca de estilo para evitar regressao em blocos sensiveis do `brandbook`, `finalframe`, `brandmanual`, `mockups` e `ocimage`.
+- Documentacao tecnica atualizada para refletir este ciclo.
+
+## Atualizacao anterior (04/05/2026)
+
+- Revisao textual nas telas administrativas e ferramentas para padronizacao PT-BR.
+- Normalizacao de encoding UTF-8 em arquivos criticos de interface.
+- Correcao de acentuacao em rotulos, mensagens, titulos e blocos de relatorio.
+- Validacao tecnica apos ajustes:
+  - `php -l` nos arquivos PHP alterados.
+  - `node --check` nos arquivos JavaScript alterados.
+- Documentacao tecnica atualizada para refletir esse ciclo de ajustes.
+
 ## Objetivo do sistema
 
 O cliente **nao monta orcamento** direto.  

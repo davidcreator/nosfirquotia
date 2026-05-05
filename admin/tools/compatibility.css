@@ -736,3 +736,222 @@ body.aq-tool-fluid .aq-workflow-hint {
         width: 100%;
     }
 }
+
+/* Mobile legibility polish across tools (Font Advisor has dedicated tuning) */
+@media (max-width: 980px) {
+    body.aq-tool-coloradvisor :is(.summary, .confidence-meta, .export-status, .swatch-role, .swatch-meta) {
+        font-size: 0.84rem !important;
+        line-height: 1.36 !important;
+        color: #415d84 !important;
+    }
+
+    body.aq-tool-coloradvisor :is(.confidence-label, .score-table th) {
+        font-size: 0.74rem !important;
+        line-height: 1.32 !important;
+        color: #36547d !important;
+    }
+
+    body.aq-tool-coloradvisor :is(.notes, .confidence-list, .score-table td) {
+        font-size: 0.83rem !important;
+        line-height: 1.42 !important;
+    }
+
+    body.aq-tool-colorpalette :is(.brand-sync-status, .workflow-head p, .workflow-step span, .workflow-step em, .wheel-hint, .saved-theme-meta, .conflict-suggestion-meta, .vision-conflicts, .vision-swatch-code, .conflict-suggestion-chip, .contrast-inline, .contrast-badge) {
+        font-size: 0.82rem !important;
+        line-height: 1.38 !important;
+        color: #425f87 !important;
+    }
+
+    body.aq-tool-colorpalette :is(.insight-item .insight-meta, .role-item-meta small, .vision-lock small, .gradient-code) {
+        font-size: 0.8rem !important;
+        line-height: 1.36 !important;
+        color: #4b668c !important;
+    }
+
+    body.aq-tool-bgremove :is(.subtitle, .hero-subtitle, .upload-info, .tolerance-labels, .preset-controls .preset-help, .processing-elapsed, .result-toolbar-text, .footer) {
+        font-size: 0.84rem !important;
+        line-height: 1.36 !important;
+        color: #415d84 !important;
+    }
+
+    body.aq-tool-bgremove :is(.fine-controls .fine-control small, .smart-debug-list li, .smart-score-row, .result-block-title) {
+        font-size: 0.82rem !important;
+        line-height: 1.34 !important;
+    }
+
+    body.aq-tool-brandbook :is(.muted, .status-list li, .role-meta, .insight-card .meta, .insight-card p, .status-line, .mockup-item span, .detail-item, .detail-item small, .kpi-card small, .info-card small, .info-card p, .swatch-card code, .mockup-badge) {
+        font-size: 0.84rem !important;
+        line-height: 1.36 !important;
+        color: #425f87 !important;
+    }
+
+    body.aq-tool-finalframe :is(.status-list li, .status-line, .history-meta, .history-head small, .quality-factor p, .quality-factor-head small, .detail-item, .detail-item small, .kpi-card small, .info-card small, .info-card p, .history-empty) {
+        font-size: 0.84rem !important;
+        line-height: 1.36 !important;
+        color: #425f87 !important;
+    }
+
+    body.aq-tool-brandmanual :is(.muted, .sync-meta, .palette-meta small, .type-line small, .og-line small, .notes li, .status-line, .meta-tag, .sync-badge, .builder-meta, .empty-note, .sheet-color-meta, .designer-shortcuts-note, .canvas-block-note, .canvas-block-meta, .designer-ribbon-group-label, .designer-shape-gallery-title, .designer-insert-library-title, .designer-office-main-copy small, .designer-office-main-copy strong, .pdf-template-control) {
+        font-size: 0.84rem !important;
+        line-height: 1.36 !important;
+        color: #415d84 !important;
+    }
+
+    body.aq-tool-mockups :is(.upload-option-note, .upload-validation-status, .upload-validation-meta p, .upload-status, .upload-preview-meta span, .mockup-description, .stat-label, .meta-badge, .editor-hint, .report-card-meta, .report-export-hint, .report-color-meta, .report-typography-summary, .report-restriction-note, .results-hero-description, .results-status, .results-card-meta, .results-card-old-price, .quality-badge, .results-tag, .results-download-btn, .mockup-badge, .nav-count) {
+        font-size: 0.82rem !important;
+        line-height: 1.36 !important;
+        color: #425f87 !important;
+    }
+
+    body.aq-tool-mockups .upload-validation-status.status-pass {
+        color: #166534 !important;
+    }
+
+    body.aq-tool-mockups .upload-validation-status.status-fail {
+        color: #991b1b !important;
+    }
+
+    body.aq-tool-mockups :is(.upload-status.status-success, .upload-status.upload-status-intake.status-success) {
+        color: #d1fae5 !important;
+    }
+
+    body.aq-tool-mockups :is(.upload-status.status-error, .upload-status.upload-status-intake.status-error) {
+        color: #fecaca !important;
+    }
+
+    body.aq-tool-mockups .quality-badge {
+        color: #ffffff !important;
+    }
+
+    body.aq-tool-mockups .results-tag,
+    body.aq-tool-mockups .results-download-btn {
+        color: #3730a3 !important;
+    }
+
+    body.aq-tool-mockups .mockup-badge {
+        color: #2b4d78 !important;
+    }
+
+    body.aq-tool-ocimage :is(.facebook-time, .facebook-link-url, .facebook-link-description, .instagram-caption, .instagram-username-caption, .twitter-handle, .twitter-time, .twitter-card-description, .twitter-card-url, .pinterest-description, .pinterest-username, .upload-formats, .upload-details, .slider-value, .dimensions-info) {
+        font-size: 0.84rem !important;
+        line-height: 1.36 !important;
+        color: #425f87 !important;
+    }
+
+    body.aq-tool-ocimage .og-image .og-description {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    body.aq-tool-brandbook .status-line.ok,
+    body.aq-tool-brandmanual .status-line.ok {
+        color: #166534 !important;
+    }
+
+    body.aq-tool-brandbook .status-line.warn,
+    body.aq-tool-brandmanual .status-line.warn {
+        color: #a16207 !important;
+    }
+
+    body.aq-tool-brandbook .status-line.error,
+    body.aq-tool-brandmanual .status-line.error {
+        color: #991b1b !important;
+    }
+
+    body.aq-tool-finalframe .status-line.ok {
+        color: #1f8b63 !important;
+    }
+
+    body.aq-tool-finalframe .status-line.warn {
+        color: #9c6512 !important;
+    }
+
+    body.aq-tool-finalframe .status-line.error {
+        color: #c03642 !important;
+    }
+}
+
+@media (max-width: 680px) {
+    body.aq-tool-coloradvisor :is(.summary, .confidence-meta, .export-status, .swatch-role, .swatch-meta, .notes, .confidence-list, .score-table td) {
+        font-size: 0.86rem !important;
+        line-height: 1.4 !important;
+    }
+
+    body.aq-tool-colorpalette :is(.brand-sync-status, .workflow-head p, .workflow-step span, .workflow-step em, .wheel-hint, .saved-theme-meta, .conflict-suggestion-meta, .vision-conflicts, .insight-item .insight-meta, .role-item-meta small, .vision-lock small, .gradient-code, .vision-swatch-code, .conflict-suggestion-chip, .contrast-inline, .contrast-badge) {
+        font-size: 0.84rem !important;
+        line-height: 1.4 !important;
+    }
+
+    body.aq-tool-bgremove :is(.subtitle, .hero-subtitle, .upload-info, .tolerance-labels, .preset-controls .preset-help, .processing-elapsed, .result-toolbar-text, .footer, .fine-controls .fine-control small, .smart-debug-list li, .smart-score-row, .result-block-title) {
+        font-size: 0.84rem !important;
+        line-height: 1.4 !important;
+    }
+
+    body.aq-tool-brandbook :is(.muted, .status-list li, .role-meta, .insight-card .meta, .insight-card p, .status-line, .mockup-item span, .detail-item, .detail-item small, .kpi-card small, .info-card small, .info-card p, .swatch-card code, .mockup-badge),
+    body.aq-tool-finalframe :is(.status-list li, .status-line, .history-meta, .history-head small, .quality-factor p, .quality-factor-head small, .detail-item, .detail-item small, .kpi-card small, .info-card small, .info-card p, .history-empty),
+    body.aq-tool-brandmanual :is(.muted, .sync-meta, .palette-meta small, .type-line small, .og-line small, .notes li, .status-line, .meta-tag, .sync-badge, .builder-meta, .empty-note, .sheet-color-meta, .designer-shortcuts-note, .canvas-block-note, .canvas-block-meta, .designer-ribbon-group-label, .designer-shape-gallery-title, .designer-insert-library-title, .designer-office-main-copy small, .designer-office-main-copy strong, .pdf-template-control),
+    body.aq-tool-mockups :is(.upload-option-note, .upload-validation-status, .upload-validation-meta p, .upload-status, .upload-preview-meta span, .mockup-description, .stat-label, .meta-badge, .editor-hint, .report-card-meta, .report-export-hint, .report-color-meta, .report-typography-summary, .report-restriction-note, .results-hero-description, .results-status, .results-card-meta, .results-card-old-price, .quality-badge, .results-tag, .results-download-btn, .mockup-badge, .nav-count),
+    body.aq-tool-ocimage :is(.facebook-time, .facebook-link-url, .facebook-link-description, .instagram-caption, .instagram-username-caption, .twitter-handle, .twitter-time, .twitter-card-description, .twitter-card-url, .pinterest-description, .pinterest-username, .upload-formats, .upload-details, .slider-value, .dimensions-info) {
+        font-size: 0.84rem !important;
+        line-height: 1.4 !important;
+    }
+
+    body.aq-tool-mockups .upload-validation-status.status-pass {
+        color: #166534 !important;
+    }
+
+    body.aq-tool-mockups .upload-validation-status.status-fail {
+        color: #991b1b !important;
+    }
+
+    body.aq-tool-mockups :is(.upload-status.status-success, .upload-status.upload-status-intake.status-success) {
+        color: #d1fae5 !important;
+    }
+
+    body.aq-tool-mockups :is(.upload-status.status-error, .upload-status.upload-status-intake.status-error) {
+        color: #fecaca !important;
+    }
+
+    body.aq-tool-mockups .quality-badge {
+        color: #ffffff !important;
+    }
+
+    body.aq-tool-mockups .results-tag,
+    body.aq-tool-mockups .results-download-btn {
+        color: #3730a3 !important;
+    }
+
+    body.aq-tool-mockups .mockup-badge {
+        color: #2b4d78 !important;
+    }
+
+    body.aq-tool-ocimage .og-image .og-description {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    body.aq-tool-brandbook .status-line.ok,
+    body.aq-tool-brandmanual .status-line.ok {
+        color: #166534 !important;
+    }
+
+    body.aq-tool-brandbook .status-line.warn,
+    body.aq-tool-brandmanual .status-line.warn {
+        color: #a16207 !important;
+    }
+
+    body.aq-tool-brandbook .status-line.error,
+    body.aq-tool-brandmanual .status-line.error {
+        color: #991b1b !important;
+    }
+
+    body.aq-tool-finalframe .status-line.ok {
+        color: #1f8b63 !important;
+    }
+
+    body.aq-tool-finalframe .status-line.warn {
+        color: #9c6512 !important;
+    }
+
+    body.aq-tool-finalframe .status-line.error {
+        color: #c03642 !important;
+    }
+}

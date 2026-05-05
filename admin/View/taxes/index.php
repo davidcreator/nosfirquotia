@@ -31,7 +31,7 @@ if (!is_array($legalReferences)) {
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
             <h1 class="aq-admin-page-hero-title">Central fiscal</h1>
-            <p class="aq-admin-page-hero-subtitle">Par�metros tributários com foco em conformidade brasileira para apoiar a formação de orçamentos.</p>
+            <p class="aq-admin-page-hero-subtitle">Parâmetros tributários com foco em conformidade brasileira para apoiar a formação de orçamentos.</p>
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
@@ -185,7 +185,7 @@ if (!is_array($legalReferences)) {
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="checkRetentions" name="check_retentions" value="1" required <?= $checkRetentions ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="checkRetentions">Retenções na fonte revisadas conforme tomador, contrato e legislacao aplicavel.</label>
+                                <label class="form-check-label" for="checkRetentions">Retenções na fonte revisadas conforme tomador, contrato e legislação aplicável.</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="checkNfse" name="check_nfse" value="1" required <?= $checkNfse ? 'checked' : '' ?>>
@@ -242,9 +242,9 @@ if (!is_array($legalReferences)) {
 
                 <h3 class="h6 text-uppercase text-muted mb-2">Boas praticas</h3>
                 <ul class="small mb-0 ps-3">
-                    <li>Revisar regras municipais de ISS sempre que houver mudanca de tomador.</li>
+                    <li>Revisar regras municipais de ISS sempre que houver mudança de tomador.</li>
                     <li>Documentar retenções para evitar divergência entre proposta, nota e recebimento.</li>
-                    <li>Atualizar esta central sempre que houver mudanca de regime ou de legislacao aplicavel.</li>
+                    <li>Atualizar esta central sempre que houver mudança de regime ou de legislação aplicável.</li>
                 </ul>
             </div>
         </div>

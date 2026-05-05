@@ -15,7 +15,7 @@ final class ToolModel extends Model
     private const TOOL_METADATA = [
         'bgremove' => [
             'name' => 'Background Remover',
-            'description' => 'Remove fundo de imagens com opcoes de tolerancia, refinamento e exportacao.',
+            'description' => 'Remove fundo de imagens com opções de tolerância, refinamento e exportação.',
         ],
         'colorpalette' => [
             'name' => 'Color Palette',
@@ -23,27 +23,27 @@ final class ToolModel extends Model
         ],
         'coloradvisor' => [
             'name' => 'Color Strategy Advisor',
-            'description' => 'Assistente de decisao de cores para identidade visual com base em psicologia e marketing.',
+            'description' => 'Assistente de decisão de cores para identidade visual com base em psicologia e marketing.',
         ],
         'fontadvisor' => [
             'name' => 'Font Strategy Advisor',
-            'description' => 'Define pares tipograficos, hierarquia de fontes e recomendacoes para marca.',
+            'description' => 'Define pares tipográficos, hierarquia de fontes e recomendações para marca.',
         ],
         'brandmanual' => [
             'name' => 'Brand Manual Report (MVP)',
-            'description' => 'Consolida identidade visual (cores, tipografia, mockups e diretriz digital) em um unico relatorio.',
+            'description' => 'Consolida identidade visual (cores, tipografia, mockups e diretriz digital) em um único relatório.',
         ],
         'brandbook' => [
             'name' => 'BrandBook',
-            'description' => 'Relatorio robusto com paleta, tendencias, tipografia, OG e mockups sincronizados entre ferramentas.',
+            'description' => 'Relatório robusto com paleta, tendências, tipografia, OG e mockups sincronizados entre ferramentas.',
         ],
         'finalframe' => [
             'name' => 'FinalFrame',
-            'description' => 'Relatorio final consolidado com dados de identidade, OG, mockups e background remover.',
+            'description' => 'Relatório final consolidado com dados de identidade, OG, mockups e background remover.',
         ],
         'mockups' => [
             'name' => 'Mockups',
-            'description' => 'Criacao e edicao de mockups para apresentacoes de design.',
+            'description' => 'Criação e edição de mockups para apresentações de design.',
         ],
         'ocimage' => [
             'name' => 'OG Image Generator',

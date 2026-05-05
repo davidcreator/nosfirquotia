@@ -1,7 +1,7 @@
 <section class="aq-admin-page-hero">
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
-            <h1 class="aq-admin-page-hero-title">Solicitacoes e relatorios</h1>
+            <h1 class="aq-admin-page-hero-title">Solicitações e relatórios</h1>
             <p class="aq-admin-page-hero-subtitle">Gestão central de pedidos, status de análise e emissão de propostas.</p>
         </div>
         <div class="col-md-4">
@@ -15,7 +15,7 @@
 <div class="aq-admin-panel aq-admin-table-card">
     <div class="aq-admin-panel-header">
         <div>
-            <h2 class="aq-admin-panel-title">Lista de solicitacoes</h2>
+            <h2 class="aq-admin-panel-title">Lista de solicitações</h2>
             <p class="aq-admin-panel-subtitle">Acompanhe cada proposta ate a etapa de conclusao.</p>
         </div>
     </div>
@@ -27,7 +27,7 @@
                 <th>Projeto</th>
                 <th>Cliente</th>
                 <th>Email</th>
-                <th>Servicos</th>
+                <th>Serviços</th>
                 <th>Status</th>
                 <th>Relatório</th>
                 <th>Validade</th>

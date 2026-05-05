@@ -66,6 +66,19 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 </label>
 
                 <label>
+                    Persona principal
+                    <select id="persona">
+                        <option value="general">Geral</option>
+                        <option value="executive">Executiva e decisora</option>
+                        <option value="analytical">Analítica e racional</option>
+                        <option value="creative">Criativa e exploratória</option>
+                        <option value="pragmatic">Pragmática e objetiva</option>
+                        <option value="premium">Premium e sofisticada</option>
+                        <option value="youth">Jovem e dinâmica</option>
+                    </select>
+                </label>
+
+                <label>
                     Nível de excitação desejado
                     <select id="arousal">
                         <option value="low">Baixo (calmo)</option>
@@ -107,6 +120,34 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 </label>
 
                 <label>
+                    Segmento principal
+                    <select id="segment">
+                        <option value="general">Geral</option>
+                        <option value="saas">SaaS e Produtos Digitais</option>
+                        <option value="ecommerce">E-commerce e Varejo</option>
+                        <option value="health">Saúde e Bem-estar</option>
+                        <option value="education">Educação e Cursos</option>
+                        <option value="finance">Finanças e Seguros</option>
+                        <option value="fashion">Moda e Lifestyle</option>
+                        <option value="industrial">Indústria e B2B</option>
+                        <option value="hospitality">Hospitalidade e Eventos</option>
+                    </select>
+                </label>
+
+                <label>
+                    Canal principal
+                    <select id="channel">
+                        <option value="multichannel">Multicanal</option>
+                        <option value="digital">Site e Produto Digital</option>
+                        <option value="social">Redes Sociais</option>
+                        <option value="performance">Campanhas de Performance</option>
+                        <option value="editorial">Materiais Editoriais</option>
+                        <option value="retail">Varejo e PDV</option>
+                        <option value="presentation">Apresentações Institucionais</option>
+                    </select>
+                </label>
+
+                <label>
                     Quantidade de cores
                     <select id="paletteSize">
                         <option value="auto">Automático</option>
@@ -127,9 +168,17 @@ require_once dirname(__DIR__) . '/bootstrap.php';
         <section class="panel">
             <h2>Paleta Recomendada</h2>
             <p id="strategySummary" class="summary">Preencha o diagnóstico e gere sua estratégia.</p>
+            <div id="confidencePanel" class="confidence-panel" aria-live="polite"></div>
             <div class="export-actions">
                 <button type="button" id="exportJsonBtn" class="ghost">Exportar JSON</button>
                 <button type="button" id="exportPdfBtn">Exportar PDF</button>
+                <label class="pdf-template-control">
+                    Modelo PDF
+                    <select id="colorPdfTemplate">
+                        <option value="full">Brandbook Completo</option>
+                        <option value="mini">Mini Brand Guide</option>
+                    </select>
+                </label>
                 <span id="exportStatus" class="export-status"></span>
             </div>
             <div id="palettePreview" class="palette-preview"></div>
@@ -157,6 +206,23 @@ require_once dirname(__DIR__) . '/bootstrap.php';
             </div>
         </section>
 
+        <section class="panel split">
+            <div>
+                <h2>Teste A/B Sugerido</h2>
+                <ul id="abTestsList" class="notes"></ul>
+            </div>
+            <div>
+                <h2>Checklist de Entrega</h2>
+                <ul id="deliveryChecklist" class="notes"></ul>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Auditoria de Contraste por Canal</h2>
+            <p id="contrastAuditSummary" class="summary">Configure o diagnóstico para gerar a auditoria de contraste.</p>
+            <ul id="contrastAuditList" class="notes"></ul>
+        </section>
+
         <section class="panel">
             <h2>Base de Referência</h2>
             <ul class="sources">
@@ -172,4 +238,5 @@ require_once dirname(__DIR__) . '/bootstrap.php';
     <script src="../shared/workflow-assistant.js"></script>
 </body>
 </html>
+
 

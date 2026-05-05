@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
-                <span class="aq-admin-link-chip"><i class="fa-solid fa-tags"></i> Catalogo interno</span>
+                <span class="aq-admin-link-chip"><i class="fa-solid fa-tags"></i> Catálogo interno</span>
             </div>
         </div>
     </div>

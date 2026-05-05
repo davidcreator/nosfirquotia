@@ -177,7 +177,7 @@ final class TaxController extends BaseAdminController
             ]
         );
 
-        $this->session->flash('success', 'Central Fiscal atualizada com parametros de conformidade e checklist legal.');
+        $this->session->flash('success', 'Central Fiscal atualizada com parâmetros de conformidade e checklist legal.');
         $this->redirect('/admin/tributos');
     }
 

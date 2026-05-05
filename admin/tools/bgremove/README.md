@@ -1,98 +1,55 @@
-# Background Remover - Removedor de Fundo de Imagens
+# Background Remover
 
-Sistema completo para remoção de fundo de imagens usando PHP e JavaScript.
+Ferramenta para remoção de fundo de imagens com fluxo de upload, preview, ajustes e exportação.
 
-## 🚀 Recursos
+## Recursos
 
-- ✅ Upload de imagens (JPG, PNG)
-- ✅ Remoção automática de fundo
-- ✅ Controle de sensibilidade
-- ✅ Drag & drop
-- ✅ Interface responsiva
-- ✅ Multi-idioma (PT, EN, ES)
-- ✅ Download da imagem processada
-- ✅ Limpeza automática de arquivos antigos
-- ✅ Segurança e validações
+- Upload de imagens (`JPG`, `PNG`, `WEBP` quando suportado)
+- Pré-visualização da imagem original e resultado sem fundo
+- Processamento automático com presets
+- Ajustes finos de recorte e limpeza
+- Download do resultado processado
+- Suporte multilíngue (`PT-BR`, `EN`, `ES`)
 
-## 📋 Requisitos
+## Requisitos
 
-- PHP 7.4 ou superior
-- GD Library habilitada
-- Apache com mod_rewrite
-- Permissões de escrita nas pastas uploads/ e processed/
+- PHP 8.1+ (recomendado: 8.2+)
+- Extensão GD habilitada
+- Permissão de escrita nas pastas temporárias da ferramenta
 
-## 🔧 Instalação
+## Estrutura
 
-1. Clone ou baixe o projeto
-2. Configure o Apache/Nginx para apontar para a pasta do projeto
-3. Ajuste as permissões:
-   ```bash
-   chmod 755 uploads/
-   chmod 755 processed/
-   ```
-4. Edite `config.php` e ajuste BASE_URL
-5. Acesse via navegador
+- `index.php`: interface principal
+- `upload.php`: endpoint de upload/processamento
+- `download.php`: endpoint de download
+- `optimize.php`: otimizações auxiliares
+- `config.php`: configurações gerais
+- `includes/functions.php`: regras de recorte e pós-processamento
+- `assets/`: CSS/JS da interface
+- `uploads/` e `processed/`: arquivos temporários/resultado
 
-## 📁 Estrutura
+## Fluxo de uso
 
-- `index.php` - Página principal
-- `upload.php` - Processa upload e remoção
-- `download.php` - Gerencia downloads
-- `config.php` - Configurações
-- `assets/` - CSS e JavaScript
-- `uploads/` - Imagens enviadas (temp)
-- `processed/` - Imagens processadas
-- `language/` - Traduções
-- `includes/` - Componentes PHP
+1. Faça upload da imagem.
+2. Aguarde a análise inicial e geração do preview.
+3. Ajuste parâmetros de refinamento, quando necessário.
+4. Gere o resultado final.
+5. Baixe a imagem processada.
 
-## ⚙️ Configuração
+## Segurança
 
-Edite `config.php` para personalizar:
+- Validação de tipo MIME
+- Limite de tamanho de arquivo
+- Sanitização de entrada
+- Nomes de arquivo únicos
+- Limpeza periódica de arquivos temporários
 
-```php
-define('MAX_FILE_SIZE', 10 * 1024 * 1024); // Tamanho máximo
-define('ALLOWED_TYPES', ['image/jpeg', 'image/png']);
-$_SESSION['lang'] = 'pt-BR'; // Idioma padrão
-```
+## Limitações conhecidas
 
-## 🔒 Segurança
+- Imagens com fundo muito complexo podem exigir ajustes manuais.
+- Fotos com contraste baixo entre objeto e fundo podem gerar ruído.
 
-- Validação de tipos MIME
-- Proteção contra upload de scripts
-- Arquivos .htaccess nas pastas sensíveis
-- Limpeza automática de arquivos antigos
-- Nomes únicos para arquivos
-- Headers de segurança
+## Próximos passos sugeridos
 
-## 🎨 Personalização
-
-**CSS**: Edite `assets/css/style.css` para mudar cores e layout
-**Idiomas**: Adicione novos arquivos em `language/`
-**Algoritmo**: Ajuste a função `removeBackground()` em `includes/functions.php`
-
-## 📝 Uso
-
-1. Acesse a aplicação
-2. Arraste uma imagem ou clique para selecionar
-3. Ajuste a sensibilidade se necessário
-4. Aguarde o processamento
-5. Compare original com resultado
-6. Faça download da imagem processada
-
-## ⚠️ Limitações
-
-- O algoritmo funciona melhor com fundos uniformes
-- Imagens complexas podem precisar ajuste de sensibilidade
-- Limite de 10MB por arquivo
-
-## 🛠️ Melhorias Futuras
-
-- Integração com APIs de IA (remove.bg, etc)
-- Editor de ajustes finos
-- Suporte a múltiplas imagens
-- Histórico de processamentos
-- Compartilhamento social
-
-## 📄 Licença
-
-Uso livre para projetos pessoais e comerciais.
+- Aprimorar presets inteligentes por cenário (produto, retrato, logo).
+- Expandir integração com `AQBrandKit` e `FinalFrame`.

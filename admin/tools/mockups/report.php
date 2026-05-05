@@ -12,7 +12,7 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MockupHub - Relatorio de Orcamento</title>
+    <title>MockupHub - Relatório de Orçamento</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css?v=<?php echo htmlspecialchars($mockupStyleVersion, ENT_QUOTES, 'UTF-8'); ?>">
     <link rel="stylesheet" href="../compatibility.css">
@@ -22,7 +22,7 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
         <div class="container">
             <div class="logo">
                 <i class="fas fa-file-invoice-dollar"></i>
-                <span>Relatorio de Orcamento</span>
+                <span>Relatório de Orçamento</span>
             </div>
             <div class="search-container report-header-actions">
                 <button type="button" class="btn-secondary" id="backToEditorBtn">
@@ -41,7 +41,7 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
         <div class="container report-container">
             <section class="hero report-hero">
                 <h1>Mockups Salvos para Anexo</h1>
-                <p>Selecione os mockups finais, gere o resumo e anexe ao relatorio de orcamento.</p>
+                <p>Selecione os mockups finais, gere o resumo e anexe ao relatório de orçamento.</p>
                 <div class="report-validity-box" id="reportValidityBox">
                     <div>
                         <strong>Emissao:</strong>
@@ -59,7 +59,7 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
                 <div class="report-actions">
                     <button type="button" class="btn-primary" id="downloadPayloadBtn">
                         <i class="fas fa-file-download"></i>
-                        Baixar JSON do Relatorio
+                        Baixar JSON do Relatório
                     </button>
                     <button type="button" class="btn-secondary" id="printReportBtn">
                         <i class="fas fa-print"></i>
@@ -74,7 +74,7 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
 
             <section class="report-branding">
                 <h3>Resumo Geral de Identidade Visual</h3>
-                <p class="report-export-hint">As informacoes abaixo integram Color Palette, Color Strategy Advisor, Font Strategy Advisor e Mockups.</p>
+                <p class="report-export-hint">As informações abaixo integram Color Palette, Color Strategy Advisor, Font Strategy Advisor e Mockups.</p>
                 <div class="report-branding-grid">
                     <article class="report-brand-card">
                         <h4>Cores da Marca</h4>
@@ -98,20 +98,20 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
                     <strong class="stat-value" id="reportSelectedCount">0</strong>
                 </article>
                 <article class="stat-card">
-                    <span class="stat-label">Ultima atualizacao</span>
+                    <span class="stat-label">Última atualização</span>
                     <strong class="stat-value" id="reportUpdatedAt">-</strong>
                 </article>
             </section>
 
             <section class="report-empty-state" id="reportEmptyState" style="display: none;">
-                <p>Nenhum mockup salvo ainda. Volte ao editor, finalize os ajustes e salve para anexar ao orcamento.</p>
+                <p>Nenhum mockup salvo ainda. Volte ao editor, finalize os ajustes e salve para anexar ao orçamento.</p>
             </section>
 
             <section class="report-grid" id="reportMockupsGrid"></section>
 
             <section class="report-export">
-                <h3>Resumo para Relatorio de Orcamento</h3>
-                <p class="report-export-hint">Use este resumo para anexar no seu fluxo de orcamento ou CRM.</p>
+                <h3>Resumo para Relatório de Orçamento</h3>
+                <p class="report-export-hint">Use este resumo para anexar no seu fluxo de orçamento ou CRM.</p>
                 <textarea id="reportPayload" readonly></textarea>
                 <div class="report-actions">
                     <button type="button" class="btn-secondary" id="refreshPayloadBtn">

@@ -139,12 +139,111 @@ button:hover {
     font-size: 0.9rem;
 }
 
+.confidence-panel {
+    border: 1px solid #d7e2f4;
+    border-radius: 12px;
+    background: linear-gradient(160deg, #f8fbff 0%, #f1f6ff 100%);
+    padding: 0.72rem 0.78rem;
+    margin: 0 0 0.9rem;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.confidence-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.confidence-label {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #36517a;
+}
+
+.confidence-score {
+    margin: 0.08rem 0 0;
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #123b74;
+}
+
+.confidence-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.26rem 0.56rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+
+.confidence-chip.high {
+    background: #e7f7ef;
+    color: #145f3f;
+    border-color: #a5dbbe;
+}
+
+.confidence-chip.medium {
+    background: #fff4df;
+    color: #8a4a08;
+    border-color: #f0c98b;
+}
+
+.confidence-chip.low {
+    background: #ffe8e8;
+    color: #8f1d1d;
+    border-color: #f1b9b9;
+}
+
+.confidence-meta {
+    margin: 0;
+    font-size: 0.79rem;
+    color: #4d6788;
+}
+
+.confidence-list {
+    margin: 0;
+    padding-left: 1rem;
+    font-size: 0.8rem;
+    color: #2f4a6e;
+}
+
+.confidence-list li {
+    margin-bottom: 0.3rem;
+}
+
 .export-actions {
     display: flex;
     align-items: center;
     gap: 0.65rem;
     flex-wrap: wrap;
     margin: 0 0 0.9rem;
+}
+
+.pdf-template-control {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.22rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #36517a;
+    min-width: 184px;
+}
+
+.pdf-template-control select {
+    border: 1px solid #bfd0f0;
+    border-radius: 10px;
+    padding: 0.5rem 0.62rem;
+    background: #eff6ff;
+    color: #18345f;
+    font: inherit;
+    font-size: 0.8rem;
 }
 
 .export-status {
@@ -250,6 +349,18 @@ button:hover {
 
 .notes.warning {
     color: var(--warning);
+}
+
+#contrastAuditList li.contrast-ok {
+    color: #145f3f;
+}
+
+#contrastAuditList li.contrast-adjust {
+    color: #8a4a08;
+}
+
+#contrastAuditList li.contrast-critical {
+    color: #8f1d1d;
 }
 
 .sources {

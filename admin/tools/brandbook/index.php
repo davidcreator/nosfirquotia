@@ -52,6 +52,10 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <small>Status OG</small>
                 <strong id="metricOgStatus">Sem dados</strong>
             </article>
+            <article class="kpi-card">
+                <small>Contraste</small>
+                <strong id="metricContrastStatus">Sem dados</strong>
+            </article>
         </section>
 
         <section class="panel two-col">
@@ -91,6 +95,17 @@ require_once dirname(__DIR__) . '/bootstrap.php';
             <article>
                 <h2>Diretriz OG</h2>
                 <div id="ogBlock" class="detail-stack"></div>
+            </article>
+        </section>
+
+        <section class="panel two-col">
+            <article>
+                <h2>Perfil Estratégico</h2>
+                <div id="strategyProfileBlock" class="detail-stack"></div>
+            </article>
+            <article>
+                <h2>Auditoria de Contraste</h2>
+                <ul id="contrastAuditStatus" class="status-list"></ul>
             </article>
         </section>
 

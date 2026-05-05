@@ -144,7 +144,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                         <h4>Paleta do template</h4>
                         <label class="template-palette-toggle">
                             <input type="checkbox" id="customTemplateUsePaletteToggle">
-                            <span>Forcar paleta do template no preview e exportacoes</span>
+                            <span>Forçar paleta do template no preview e exportações</span>
                         </label>
                     </div>
                     <p class="muted">Personalize as cores do template para reutilizar em qualquer projeto.</p>
@@ -747,7 +747,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                                     </div>
                                 </section>
                                 <section class="designer-insert-library-group">
-                                    <p class="designer-insert-library-title">Aplicacoes</p>
+                                    <p class="designer-insert-library-title">Aplicações</p>
                                     <div class="designer-insert-library-grid">
                                         <button type="button" class="btn ghost icon-btn designer-shape-cell" data-design-add="mockup_slot" aria-label="Adicionar mockup slot" title="Adicionar mockup slot">
                                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"></rect><path d="M8 14l3-3 2 2 3-3 2 4"></path></svg>
@@ -776,10 +776,10 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                                 <button type="button" class="btn ghost designer-inspector-tab icon-btn" data-design-inspector-tab="transform" aria-selected="false" aria-label="Guia transformação" title="Guia transformação" data-tooltip="Transformação">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18"></path><path d="M12 3v18"></path><path d="M7 8l-4 4 4 4"></path><path d="M17 8l4 4-4 4"></path><path d="M8 7l4-4 4 4"></path><path d="M8 17l4 4 4-4"></path></svg>
                                 </button>
-                                <button type="button" class="btn ghost designer-inspector-tab icon-btn" data-design-inspector-tab="appearance" aria-selected="false" aria-label="Guia aparencia" title="Guia aparencia" data-tooltip="Aparencia">
+                                <button type="button" class="btn ghost designer-inspector-tab icon-btn" data-design-inspector-tab="appearance" aria-selected="false" aria-label="Guia aparência" title="Guia aparência" data-tooltip="Aparência">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0 0 18h1.2a2.8 2.8 0 0 0 0-5.6h-.6A2.6 2.6 0 0 1 10 12.8 2.8 2.8 0 0 1 12.8 10H15a6 6 0 0 0-3-7z"></path><circle cx="7" cy="10" r="1"></circle><circle cx="9.5" cy="7" r="1"></circle><circle cx="13" cy="6.2" r="1"></circle></svg>
                                 </button>
-                                <button type="button" class="btn ghost designer-inspector-tab icon-btn" data-design-inspector-tab="actions" aria-selected="false" aria-label="Guia acoes" title="Guia acoes" data-tooltip="Acoes">
+                                <button type="button" class="btn ghost designer-inspector-tab icon-btn" data-design-inspector-tab="actions" aria-selected="false" aria-label="Guia ações" title="Guia ações" data-tooltip="Ações">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4"></path><path d="M12 17v4"></path><path d="M4.9 4.9l2.8 2.8"></path><path d="M16.3 16.3l2.8 2.8"></path><path d="M3 12h4"></path><path d="M17 12h4"></path><path d="M4.9 19.1l2.8-2.8"></path><path d="M16.3 7.7l2.8-2.8"></path><circle cx="12" cy="12" r="3.2"></circle></svg>
                                 </button>
                             </div>
@@ -829,7 +829,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                                     </div>
                                     <div class="designer-inspector-group">
                                         <div class="designer-inspector-group-head">
-                                            <span class="designer-inspector-group-icon" role="img" aria-label="Ajuste rapido" title="Ajuste rapido" data-tooltip="Ajuste rapido">
+                                            <span class="designer-inspector-group-icon" role="img" aria-label="Ajuste rápido" title="Ajuste rápido" data-tooltip="Ajuste rápido">
                                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path><path d="M4 7h5"></path><path d="M15 17h5"></path></svg>
                                             </span>
                                         </div>
@@ -989,7 +989,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                                 <section class="designer-inspector-panel" data-design-inspector-panel="actions" hidden>
                                     <div class="designer-inspector-group">
                                         <div class="designer-inspector-group-head">
-                                            <span class="designer-inspector-group-icon" role="img" aria-label="Operacoes" title="Operacoes" data-tooltip="Operacoes">
+                                            <span class="designer-inspector-group-icon" role="img" aria-label="Operações" title="Operações" data-tooltip="Operações">
                                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4"></path><path d="M12 17v4"></path><path d="M4.9 4.9l2.8 2.8"></path><path d="M16.3 16.3l2.8 2.8"></path><path d="M3 12h4"></path><path d="M17 12h4"></path><path d="M4.9 19.1l2.8-2.8"></path><path d="M16.3 7.7l2.8-2.8"></path><circle cx="12" cy="12" r="3.2"></circle></svg>
                                             </span>
                                         </div>
@@ -1254,9 +1254,9 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 </div>
             </div>
             <p class="muted">Template preenchido automaticamente com os dados do projeto para acelerar apresentações de brandbook.</p>
-            <p class="sync-meta" id="previewSyncMeta">Ultima atualizacao: -</p>
+            <p class="sync-meta" id="previewSyncMeta">Última atualização: -</p>
             <div class="sync-actions">
-                <button type="button" class="btn ghost sync-test-btn" id="previewSyncTestBtn">Forcar teste de sync</button>
+                <button type="button" class="btn ghost sync-test-btn" id="previewSyncTestBtn">Forçar teste de sync</button>
             </div>
             <div id="brandbookPreview" class="brandbook-preview"></div>
         </section>
@@ -1272,7 +1272,14 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                 <button type="button" class="btn" id="refreshBtn">Atualizar</button>
                 <button type="button" class="btn ghost" id="copyBtn">Copiar JSON</button>
                 <button type="button" class="btn ghost" id="downloadJsonBtn">Baixar JSON</button>
-                <button type="button" class="btn" id="downloadPdfBtn">Baixar PDF (Render Visual)</button>
+                <button type="button" class="btn" id="downloadPdfBtn">Baixar PDF</button>
+                <label class="pdf-template-control">
+                    Modelo PDF
+                    <select id="brandManualPdfTemplate">
+                        <option value="full">Brandbook Completo</option>
+                        <option value="mini">Mini Brand Guide</option>
+                    </select>
+                </label>
             </div>
             <p id="statusLine" class="status-line">Aguardando consolidação de dados.</p>
         </section>

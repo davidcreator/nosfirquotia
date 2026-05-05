@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
-                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['catalogs_total'] ?></strong> catalogos</div>
+                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['catalogs_total'] ?></strong> catálogos</div>
                 <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['items_total'] ?></strong> servicos</div>
             </div>
         </div>

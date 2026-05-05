@@ -4,6 +4,55 @@ const OG_SETTINGS_STORAGE_KEY = 'ogImageSettings';
 const BGREMOVE_STATE_KEY_FALLBACK = 'aq_bgremove_state_v1';
 const BGREMOVE_QUALITY_HISTORY_KEY = 'finalframe_bgremove_quality_history_v1';
 
+const STRATEGY_LABELS = {
+    objective: {
+        confianca: 'Transmitir confiança',
+        atencao: 'Ganhar atenção',
+        acao: 'Estimular ação',
+        sofisticacao: 'Posicionamento sofisticado',
+        equilibrio: 'Bem-estar e equilíbrio',
+        diversao: 'Energia e diversão'
+    },
+    context: {
+        general: 'Geral',
+        financas: 'Finanças e tecnologia',
+        saude: 'Saúde e bem-estar',
+        educacao: 'Educação',
+        moda: 'Moda e beleza',
+        namoro: 'Relacionamento e paixão',
+        avaliacao: 'Avaliação e performance'
+    },
+    persona: {
+        general: 'Geral',
+        executive: 'Executiva e decisora',
+        analytical: 'Analítica e racional',
+        creative: 'Criativa e exploratória',
+        pragmatic: 'Pragmática e objetiva',
+        premium: 'Premium e sofisticada',
+        youth: 'Jovem e dinâmica'
+    },
+    segment: {
+        general: 'Geral',
+        saas: 'SaaS e Produtos Digitais',
+        ecommerce: 'E-commerce e Varejo',
+        health: 'Saúde e Bem-estar',
+        education: 'Educação e Cursos',
+        finance: 'Finanças e Seguros',
+        fashion: 'Moda e Lifestyle',
+        industrial: 'Indústria e B2B',
+        hospitality: 'Hospitalidade e Eventos'
+    },
+    channel: {
+        multichannel: 'Multicanal',
+        digital: 'Site e Produto Digital',
+        social: 'Redes Sociais',
+        performance: 'Campanhas de Performance',
+        editorial: 'Materiais Editoriais',
+        retail: 'Varejo e PDV',
+        presentation: 'Apresentações Institucionais'
+    }
+};
+
 let latestPayload = null;
 let latestContext = null;
 let latestBgSuggestion = null;
@@ -125,6 +174,8 @@ function buildContext() {
     const readinessSignals = {
         hasBrandKit: Boolean(snapshot?.brandKit?.updatedAt),
         hasColors: brand.paletteColors.length > 0,
+        hasStrategyProfile: brand.strategyProfile.available,
+        hasContrastAudit: brand.contrastAudit.available,
         hasTypography: typography.isConfigured,
         hasOg: og.available,
         hasMockups: mockups.length > 0,
@@ -136,6 +187,9 @@ function buildContext() {
     const integrationNotes = buildIntegrationNotes({
         hasBrandKit: readinessSignals.hasBrandKit,
         hasColors: readinessSignals.hasColors,
+        hasStrategyProfile: readinessSignals.hasStrategyProfile,
+        hasContrastAudit: readinessSignals.hasContrastAudit,
+        contrastHardFails: brand.contrastAudit.hardFailCount,
         hasTypography: readinessSignals.hasTypography,
         hasOg: readinessSignals.hasOg,
         hasMockups: readinessSignals.hasMockups,
@@ -163,11 +217,26 @@ function buildContext() {
             paletteType: brand.paletteType,
             roleMap: brand.roleMap,
             paletteColors: brand.paletteColors,
+            strategyProfile: brand.strategyProfile,
+            confidence: brand.confidence,
+            contrastAudit: brand.contrastAudit,
             typography: {
                 primaryFontName: typography.primaryFontName,
                 secondaryFontName: typography.secondaryFontName,
                 pairingStyle: typography.pairingStyle,
-                tone: typography.tone
+                tone: typography.tone,
+                industry: typography.industry,
+                channel: typography.channel,
+                readability: typography.readability,
+                brandPersonality: typography.brandPersonality,
+                contentScale: typography.contentScale,
+                hierarchyStyle: typography.hierarchyStyle,
+                fontContrast: typography.fontContrast,
+                confidenceScore: typography.confidenceScore,
+                confidenceLabel: typography.confidenceLabel,
+                confidenceDrivers: typography.confidenceDrivers,
+                usageGuidelines: typography.usageGuidelines,
+                riskAlerts: typography.riskAlerts
             }
         },
         applications: {
@@ -285,10 +354,124 @@ function resolveBrand(snapshot) {
         roleMap.neutralDark
     ]).slice(0, 14);
 
+    const strategyProfile = resolveStrategyProfile(insights.strategyProfile, paletteState);
+    const confidence = resolveStrategyConfidence(insights.confidence);
+    const contrastAudit = resolveStrategyContrastAudit(
+        insights.contrastAudit,
+        insights.contrast,
+        strategyProfile.channelLabel
+    );
+
     return {
         paletteType: String(insights.paletteType || brandKit?.palette?.type || paletteState?.type || 'monochromatic'),
         roleMap,
-        paletteColors
+        paletteColors,
+        strategyProfile,
+        confidence,
+        contrastAudit
+    };
+}
+
+function resolveStrategyProfile(rawProfile, paletteState = {}) {
+    const raw = rawProfile && typeof rawProfile === 'object' ? rawProfile : {};
+    const objective = String(raw.objective || paletteState.objective || '').trim();
+    const context = String(raw.context || paletteState.context || '').trim();
+    const persona = String(raw.persona || paletteState.persona || '').trim();
+    const segment = String(raw.segment || paletteState.segment || '').trim();
+    const channel = String(raw.channel || paletteState.channel || '').trim();
+
+    return {
+        objective,
+        context,
+        persona,
+        segment,
+        channel,
+        objectiveLabel: STRATEGY_LABELS.objective[objective] || 'Não definido',
+        contextLabel: STRATEGY_LABELS.context[context] || 'Não definido',
+        personaLabel: STRATEGY_LABELS.persona[persona] || 'Não definido',
+        segmentLabel: STRATEGY_LABELS.segment[segment] || 'Não definido',
+        channelLabel: STRATEGY_LABELS.channel[channel] || STRATEGY_LABELS.channel.multichannel,
+        available: [objective, context, persona, segment, channel].some(Boolean)
+    };
+}
+
+function resolveStrategyConfidence(rawConfidence) {
+    const score = Number(rawConfidence?.score);
+    const level = String(rawConfidence?.level || '').trim();
+    const label = String(rawConfidence?.label || '').trim();
+    return {
+        available: Number.isFinite(score) || Boolean(level) || Boolean(label),
+        score: Number.isFinite(score) ? Math.max(0, Math.min(100, Math.round(score))) : null,
+        level: level || 'medium',
+        label: label || 'Média',
+        drivers: Array.isArray(rawConfidence?.drivers)
+            ? rawConfidence.drivers.map((item) => String(item || '').trim()).filter(Boolean).slice(0, 6)
+            : []
+    };
+}
+
+function resolveStrategyContrastAudit(rawAudit, fallbackContrast, fallbackChannelLabel) {
+    const hasRawAudit = Boolean(rawAudit && typeof rawAudit === 'object');
+    const pairs = hasRawAudit && Array.isArray(rawAudit.pairs) && rawAudit.pairs.length
+        ? rawAudit.pairs
+            .map((item) => ({
+                label: String(item?.label || item?.id || 'Par de contraste').trim(),
+                ratio: Number(item?.ratio),
+                minimum: Number(item?.minimum),
+                recommended: Number(item?.recommended),
+                passMinimum: Boolean(item?.passMinimum),
+                passRecommended: Boolean(item?.passRecommended)
+            }))
+            .filter((item) => item.label && Number.isFinite(item.ratio))
+            .slice(0, 18)
+        : (Array.isArray(fallbackContrast) ? fallbackContrast : [])
+            .map((item, index) => ({
+                label: `Par ${index + 1}`,
+                ratio: Number(item?.ratio),
+                minimum: 4.5,
+                recommended: 4.5,
+                passMinimum: Number(item?.ratio) >= 4.5,
+                passRecommended: Number(item?.ratio) >= 4.5
+            }))
+            .filter((item) => Number.isFinite(item.ratio))
+            .slice(0, 12);
+
+    const minimumRatio = Number.isFinite(Number(rawAudit?.profile?.minimumRatio))
+        ? Number(rawAudit.profile.minimumRatio)
+        : 4.5;
+    const recommendedRatio = Number.isFinite(Number(rawAudit?.profile?.recommendedRatio))
+        ? Number(rawAudit.profile.recommendedRatio)
+        : minimumRatio;
+
+    const hardFailCount = Number.isFinite(Number(rawAudit?.hardFailCount))
+        ? Number(rawAudit.hardFailCount)
+        : pairs.filter((item) => item.ratio < (Number.isFinite(item.minimum) ? item.minimum : minimumRatio)).length;
+    const softFailCount = Number.isFinite(Number(rawAudit?.softFailCount))
+        ? Number(rawAudit.softFailCount)
+        : pairs.filter((item) => {
+            const min = Number.isFinite(item.minimum) ? item.minimum : minimumRatio;
+            const rec = Number.isFinite(item.recommended) ? item.recommended : recommendedRatio;
+            return item.ratio >= min && item.ratio < rec;
+        }).length;
+    const totalPairs = Number.isFinite(Number(rawAudit?.totalPairs))
+        ? Number(rawAudit.totalPairs)
+        : pairs.length;
+    const passCount = Number.isFinite(Number(rawAudit?.passCount))
+        ? Number(rawAudit.passCount)
+        : Math.max(0, totalPairs - hardFailCount);
+
+    return {
+        available: pairs.length > 0,
+        channel: String(rawAudit?.profile?.channel || '').trim(),
+        channelLabel: String(rawAudit?.profile?.label || fallbackChannelLabel || STRATEGY_LABELS.channel.multichannel),
+        minimumRatio,
+        recommendedRatio,
+        level: String(rawAudit?.profile?.level || 'AA').trim() || 'AA',
+        passCount,
+        totalPairs,
+        hardFailCount,
+        softFailCount,
+        pairs
     };
 }
 
@@ -299,14 +482,94 @@ function resolveTypography(snapshot) {
     const secondaryFontName = String(brandKitTypography.secondaryFontName || fontProfile.secondaryFontName || 'Não definido');
     const pairingStyle = String(brandKitTypography.pairingStyle || fontProfile.pairingStyle || 'Não definido');
     const tone = String(brandKitTypography.tone || fontProfile.tone || 'Não definido');
+    const confidenceRaw = Number(fontProfile.confidenceScore ?? brandKitTypography.confidenceScore);
+    const confidenceScore = Number.isFinite(confidenceRaw)
+        ? Math.max(0, Math.min(100, Math.round(confidenceRaw)))
+        : null;
+    const confidenceLabel = String(fontProfile.confidenceLabel || brandKitTypography.confidenceLabel || '');
+    const confidenceDrivers = toStringArray(fontProfile.confidenceDrivers || brandKitTypography.confidenceDrivers, 6);
+    const usageGuidelines = toStringArray(fontProfile.usageGuidelines || brandKitTypography.usageGuidelines, 8);
+    const riskAlerts = toStringArray(fontProfile.riskAlerts || brandKitTypography.riskAlerts, 8);
     return {
         primaryFontName,
         secondaryFontName,
         pairingStyle,
         tone,
+        industry: String(fontProfile.industry || brandKitTypography.industry || 'geral'),
+        channel: String(fontProfile.channel || brandKitTypography.channel || 'digital'),
+        readability: String(fontProfile.readability || brandKitTypography.readability || 'media'),
+        brandPersonality: String(fontProfile.brandPersonality || brandKitTypography.brandPersonality || 'sobria'),
+        contentScale: String(fontProfile.contentScale || brandKitTypography.contentScale || 'medio'),
+        hierarchyStyle: String(fontProfile.hierarchyStyle || brandKitTypography.hierarchyStyle || 'equilibrada'),
+        fontContrast: String(fontProfile.fontContrast || brandKitTypography.fontContrast || 'medio'),
+        confidenceScore,
+        confidenceLabel: confidenceLabel || (confidenceScore !== null ? 'Média' : ''),
+        confidenceDrivers,
+        usageGuidelines,
+        riskAlerts,
         source: String(brandKitTypography.source || fontProfile.source || 'system'),
         isConfigured: primaryFontName !== 'Não definido' || secondaryFontName !== 'Não definido'
     };
+}
+
+function toStringArray(value, maxItems = 8) {
+    if (!Array.isArray(value)) {
+        return [];
+    }
+    return value
+        .map((entry) => String(entry || '').trim())
+        .filter(Boolean)
+        .slice(0, maxItems);
+}
+
+function translateTypographyLabel(group, key) {
+    const maps = {
+        industry: {
+            geral: 'Geral',
+            tecnologia: 'Tecnologia',
+            moda: 'Moda / Beleza',
+            financeiro: 'Financeiro',
+            saude: 'Saúde / Bem-estar',
+            educacao: 'Educação',
+            gastronomia: 'Gastronomia',
+            criativo: 'Criativo / Agência'
+        },
+        channel: {
+            digital: 'Digital',
+            impresso: 'Impresso',
+            hibrido: 'Híbrido'
+        },
+        readability: {
+            alta: 'Alta',
+            media: 'Média',
+            expressiva: 'Expressiva'
+        },
+        brandPersonality: {
+            sobria: 'Sóbria',
+            calorosa: 'Calorosa',
+            ousada: 'Ousada',
+            tecnica: 'Técnica',
+            artesanal: 'Artesanal'
+        },
+        contentScale: {
+            longo: 'Longo',
+            medio: 'Médio',
+            curto: 'Curto'
+        },
+        hierarchyStyle: {
+            equilibrada: 'Equilibrada',
+            compacta: 'Compacta',
+            dramatica: 'Dramática'
+        },
+        fontContrast: {
+            baixo: 'Baixo',
+            medio: 'Médio',
+            alto: 'Alto'
+        }
+    };
+    const source = maps[group] || {};
+    const normalized = String(key || '').trim();
+    return source[normalized] || normalized || '-';
 }
 
 function resolveOg(snapshot) {
@@ -413,6 +676,23 @@ function buildIntegrationNotes(context) {
         ? { level: 'ok', message: 'Sistema de cores consolidado para aplicação.' }
         : { level: 'warn', message: 'Sem cores consolidadas no snapshot atual.' });
 
+    notes.push(context.hasStrategyProfile
+        ? { level: 'ok', message: 'Perfil estratégico sincronizado (objetivo, persona, segmento e canal).' }
+        : { level: 'warn', message: 'Perfil estratégico ausente. Gere estratégia no Color Strategy Advisor.' });
+
+    if (context.hasContrastAudit) {
+        if (context.contrastHardFails > 0) {
+            notes.push({
+                level: 'warn',
+                message: `Auditoria de contraste detectou ${context.contrastHardFails} ponto(s) crítico(s).`
+            });
+        } else {
+            notes.push({ level: 'ok', message: 'Auditoria de contraste sincronizada sem falhas críticas.' });
+        }
+    } else {
+        notes.push({ level: 'warn', message: 'Auditoria de contraste não encontrada para o relatório final.' });
+    }
+
     notes.push(context.hasTypography
         ? { level: 'ok', message: 'Tipografia definida para o projeto.' }
         : { level: 'warn', message: 'Tipografia não definida. Recomendado executar Font Strategy Advisor.' });
@@ -486,8 +766,23 @@ function renderBrandSummary(context) {
         ['Cor primária', context.brand.roleMap.primary.toUpperCase()],
         ['Cor secundária', context.brand.roleMap.secondary.toUpperCase()],
         ['Acento', context.brand.roleMap.accent.toUpperCase()],
+        ['Persona', context.brand.strategyProfile.personaLabel],
+        ['Segmento', context.brand.strategyProfile.segmentLabel],
+        ['Canal', context.brand.strategyProfile.channelLabel],
+        ['Confiança', context.brand.confidence.available && Number.isFinite(context.brand.confidence.score)
+            ? `${context.brand.confidence.score}% (${context.brand.confidence.label})`
+            : 'Sem dados'],
+        ['Contraste', context.brand.contrastAudit.available
+            ? `${context.brand.contrastAudit.passCount}/${context.brand.contrastAudit.totalPairs} pares aprovados`
+            : 'Sem dados'],
         ['Fonte primária', context.typography.primaryFontName],
         ['Fonte secundária', context.typography.secondaryFontName],
+        ['Perfil tipográfico', translateTypographyLabel('brandPersonality', context.typography.brandPersonality)],
+        ['Canal tipográfico', translateTypographyLabel('channel', context.typography.channel)],
+        ['Legibilidade', translateTypographyLabel('readability', context.typography.readability)],
+        ['Confiança tipográfica', context.typography.confidenceScore !== null
+            ? `${context.typography.confidenceScore}% (${context.typography.confidenceLabel || 'Média'})`
+            : 'Sem dados'],
         ['Template OG', context.og.template || 'Não definido']
     ];
 
@@ -768,7 +1063,7 @@ function buildBgremoveSuggestion(context) {
     suggestion.presetKey = normalizePresetKey(suggestion.presetKey);
     suggestion.reason = notes.length
         ? notes.join(' ')
-        : 'Parametros atuais mantidos por boa consistência do recorte.';
+        : 'Parâmetros atuais mantidos por boa consistência do recorte.';
     return suggestion;
 }
 

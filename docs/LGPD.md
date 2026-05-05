@@ -1,10 +1,10 @@
 # Documento LGPD - Nosfir Quotia
 
-Ultima atualizacao: 03/04/2026
+Última atualização: 04/05/2026
 
 ## 1. Objetivo
 
-Este documento estabelece as diretrizes de conformidade com a Lei Geral de Protecao de Dados Pessoais (LGPD - Lei no 13.709/2018) para o sistema Nosfir Quotia, incluindo tratamento de dados de clientes e administradores.
+Este documento estabelece as diretrizes de conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD - Lei nº 13.709/2018) para o sistema Nosfir Quotia, incluindo o tratamento de dados de clientes e administradores.
 
 ## 2. Escopo
 
@@ -12,125 +12,125 @@ Aplica-se a:
 
 - clientes cadastrados na plataforma;
 - administradores com acesso ao painel;
-- dados pessoais tratados em cadastros, solicitacoes, relatorios, comunicacoes e registros tecnicos.
+- dados pessoais tratados em cadastros, solicitações, relatórios, comunicações e registros técnicos.
 
 ## 3. Agentes de tratamento
 
-- Controlador: operacao responsavel pelo sistema Nosfir Quotia.
-- Operadores: terceiros contratados para suporte tecnico, hospedagem e envio de comunicacoes, quando aplicavel.
+- Controlador: operação responsável pelo sistema Nosfir Quotia.
+- Operadores: terceiros contratados para suporte técnico, hospedagem e envio de comunicações, quando aplicável.
 - Encarregado (DPO): deve ser formalmente designado pelo controlador e divulgado em canal de atendimento ao titular.
 
 ## 4. Categorias de dados pessoais tratados
 
-- Identificacao e contato:
-  - nome, email, telefone.
+- Identificação e contato:
+  - nome, e-mail, telefone.
 - Credenciais:
-  - senha criptografada (hash), tokens de recuperacao.
-- Dados de solicitacao/orcamento:
-  - titulo de projeto, escopo, servicos solicitados, prazos, observacoes.
-- Dados de operacao e seguranca:
-  - logs de envio de email, eventos de autenticacao, metadados de sessao e IP em fluxos criticos.
+  - senha criptografada (hash), tokens de recuperação.
+- Dados de solicitação/orçamento:
+  - título de projeto, escopo, serviços solicitados, prazos, observações.
+- Dados de operação e segurança:
+  - logs de envio de e-mail, eventos de autenticação, metadados de sessão e IP em fluxos críticos.
 
 ## 5. Finalidades do tratamento
 
-- autenticacao e controle de acesso por perfil;
-- recebimento e processamento de solicitacoes de orcamento;
-- emissao de relatorios e comunicacao de status ao cliente;
-- seguranca da informacao, prevencao a fraude e rastreabilidade;
-- cumprimento de obrigacoes legais/regulatorias e exercicio regular de direitos.
+- autenticação e controle de acesso por perfil;
+- recebimento e processamento de solicitações de orçamento;
+- emissão de relatórios e comunicação de status ao cliente;
+- segurança da informação, prevenção a fraude e rastreabilidade;
+- cumprimento de obrigações legais/regulatórias e exercício regular de direitos.
 
-## 6. Bases legais aplicaveis (LGPD)
+## 6. Bases legais aplicáveis (LGPD)
 
-As bases legais devem ser selecionadas conforme operacao concreta. Em regra:
+As bases legais devem ser selecionadas conforme a operação concreta. Em regra:
 
-- execucao de contrato e procedimentos preliminares (art. 7o, V);
-- cumprimento de obrigacao legal ou regulatoria (art. 7o, II);
-- exercicio regular de direitos em processo judicial, administrativo ou arbitral (art. 7o, VI);
-- legitimo interesse, quando cabivel com avaliacao de impacto e salvaguardas (art. 7o, IX);
-- consentimento, quando estritamente necessario (art. 7o, I).
+- execução de contrato e procedimentos preliminares (art. 7º, V);
+- cumprimento de obrigação legal ou regulatória (art. 7º, II);
+- exercício regular de direitos em processo judicial, administrativo ou arbitral (art. 7º, VI);
+- legítimo interesse, quando cabível, com avaliação de impacto e salvaguardas (art. 7º, IX);
+- consentimento, quando estritamente necessário (art. 7º, I).
 
-## 7. Principios observados
+## 7. Princípios observados
 
-Implementacao alinhada aos principios da LGPD, incluindo:
+Implementação alinhada aos princípios da LGPD, incluindo:
 
 - finalidade;
-- adequacao;
+- adequação;
 - necessidade;
 - livre acesso;
 - qualidade dos dados;
-- transparencia;
-- seguranca;
-- prevencao;
-- nao discriminacao;
-- responsabilizacao e prestacao de contas.
+- transparência;
+- segurança;
+- prevenção;
+- não discriminação;
+- responsabilização e prestação de contas.
 
 ## 8. Direitos dos titulares
 
-Canal de atendimento deve viabilizar, quando aplicavel:
+Canal de atendimento deve viabilizar, quando aplicável:
 
-- confirmacao de tratamento;
+- confirmação de tratamento;
 - acesso aos dados;
-- correcao;
-- anonimizacao, bloqueio ou eliminacao;
+- correção;
+- anonimização, bloqueio ou eliminação;
 - portabilidade;
-- informacao sobre compartilhamento;
-- revogacao de consentimento;
-- revisao de decisoes automatizadas, quando houver.
+- informação sobre compartilhamento;
+- revogação de consentimento;
+- revisão de decisões automatizadas, quando houver.
 
-## 9. Seguranca da informacao (medidas tecnicas)
+## 9. Segurança da informação (medidas técnicas)
 
 No Nosfir Quotia:
 
-- controle de acesso por papeis e permissoes no admin;
-- conta Administrador Geral com governanca de acessos;
-- sessao com protecoes de cookie (HttpOnly, SameSite, Strict Mode);
-- cabecalhos de seguranca HTTP (CSP, X-Frame-Options, nosniff, etc.);
-- recuperacao de senha por token unico com expiracao;
-- trilha de envio de emails com status de entrega/falha;
-- sanitizacao de saida em views para mitigar XSS.
+- controle de acesso por papéis e permissões no admin;
+- conta Administrador Geral com governança de acessos;
+- sessão com proteções de cookie (`HttpOnly`, `SameSite`, `Strict Mode`);
+- cabeçalhos de segurança HTTP (CSP, X-Frame-Options, nosniff, etc.);
+- recuperação de senha por token único com expiração;
+- trilha de envio de e-mails com status de entrega/falha;
+- sanitização de saída em views para mitigar XSS.
 
-## 10. Retencao e descarte
+## 10. Retenção e descarte
 
-- dados devem ser mantidos apenas pelo tempo necessario as finalidades e obrigacoes legais;
-- apos prazo aplicavel, deve-se aplicar descarte seguro, anonimização ou bloqueio conforme politica interna.
+- os dados devem ser mantidos apenas pelo tempo necessário às finalidades e obrigações legais;
+- após o prazo aplicável, deve-se aplicar descarte seguro, anonimização ou bloqueio conforme política interna.
 
 ## 11. Compartilhamento internacional e terceiros
 
 - qualquer compartilhamento com terceiros deve ser formalizado contratualmente;
-- transferencias internacionais devem observar bases legais e garantias adequadas da LGPD.
+- transferências internacionais devem observar bases legais e garantias adequadas da LGPD.
 
 ## 12. Resposta a incidentes
 
-Em caso de incidente de seguranca com risco ou dano relevante:
+Em caso de incidente de segurança com risco ou dano relevante:
 
-- registrar evidencias e conter impacto;
+- registrar evidências e conter impacto;
 - avaliar escopo e titulares afetados;
 - comunicar autoridade competente e titulares quando exigido (art. 48 da LGPD);
-- implementar plano de remediacao e melhoria continua.
+- implementar plano de remediação e melhoria contínua.
 
-## 13. Governanca e auditoria
+## 13. Governança e auditoria
 
-- manter inventario de operacoes de tratamento;
-- revisar periodicamente permissoes de admin;
-- manter evidencias de consentimento de cookies e politicas publicadas;
-- realizar treinamentos periodicos para equipe administrativa.
+- manter inventário de operações de tratamento;
+- revisar periodicamente permissões de admin;
+- manter evidências de consentimento de cookies e políticas publicadas;
+- realizar treinamentos periódicos para equipe administrativa.
 
-## 14. Politicas complementares do sistema
+## 14. Políticas complementares do sistema
 
 Este documento deve ser lido junto com:
 
 - Termos de Uso;
-- Politica de Uso;
-- Politica de Privacidade e Captacao de Dados;
-- Politica de Cookies.
+- Política de Uso;
+- Política de Privacidade e Captação de Dados;
+- Política de Cookies.
 
-## 15. Referencias oficiais
+## 15. Referências oficiais
 
-- Lei no 13.709/2018 (LGPD): https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
-- Autoridade Nacional de Protecao de Dados (ANPD): https://www.gov.br/anpd/pt-br
+- Lei nº 13.709/2018 (LGPD): https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
+- Autoridade Nacional de Proteção de Dados (ANPD): https://www.gov.br/anpd/pt-br
 - Direitos dos titulares (FAQ ANPD): https://www.gov.br/anpd/pt-br/acesso-a-informacao/perguntas-frequentes/perguntas-frequentes/6-direitos-dos-titulares-de-dados
-- Comunicacao de incidente de seguranca (ANPD): https://www.gov.br/anpd/pt-br/canais_atendimento/agente-de-tratamento/comunicado-de-incidente-de-seguranca-cis
+- Comunicação de incidente de segurança (ANPD): https://www.gov.br/anpd/pt-br/canais_atendimento/agente-de-tratamento/comunicado-de-incidente-de-seguranca-cis
 
-## 16. Observacao de conformidade
+## 16. Observação de conformidade
 
-Este documento fornece diretrizes tecnicas e operacionais de conformidade. A validacao juridica final deve ser realizada por assessoria especializada, considerando o contexto do controlador e eventuais normas setoriais.
+Este documento fornece diretrizes técnicas e operacionais de conformidade. A validação jurídica final deve ser realizada por assessoria especializada, considerando o contexto do controlador e eventuais normas setoriais.

@@ -402,7 +402,7 @@ require_once 'assets/common/header.php';
 
                     <div class="editor-actions">
                         <button type="button" class="btn-primary" onclick="saveMockupChanges()">
-                            <i class="fas fa-save"></i> Salvar Alteracoes
+                            <i class="fas fa-save"></i> Salvar Alterações
                         </button>
                         <button type="button" class="btn-primary" onclick="downloadMockup()">
                             <i class="fas fa-download"></i> Baixar

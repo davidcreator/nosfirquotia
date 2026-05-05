@@ -33,7 +33,7 @@ $resultsScriptVersion = is_file($resultsScriptPath) ? (string) filemtime($result
                 </button>
                 <button type="button" class="btn-secondary" id="goToReportBtn">
                     <i class="fas fa-file-invoice-dollar"></i>
-                    Abrir Relatorio
+                    Abrir Relatório
                 </button>
             </div>
         </div>

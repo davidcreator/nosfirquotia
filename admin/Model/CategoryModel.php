@@ -84,7 +84,7 @@ final class CategoryModel extends Model
             ['development', 'Desenvolvimento Web', 'sites, sistemas web e portais sob medida', 2500.00],
             ['development', 'Aplicativo Mobile', 'aplicativos Android e iOS com foco em produto digital', 5000.00],
             ['development', 'Software Desktop', 'sistemas desktop para operacao interna e produtividade', 3200.00],
-            ['development', 'Integracoes e API', 'integracoes entre sistemas, automacoes e API REST', 2800.00],
+            ['development', 'Integrações e API', 'integrações entre sistemas, automações e API REST', 2800.00],
         ];
 
         foreach ($defaults as $default) {

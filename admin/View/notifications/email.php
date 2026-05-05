@@ -1,12 +1,12 @@
 <section class="aq-admin-page-hero">
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
-            <h1 class="aq-admin-page-hero-title">Notificacoes de email</h1>
+            <h1 class="aq-admin-page-hero-title">Notificações de e-mail</h1>
             <p class="aq-admin-page-hero-subtitle">Historico de envio de emails do sistema para clientes e administradores.</p>
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
-                <a href="<?= e(url('/admin/orcamentos')) ?>" class="btn btn-sm btn-outline-light">Voltar para orcamentos</a>
+                <a href="<?= e(url('/admin/orcamentos')) ?>" class="btn btn-sm btn-outline-light">Voltar para orçamentos</a>
             </div>
         </div>
     </div>

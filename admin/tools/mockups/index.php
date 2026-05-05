@@ -38,7 +38,7 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
                 <p>Comece validando o arquivo que sera aplicado nos mockups.</p>
             </section>
 
-            <section class="upload-options" aria-label="Acoes de entrada">
+            <section class="upload-options" aria-label="Ações de entrada">
                 <article class="upload-option-card is-primary" id="uploadCard">
                     <div class="upload-option-icon" aria-hidden="true">
                         <i class="fas fa-upload"></i>
@@ -72,7 +72,7 @@ $uploadJsVersion = is_file($uploadJsPath) ? (string) filemtime($uploadJsPath) : 
                         </li>
                         <li data-check="size" class="is-pending">
                             <span class="state-dot" aria-hidden="true">-</span>
-                            <span>Tamanho maximo de 40 MB</span>
+                            <span>Tamanho máximo de 40 MB</span>
                         </li>
                         <li data-check="resolution" class="is-pending">
                             <span class="state-dot" aria-hidden="true">-</span>

@@ -29,6 +29,55 @@ const SECTOR_LABELS = {
     fashion: 'Moda e Lifestyle'
 };
 
+const STRATEGY_LABELS = {
+    objective: {
+        confianca: 'Transmitir confiança',
+        atencao: 'Ganhar atenção',
+        acao: 'Estimular ação',
+        sofisticacao: 'Posicionamento sofisticado',
+        equilibrio: 'Bem-estar e equilíbrio',
+        diversao: 'Energia e diversão'
+    },
+    context: {
+        general: 'Geral',
+        financas: 'Finanças e tecnologia',
+        saude: 'Saúde e bem-estar',
+        educacao: 'Educação',
+        moda: 'Moda e beleza',
+        namoro: 'Relacionamento e paixão',
+        avaliacao: 'Avaliação e performance'
+    },
+    persona: {
+        general: 'Geral',
+        executive: 'Executiva e decisora',
+        analytical: 'Analítica e racional',
+        creative: 'Criativa e exploratória',
+        pragmatic: 'Pragmática e objetiva',
+        premium: 'Premium e sofisticada',
+        youth: 'Jovem e dinâmica'
+    },
+    segment: {
+        general: 'Geral',
+        saas: 'SaaS e Produtos Digitais',
+        ecommerce: 'E-commerce e Varejo',
+        health: 'Saúde e Bem-estar',
+        education: 'Educação e Cursos',
+        finance: 'Finanças e Seguros',
+        fashion: 'Moda e Lifestyle',
+        industrial: 'Indústria e B2B',
+        hospitality: 'Hospitalidade e Eventos'
+    },
+    channel: {
+        multichannel: 'Multicanal',
+        digital: 'Site e Produto Digital',
+        social: 'Redes Sociais',
+        performance: 'Campanhas de Performance',
+        editorial: 'Materiais Editoriais',
+        retail: 'Varejo e PDV',
+        presentation: 'Apresentações Institucionais'
+    }
+};
+
 let latestPayload = null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -92,6 +141,8 @@ function renderBrandBook() {
     renderInsightList('trendList', context.trends, 'Sem tendências no momento.');
     renderTypography(context.typography);
     renderOg(context.og);
+    renderStrategyProfile(context.strategyProfile, context.confidence);
+    renderContrastAudit(context.contrastAudit);
     renderMockups(context.mockups);
     renderPayload(context.payload);
 
@@ -117,6 +168,9 @@ function buildContext() {
     const integrationNotes = buildIntegrationNotes({
         hasSnapshot: Boolean(snapshot?.brandKit || snapshot?.colorPalette || snapshot?.fontProfile),
         hasInsights: insights.combinations.length > 0 || insights.trends.length > 0,
+        hasStrategyProfile: insights.strategyProfile.available,
+        hasContrastAudit: insights.contrastAudit.available,
+        contrastHardFails: insights.contrastAudit.hardFailCount,
         colorCount: colorSystem.paletteColors.length,
         hasTypography: typography.primaryFontName !== 'Não definido' || typography.secondaryFontName !== 'Não definido',
         mockupCount: mockups.length,
@@ -142,6 +196,8 @@ function buildContext() {
             paletteType: colorSystem.paletteType,
             harmony: colorSystem.harmony,
             sectorProfile: colorSystem.sectorProfile,
+            strategyProfile: insights.strategyProfile,
+            confidence: insights.confidence,
             paletteSummary: insights.summary,
             roleMap: colorSystem.roleMap,
             paletteColors: colorSystem.paletteColors,
@@ -150,6 +206,7 @@ function buildContext() {
         strategy: {
             combinations: insights.combinations,
             trends: insights.trends,
+            contrastAudit: insights.contrastAudit,
             recommendations: insights.recommendations
         },
         applications: {
@@ -188,7 +245,10 @@ function buildContext() {
         paletteColors: colorSystem.paletteColors,
         combinations: insights.combinations,
         trends: insights.trends,
-        recommendations: insights.recommendations
+        recommendations: insights.recommendations,
+        strategyProfile: insights.strategyProfile,
+        confidence: insights.confidence,
+        contrastAudit: insights.contrastAudit
     };
 }
 
@@ -236,6 +296,10 @@ function resolveColorSystem(snapshot) {
 
 function resolveInsights(snapshot, colorSystem) {
     const brandInsights = snapshot?.brandInsights || {};
+    const strategyProfile = resolveStrategyProfile(snapshot);
+    const confidence = resolveStrategyConfidence(brandInsights.confidence);
+    const contrastAudit = resolveStrategyContrastAudit(brandInsights.contrastAudit, brandInsights.contrast);
+
     const combinations = Array.isArray(brandInsights.combinations) && brandInsights.combinations.length
         ? sanitizeInsightList(brandInsights.combinations, 8)
         : buildFallbackCombinations(colorSystem);
@@ -262,12 +326,141 @@ function resolveInsights(snapshot, colorSystem) {
     if (colorSystem?.sectorProfile?.key && colorSystem.sectorProfile.key !== 'none' && recommendations.length < 8) {
         recommendations.push(`Preset setorial ativo: ${sectorLabel}. Alinhe campanhas, interface e materiais do BrandBook nesse direcionamento.`);
     }
+    if (strategyProfile.available && recommendations.length < 10) {
+        recommendations.push(
+            `Perfil estratégico ativo: ${strategyProfile.personaLabel} no canal ${strategyProfile.channelLabel} para o segmento ${strategyProfile.segmentLabel}.`
+        );
+    }
+    if (contrastAudit.available) {
+        if (contrastAudit.hardFailCount > 0 && recommendations.length < 10) {
+            recommendations.push(
+                `Ajuste obrigatório: ${contrastAudit.hardFailCount} pares de contraste abaixo do mínimo para ${contrastAudit.channelLabel}.`
+            );
+        } else if (recommendations.length < 10) {
+            recommendations.push(
+                `Contraste validado para ${contrastAudit.channelLabel}: ${contrastAudit.passCount}/${contrastAudit.totalPairs} pares em conformidade.`
+            );
+        }
+    }
 
     return {
         summary,
         combinations,
         trends,
-        recommendations
+        recommendations,
+        strategyProfile,
+        confidence,
+        contrastAudit
+    };
+}
+
+function resolveStrategyProfile(snapshot) {
+    const brandInsights = snapshot?.brandInsights || {};
+    const colorPalette = snapshot?.colorPalette || {};
+    const raw = brandInsights.strategyProfile || {};
+    const objective = String(raw.objective || colorPalette.objective || '').trim();
+    const context = String(raw.context || colorPalette.context || '').trim();
+    const persona = String(raw.persona || colorPalette.persona || '').trim();
+    const segment = String(raw.segment || colorPalette.segment || '').trim();
+    const channel = String(raw.channel || colorPalette.channel || '').trim();
+
+    const objectiveLabel = STRATEGY_LABELS.objective[objective] || 'Não definido';
+    const contextLabel = STRATEGY_LABELS.context[context] || 'Não definido';
+    const personaLabel = STRATEGY_LABELS.persona[persona] || 'Não definido';
+    const segmentLabel = STRATEGY_LABELS.segment[segment] || 'Não definido';
+    const channelLabel = STRATEGY_LABELS.channel[channel] || 'Não definido';
+
+    return {
+        objective,
+        context,
+        persona,
+        segment,
+        channel,
+        objectiveLabel,
+        contextLabel,
+        personaLabel,
+        segmentLabel,
+        channelLabel,
+        available: [objective, context, persona, segment, channel].some(Boolean)
+    };
+}
+
+function resolveStrategyConfidence(rawConfidence) {
+    const score = Number(rawConfidence?.score);
+    const level = String(rawConfidence?.level || '').trim();
+    const label = String(rawConfidence?.label || '').trim();
+    const hasScore = Number.isFinite(score);
+    return {
+        available: hasScore || Boolean(level) || Boolean(label),
+        score: hasScore ? Math.max(0, Math.min(100, Math.round(score))) : null,
+        level: level || 'medium',
+        label: label || 'Média',
+        drivers: Array.isArray(rawConfidence?.drivers)
+            ? rawConfidence.drivers.map((item) => String(item || '').trim()).filter(Boolean).slice(0, 6)
+            : []
+    };
+}
+
+function resolveStrategyContrastAudit(rawAudit, fallbackContrast) {
+    const pairsFromAudit = Array.isArray(rawAudit?.pairs) ? rawAudit.pairs : [];
+    const pairs = pairsFromAudit.length
+        ? pairsFromAudit
+            .map((item) => ({
+                label: String(item?.label || item?.id || 'Par de contraste').trim(),
+                ratio: Number(item?.ratio),
+                minimum: Number(item?.minimum),
+                recommended: Number(item?.recommended),
+                passMinimum: Boolean(item?.passMinimum),
+                passRecommended: Boolean(item?.passRecommended)
+            }))
+            .filter((item) => item.label && Number.isFinite(item.ratio))
+            .slice(0, 18)
+        : (Array.isArray(fallbackContrast) ? fallbackContrast : [])
+            .map((item, index) => ({
+                label: `Par ${index + 1}`,
+                ratio: Number(item?.ratio),
+                minimum: 4.5,
+                recommended: 4.5,
+                passMinimum: Number(item?.ratio) >= 4.5,
+                passRecommended: Number(item?.ratio) >= 4.5
+            }))
+            .filter((item) => Number.isFinite(item.ratio))
+            .slice(0, 12);
+
+    const minimumRatioRaw = Number(rawAudit?.profile?.minimumRatio);
+    const recommendedRatioRaw = Number(rawAudit?.profile?.recommendedRatio);
+    const minimumRatio = Number.isFinite(minimumRatioRaw) ? minimumRatioRaw : 4.5;
+    const recommendedRatio = Number.isFinite(recommendedRatioRaw) ? recommendedRatioRaw : minimumRatio;
+
+    const hardFailCount = Number.isFinite(Number(rawAudit?.hardFailCount))
+        ? Number(rawAudit.hardFailCount)
+        : pairs.filter((item) => item.ratio < (Number.isFinite(item.minimum) ? item.minimum : minimumRatio)).length;
+    const softFailCount = Number.isFinite(Number(rawAudit?.softFailCount))
+        ? Number(rawAudit.softFailCount)
+        : pairs.filter((item) => {
+            const min = Number.isFinite(item.minimum) ? item.minimum : minimumRatio;
+            const rec = Number.isFinite(item.recommended) ? item.recommended : recommendedRatio;
+            return item.ratio >= min && item.ratio < rec;
+        }).length;
+    const totalPairs = Number.isFinite(Number(rawAudit?.totalPairs))
+        ? Number(rawAudit.totalPairs)
+        : pairs.length;
+    const passCount = Number.isFinite(Number(rawAudit?.passCount))
+        ? Number(rawAudit.passCount)
+        : Math.max(0, totalPairs - hardFailCount);
+
+    return {
+        available: pairs.length > 0,
+        channel: String(rawAudit?.profile?.channel || '').trim(),
+        channelLabel: String(rawAudit?.profile?.label || STRATEGY_LABELS.channel.multichannel),
+        minimumRatio,
+        recommendedRatio,
+        level: String(rawAudit?.profile?.level || 'AA').trim() || 'AA',
+        passCount,
+        totalPairs,
+        hardFailCount,
+        softFailCount,
+        pairs
     };
 }
 
@@ -349,14 +542,99 @@ function sanitizeInsightList(items, maxItems) {
 function resolveTypography(snapshot) {
     const brandKitTypography = snapshot?.brandKit?.typography || {};
     const fontProfile = snapshot?.fontProfile || {};
+    const confidenceRaw = Number(fontProfile.confidenceScore ?? brandKitTypography.confidenceScore);
+    const confidenceScore = Number.isFinite(confidenceRaw)
+        ? Math.max(0, Math.min(100, Math.round(confidenceRaw)))
+        : null;
+    const confidenceLabel = String(fontProfile.confidenceLabel || brandKitTypography.confidenceLabel || '');
+    const confidenceDrivers = toStringArray(fontProfile.confidenceDrivers || brandKitTypography.confidenceDrivers, 6);
+    const usageGuidelines = toStringArray(fontProfile.usageGuidelines || brandKitTypography.usageGuidelines, 8);
+    const riskAlerts = toStringArray(fontProfile.riskAlerts || brandKitTypography.riskAlerts, 8);
+    const pairAlternatives = Array.isArray(fontProfile.pairAlternatives)
+        ? fontProfile.pairAlternatives
+        : (Array.isArray(brandKitTypography.pairAlternatives) ? brandKitTypography.pairAlternatives : []);
+
     return {
         primaryFontName: String(brandKitTypography.primaryFontName || fontProfile.primaryFontName || 'Não definido'),
         secondaryFontName: String(brandKitTypography.secondaryFontName || fontProfile.secondaryFontName || 'Não definido'),
         pairingStyle: String(brandKitTypography.pairingStyle || fontProfile.pairingStyle || 'Não definido'),
         tone: String(brandKitTypography.tone || fontProfile.tone || 'Não definido'),
+        industry: String(fontProfile.industry || brandKitTypography.industry || 'geral'),
+        channel: String(fontProfile.channel || brandKitTypography.channel || 'digital'),
+        readability: String(fontProfile.readability || brandKitTypography.readability || 'media'),
+        brandPersonality: String(fontProfile.brandPersonality || brandKitTypography.brandPersonality || 'sobria'),
+        contentScale: String(fontProfile.contentScale || brandKitTypography.contentScale || 'medio'),
+        hierarchyStyle: String(fontProfile.hierarchyStyle || brandKitTypography.hierarchyStyle || 'equilibrada'),
+        fontContrast: String(fontProfile.fontContrast || brandKitTypography.fontContrast || 'medio'),
+        confidenceScore,
+        confidenceLabel: confidenceLabel || (confidenceScore !== null ? 'Média' : ''),
+        confidenceDrivers,
+        usageGuidelines,
+        riskAlerts,
+        pairAlternativesCount: pairAlternatives.length,
         notes: String(brandKitTypography.notes || fontProfile.notes || ''),
         source: String(brandKitTypography.source || fontProfile.source || 'brandkit')
     };
+}
+
+function toStringArray(value, maxItems = 8) {
+    if (!Array.isArray(value)) {
+        return [];
+    }
+    return value
+        .map((entry) => String(entry || '').trim())
+        .filter(Boolean)
+        .slice(0, maxItems);
+}
+
+function translateTypographyLabel(group, key) {
+    const maps = {
+        industry: {
+            geral: 'Geral',
+            tecnologia: 'Tecnologia',
+            moda: 'Moda / Beleza',
+            financeiro: 'Financeiro',
+            saude: 'Saúde / Bem-estar',
+            educacao: 'Educação',
+            gastronomia: 'Gastronomia',
+            criativo: 'Criativo / Agência'
+        },
+        channel: {
+            digital: 'Digital',
+            impresso: 'Impresso',
+            hibrido: 'Híbrido'
+        },
+        readability: {
+            alta: 'Alta',
+            media: 'Média',
+            expressiva: 'Expressiva'
+        },
+        brandPersonality: {
+            sobria: 'Sóbria',
+            calorosa: 'Calorosa',
+            ousada: 'Ousada',
+            tecnica: 'Técnica',
+            artesanal: 'Artesanal'
+        },
+        contentScale: {
+            longo: 'Longo',
+            medio: 'Médio',
+            curto: 'Curto'
+        },
+        hierarchyStyle: {
+            equilibrada: 'Equilibrada',
+            compacta: 'Compacta',
+            dramatica: 'Dramática'
+        },
+        fontContrast: {
+            baixo: 'Baixo',
+            medio: 'Médio',
+            alto: 'Alto'
+        }
+    };
+    const source = maps[group] || {};
+    const normalized = String(key || '').trim();
+    return source[normalized] || normalized || '-';
 }
 
 function resolveOg(snapshot) {
@@ -464,6 +742,23 @@ function buildIntegrationNotes(context) {
         ? { level: 'ok', message: 'Insights de combinações e tendências disponíveis para o BrandBook.' }
         : { level: 'warn', message: 'Sem insights consolidados. Gere paleta no Color Palette para enriquecer o relatório.' });
 
+    notes.push(context.hasStrategyProfile
+        ? { level: 'ok', message: 'Perfil estratégico (objetivo, persona, segmento e canal) sincronizado.' }
+        : { level: 'warn', message: 'Perfil estratégico não encontrado. Gere estratégia no Color Strategy Advisor.' });
+
+    if (context.hasContrastAudit) {
+        if (context.contrastHardFails > 0) {
+            notes.push({
+                level: 'warn',
+                message: `Auditoria de contraste com ${context.contrastHardFails} ponto(s) crítico(s). Ajuste antes de publicar.`
+            });
+        } else {
+            notes.push({ level: 'ok', message: 'Auditoria de contraste sincronizada sem falhas críticas.' });
+        }
+    } else {
+        notes.push({ level: 'warn', message: 'Auditoria de contraste não encontrada no snapshot atual.' });
+    }
+
     notes.push(context.colorCount > 0
         ? { level: 'ok', message: `Sistema de cores consolidado com ${context.colorCount} cor(es).` }
         : { level: 'warn', message: 'Nenhuma cor consolidada encontrada.' });
@@ -489,6 +784,12 @@ function renderMetrics(context) {
     setText('metricTrendCount', String(context.trends.length));
     setText('metricMockupCount', String(context.mockups.length));
     setText('metricOgStatus', context.og.available ? 'Configurado' : 'Sem dados');
+    setText(
+        'metricContrastStatus',
+        context.contrastAudit.available
+            ? `${context.contrastAudit.passCount}/${context.contrastAudit.totalPairs}`
+            : 'Sem dados'
+    );
 }
 
 function renderProject(project) {
@@ -530,7 +831,16 @@ function renderColorSystem(context) {
     const harmonyLabel = context?.harmony?.label || HARMONY_LABELS.monochromatic;
     const harmonySpread = Number.isFinite(context?.harmony?.spread) ? context.harmony.spread : 24;
     const sectorLabel = context?.sectorProfile?.label || SECTOR_LABELS.none;
-    const summary = `${context.paletteSummary} Regra ativa: ${harmonyLabel} (${harmonySpread}deg). Setor: ${sectorLabel}.`;
+    const strategyLine = context?.strategyProfile?.available
+        ? ` Perfil: ${context.strategyProfile.personaLabel} | ${context.strategyProfile.segmentLabel} | ${context.strategyProfile.channelLabel}.`
+        : '';
+    const confidenceLine = context?.confidence?.available && Number.isFinite(context.confidence.score)
+        ? ` Confiança: ${context.confidence.score}% (${context.confidence.label}).`
+        : '';
+    const contrastLine = context?.contrastAudit?.available
+        ? ` Contraste: ${context.contrastAudit.passCount}/${context.contrastAudit.totalPairs} pares aprovados.`
+        : '';
+    const summary = `${context.paletteSummary} Regra ativa: ${harmonyLabel} (${harmonySpread}deg). Setor: ${sectorLabel}.${strategyLine}${confidenceLine}${contrastLine}`;
     setText('paletteSummary', summary);
 
     const roleTarget = document.getElementById('paletteRoles');
@@ -638,15 +948,36 @@ function renderTypography(typography) {
         ['Fonte secundária', typography.secondaryFontName],
         ['Pairing', typography.pairingStyle],
         ['Tom', typography.tone],
+        ['Segmento', translateTypographyLabel('industry', typography.industry)],
+        ['Canal', translateTypographyLabel('channel', typography.channel)],
+        ['Legibilidade', translateTypographyLabel('readability', typography.readability)],
+        ['Personalidade', translateTypographyLabel('brandPersonality', typography.brandPersonality)],
+        ['Escala de conteúdo', translateTypographyLabel('contentScale', typography.contentScale)],
+        ['Hierarquia', translateTypographyLabel('hierarchyStyle', typography.hierarchyStyle)],
+        ['Contraste tipográfico', translateTypographyLabel('fontContrast', typography.fontContrast)],
+        ['Confiança', typography.confidenceScore !== null
+            ? `${typography.confidenceScore}% (${typography.confidenceLabel || 'Média'})`
+            : 'Sem dados'],
+        ['Alternativas de par', String(typography.pairAlternativesCount || 0)],
+        ['Diretrizes sugeridas', typography.usageGuidelines.length ? String(typography.usageGuidelines.length) : 'Sem dados'],
+        ['Alertas tipográficos', typography.riskAlerts.length ? String(typography.riskAlerts.length) : 'Sem dados'],
         ['Notas', typography.notes || 'Sem observações']
     ];
 
-    target.innerHTML = rows.map(([label, value]) => `
-        <article class="detail-item">
-            <small>${escapeHtml(label)}</small>
-            <strong>${escapeHtml(String(value || '-'))}</strong>
-        </article>
-    `).join('');
+    target.innerHTML = `
+        ${rows.map(([label, value]) => `
+            <article class="detail-item">
+                <small>${escapeHtml(label)}</small>
+                <strong>${escapeHtml(String(value || '-'))}</strong>
+            </article>
+        `).join('')}
+        ${typography.confidenceDrivers.length ? `
+            <article class="detail-item">
+                <small>Drivers de confiança</small>
+                <strong>${escapeHtml(typography.confidenceDrivers.slice(0, 3).join(' | '))}</strong>
+            </article>
+        ` : ''}
+    `;
 }
 
 function renderOg(og) {
@@ -680,6 +1011,91 @@ function renderOg(og) {
             <strong>${escapeHtml(String(value || '-'))}</strong>
         </article>
     `).join('');
+}
+
+function renderStrategyProfile(strategyProfile, confidence) {
+    const target = document.getElementById('strategyProfileBlock');
+    if (!target) {
+        return;
+    }
+
+    if (!strategyProfile?.available) {
+        target.innerHTML = `
+            <article class="detail-item">
+                <small>Status</small>
+                <strong>Sem perfil estratégico sincronizado</strong>
+            </article>
+        `;
+        return;
+    }
+
+    const rows = [
+        ['Objetivo', strategyProfile.objectiveLabel],
+        ['Contexto', strategyProfile.contextLabel],
+        ['Persona', strategyProfile.personaLabel],
+        ['Segmento', strategyProfile.segmentLabel],
+        ['Canal', strategyProfile.channelLabel],
+        ['Confiança', confidence?.available && Number.isFinite(confidence?.score)
+            ? `${confidence.score}% (${confidence.label || 'Média'})`
+            : 'Sem dados']
+    ];
+
+    const drivers = Array.isArray(confidence?.drivers) ? confidence.drivers : [];
+    target.innerHTML = `
+        ${rows.map(([label, value]) => `
+            <article class="detail-item">
+                <small>${escapeHtml(label)}</small>
+                <strong>${escapeHtml(String(value || 'Não definido'))}</strong>
+            </article>
+        `).join('')}
+        ${drivers.length ? `
+            <article class="detail-item">
+                <small>Drivers de confiança</small>
+                <strong>${escapeHtml(drivers.slice(0, 3).join(' | '))}</strong>
+            </article>
+        ` : ''}
+    `;
+}
+
+function renderContrastAudit(contrastAudit) {
+    const target = document.getElementById('contrastAuditStatus');
+    if (!target) {
+        return;
+    }
+
+    if (!contrastAudit?.available) {
+        target.innerHTML = `
+            <li class="warn">Sem auditoria de contraste no snapshot atual.</li>
+        `;
+        return;
+    }
+
+    const headerLevel = contrastAudit.hardFailCount > 0
+        ? 'error'
+        : contrastAudit.softFailCount > 0
+            ? 'warn'
+            : 'ok';
+
+    const headerText = contrastAudit.hardFailCount > 0
+        ? `Canal ${contrastAudit.channelLabel}: ${contrastAudit.hardFailCount} falha(s) crítica(s), ${contrastAudit.passCount}/${contrastAudit.totalPairs} pares aprovados.`
+        : contrastAudit.softFailCount > 0
+            ? `Canal ${contrastAudit.channelLabel}: sem falhas críticas, mas ${contrastAudit.softFailCount} ajuste(s) fino(s).`
+            : `Canal ${contrastAudit.channelLabel}: ${contrastAudit.passCount}/${contrastAudit.totalPairs} pares aprovados sem falhas críticas.`;
+
+    const rows = (Array.isArray(contrastAudit.pairs) ? contrastAudit.pairs : []).slice(0, 8).map((item) => {
+        const level = item.passMinimum ? (item.passRecommended ? 'ok' : 'warn') : 'error';
+        const min = Number.isFinite(item.minimum) ? item.minimum : contrastAudit.minimumRatio;
+        const rec = Number.isFinite(item.recommended) ? item.recommended : contrastAudit.recommendedRatio;
+        return {
+            level,
+            message: `${item.label}: ${Number(item.ratio || 0).toFixed(2)}:1 (mín ${Number(min).toFixed(1)}:1, alvo ${Number(rec).toFixed(1)}:1)`
+        };
+    });
+
+    target.innerHTML = [
+        `<li class="${headerLevel}">${escapeHtml(headerText)}</li>`,
+        ...rows.map((row) => `<li class="${row.level}">${escapeHtml(row.message)}</li>`)
+    ].join('');
 }
 
 function renderMockups(mockups) {

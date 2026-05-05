@@ -84,7 +84,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
 
     if (admin_can('quotes.manage')) {
         $menuItems[] = [
-            'label' => 'Solicitacoes',
+            'label' => 'Solicitações',
             'path' => '/admin/orcamentos',
             'icon' => 'fa-solid fa-file-signature',
             'active' => $isActivePath('/admin/orcamentos'),
@@ -99,7 +99,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
 
     if (admin_can('references.view')) {
         $menuItems[] = [
-            'label' => 'Precos e Serviços',
+            'label' => 'Preços e Serviços',
             'path' => '/admin/referencias',
             'icon' => 'fa-solid fa-table',
             'active' => $isActivePath('/admin/referencias'),
@@ -135,7 +135,7 @@ $extraBodyClass = trim((string) ($extraBodyClass ?? ''));
 
     if (admin_is_general()) {
         $menuItems[] = [
-            'label' => 'Usuarios e Permissoes',
+            'label' => 'Usuários e Permissões',
             'path' => '/admin/usuarios',
             'icon' => 'fa-solid fa-users-cog',
             'active' => $isActivePath('/admin/usuarios'),

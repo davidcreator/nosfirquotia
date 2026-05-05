@@ -264,6 +264,87 @@
             .slice(0, maxItems);
     }
 
+    function sanitizeEnum(value, allowed, fallback) {
+        const normalized = sanitizeText(value, 80, fallback);
+        return allowed.has(normalized) ? normalized : fallback;
+    }
+
+    function sanitizeInsightsStrategyProfile(rawProfile, fallbackProfile = {}) {
+        const raw = isObject(rawProfile) ? rawProfile : {};
+        const fallback = isObject(fallbackProfile) ? fallbackProfile : {};
+        const objectives = new Set(['confianca', 'atencao', 'acao', 'sofisticacao', 'equilibrio', 'diversao']);
+        const contexts = new Set(['general', 'financas', 'saude', 'educacao', 'moda', 'namoro', 'avaliacao']);
+        const personas = new Set(['general', 'executive', 'analytical', 'creative', 'pragmatic', 'premium', 'youth']);
+        const segments = new Set(['general', 'saas', 'ecommerce', 'health', 'education', 'finance', 'fashion', 'industrial', 'hospitality']);
+        const channels = new Set(['multichannel', 'digital', 'social', 'performance', 'editorial', 'retail', 'presentation']);
+
+        return {
+            objective: sanitizeEnum(raw.objective, objectives, sanitizeEnum(fallback.objective, objectives, 'confianca')),
+            context: sanitizeEnum(raw.context, contexts, sanitizeEnum(fallback.context, contexts, 'general')),
+            persona: sanitizeEnum(raw.persona, personas, sanitizeEnum(fallback.persona, personas, 'general')),
+            segment: sanitizeEnum(raw.segment, segments, sanitizeEnum(fallback.segment, segments, 'general')),
+            channel: sanitizeEnum(raw.channel, channels, sanitizeEnum(fallback.channel, channels, 'multichannel'))
+        };
+    }
+
+    function sanitizeInsightsConfidence(rawConfidence, fallbackConfidence = {}) {
+        const raw = isObject(rawConfidence) ? rawConfidence : {};
+        const fallback = isObject(fallbackConfidence) ? fallbackConfidence : {};
+        const levels = new Set(['low', 'medium', 'high']);
+        return {
+            score: sanitizeNumber(raw.score, sanitizeNumber(fallback.score, 0, 0, 100), 0, 100),
+            level: sanitizeEnum(raw.level, levels, sanitizeEnum(fallback.level, levels, 'medium')),
+            label: sanitizeText(raw.label, 30, sanitizeText(fallback.label, 30, 'Media')),
+            drivers: sanitizeStringArray(raw.drivers, 8, 160)
+        };
+    }
+
+    function sanitizeInsightsContrastAudit(rawAudit) {
+        if (!isObject(rawAudit)) {
+            return null;
+        }
+        const rawProfile = isObject(rawAudit.profile) ? rawAudit.profile : {};
+        const levels = new Set(['AA', 'AAA']);
+        const profile = {
+            channel: sanitizeText(rawProfile.channel, 40, ''),
+            label: sanitizeText(rawProfile.label, 120, ''),
+            minimumRatio: sanitizeNumber(rawProfile.minimumRatio, 4.5, 0, 30),
+            recommendedRatio: sanitizeNumber(rawProfile.recommendedRatio, 4.5, 0, 30),
+            level: sanitizeEnum(rawProfile.level, levels, 'AA')
+        };
+
+        const pairs = Array.isArray(rawAudit.pairs)
+            ? rawAudit.pairs
+                .map((item) => {
+                    if (!isObject(item)) {
+                        return null;
+                    }
+                    return {
+                        id: sanitizeText(item.id, 60, ''),
+                        label: sanitizeText(item.label, 180, ''),
+                        fg: normalizeHex(item.fg, '#111827'),
+                        bg: normalizeHex(item.bg, '#f8fafc'),
+                        ratio: sanitizeNumber(item.ratio, 0, 0, 30),
+                        minimum: sanitizeNumber(item.minimum, 4.5, 0, 30),
+                        recommended: sanitizeNumber(item.recommended, 4.5, 0, 30),
+                        passMinimum: Boolean(item.passMinimum),
+                        passRecommended: Boolean(item.passRecommended)
+                    };
+                })
+                .filter((item) => item && (item.label || item.id))
+                .slice(0, 18)
+            : [];
+
+        return {
+            profile,
+            passCount: sanitizeNumber(rawAudit.passCount, 0, 0, 1000),
+            totalPairs: sanitizeNumber(rawAudit.totalPairs, pairs.length, 0, 1000),
+            hardFailCount: sanitizeNumber(rawAudit.hardFailCount, 0, 0, 1000),
+            softFailCount: sanitizeNumber(rawAudit.softFailCount, 0, 0, 1000),
+            pairs
+        };
+    }
+
     function mergeBrandKit(rawState) {
         const raw = isObject(rawState) ? rawState : {};
         const rawBrandColors = isObject(raw.brandColors) ? raw.brandColors : {};
@@ -440,6 +521,19 @@
             source: 'system',
             paletteType: 'monochromatic',
             summary: '',
+            strategyProfile: {
+                objective: 'confianca',
+                context: 'general',
+                persona: 'general',
+                segment: 'general',
+                channel: 'multichannel'
+            },
+            confidence: {
+                score: 0,
+                level: 'medium',
+                label: 'Media',
+                drivers: []
+            },
             roles: {
                 primary: '#3498db',
                 secondary: '#1f2937',
@@ -464,7 +558,9 @@
             colors: uniqueColors(raw.colors).slice(0, 12),
             combinations: sanitizeInsightsList(raw.combinations, 16),
             trends: sanitizeInsightsList(raw.trends, 16),
-            recommendations: sanitizeStringArray(raw.recommendations, 18, 220)
+            recommendations: sanitizeStringArray(raw.recommendations, 18, 220),
+            strategyProfile: sanitizeInsightsStrategyProfile(raw.strategyProfile, fallback.strategyProfile),
+            confidence: sanitizeInsightsConfidence(raw.confidence, fallback.confidence)
         };
 
         if (!next.colors.length) {
@@ -490,6 +586,8 @@
             next.contrast = [];
         }
 
+        next.contrastAudit = sanitizeInsightsContrastAudit(raw.contrastAudit);
+
         return next;
     }
 
@@ -510,7 +608,9 @@
             trends: Array.isArray(patch.trends) ? sanitizeInsightsList(patch.trends, 16) : current.trends,
             recommendations: Array.isArray(patch.recommendations)
                 ? sanitizeStringArray(patch.recommendations, 18, 220)
-                : current.recommendations
+                : current.recommendations,
+            strategyProfile: sanitizeInsightsStrategyProfile(patch.strategyProfile, current.strategyProfile),
+            confidence: sanitizeInsightsConfidence(patch.confidence, current.confidence)
         };
 
         if (Array.isArray(patch.contrast)) {
@@ -528,6 +628,10 @@
                 })
                 .filter((item) => item && item.color)
                 .slice(0, 18);
+        }
+
+        if (Object.prototype.hasOwnProperty.call(patch, 'contrastAudit')) {
+            next.contrastAudit = sanitizeInsightsContrastAudit(patch.contrastAudit);
         }
 
         writeState(BRAND_INSIGHTS_STATE_KEY, next);
@@ -557,7 +661,7 @@
                 baseColor: fallbackRoles.primary,
                 type: insights.paletteType || 'monochromatic',
                 title: 'Paleta consolidada com insights',
-                description: insights.summary || 'Paleta consolidada a partir de combinacoes e tendencias.',
+                description: insights.summary || 'Paleta consolidada a partir de combinações e tendências.',
                 colors
             }
         }, source);

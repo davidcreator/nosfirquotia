@@ -79,7 +79,7 @@ cleanOldFiles();
                         </label>
                         <label style="display:flex; align-items:center; gap:8px;">
                             <input type="checkbox" id="showSmartDebug"/>
-                            Diagnostico IA
+                            Diagnóstico IA
                         </label>
                         <button class="btn btn-secondary" id="comparePresetsBtn" type="button">Comparar presets</button>
                         <small class="preset-help">Escolha um preset para aplicar ajustes recomendados.</small>

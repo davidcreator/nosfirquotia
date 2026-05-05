@@ -19,7 +19,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
             <div>
                 <p class="eyebrow">Quotia Tools</p>
                 <h1>FinalFrame</h1>
-                <p class="hero-text">Relatorio final consolidado com identidade visual, OG, mockups e background remover em um unico payload.</p>
+                <p class="hero-text">Relatório final consolidado com identidade visual, OG, mockups e background remover em um único payload.</p>
             </div>
             <div class="hero-actions">
                 <button type="button" class="btn" id="refreshReportBtn">Atualizar relatório</button>

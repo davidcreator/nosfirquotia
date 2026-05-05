@@ -1,7 +1,7 @@
 <section class="aq-admin-page-hero">
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
-            <h1 class="aq-admin-page-hero-title">Usuarios admin e permissoes</h1>
+            <h1 class="aq-admin-page-hero-title">Usuários admin e permissões</h1>
             <p class="aq-admin-page-hero-subtitle">Controle de niveis de acesso do painel administrativo.</p>
         </div>
         <div class="col-md-4">
@@ -39,7 +39,7 @@
                         <input class="form-control" name="access_level" value="Operacional" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label d-block mb-2">Permissoes</label>
+                        <label class="form-label d-block mb-2">Permissões</label>
                         <div class="row g-2">
                             <?php foreach ($permissionCatalog as $permissionKey => $permissionLabel): ?>
                                 <div class="col-md-6">
@@ -88,7 +88,7 @@
 <section class="aq-admin-panel">
     <div class="aq-admin-panel-header">
         <div>
-            <h2 class="aq-admin-panel-title">Usuarios existentes</h2>
+            <h2 class="aq-admin-panel-title">Usuários existentes</h2>
             <p class="aq-admin-panel-subtitle">Atualize status, senha e permissoes por perfil.</p>
         </div>
     </div>
@@ -155,7 +155,7 @@
                                 </div>
                             <?php else: ?>
                                 <div class="col-12">
-                                    <label class="form-label d-block mb-2">Permissoes</label>
+                                    <label class="form-label d-block mb-2">Permissões</label>
                                     <div class="row g-2">
                                         <?php foreach ($permissionCatalog as $permissionKey => $permissionLabel): ?>
                                             <div class="col-md-6">
@@ -178,7 +178,7 @@
                                 </div>
                             <?php endif; ?>
                             <div class="col-12 d-flex justify-content-end">
-                                <button class="btn btn-outline-primary btn-sm" type="submit">Salvar configuracoes</button>
+                                <button class="btn btn-outline-primary btn-sm" type="submit">Salvar configurações</button>
                             </div>
                         </form>
                     </article>

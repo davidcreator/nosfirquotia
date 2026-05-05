@@ -28,7 +28,7 @@ const CATEGORY_DEFS = {
             ['Capa de Ebook', 'vertical', 'paper', 'ebook,capa,editorial'],
             ['Email Marketing', 'horizontal', 'screen', 'email,newsletter,crm'],
             ['Landing Page', 'horizontal', 'screen', 'landing,site,conversao'],
-            ['Catalogo de Produto', 'vertical', 'paper', 'catalogo,produto,vendas'],
+            ['Catálogo de Produto', 'vertical', 'paper', 'catálogo,produto,vendas'],
             ['Pitch Deck', 'horizontal', 'paper', 'deck,startup,investidor'],
             ['Infografico Vertical', 'vertical', 'paper', 'infografico,dados,visual']
         ]
@@ -105,7 +105,7 @@ const CATEGORY_DEFS = {
             ['Logo Horizontal Institucional', 'horizontal', 'frame', 'logo,horizontal,assinatura'],
             ['Monograma e Simbolo', 'quadrada', 'frame', 'monograma,simbolo,marca'],
             ['Pattern Institucional', 'quadrada', 'frame', 'pattern,textura,identidade'],
-            ['Kit Aplicações da Marca', 'horizontal', 'frame', 'aplicacoes,branding,apresentacao'],
+            ['Kit Aplicações da Marca', 'horizontal', 'frame', 'aplicações,branding,apresentação'],
             ['Fachada Comercial', 'horizontal', 'sign', 'fachada,loja,sinalização,marca'],
             ['Uniforme Corporativo', 'vertical', 'fabric', 'uniforme,corporativo,aplicação'],
             ['Assinatura de Apresentação', 'horizontal', 'screen', 'apresentação,pitch,marca'],
@@ -2045,7 +2045,7 @@ async function processUploadedArtworkFile(file, options = {}) {
             ? `Imagem carregada e aplicada ao mockup atual (${width}x${height}).`
             : `Imagem carregada com sucesso (${width}x${height}). Selecione um mockup em "Editar" para aplicar.`;
         const optimizationInfo = wasOptimized
-            ? ` | Otimizada para edicao: ${image._optimizedWidth}x${image._optimizedHeight}px`
+            ? ` | Otimizada para edição: ${image._optimizedWidth}x${image._optimizedHeight}px`
             : '';
 
         updateUploadFeedback({
@@ -3931,7 +3931,7 @@ function saveMockupChanges(options = {}) {
     const silent = Boolean(options.silent);
     if (!selectedMockup) {
         if (!silent) {
-            alert('Selecione um mockup antes de salvar as alteracoes.');
+            alert('Selecione um mockup antes de salvar as alterações.');
         }
         return false;
     }
