@@ -126,6 +126,31 @@ final class Application
         return $this->clientAuth;
     }
 
+    public function csrfToken(): string
+    {
+        $token = (string) $this->session->get('_csrf_token', '');
+        if ($token === '') {
+            try {
+                $token = bin2hex(random_bytes(32));
+            } catch (Throwable) {
+                $token = hash('sha256', uniqid('csrf_', true));
+            }
+            $this->session->set('_csrf_token', $token);
+        }
+
+        return $token;
+    }
+
+    public function csrfTokenIsValid(string $providedToken): bool
+    {
+        $stored = (string) $this->session->get('_csrf_token', '');
+        if ($stored === '' || trim($providedToken) === '') {
+            return false;
+        }
+
+        return hash_equals($stored, trim($providedToken));
+    }
+
     private function registerRoutes(): void
     {
         $routeFile = $this->rootPath . '/system/routes.php';
@@ -175,6 +200,10 @@ final class Application
             return;
         }
 
+        if (!$this->enforceCsrfForWriteRequests()) {
+            return;
+        }
+
         $handler = $result['handler'];
         $vars = array_values((array) ($result['vars'] ?? []));
 
@@ -201,6 +230,84 @@ final class Application
         }
 
         throw new RuntimeException('Handler de rota invalido.');
+    }
+
+    private function enforceCsrfForWriteRequests(): bool
+    {
+        $method = strtoupper($this->request->method());
+        if (!in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
+            return true;
+        }
+
+        $token = trim((string) $this->request->post('_csrf_token', ''));
+        if ($token === '' && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+            $token = trim((string) $_SERVER['HTTP_X_CSRF_TOKEN']);
+        }
+        if ($this->csrfTokenIsValid($token)) {
+            return true;
+        }
+
+        $this->session->flash('error', 'Sua sessao expirou ou a requisicao e invalida. Tente novamente.');
+        $this->response->redirect($this->csrfFailureRedirectPath($this->request->path()));
+
+        return false;
+    }
+
+    private function csrfFailureRedirectPath(string $path): string
+    {
+        if (str_starts_with($path, '/install')) {
+            return '/index.php?route=' . $path;
+        }
+
+        if (str_starts_with($path, '/admin')) {
+            if (str_starts_with($path, '/admin/orcamentos')) {
+                return '/admin/orcamentos';
+            }
+
+            if (str_starts_with($path, '/admin/tributos')) {
+                return '/admin/tributos';
+            }
+
+            if (str_starts_with($path, '/admin/usuarios')) {
+                return '/admin/usuarios';
+            }
+
+            if (str_starts_with($path, '/admin/categorias')) {
+                return '/admin/categorias';
+            }
+
+            if (str_starts_with($path, '/admin/esqueci-senha')) {
+                return '/admin/esqueci-senha';
+            }
+
+            if (str_starts_with($path, '/admin/redefinir-senha')) {
+                return '/admin/esqueci-senha';
+            }
+
+            return '/admin';
+        }
+
+        if (str_starts_with($path, '/cliente/login')) {
+            return '/cliente/login';
+        }
+
+        if (str_starts_with($path, '/cliente/cadastro')) {
+            return '/cliente/cadastro';
+        }
+
+        if (str_starts_with($path, '/cliente/esqueci-senha')) {
+            return '/cliente/esqueci-senha';
+        }
+
+        if (str_starts_with($path, '/cliente/redefinir-senha')) {
+            return '/cliente/esqueci-senha';
+        }
+
+        if (str_starts_with($path, '/orcamento')) {
+            return '/orcamento/novo';
+        }
+
+        return '/';
     }
 
     private function handleException(Throwable $exception): void

@@ -22,6 +22,7 @@
             </div>
             <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/categorias')) ?>" class="row g-3">
+                    <?= csrf_field() ?>
                     <div class="col-12">
                         <label class="form-label">Área</label>
                         <select class="form-select" name="area_type" required>

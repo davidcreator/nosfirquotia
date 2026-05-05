@@ -22,6 +22,7 @@
             </div>
             <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/usuarios')) ?>" class="row g-3">
+                    <?= csrf_field() ?>
                     <div class="col-md-6">
                         <label class="form-label">Nome</label>
                         <input class="form-control" name="name" required>
@@ -125,6 +126,7 @@
                         </div>
 
                         <form method="post" action="<?= e(url('/admin/usuarios/' . $userId)) ?>" class="row g-3">
+                            <?= csrf_field() ?>
                             <div class="col-md-4">
                                 <label class="form-label">Nome</label>
                                 <input class="form-control" name="name" value="<?= e((string) $user['name']) ?>" required>

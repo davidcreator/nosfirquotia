@@ -14,6 +14,7 @@
     </div>
 
     <form method="post" action="<?= e(url('/admin/esqueci-senha')) ?>" class="aq-admin-auth-form">
+        <?= csrf_field() ?>
         <label for="adminForgotEmail">Email administrativo</label>
         <input
             type="email"

@@ -31,6 +31,7 @@
         </div>
 
         <form method="post" action="<?= e(url('/index.php?route=/install/step1')) ?>" class="d-flex justify-content-end">
+            <?= csrf_field() ?>
             <button class="btn btn-primary" type="submit" <?= !$canContinue ? 'disabled' : '' ?>>
                 Continuar para Passo 2
             </button>

@@ -28,6 +28,7 @@ $metaFavicon = asset('image/quotia.png');
     <meta name="twitter:title" content="<?= e($metaAppName) ?>">
     <meta name="twitter:description" content="<?= e($metaDescription) ?>">
     <meta name="twitter:image" content="<?= e($metaOgImage) ?>">
+    <meta name="csrf-token" content="<?= e(csrf_token()) ?>">
     <link rel="icon" type="image/png" href="<?= e($metaFavicon) ?>">
     <link rel="apple-touch-icon" href="<?= e($metaFavicon) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -31,6 +31,7 @@
                 <p>Digite seu email para receber o link de redefinição.</p>
 
                 <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/esqueci-senha')) ?>">
+                    <?= csrf_field() ?>
                     <label for="forgotPasswordEmail">Email</label>
                     <input type="email" id="forgotPasswordEmail" name="email" required autocomplete="email" value="<?= e((string) old('email')) ?>">
 

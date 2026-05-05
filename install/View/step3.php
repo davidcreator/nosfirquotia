@@ -4,6 +4,7 @@
         <p class="text-muted mb-4">Informe os dados do banco MySQL e o usuario administrador inicial.</p>
 
         <form method="post" action="<?= e(url('/index.php?route=/install/step3')) ?>" class="row g-3">
+            <?= csrf_field() ?>
             <div class="col-12">
                 <h3 class="h6 text-uppercase text-muted">Banco de Dados</h3>
             </div>

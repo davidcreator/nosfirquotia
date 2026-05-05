@@ -27,6 +27,7 @@ final class ClientAuth
         }
 
         $this->session->regenerate();
+        $this->session->remove('_csrf_token');
         $this->session->set('client_user', [
             'id' => (int) $user['id'],
             'name' => (string) $user['name'],
@@ -77,6 +78,7 @@ final class ClientAuth
         );
 
         $this->session->regenerate();
+        $this->session->remove('_csrf_token');
         $this->session->set('client_user', [
             'id' => $this->database->lastInsertId(),
             'name' => $name,
@@ -110,5 +112,6 @@ final class ClientAuth
     {
         $this->session->remove('client_user');
         $this->session->regenerate();
+        $this->session->remove('_csrf_token');
     }
 }

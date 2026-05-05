@@ -2,3 +2,9 @@
 /storage/installed.lock
 /storage/sessions/*
 !/storage/sessions/.gitkeep
+/storage/cache/rate_limits/*
+!/storage/cache/rate_limits/.gitkeep
+/config/config.php
+/config/config-*.php
+!/config/config.example.php
+/database/schema_backup_*.sql

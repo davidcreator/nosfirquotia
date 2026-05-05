@@ -54,15 +54,30 @@
                         </a>
                     </div>
                 <?php else: ?>
+                    <?php
+                    $rememberedClientEmail = trim((string) app()->request()->cookie('aq_client_remember_email', ''));
+                    if (filter_var($rememberedClientEmail, FILTER_VALIDATE_EMAIL) === false) {
+                        $rememberedClientEmail = '';
+                    }
+                    $homeLoginEmail = trim((string) old('email', $rememberedClientEmail));
+                    $homeRememberChecked = old('remember_email', $rememberedClientEmail !== '' ? '1' : '0');
+                    $homeRememberChecked = in_array((string) $homeRememberChecked, ['1', 'true', 'on', 'sim', 'yes'], true);
+                    ?>
                     <h2>Entrar na conta</h2>
                     <p>Acesse para editar pedidos, acompanhar status e consultar seus relatórios de orçamento.</p>
 
                     <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/login')) ?>">
+                        <?= csrf_field() ?>
                         <label for="homeLoginEmail">Email</label>
-                        <input id="homeLoginEmail" name="email" type="email" autocomplete="username" required value="<?= e((string) old('email')) ?>">
+                        <input id="homeLoginEmail" name="email" type="email" autocomplete="username" required value="<?= e($homeLoginEmail) ?>">
 
                         <label for="homeLoginPassword">Senha</label>
                         <input id="homeLoginPassword" name="password" type="password" autocomplete="current-password" required>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="homeRememberEmail" name="remember_email" value="1" <?= $homeRememberChecked ? 'checked' : '' ?>>
+                            <label class="form-check-label small" for="homeRememberEmail">Lembrar meu e-mail neste dispositivo</label>
+                        </div>
 
                         <button type="submit" class="aq-entry-submit">Entrar na conta</button>
                     </form>

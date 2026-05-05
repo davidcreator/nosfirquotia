@@ -203,6 +203,7 @@ foreach ($serviceCatalogs as $catalog) {
                 <p class="text-muted mb-4">Preencha em 4 passos e receba um atendimento estratégico para marca, identidade visual e materiais da sua empresa.</p>
 
                 <form method="post" action="<?= e(url('/orcamento/enviar')) ?>" data-quote-wizard>
+                    <?= csrf_field() ?>
                     <div class="aq-assistant-shell aq-wizard-shell">
                         <div class="aq-assistant-header">
                             <div>

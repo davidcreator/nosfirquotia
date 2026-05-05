@@ -31,6 +31,7 @@ $extraHeadContent = (string) ($extraHeadContent ?? '');
     <meta name="twitter:title" content="<?= e($metaPageTitle) ?>">
     <meta name="twitter:description" content="<?= e($metaDescription) ?>">
     <meta name="twitter:image" content="<?= e($metaOgImage) ?>">
+    <meta name="csrf-token" content="<?= e(csrf_token()) ?>">
     <?php if ($extraHeadBaseHref !== ''): ?>
         <base href="<?= e($extraHeadBaseHref) ?>">
     <?php endif; ?>

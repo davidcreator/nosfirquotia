@@ -14,6 +14,7 @@
     </div>
 
     <form method="post" action="<?= e(url('/admin/redefinir-senha')) ?>" class="aq-admin-auth-form">
+        <?= csrf_field() ?>
         <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">
 
         <label for="adminResetPassword">Nova senha</label>

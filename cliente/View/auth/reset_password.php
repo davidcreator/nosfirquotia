@@ -24,6 +24,7 @@
                 <p>Cadastre sua nova senha para concluir a recuperação.</p>
 
                 <form class="aq-entry-form aq-entry-form-grid" method="post" action="<?= e(url('/cliente/redefinir-senha')) ?>">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">
 
                     <div class="aq-entry-field">

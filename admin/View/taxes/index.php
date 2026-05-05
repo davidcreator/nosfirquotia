@@ -52,6 +52,7 @@ if (!is_array($legalReferences)) {
             </div>
             <div class="aq-admin-panel-body">
                 <form method="post" action="<?= e(url('/admin/tributos')) ?>" class="row g-3">
+                    <?= csrf_field() ?>
                     <div class="col-12">
                         <h3 class="h6 text-uppercase text-muted mb-2">1) Perfil tributário</h3>
                     </div>

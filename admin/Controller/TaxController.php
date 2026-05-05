@@ -40,14 +40,14 @@ final class TaxController extends BaseAdminController
         $this->ensurePermission('taxes.manage');
 
         $payload = [
-            'imposto_label' => trim((string) $this->request->post('imposto_label', 'Tributos sobre faturamento')),
+            'imposto_label' => $this->sanitizeSingleLineText((string) $this->request->post('imposto_label', 'Tributos sobre faturamento'), 120),
             'imposto_percent' => $this->toPercent($this->request->post('imposto_percent', '0')),
-            'taxa_label' => trim((string) $this->request->post('taxa_label', 'Taxas administrativas')),
+            'taxa_label' => $this->sanitizeSingleLineText((string) $this->request->post('taxa_label', 'Taxas administrativas'), 120),
             'taxa_percent' => $this->toPercent($this->request->post('taxa_percent', '0')),
-            'encargo_label' => trim((string) $this->request->post('encargo_label', 'Encargos gerais')),
+            'encargo_label' => $this->sanitizeSingleLineText((string) $this->request->post('encargo_label', 'Encargos gerais'), 120),
             'encargo_percent' => $this->toPercent($this->request->post('encargo_percent', '0')),
             'tax_regime' => $this->normalizeTaxRegime((string) $this->request->post('tax_regime', 'simples_nacional')),
-            'municipality_name' => trim((string) $this->request->post('municipality_name', '')),
+            'municipality_name' => $this->sanitizeSingleLineText((string) $this->request->post('municipality_name', ''), 150),
             'iss_percent' => $this->toPercent($this->request->post('iss_percent', '')),
             'apply_iss_withholding' => $this->toBool($this->request->post('apply_iss_withholding', false)),
             'iss_withholding_percent' => $this->toPercent($this->request->post('iss_withholding_percent', '0')),
@@ -57,9 +57,9 @@ final class TaxController extends BaseAdminController
             'pcc_withholding_percent' => $this->toPercent($this->request->post('pcc_withholding_percent', '0')),
             'apply_inss_withholding' => $this->toBool($this->request->post('apply_inss_withholding', false)),
             'inss_withholding_percent' => $this->toPercent($this->request->post('inss_withholding_percent', '0')),
-            'legal_responsible_name' => trim((string) $this->request->post('legal_responsible_name', '')),
+            'legal_responsible_name' => $this->sanitizeSingleLineText((string) $this->request->post('legal_responsible_name', ''), 150),
             'legal_review_date' => trim((string) $this->request->post('legal_review_date', '')),
-            'legal_notes_text' => trim((string) $this->request->post('legal_notes_text', '')),
+            'legal_notes_text' => $this->sanitizeMultilineText((string) $this->request->post('legal_notes_text', ''), 4000),
             'check_regime' => $this->toBool($this->request->post('check_regime', false)),
             'check_iss' => $this->toBool($this->request->post('check_iss', false)),
             'check_retentions' => $this->toBool($this->request->post('check_retentions', false)),
@@ -253,13 +253,7 @@ final class TaxController extends BaseAdminController
 
     private function toBool(mixed $value): bool
     {
-        if (is_bool($value)) {
-            return $value;
-        }
-
-        $normalized = strtolower(trim((string) $value));
-
-        return in_array($normalized, ['1', 'true', 'on', 'sim', 'yes'], true);
+        return $this->toBoolValue($value);
     }
 
     private function isDateYmd(string $value): bool

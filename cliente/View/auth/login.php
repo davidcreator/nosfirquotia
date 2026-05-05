@@ -1,3 +1,8 @@
+<?php
+$loginEmailValue = trim((string) old('email', (string) ($rememberedEmail ?? '')));
+$rememberChecked = old('remember_email', !empty($rememberEmailChecked) ? '1' : '0');
+$rememberChecked = in_array((string) $rememberChecked, ['1', 'true', 'on', 'sim', 'yes'], true);
+?>
 <section class="aq-entry aq-entry-auth">
     <div class="aq-entry-shell">
         <div class="aq-entry-grid">
@@ -35,11 +40,17 @@
                 <p>Informe seu email e senha para continuar no portal do cliente.</p>
 
                 <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/login')) ?>">
+                    <?= csrf_field() ?>
                     <label for="clientLoginEmail">Email</label>
-                    <input type="email" id="clientLoginEmail" name="email" required autocomplete="email" value="<?= e((string) old('email')) ?>">
+                    <input type="email" id="clientLoginEmail" name="email" required autocomplete="email" value="<?= e($loginEmailValue) ?>">
 
                     <label for="clientLoginPassword">Senha</label>
                     <input type="password" id="clientLoginPassword" name="password" required autocomplete="current-password">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="clientRememberEmail" name="remember_email" value="1" <?= $rememberChecked ? 'checked' : '' ?>>
+                        <label class="form-check-label small" for="clientRememberEmail">Lembrar meu e-mail neste dispositivo</label>
+                    </div>
 
                     <button class="aq-entry-submit" type="submit">Entrar</button>
                 </form>

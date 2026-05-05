@@ -31,6 +31,7 @@
                 <p>Preencha os dados abaixo para liberar seu acesso no portal do cliente.</p>
 
                 <form class="aq-entry-form aq-entry-form-grid" method="post" action="<?= e(url('/cliente/cadastro')) ?>">
+                    <?= csrf_field() ?>
                     <div class="aq-entry-form-row aq-entry-form-row-2">
                         <div class="aq-entry-field">
                             <label for="registerName">Nome</label>

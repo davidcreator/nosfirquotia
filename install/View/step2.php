@@ -33,6 +33,7 @@
         <div class="d-flex justify-content-between">
             <a href="<?= e(url('/index.php?route=/install/step1')) ?>" class="btn btn-outline-secondary">Voltar</a>
             <form method="post" action="<?= e(url('/index.php?route=/install/step2')) ?>">
+                <?= csrf_field() ?>
                 <button class="btn btn-primary" type="submit" <?= !$canContinue ? 'disabled' : '' ?>>
                     Continuar para Passo 3
                 </button>

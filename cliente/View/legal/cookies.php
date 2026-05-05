@@ -16,10 +16,14 @@ $legalPageDescription = 'Informações sobre cookies essenciais, consentimento e
             <h2>2. Cookies essenciais</h2>
             <p>O Quotia utiliza cookies essenciais para autenticação de sessão, segurança e funcionamento básico da plataforma. Esses cookies são necessários para o serviço operar.</p>
 
-            <h2>3. Consentimento</h2>
+            <h2>3. Cookie opcional de lembrança de e-mail</h2>
+            <p>Quando o usuário marca a opção <strong>“Lembrar meu e-mail neste dispositivo”</strong> na tela de login, o sistema grava um cookie funcional apenas com o e-mail informado para facilitar novos acessos.</p>
+            <p>Este cookie não armazena senha, token de autenticação permanente ou dados financeiros.</p>
+
+            <h2>4. Consentimento</h2>
             <p>Ao acessar o sistema, o usuário pode definir preferência de consentimento de cookies. O consentimento é armazenado para registro de preferência.</p>
 
-            <h2>4. Como gerenciar</h2>
+            <h2>5. Como gerenciar</h2>
             <p>Você pode alterar ou remover cookies pelas configurações do navegador. A desativação de cookies essenciais pode comprometer funcionalidades de login e segurança.</p>
         </div>
     </article>

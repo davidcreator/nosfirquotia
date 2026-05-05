@@ -156,6 +156,7 @@
         ?>
 
         <form method="post" action="<?= e(url('/admin/orcamentos/' . (int) $requestData['id'] . '/gerar-relatorio')) ?>" class="row g-3" id="quoteReportForm">
+            <?= csrf_field() ?>
             <input type="hidden" name="company_profile" id="companyProfileField" value="todos">
             <?php
             $reportItemsByService = [];

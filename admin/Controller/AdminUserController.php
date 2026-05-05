@@ -33,11 +33,11 @@ final class AdminUserController extends BaseAdminController
         $this->ensureGeneralAdmin();
 
         $payload = [
-            'name' => trim((string) $this->request->post('name', '')),
-            'email' => strtolower(trim((string) $this->request->post('email', ''))),
+            'name' => $this->sanitizeSingleLineText((string) $this->request->post('name', ''), 120),
+            'email' => $this->sanitizeEmailAddress((string) $this->request->post('email', '')),
             'password' => (string) $this->request->post('password', ''),
-            'access_level' => trim((string) $this->request->post('access_level', 'Operacional')),
-            'is_active' => (bool) $this->request->post('is_active', false),
+            'access_level' => $this->sanitizeSingleLineText((string) $this->request->post('access_level', 'Operacional'), 80),
+            'is_active' => $this->toBoolValue($this->request->post('is_active', false)),
             'permissions' => $this->normalizePermissionsInput($this->request->post('permissions', [])),
         ];
 
@@ -71,11 +71,11 @@ final class AdminUserController extends BaseAdminController
         }
 
         $payload = [
-            'name' => trim((string) $this->request->post('name', '')),
-            'email' => strtolower(trim((string) $this->request->post('email', ''))),
+            'name' => $this->sanitizeSingleLineText((string) $this->request->post('name', ''), 120),
+            'email' => $this->sanitizeEmailAddress((string) $this->request->post('email', '')),
             'new_password' => (string) $this->request->post('new_password', ''),
-            'access_level' => trim((string) $this->request->post('access_level', 'Operacional')),
-            'is_active' => (bool) $this->request->post('is_active', false),
+            'access_level' => $this->sanitizeSingleLineText((string) $this->request->post('access_level', 'Operacional'), 80),
+            'is_active' => $this->toBoolValue($this->request->post('is_active', false)),
             'permissions' => $this->normalizePermissionsInput($this->request->post('permissions', [])),
         ];
 
@@ -127,6 +127,9 @@ final class AdminUserController extends BaseAdminController
         if (strlen((string) $payload['password']) < 6) {
             $errors[] = 'Senha deve ter pelo menos 6 caracteres.';
         }
+        if (strlen((string) $payload['password']) > 200) {
+            $errors[] = 'Senha excede o tamanho máximo permitido.';
+        }
 
         if (($payload['permissions'] ?? []) === []) {
             $errors[] = 'Selecione pelo menos uma permissão para o usuário.';
@@ -150,6 +153,9 @@ final class AdminUserController extends BaseAdminController
         if ($payload['new_password'] !== '' && strlen((string) $payload['new_password']) < 6) {
             $errors[] = 'Nova senha deve ter pelo menos 6 caracteres.';
         }
+        if (strlen((string) $payload['new_password']) > 200) {
+            $errors[] = 'Nova senha excede o tamanho máximo permitido.';
+        }
 
         if ($requirePermissions && ($payload['permissions'] ?? []) === []) {
             $errors[] = 'Selecione pelo menos uma permissão para o usuário.';
@@ -164,10 +170,11 @@ final class AdminUserController extends BaseAdminController
             return [];
         }
 
+        $allowedPermissions = array_keys(Auth::permissionCatalog());
         $permissions = [];
         foreach ($raw as $permission) {
             $permission = (string) $permission;
-            if ($permission !== '') {
+            if ($permission !== '' && in_array($permission, $allowedPermissions, true)) {
                 $permissions[$permission] = $permission;
             }
         }

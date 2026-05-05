@@ -36,13 +36,13 @@ final class RequestController extends BaseClientController
             : '';
 
         $payload = [
-            'project_title' => trim((string) $this->request->post('project_title', '')),
+            'project_title' => $this->sanitizeSingleLineText((string) $this->request->post('project_title', ''), 180),
             'client_person_type' => $personType,
             'company_profile' => $companyProfile,
             'client_area' => $this->sanitizeArea((string) $this->request->post('client_area', '')),
-            'client_area_other' => trim((string) $this->request->post('client_area_other', '')),
+            'client_area_other' => $this->sanitizeSingleLineText((string) $this->request->post('client_area_other', ''), 160),
             'service_category' => $this->sanitizeServiceCategory((string) $this->request->post('service_category', '')),
-            'requested_availability' => trim((string) $this->request->post('requested_availability', '')),
+            'requested_availability' => $this->sanitizeSingleLineText((string) $this->request->post('requested_availability', ''), 150),
             'business_moment' => $this->sanitizeBusinessMoment((string) $this->request->post('business_moment', '')),
             'priority_channel' => $this->sanitizePriorityChannel((string) $this->request->post('priority_channel', '')),
             'project_priority' => $this->sanitizeProjectPriority((string) $this->request->post('project_priority', '')),

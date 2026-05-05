@@ -8,15 +8,17 @@ final class Request
 {
     private array $query;
     private array $body;
+    private array $cookies;
     private array $server;
     private string $method;
     private string $path;
     private string $basePath;
 
-    public function __construct(array $query = [], array $body = [], array $server = [])
+    public function __construct(array $query = [], array $body = [], array $server = [], array $cookies = [])
     {
         $this->query = $query ?: $_GET;
         $this->body = $body ?: $_POST;
+        $this->cookies = $cookies ?: $_COOKIE;
         $this->server = $server ?: $_SERVER;
 
         $this->method = $this->detectMethod();
@@ -52,6 +54,11 @@ final class Request
     public function query(string $key, mixed $default = null): mixed
     {
         return $this->query[$key] ?? $default;
+    }
+
+    public function cookie(string $key, mixed $default = null): mixed
+    {
+        return $this->cookies[$key] ?? $default;
     }
 
     public function all(): array

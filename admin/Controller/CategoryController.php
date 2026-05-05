@@ -31,16 +31,16 @@ final class CategoryController extends BaseAdminController
         $this->ensurePermission('categories.manage');
 
         $areaType = strtolower(trim((string) $this->request->post('area_type', 'design')));
-        $name = trim((string) $this->request->post('name', ''));
-        $description = trim((string) $this->request->post('description', ''));
-        $basePrice = (float) $this->request->post('base_price', 0);
+        $name = $this->sanitizeSingleLineText((string) $this->request->post('name', ''), 160);
+        $description = $this->sanitizeMultilineText((string) $this->request->post('description', ''), 2000);
+        $basePrice = $this->toPositiveFloat($this->request->post('base_price', 0));
         $allowedAreas = ['design', 'development'];
 
         if (!in_array($areaType, $allowedAreas, true)) {
             $areaType = 'design';
         }
 
-        if ($name === '' || $basePrice <= 0) {
+        if ($name === '' || $basePrice === null || $basePrice <= 0) {
             $this->session->flash('error', 'Informe área, nome e valor base válido.');
             $this->redirect('/admin/categorias');
         }
@@ -56,5 +56,21 @@ final class CategoryController extends BaseAdminController
 
         $this->session->flash('success', 'Categoria criada com sucesso.');
         $this->redirect('/admin/categorias');
+    }
+
+    private function toPositiveFloat(mixed $value): ?float
+    {
+        $raw = trim((string) $value);
+        if ($raw === '') {
+            return null;
+        }
+
+        $normalized = str_replace(',', '.', $raw);
+        $normalized = preg_replace('/[^0-9.\-]/', '', $normalized) ?? '';
+        if ($normalized === '' || !is_numeric($normalized)) {
+            return null;
+        }
+
+        return (float) $normalized;
     }
 }

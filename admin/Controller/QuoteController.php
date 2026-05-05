@@ -135,8 +135,8 @@ final class QuoteController extends BaseAdminController
             $amount = $this->toFloat($this->request->post('price_' . $serviceId, ''));
             $deadlineRaw = trim((string) $this->request->post('deadline_' . $serviceId, ''));
             $deadlineDays = $deadlineRaw !== '' ? (int) $deadlineRaw : null;
-            $availability = trim((string) $this->request->post('availability_' . $serviceId, ''));
-            $notes = trim((string) $this->request->post('notes_' . $serviceId, ''));
+            $availability = $this->sanitizeSingleLineText((string) $this->request->post('availability_' . $serviceId, ''), 120);
+            $notes = $this->sanitizeMultilineText((string) $this->request->post('notes_' . $serviceId, ''), 2000);
 
             if ($amount === null || $amount <= 0) {
                 $errors[] = 'Informe um valor válido para o serviço ' . $service['service_name'] . '.';
@@ -145,6 +145,10 @@ final class QuoteController extends BaseAdminController
 
             if ($deadlineDays !== null && $deadlineDays < 1) {
                 $errors[] = 'Prazo inválido para o serviço ' . $service['service_name'] . '.';
+                continue;
+            }
+            if ($deadlineDays !== null && $deadlineDays > 3650) {
+                $errors[] = 'Prazo muito alto para o serviço ' . $service['service_name'] . '.';
                 continue;
             }
 
@@ -190,7 +194,7 @@ final class QuoteController extends BaseAdminController
 
         foreach ($taxDefinitions as $definition) {
             $key = $definition['key'];
-            $label = trim((string) $this->request->post('tax_label_' . $key, $definition['default_label']));
+            $label = $this->sanitizeSingleLineText((string) $this->request->post('tax_label_' . $key, $definition['default_label']), 150);
             $percent = $this->toFloat((string) $this->request->post('tax_percent_' . $key, (string) $definition['default_percent']));
 
             if ($label === '') {
@@ -230,12 +234,16 @@ final class QuoteController extends BaseAdminController
             $this->session->flash('error', 'Prazo total do relatório deve ser maior que zero.');
             $this->redirect('/admin/orcamentos/' . $requestId);
         }
+        if ($totalDeadline !== null && $totalDeadline > 3650) {
+            $this->session->flash('error', 'Prazo total do relatório está acima do limite permitido.');
+            $this->redirect('/admin/orcamentos/' . $requestId);
+        }
 
         $payload = [
             'total_deadline_days' => $totalDeadline,
-            'availability_summary' => trim((string) $this->request->post('availability_summary', '')) ?: null,
-            'report_notes' => trim((string) $this->request->post('report_notes', '')) ?: null,
-            'show_tax_details' => (bool) $this->request->post('show_tax_details', false),
+            'availability_summary' => $this->sanitizeSingleLineText((string) $this->request->post('availability_summary', ''), 180) ?: null,
+            'report_notes' => $this->sanitizeMultilineText((string) $this->request->post('report_notes', ''), 5000) ?: null,
+            'show_tax_details' => $this->toBoolValue($this->request->post('show_tax_details', false)),
         ];
 
         $manualPayloadRaw = trim((string) $this->request->post('manual_brand_payload', ''));
