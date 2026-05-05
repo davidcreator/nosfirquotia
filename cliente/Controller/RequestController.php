@@ -62,13 +62,13 @@ final class RequestController extends BaseClientController
         }
 
         if ($payload['client_area'] === '') {
-            $errors[] = 'Selecione a area de atuacao.';
+            $errors[] = 'Selecione a área de atuação.';
         } elseif ($payload['client_area'] === 'outros' && $payload['client_area_other'] === '') {
-            $errors[] = 'Descreva sua area de atuacao ou servico.';
+            $errors[] = 'Descreva sua área de atuação ou serviço.';
         }
         
         if ($payload['service_category'] === '') {
-            $errors[] = 'Selecione o servico principal.';
+            $errors[] = 'Selecione o serviço principal.';
         }
 
         if ($personType === 'pj' && $payload['company_profile'] === '') {
@@ -76,11 +76,11 @@ final class RequestController extends BaseClientController
         }
 
         if ($payload['business_moment'] === '') {
-            $errors[] = 'Selecione o momento do negocio.';
+            $errors[] = 'Selecione o momento do negócio.';
         }
 
         if ($payload['priority_channel'] === '') {
-            $errors[] = 'Selecione o canal prioritario.';
+            $errors[] = 'Selecione o canal prioritário.';
         }
 
         if ($payload['project_priority'] === '') {
@@ -88,9 +88,9 @@ final class RequestController extends BaseClientController
         }
 
         if ($serviceIds === []) {
-            $errors[] = 'Selecione pelo menos um servico para cotacao.';
+            $errors[] = 'Selecione pelo menos um serviço para cotação.';
         } elseif (count($validServiceIds) !== count($serviceIds)) {
-            $errors[] = 'Existe um ou mais servicos invalidos na solicitacao.';
+            $errors[] = 'Existe um ou mais serviços inválidos na solicitação.';
         }
 
         if ($errors !== []) {
@@ -115,7 +115,7 @@ final class RequestController extends BaseClientController
         );
 
         $this->session->forgetMany(['old_input']);
-        $this->session->flash('success', 'Solicitacao enviada. O admin ira gerar seu orcamento em breve.');
+        $this->session->flash('success', 'Solicitação enviada. O admin irá gerar seu orçamento em breve.');
         $this->redirect('/orcamentos/' . $requestId);
     }
 
@@ -144,7 +144,7 @@ final class RequestController extends BaseClientController
         $request = $requestModel->findByClient((int) $id, (int) ($this->clientUser()['id'] ?? 0));
 
         if ($request === null) {
-            $this->session->flash('error', 'Solicitacao nao encontrada.');
+            $this->session->flash('error', 'Solicitação não encontrada.');
             $this->redirect('/orcamentos');
         }
 
@@ -272,18 +272,18 @@ final class RequestController extends BaseClientController
         if (($payload['client_area'] ?? '') === 'outros' && ($payload['client_area_other'] ?? '') !== '') {
             $areaLabel .= ': ' . $payload['client_area_other'];
         }
-        $lines[] = 'Area de atuacao: ' . $areaLabel;
-        $lines[] = 'Servico principal desejado: ' . $this->resolveServiceCategoryLabel((string) ($payload['service_category'] ?? ''));
-        $lines[] = 'Disponibilidade esperada: ' . ($payload['requested_availability'] !== '' ? $payload['requested_availability'] : 'Nao informada');
-        $lines[] = 'Momento do negocio: ' . $this->resolveBusinessMomentLabel((string) ($payload['business_moment'] ?? ''));
-        $lines[] = 'Canal prioritario: ' . $this->resolvePriorityChannelLabel((string) ($payload['priority_channel'] ?? ''));
+        $lines[] = 'Área de atuação: ' . $areaLabel;
+        $lines[] = 'Serviço principal desejado: ' . $this->resolveServiceCategoryLabel((string) ($payload['service_category'] ?? ''));
+        $lines[] = 'Disponibilidade esperada: ' . ($payload['requested_availability'] !== '' ? $payload['requested_availability'] : 'Não informada');
+        $lines[] = 'Momento do negócio: ' . $this->resolveBusinessMomentLabel((string) ($payload['business_moment'] ?? ''));
+        $lines[] = 'Canal prioritário: ' . $this->resolvePriorityChannelLabel((string) ($payload['priority_channel'] ?? ''));
         $lines[] = 'Prioridade do projeto: ' . $this->resolveProjectPriorityLabel((string) ($payload['project_priority'] ?? ''));
-        $lines[] = 'Visualizacao escolhida no passo 2: ' . $this->resolveServiceViewModeLabel((string) ($payload['service_view_mode'] ?? 'recommended'));
-        $lines[] = '[Servicos selecionados]';
+        $lines[] = 'Visualização escolhida no passo 2: ' . $this->resolveServiceViewModeLabel((string) ($payload['service_view_mode'] ?? 'recommended'));
+        $lines[] = '[Serviços selecionados]';
 
         $serviceLines = $this->resolveServiceLines($referenceModel, $serviceIds);
         if ($serviceLines === []) {
-            $lines[] = '- Nenhum servico reconhecido.';
+            $lines[] = '- Nenhum serviço reconhecido.';
         } else {
             foreach ($serviceLines as $line) {
                 $lines[] = '- ' . $line;
@@ -324,7 +324,7 @@ final class RequestController extends BaseClientController
 
     private function resolvePersonTypeLabel(string $personType): string
     {
-        return $personType === 'pj' ? 'Pessoa Juridica' : 'Pessoa Fisica';
+        return $personType === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física';
     }
 
     private function resolveCompanyProfileLabel(string $profile): string
@@ -332,31 +332,31 @@ final class RequestController extends BaseClientController
         $map = [
             'mei' => 'MEI',
             'pequena' => 'Pequena empresa',
-            'media' => 'Media empresa',
+            'media' => 'Média empresa',
             'grande' => 'Grande empresa',
         ];
 
-        return $map[$profile] ?? 'Nao informado';
+        return $map[$profile] ?? 'Não informado';
     }
 
     private function resolveAreaLabel(string $area): string
     {
         $map = [
             'moda_beleza' => 'Moda e beleza',
-            'alimentacao' => 'Alimentacao e gastronomia',
-            'saude' => 'Saude e bem-estar',
-            'educacao' => 'Educacao e treinamentos',
+            'alimentacao' => 'Alimentação e gastronomia',
+            'saude' => 'Saúde e bem-estar',
+            'educacao' => 'Educação e treinamentos',
             'tecnologia' => 'Tecnologia e software',
-            'comercio' => 'Comercio e varejo',
-            'servicos' => 'Servicos profissionais',
-            'imobiliario' => 'Imobiliario e construcao',
+            'comercio' => 'Comércio e varejo',
+            'servicos' => 'Serviços profissionais',
+            'imobiliario' => 'Imobiliário e construção',
             'eventos' => 'Eventos e entretenimento',
-            'industria' => 'Industria e manufatura',
-            'agro' => 'Agronegocio',
+            'industria' => 'Indústria e manufatura',
+            'agro' => 'Agronegócio',
             'outros' => 'Outros',
         ];
 
-        return $map[$area] ?? 'Nao informada';
+        return $map[$area] ?? 'Não informada';
     }
 
     private function resolveServiceCategoryLabel(string $category): string
@@ -384,56 +384,57 @@ final class RequestController extends BaseClientController
             'embalagem'              => 'Embalagem',
             'vestuario'              => 'Vestuário',
             // Suporte para chaves antigas se necessário
-            'recriar_logo'           => 'Recriar um logo (Vetorizacao)',
+            'recriar_logo'           => 'Recriar um logo (Vetorização)',
             'identidade_visual'      => 'Projeto de Identidade Visual (PIV)',
-            'naming'                 => 'Criacao de Nome (Naming)',
+            'naming'                 => 'Criação de Nome (Naming)',
             'criar_tipografia'       => 'Criar Tipografia',
-            'criar_ilustracao'       => 'Criar Ilustracao',
+            'criar_ilustracao'       => 'Criar Ilustração',
         ];
 
-        return $map[$category] ?? 'Nao informada';
+        return $map[$category] ?? 'Não informada';
     }
 
     private function resolveBusinessMomentLabel(string $moment): string
     {
         $map = [
-            'estah_comecando' => 'Esta comecando',
-            'inicio' => 'Inicio',
-            'lancamento' => 'Lancamento',
-            'crescimento' => 'Crescimento / escalando o negocio',
+            'estah_comecando' => 'Está começando',
+            'inicio' => 'Início',
+            'lancamento' => 'Lançamento',
+            'crescimento' => 'Crescimento / escalando o negócio',
             'reposicionamento' => 'Ajustes e reposicionamento da marca',
-            'padronizacao' => 'Padronizacao da marca e processos da empresa',
+            'padronizacao' => 'Padronização da marca e processos da empresa',
         ];
 
-        return $map[$moment] ?? 'Nao informado';
+        return $map[$moment] ?? 'Não informado';
     }
 
     private function resolvePriorityChannelLabel(string $channel): string
     {
         $map = [
             'digital' => 'Digital',
-            'fisico' => 'Fisico',
-            'hibrido' => 'Hibrido',
+            'fisico' => 'Físico',
+            'hibrido' => 'Híbrido',
         ];
 
-        return $map[$channel] ?? 'Nao informado';
+        return $map[$channel] ?? 'Não informado';
     }
 
     private function resolveProjectPriorityLabel(string $priority): string
     {
         $map = [
-            'equilibrio' => 'Equilibrio entre prazo e qualidade',
-            'inicio_rapido' => 'Inicio rapido',
+            'equilibrio' => 'Equilíbrio entre prazo e qualidade',
+            'inicio_rapido' => 'Início rápido',
             'detalhado' => 'Projeto mais detalhado',
         ];
 
-        return $map[$priority] ?? 'Nao informado';
+        return $map[$priority] ?? 'Não informado';
     }
 
     private function resolveServiceViewModeLabel(string $mode): string
     {
         return $mode === 'all'
-            ? 'Mostrar todos os servicos'
+            ? 'Mostrar todos os serviços'
             : 'Mostrar recomendados';
     }
 }
+

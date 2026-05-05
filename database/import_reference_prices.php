@@ -11,7 +11,7 @@ require NQ_ROOT . '/vendor/autoload.php';
 
 $configFile = NQ_ROOT . '/config/config.php';
 if (!is_file($configFile)) {
-    fwrite(STDERR, "Arquivo config/config.php nao encontrado.\n");
+    fwrite(STDERR, "Arquivo config/config.php não encontrado.\n");
     exit(1);
 }
 
@@ -119,3 +119,4 @@ function ensureReferenceSchema(Database $db, array $dbConfig): void
         );
     }
 }
+

@@ -1,6 +1,6 @@
 <?php
 $legalPageIcon = 'fa-solid fa-scale-balanced';
-$legalPageDescription = 'Regras de conduta, seguranca e boas praticas para uso legitimo do sistema.';
+$legalPageDescription = 'Regras de conduta, segurança e boas práticas para uso legítimo do sistema.';
 ?>
 
 <section class="aq-legal-shell">
@@ -8,30 +8,30 @@ $legalPageDescription = 'Regras de conduta, seguranca e boas praticas para uso l
 
     <article class="card border-0 shadow-sm">
         <div class="card-body p-4 p-lg-5 aq-legal-content">
-            <p class="aq-legal-meta">Ultima atualizacao: <?= e(date('d/m/Y')) ?></p>
+            <p class="aq-legal-meta">Última atualização: <?= e(date('d/m/Y')) ?></p>
 
             <h2>1. Finalidade da plataforma</h2>
-            <p>O Quotia e um sistema de solicitacao, analise e emissao de orcamentos para servicos de design.</p>
+            <p>O Quotia é um sistema de solicitação, análise e emissão de orçamentos para serviços de design.</p>
 
             <h2>2. Condutas permitidas</h2>
             <ul>
-                <li>Uso legitimo para solicitacao de orcamentos e operacao administrativa.</li>
-                <li>Cadastro com informacoes verdadeiras, atualizadas e verificaveis.</li>
-                <li>Respeito as regras de seguranca, privacidade e propriedade intelectual.</li>
+                <li>Uso legítimo para solicitação de orçamentos e operação administrativa.</li>
+                <li>Cadastro com informações verdadeiras, atualizadas e verificáveis.</li>
+                <li>Respeito às regras de segurança, privacidade e propriedade intelectual.</li>
             </ul>
 
             <h2>3. Condutas proibidas</h2>
             <ul>
-                <li>Tentativa de invasao, exploracao de vulnerabilidades ou envio de scripts maliciosos.</li>
-                <li>Uso automatizado abusivo (bots) sem autorizacao previa.</li>
+                <li>Tentativa de invasão, exploração de vulnerabilidades ou envio de scripts maliciosos.</li>
+                <li>Uso automatizado abusivo (bots) sem autorização prévia.</li>
                 <li>Uso de contas de terceiros, compartilhamento indevido de credenciais e fraude.</li>
             </ul>
 
-            <h2>4. Medidas de seguranca e conformidade</h2>
-            <p>O sistema aplica controles tecnicos e organizacionais para proteger dados pessoais e operacionais, incluindo monitoramento de eventos de seguranca e rastreabilidade de operacoes criticas.</p>
+            <h2>4. Medidas de segurança e conformidade</h2>
+            <p>O sistema aplica controles técnicos e organizacionais para proteger dados pessoais e operacionais, incluindo monitoramento de eventos de segurança e rastreabilidade de operações críticas.</p>
 
             <h2>5. Medidas administrativas</h2>
-            <p>Em caso de violacao desta politica, a conta podera ser bloqueada, suspensa ou encerrada, sem prejuizo de medidas legais cabiveis.</p>
+            <p>Em caso de violação desta política, a conta poderá ser bloqueada, suspensa ou encerrada, sem prejuízo de medidas legais cabíveis.</p>
         </div>
     </article>
 </section>

@@ -7,15 +7,15 @@
                     <strong>Quotia</strong>
                 </div>
 
-                <h1>Acesse sua conta para enviar, revisar e acompanhar seus orcamentos.</h1>
+                <h1>Acesse sua conta para enviar, revisar e acompanhar seus orçamentos.</h1>
                 <p class="aq-entry-lead">
-                    O portal do cliente foi desenhado para manter seu processo de solicitacao organizado, transparente e com historico completo.
+                    O portal do cliente foi desenhado para manter seu processo de solicitação organizado, transparente e com histórico completo.
                 </p>
 
                 <ul class="aq-entry-list">
-                    <li><strong>Acompanhamento em tempo real:</strong> Consulte o status das suas solicitacoes sem depender de contato manual.</li>
-                    <li><strong>Relatorios centralizados:</strong> Visualize valores, prazos e validade em um unico lugar.</li>
-                    <li><strong>Fluxo seguro:</strong> Seus dados de acesso e solicitacoes ficam protegidos na plataforma.</li>
+                    <li><strong>Acompanhamento em tempo real:</strong> Consulte o status das suas solicitações sem depender de contato manual.</li>
+                    <li><strong>Relatórios centralizados:</strong> Visualize valores, prazos e validade em um único lugar.</li>
+                    <li><strong>Fluxo seguro:</strong> Seus dados de acesso e solicitações ficam protegidos na plataforma.</li>
                 </ul>
 
                 <div class="aq-entry-actions">
@@ -25,7 +25,7 @@
                     </a>
                     <a class="btn btn-outline-primary btn-lg" href="<?= e(url('/')) ?>">
                         <i class="fa-solid fa-house me-2"></i>
-                        Voltar ao inicio
+                        Voltar ao início
                     </a>
                 </div>
             </section>

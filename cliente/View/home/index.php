@@ -7,28 +7,28 @@
                     <strong>Quotia</strong>
                 </div>
 
-                <h1>Solicite orcamentos de design com um fluxo simples, seguro e acompanhado em tempo real.</h1>
+                <h1>Solicite orçamentos de design com um fluxo simples, seguro e acompanhado em tempo real.</h1>
                 <p class="aq-entry-lead">
-                    O Quotia centraliza cadastro, solicitacao e acompanhamento do orcamento em um unico lugar.
-                    Seu pedido passa por analise administrativa e retorna com valores, prazos e validade de 90 dias.
+                    O Quotia centraliza cadastro, solicitação e acompanhamento do orçamento em um único lugar.
+                    Seu pedido passa por análise administrativa e retorna com valores, prazos e validade de 90 dias.
                 </p>
 
                 <ul class="aq-entry-list">
-                    <li><strong>Solicitacao guiada:</strong> Escolha os servicos e descreva seu projeto com clareza.</li>
-                    <li><strong>Analise administrativa:</strong> O admin valida escopo, disponibilidade e custos por item.</li>
-                    <li><strong>Relatorio completo:</strong> Receba um resumo profissional com prazos e condicoes comerciais.</li>
-                    <li><strong>Acesso continuo:</strong> Consulte suas solicitacoes em qualquer dispositivo, quando precisar.</li>
+                    <li><strong>Solicitação guiada:</strong> Escolha os serviços e descreva seu projeto com clareza.</li>
+                    <li><strong>Análise administrativa:</strong> O admin valida escopo, disponibilidade e custos por item.</li>
+                    <li><strong>Relatório completo:</strong> Receba um resumo profissional com prazos e condições comerciais.</li>
+                    <li><strong>Acesso contínuo:</strong> Consulte suas solicitações em qualquer dispositivo, quando precisar.</li>
                 </ul>
 
                 <div class="aq-entry-actions">
                     <?php if (!empty($clientUser)): ?>
                         <a class="btn btn-primary btn-lg" href="<?= e(url('/orcamento/novo')) ?>">
                             <i class="fa-solid fa-pen-ruler me-2"></i>
-                            Nova solicitacao
+                            Nova solicitação
                         </a>
                         <a class="btn btn-outline-primary btn-lg" href="<?= e(url('/orcamentos')) ?>">
                             <i class="fa-solid fa-list-check me-2"></i>
-                            Minhas solicitacoes
+                            Minhas solicitações
                         </a>
                     <?php endif; ?>
                 </div>
@@ -36,26 +36,26 @@
 
             <aside class="aq-entry-login">
                 <?php if (!empty($clientUser)): ?>
-                    <h2>Voce ja esta conectado</h2>
-                    <p>Acesse suas solicitacoes e continue de onde parou no portal do cliente.</p>
+                    <h2>Você já está conectado</h2>
+                    <p>Acesse suas solicitações e continue de onde parou no portal do cliente.</p>
 
                     <div class="aq-entry-connected">
                         <a class="btn btn-light" href="<?= e(url('/orcamento/novo')) ?>">
                             <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
-                            Criar nova solicitacao
+                            Criar nova solicitação
                         </a>
                         <a class="btn btn-outline-light" href="<?= e(url('/orcamentos')) ?>">
                             <i class="fa-solid fa-file-invoice-dollar me-2"></i>
-                            Ver historico de orcamentos
+                            Ver histórico de orçamentos
                         </a>
                         <a class="btn btn-outline-light" href="<?= e(url('/cliente/logout')) ?>">
                             <i class="fa-solid fa-right-from-bracket me-2"></i>
-                            Encerrar sessao
+                            Encerrar sessão
                         </a>
                     </div>
                 <?php else: ?>
                     <h2>Entrar na conta</h2>
-                    <p>Acesse para editar pedidos, acompanhar status e consultar seus relatorios de orcamento.</p>
+                    <p>Acesse para editar pedidos, acompanhar status e consultar seus relatórios de orçamento.</p>
 
                     <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/login')) ?>">
                         <label for="homeLoginEmail">Email</label>

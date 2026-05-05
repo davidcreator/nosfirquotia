@@ -13,15 +13,15 @@
                 </p>
 
                 <ul class="aq-entry-list">
-                    <li><strong>Seguranca ativa:</strong> Use combinacoes de letras, numeros e simbolos.</li>
-                    <li><strong>Atualizacao imediata:</strong> A nova senha passa a valer assim que voce confirmar.</li>
-                    <li><strong>Retorno rapido:</strong> Apos salvar, basta entrar novamente com as novas credenciais.</li>
+                    <li><strong>Segurança ativa:</strong> Use combinações de letras, números e símbolos.</li>
+                    <li><strong>Atualização imediata:</strong> A nova senha passa a valer assim que você confirmar.</li>
+                    <li><strong>Retorno rápido:</strong> Após salvar, basta entrar novamente com as novas credenciais.</li>
                 </ul>
             </section>
 
             <aside class="aq-entry-login">
                 <h2>Redefinir senha</h2>
-                <p>Cadastre sua nova senha para concluir a recuperacao.</p>
+                <p>Cadastre sua nova senha para concluir a recuperação.</p>
 
                 <form class="aq-entry-form aq-entry-form-grid" method="post" action="<?= e(url('/cliente/redefinir-senha')) ?>">
                     <input type="hidden" name="token" value="<?= e((string) ($token ?? '')) ?>">

@@ -1734,7 +1734,7 @@ function buildInputLines(inputs) {
             atencao: 'Ganhar atencao',
             acao: 'Estimular ação',
             sofisticacao: 'Posicionamento sofisticado',
-            equilibrio: 'Bem-estar e equilibrio',
+            equilibrio: 'Bem-estar e equilíbrio',
             diversao: 'Energia e diversao',
         },
         productType: { utilitario: 'Utilitario', hedonico: 'Hedonico' },

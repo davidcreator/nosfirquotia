@@ -10,7 +10,7 @@ require NQ_ROOT . '/vendor/autoload.php';
 
 $configFile = NQ_ROOT . '/config/config.php';
 if (!is_file($configFile)) {
-    fwrite(STDERR, "Arquivo config/config.php nao encontrado.\n");
+    fwrite(STDERR, "Arquivo config/config.php não encontrado.\n");
     exit(1);
 }
 
@@ -57,9 +57,10 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
 
-    echo "Upgrade de comunicacao e seguranca concluido com sucesso.\n";
+    echo "Upgrade de comunicação e segurança concluído com sucesso.\n";
     exit(0);
 } catch (Throwable $exception) {
     fwrite(STDERR, 'Erro: ' . $exception->getMessage() . "\n");
     exit(1);
 }
+

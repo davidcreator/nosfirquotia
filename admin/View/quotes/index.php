@@ -16,7 +16,7 @@
     <div class="aq-admin-panel-header">
         <div>
             <h2 class="aq-admin-panel-title">Lista de solicitações</h2>
-            <p class="aq-admin-panel-subtitle">Acompanhe cada proposta ate a etapa de conclusao.</p>
+            <p class="aq-admin-panel-subtitle">Acompanhe cada proposta até a etapa de conclusão.</p>
         </div>
     </div>
     <div class="table-responsive">

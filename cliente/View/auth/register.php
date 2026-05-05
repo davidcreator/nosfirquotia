@@ -7,21 +7,21 @@
                     <strong>Quotia</strong>
                 </div>
 
-                <h1>Crie sua conta para solicitar orcamentos de forma profissional e organizada.</h1>
+                <h1>Crie sua conta para solicitar orçamentos de forma profissional e organizada.</h1>
                 <p class="aq-entry-lead">
-                    Com seu cadastro ativo, voce pode abrir novas solicitacoes, acompanhar analises e manter historico completo de orcamentos.
+                    Com seu cadastro ativo, você pode abrir novas solicitações, acompanhar análises e manter histórico completo de orçamentos.
                 </p>
 
                 <ul class="aq-entry-list">
-                    <li><strong>Conta unica:</strong> Use seu acesso para concentrar todas as demandas em um so ambiente.</li>
-                    <li><strong>Processo guiado:</strong> O Quotia ajuda voce a descrever melhor os servicos desejados.</li>
-                    <li><strong>Visao completa:</strong> Veja resposta do admin com valores, prazo e condicoes de validade.</li>
+                    <li><strong>Conta única:</strong> Use seu acesso para concentrar todas as demandas em um só ambiente.</li>
+                    <li><strong>Processo guiado:</strong> O Quotia ajuda você a descrever melhor os serviços desejados.</li>
+                    <li><strong>Visão completa:</strong> Veja resposta do admin com valores, prazo e condições de validade.</li>
                 </ul>
 
                 <div class="aq-entry-actions">
                     <a class="btn btn-outline-primary btn-lg" href="<?= e(url('/cliente/login')) ?>">
                         <i class="fa-solid fa-right-to-bracket me-2"></i>
-                        Ja tenho conta
+                        Já tenho conta
                     </a>
                 </div>
             </section>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="aq-entry-field">
                             <label for="registerPhone">Telefone (opcional)</label>
-                            <input id="registerPhone" name="phone" autocomplete="tel" inputmode="numeric" maxlength="15" data-phone-mask="br" placeholder="Somente numeros: 11999998888" value="<?= e((string) old('phone')) ?>">
+                            <input id="registerPhone" name="phone" autocomplete="tel" inputmode="numeric" maxlength="15" data-phone-mask="br" placeholder="Somente números: 11999998888" value="<?= e((string) old('phone')) ?>">
                         </div>
                     </div>
 
@@ -50,7 +50,7 @@
                     <div class="aq-entry-form-row aq-entry-form-row-2">
                         <div class="aq-entry-field">
                             <label for="registerPassword">Senha</label>
-                            <input type="password" id="registerPassword" name="password" required autocomplete="new-password" placeholder="Minimo de 6 caracteres">
+                            <input type="password" id="registerPassword" name="password" required autocomplete="new-password" placeholder="Mínimo de 6 caracteres">
                         </div>
                         <div class="aq-entry-field">
                             <label for="registerPasswordConfirm">Confirmar senha</label>

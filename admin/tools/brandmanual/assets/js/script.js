@@ -3821,7 +3821,7 @@ function renderTemplateBuilder() {
 function buildAvailableModuleItems(moduleIds) {
     const safeList = Array.isArray(moduleIds) ? moduleIds : [];
     if (!safeList.length) {
-        return '<p class="module-empty">Todos os blocos ja estao no canvas.</p>';
+        return '<p class="module-empty">Todos os blocos já estão no canvas.</p>';
     }
 
     return safeList.map((moduleId) => `
@@ -10716,7 +10716,7 @@ function runPreviewSyncTest() {
         : 0;
 
     if (pages > 0) {
-        setStatus(`Teste de sync concluido: ${pages} pagina(s) sincronizada(s).`, 'ok');
+        setStatus(`Teste de sync concluído: ${pages} página(s) sincronizada(s).`, 'ok');
         return;
     }
 
@@ -10724,9 +10724,9 @@ function runPreviewSyncTest() {
         status: 'warn',
         source: 'manual_test',
         pages: 0,
-        message: 'Teste manual concluido sem paginas renderizadas.'
+        message: 'Teste manual concluído sem páginas renderizadas.'
     });
-    setStatus('Teste de sync concluido com alerta: nenhuma pagina renderizada.', 'warn');
+    setStatus('Teste de sync concluído com alerta: nenhuma página renderizada.', 'warn');
 }
 
 function setStatus(message, tone = '') {

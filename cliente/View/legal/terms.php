@@ -8,26 +8,26 @@ $legalPageDescription = 'Diretrizes gerais para uso da plataforma Quotia e respo
 
     <article class="card border-0 shadow-sm">
         <div class="card-body p-4 p-lg-5 aq-legal-content">
-            <p class="aq-legal-meta">Ultima atualizacao: <?= e(date('d/m/Y')) ?></p>
+            <p class="aq-legal-meta">Última atualização: <?= e(date('d/m/Y')) ?></p>
 
-            <h2>1. Aceitacao</h2>
-            <p>Ao utilizar o Quotia, o usuario declara que leu e concorda com estes Termos de Uso e com as politicas publicadas nesta plataforma.</p>
+            <h2>1. Aceitação</h2>
+            <p>Ao utilizar o Quotia, o usuário declara que leu e concorda com estes Termos de Uso e com as políticas publicadas nesta plataforma.</p>
 
             <h2>2. Conta e acesso</h2>
             <ul>
-                <li>Clientes devem criar conta para solicitar orcamentos.</li>
-                <li>Administradores possuem niveis de acesso e permissoes conforme perfil.</li>
-                <li>O usuario e responsavel por manter a confidencialidade de sua senha.</li>
+                <li>Clientes devem criar conta para solicitar orçamentos.</li>
+                <li>Administradores possuem níveis de acesso e permissões conforme perfil.</li>
+                <li>O usuário é responsável por manter a confidencialidade de sua senha.</li>
             </ul>
 
-            <h2>3. Orcamentos e validade</h2>
-            <p>Os relatorios de orcamento emitidos no sistema possuem validade definida em plataforma e podem sofrer revisao em caso de mudanca de escopo, prazos, disponibilidade ou requisitos tecnicos.</p>
+            <h2>3. Orçamentos e validade</h2>
+            <p>Os relatórios de orçamento emitidos no sistema possuem validade definida em plataforma e podem sofrer revisão em caso de mudança de escopo, prazos, disponibilidade ou requisitos técnicos.</p>
 
             <h2>4. Propriedade intelectual</h2>
-            <p>Marcas, elementos visuais e conteudos do sistema pertencem aos seus titulares legais. E vedada reproducao indevida sem autorizacao.</p>
+            <p>Marcas, elementos visuais e conteúdos do sistema pertencem aos seus titulares legais. É vedada reprodução indevida sem autorização.</p>
 
-            <h2>5. Limitacao de responsabilidade</h2>
-            <p>O sistema e disponibilizado com medidas de seguranca e boas praticas, porem eventos externos fora de controle razoavel podem afetar disponibilidade e desempenho.</p>
+            <h2>5. Limitação de responsabilidade</h2>
+            <p>O sistema é disponibilizado com medidas de segurança e boas práticas, porém eventos externos fora de controle razoável podem afetar disponibilidade e desempenho.</p>
         </div>
     </article>
 </section>

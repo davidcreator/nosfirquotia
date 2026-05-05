@@ -85,42 +85,42 @@ final class TaxController extends BaseAdminController
         }
 
         if ($payload['municipality_name'] === '') {
-            $errors[] = 'Informe o municipio de referencia para o ISS.';
+            $errors[] = 'Informe o município de referência para o ISS.';
         }
 
         if ($payload['iss_percent'] === null) {
-            $errors[] = 'Informe a aliquota de ISS.';
+            $errors[] = 'Informe a alíquota de ISS.';
         } elseif ($payload['tax_regime'] === 'mei') {
             if ($payload['iss_percent'] < 0 || $payload['iss_percent'] > 5) {
                 $errors[] = 'Para MEI, use ISS entre 0 e 5% (normalmente recolhido no DAS fixo).';
             }
         } elseif ($payload['iss_percent'] < 2 || $payload['iss_percent'] > 5) {
-            $errors[] = 'Para servicos em geral, a aliquota de ISS deve ficar entre 2% e 5%.';
+            $errors[] = 'Para serviços em geral, a alíquota de ISS deve ficar entre 2% e 5%.';
         }
 
         $withholdingFields = [
             [
                 'enabled' => 'apply_iss_withholding',
                 'percent' => 'iss_withholding_percent',
-                'label' => 'retencao de ISS',
+                'label' => 'retenção de ISS',
                 'max' => 5.0,
             ],
             [
                 'enabled' => 'apply_irrf_withholding',
                 'percent' => 'irrf_withholding_percent',
-                'label' => 'retencao de IRRF',
+                'label' => 'retenção de IRRF',
                 'max' => 100.0,
             ],
             [
                 'enabled' => 'apply_pcc_withholding',
                 'percent' => 'pcc_withholding_percent',
-                'label' => 'retencao de PIS/COFINS/CSLL',
+                'label' => 'retenção de PIS/COFINS/CSLL',
                 'max' => 100.0,
             ],
             [
                 'enabled' => 'apply_inss_withholding',
                 'percent' => 'inss_withholding_percent',
-                'label' => 'retencao de INSS',
+                'label' => 'retenção de INSS',
                 'max' => 100.0,
             ],
         ];
@@ -228,7 +228,7 @@ final class TaxController extends BaseAdminController
         return [
             [
                 'title' => 'Lei Complementar 116/2003',
-                'description' => 'Base legal do ISS e limites de aliquota para servicos.',
+                'description' => 'Base legal do ISS e limites de alíquota para serviços.',
                 'url' => 'https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp116.htm',
             ],
             [

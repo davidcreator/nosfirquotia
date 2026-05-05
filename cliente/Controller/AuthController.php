@@ -30,7 +30,7 @@ final class AuthController extends Controller
         }
 
         if (!$this->clientAuth()->attempt($email, $password)) {
-            $this->session->flash('error', 'Credenciais de cliente invalidas.');
+            $this->session->flash('error', 'Credenciais de cliente inválidas.');
             $this->redirect('/cliente/login');
         }
 
@@ -64,7 +64,7 @@ final class AuthController extends Controller
         ]);
 
         if ($password !== $passwordConfirm) {
-            $this->session->flash('error', 'As senhas nao conferem.');
+            $this->session->flash('error', 'As senhas não conferem.');
             $this->redirect('/cliente/cadastro');
         }
 
@@ -76,14 +76,14 @@ final class AuthController extends Controller
         }
 
         $this->session->remove('old_input');
-        $this->session->flash('success', 'Conta criada com sucesso. Voce ja pode solicitar orcamentos.');
+        $this->session->flash('success', 'Conta criada com sucesso. Você já pode solicitar orçamentos.');
         $this->redirect('/orcamentos');
     }
 
     public function logout(): void
     {
         $this->clientAuth()->logout();
-        $this->session->flash('success', 'Sessao de cliente encerrada.');
+        $this->session->flash('success', 'Sessão de cliente encerrada.');
         $this->redirect('/');
     }
 
@@ -102,7 +102,7 @@ final class AuthController extends Controller
         $this->session->set('old_input', ['email' => $email]);
 
         if ($email === '' || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $this->session->flash('error', 'Informe um email valido para recuperar a senha.');
+            $this->session->flash('error', 'Informe um email válido para recuperar a senha.');
             $this->redirect('/cliente/esqueci-senha');
         }
 
@@ -113,7 +113,7 @@ final class AuthController extends Controller
             (string) ($_SERVER['REMOTE_ADDR'] ?? '')
         );
 
-        $this->session->flash('success', 'Se o email estiver cadastrado, enviaremos o link de redefinicao em instantes.');
+        $this->session->flash('success', 'Se o email estiver cadastrado, enviaremos o link de redefinição em instantes.');
         $this->redirect('/cliente/esqueci-senha');
     }
 
@@ -127,7 +127,7 @@ final class AuthController extends Controller
         $tokenData = $this->resetService()->tokenData('client', $token);
 
         if ($token === '' || $tokenData === null) {
-            $this->session->flash('error', 'Link de redefinicao invalido ou expirado.');
+            $this->session->flash('error', 'Link de redefinição inválido ou expirado.');
             $this->redirect('/cliente/esqueci-senha');
         }
 
@@ -148,18 +148,18 @@ final class AuthController extends Controller
         $passwordConfirm = (string) $this->request->post('password_confirm', '');
 
         if ($password !== $passwordConfirm) {
-            $this->session->flash('error', 'As senhas nao conferem.');
+            $this->session->flash('error', 'As senhas não conferem.');
             $this->redirect('/cliente/redefinir-senha?token=' . urlencode($token));
         }
 
         $result = $this->resetService()->resetPassword('client', $token, $password);
         if (!$result['success']) {
-            $this->session->flash('error', (string) ($result['error'] ?? 'Nao foi possivel redefinir a senha.'));
+            $this->session->flash('error', (string) ($result['error'] ?? 'Não foi possível redefinir a senha.'));
             $this->redirect('/cliente/esqueci-senha');
         }
 
         $this->session->forgetMany(['old_input']);
-        $this->session->flash('success', 'Senha redefinida com sucesso. Voce ja pode entrar com a nova senha.');
+        $this->session->flash('success', 'Senha redefinida com sucesso. Você já pode entrar com a nova senha.');
         $this->redirect('/cliente/login');
     }
 

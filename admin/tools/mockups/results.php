@@ -86,7 +86,7 @@ $resultsScriptVersion = is_file($resultsScriptPath) ? (string) filemtime($result
 
             <section class="results-empty" id="resultsEmptyState" style="display: none;">
                 <h3>Sem mockups para exibir</h3>
-                <p>Salve pelo menos um mockup no editor para montar a pagina de resultados.</p>
+                <p>Salve pelo menos um mockup no editor para montar a página de resultados.</p>
             </section>
         </div>
     </main>

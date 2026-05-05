@@ -11,7 +11,7 @@ abstract class BaseClientController extends Controller
     protected function ensureClientAuthenticated(): void
     {
         if (!$this->clientAuth()->check()) {
-            $this->session->flash('warning', 'Crie uma conta ou faca login para solicitar um orcamento.');
+            $this->session->flash('warning', 'Crie uma conta ou faça login para solicitar um orçamento.');
             $this->redirect('/cliente/login');
         }
     }

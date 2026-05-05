@@ -577,7 +577,7 @@ class ColorPaletteGenerator {
             };
             this.workflowPrimaryAction.textContent = state.nextStep
                 ? (labelMap[state.nextStep.key] || 'Executar próximo passo')
-                : 'Fluxo concluido';
+                : 'Fluxo concluído';
             this.workflowPrimaryAction.disabled = !state.nextStep;
         }
     }
@@ -585,7 +585,7 @@ class ColorPaletteGenerator {
     handleWorkflowPrimaryAction() {
         const state = this.getWorkflowState();
         if (!state.nextStep) {
-            this.showNotification('Fluxo concluido. Abra o BrandBook para revisar o resultado.');
+            this.showNotification('Fluxo concluído. Abra o BrandBook para revisar o resultado.');
             return;
         }
 
@@ -828,7 +828,7 @@ class ColorPaletteGenerator {
                     {
                         label: 'Vitrine visual',
                         value: `${roleMap.primary.toUpperCase()} em faixas com ${roleMap.neutralLight.toUpperCase()} de respiro`,
-                        detail: 'Equilibra impacto de campanha sem poluir a experiencia de produto.'
+                        detail: 'Equilibra impacto de campanha sem poluir a experiência de produto.'
                     }
                 ];
             case 'health':
@@ -1489,7 +1489,7 @@ class ColorPaletteGenerator {
             list.push({
                 label: 'Balanceamento de temperatura',
                 value: `${roleMap.neutralDark.toUpperCase()} + ${roleMap.neutralLight.toUpperCase()}`,
-                detail: 'Acrescente neutros para evitar fadiga visual em paginas longas.'
+                detail: 'Acrescente neutros para evitar fadiga visual em páginas longas.'
             });
         } else if (temperature.label === 'fria') {
             list.push({

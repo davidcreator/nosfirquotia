@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
-                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $availableCount ?></strong> disponiveis</div>
+                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $availableCount ?></strong> disponíveis</div>
                 <div class="aq-admin-page-hero-kpi"><strong><?= (int) $pendingCount ?></strong> pendentes</div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                     <p class="text-muted small flex-grow-1"><?= e($tool['description']) ?></p>
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <?php if ($tool['has_entrypoint']): ?>
-                            <span class="badge text-bg-success">Compativel</span>
+                            <span class="badge text-bg-success">Compatível</span>
                             <a class="btn btn-sm btn-primary" href="<?= e(url('/admin/ferramentas/' . $tool['slug'])) ?>">Abrir</a>
                         <?php else: ?>
                             <span class="badge text-bg-warning">Pendente</span>

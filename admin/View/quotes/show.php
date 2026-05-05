@@ -128,7 +128,7 @@
         <div class="alert alert-secondary">
             Utilize a base completa de referência para apoiar a precificação:
             <a href="<?= e(url('/admin/referencias')) ?>">Preços e Serviços</a>.
-            Para padroes tributarios, acesse
+            Para padrões tributários, acesse
             <a href="<?= e(url('/admin/tributos')) ?>">Central Fiscal</a>.
         </div>
 
@@ -136,7 +136,7 @@
             <div class="alert alert-success">
                 Relatório gerado em <?= e(date('d/m/Y H:i', strtotime((string) $requestData['report_created_at']))) ?>
                 por <?= e((string) ($requestData['report_admin_name'] ?? 'Admin')) ?>.
-                Valido ate <?= e(date('d/m/Y', strtotime((string) $requestData['valid_until']))) ?>.
+                Válido até <?= e(date('d/m/Y', strtotime((string) $requestData['valid_until']))) ?>.
                 Total atual: <strong>R$ <?= number_format((float) ($requestData['total_value'] ?? 0), 2, ',', '.') ?></strong>.
             </div>
         <?php endif; ?>
@@ -321,7 +321,7 @@
                 <label class="form-label">Resumo de disponibilidade</label>
                 <input class="form-control" name="availability_summary"
                        value="<?= e((string) ($requestData['availability_summary'] ?? '')) ?>"
-                       placeholder="Ex.: Inicio em ate 5 dias uteis, execucao por etapas.">
+                       placeholder="Ex.: Início em até 5 dias úteis, execução por etapas.">
             </div>
             <div class="col-12">
                 <div class="form-check border rounded-3 p-3 bg-light">

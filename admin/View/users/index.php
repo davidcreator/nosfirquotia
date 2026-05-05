@@ -69,13 +69,13 @@
         <div class="aq-admin-panel h-100">
             <div class="aq-admin-panel-header">
                 <div>
-                    <h2 class="aq-admin-panel-title">Regras de seguranca</h2>
+                    <h2 class="aq-admin-panel-title">Regras de segurança</h2>
                 </div>
             </div>
             <div class="aq-admin-panel-body">
                 <ul class="mb-0">
                     <li>Administrador Geral tem acesso total ao sistema.</li>
-                    <li>Somente Administrador Geral pode alterar permissoes de outros admins.</li>
+                    <li>Somente Administrador Geral pode alterar permissões de outros admins.</li>
                     <li>Contas inativas não conseguem efetuar login.</li>
                     <li>Ajuste o nível de acesso por módulo conforme a função de cada usuário.</li>
                     <li>Evite compartilhar contas, mantenha um usuário por pessoa.</li>
@@ -89,7 +89,7 @@
     <div class="aq-admin-panel-header">
         <div>
             <h2 class="aq-admin-panel-title">Usuários existentes</h2>
-            <p class="aq-admin-panel-subtitle">Atualize status, senha e permissoes por perfil.</p>
+            <p class="aq-admin-panel-subtitle">Atualize status, senha e permissões por perfil.</p>
         </div>
     </div>
     <div class="aq-admin-panel-body">

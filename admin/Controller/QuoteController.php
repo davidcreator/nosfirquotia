@@ -139,7 +139,7 @@ final class QuoteController extends BaseAdminController
             $notes = trim((string) $this->request->post('notes_' . $serviceId, ''));
 
             if ($amount === null || $amount <= 0) {
-                $errors[] = 'Informe um valor valido para o servico ' . $service['service_name'] . '.';
+                $errors[] = 'Informe um valor válido para o serviço ' . $service['service_name'] . '.';
                 continue;
             }
 

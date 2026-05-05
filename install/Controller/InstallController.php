@@ -32,7 +32,7 @@ final class InstallController extends Controller
         $checks = $installer->requirementChecks();
 
         if (!$this->allPassed($checks)) {
-            $this->session->flash('error', 'Alguns requisitos nao foram atendidos.');
+            $this->session->flash('error', 'Alguns requisitos não foram atendidos.');
             $this->redirect($this->installRoute('/step1'));
         }
 
@@ -71,7 +71,7 @@ final class InstallController extends Controller
         $checks = $installer->permissionChecks();
 
         if (!$this->allPassed($checks)) {
-            $this->session->flash('error', 'Corrija as permissoes antes de continuar.');
+            $this->session->flash('error', 'Corrija as permissões antes de continuar.');
             $this->redirect($this->installRoute('/step2'));
         }
 
@@ -119,7 +119,7 @@ final class InstallController extends Controller
         }
 
         if ($payload['admin_pass'] !== $payload['admin_pass_confirm']) {
-            $this->session->flash('error', 'As senhas do admin nao conferem.');
+            $this->session->flash('error', 'As senhas do admin não conferem.');
             $this->redirect($this->installRoute('/step3'));
         }
 
@@ -132,9 +132,9 @@ final class InstallController extends Controller
         }
 
         if (!empty($result['imported_reference_prices'])) {
-            $this->session->flash('success', 'Base de precos e servicos de referencia importada com sucesso.');
+            $this->session->flash('success', 'Base de preços e serviços de referência importada com sucesso.');
         } else {
-            $this->session->flash('warning', 'Instalacao concluida sem importar a base de precos. Voce pode importar depois pelo script.');
+            $this->session->flash('warning', 'Instalação concluída sem importar a base de precos. Voce pode importar depois pelo script.');
         }
 
         $this->session->forgetMany(['old_input', 'install.step1', 'install.step2']);
@@ -178,3 +178,4 @@ final class InstallController extends Controller
         return '/index.php?route=' . $route;
     }
 }
+

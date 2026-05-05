@@ -60,10 +60,10 @@
                         <?= $importReference ? 'checked' : '' ?>
                     >
                     <label class="form-check-label fw-semibold" for="importReferencePrices">
-                        Importar base de precos e servicos de referencia (arquivo `reference_prices_2025.json`)
+                        Importar base de preços e serviços de referência (arquivo `reference_prices_2025.json`)
                     </label>
                     <div class="small text-muted mt-1">
-                        Recomendado para o admin gerar orcamentos com valores minimos e maximos de referencia.
+                        Recomendado para o admin gerar orçamentos com valores mínimos e máximos de referência.
                     </div>
                 </div>
             </div>
@@ -75,3 +75,4 @@
         </form>
     </div>
 </section>
+

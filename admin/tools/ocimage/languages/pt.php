@@ -1,7 +1,7 @@
 <?php
 return [
     // Menu
-    'menu_home'       => 'Inicio',
+    'menu_home'       => 'Início',
     'menu_about'      => 'Sobre',
     'menu_services'   => 'Serviços',
     'menu_works'      => 'Trabalhos',
@@ -164,3 +164,4 @@ return [
     // Rights
     'rights_text'                       => '© 2025 Todos os direitos reservados. David L. Almeida - Desenvolvedor criativo.',
 ];
+

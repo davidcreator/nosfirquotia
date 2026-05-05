@@ -1,13 +1,13 @@
 <section class="aq-admin-page-hero">
     <div class="row g-2 align-items-center">
         <div class="col-md-8">
-            <h1 class="aq-admin-page-hero-title">Base de precos e servicos</h1>
-            <p class="aq-admin-page-hero-subtitle">Tabela de referencia para Design e Desenvolvimento.</p>
+            <h1 class="aq-admin-page-hero-title">Base de preços e serviços</h1>
+            <p class="aq-admin-page-hero-subtitle">Tabela de referência para Design e Desenvolvimento.</p>
         </div>
         <div class="col-md-4">
             <div class="aq-admin-page-hero-meta">
                 <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['catalogs_total'] ?></strong> catálogos</div>
-                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['items_total'] ?></strong> servicos</div>
+                <div class="aq-admin-page-hero-kpi"><strong><?= (int) $totals['items_total'] ?></strong> serviços</div>
             </div>
         </div>
     </div>
@@ -17,19 +17,19 @@
     <div class="aq-admin-panel-body">
         <div class="row g-3">
             <div class="col-md-8">
-                <label class="form-label" for="referenceSearch">Buscar servico</label>
-                <input id="referenceSearch" class="form-control" placeholder="Digite codigo, grupo ou nome do servico">
+                <label class="form-label" for="referenceSearch">Buscar serviço</label>
+                <input id="referenceSearch" class="form-control" placeholder="Digite código, grupo ou nome do serviço">
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="referenceAreaFilter">Área</label>
                 <select id="referenceAreaFilter" class="form-select">
-                    <option value="all">Todas as areas</option>
+                    <option value="all">Todas as áreas</option>
                     <option value="design">Design</option>
                     <option value="development">Desenvolvimento</option>
                 </select>
             </div>
             <div class="col-12">
-                <p class="small text-muted mb-0" id="referenceFilterSummary">Exibindo todos os servicos da base.</p>
+                <p class="small text-muted mb-0" id="referenceFilterSummary">Exibindo todos os serviços da base.</p>
             </div>
         </div>
     </div>
@@ -66,12 +66,12 @@
                         <table class="table table-sm align-middle reference-table">
                             <thead class="table-light">
                             <tr>
-                                <th>Codigo</th>
+                                <th>Código</th>
                                 <th>Grupo</th>
-                                <th>Servico</th>
+                                <th>Serviço</th>
                                 <th>Área</th>
-                                <th>Minimo</th>
-                                <th>Maximo</th>
+                                <th>Mínimo</th>
+                                <th>Máximo</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (summary) {
             const areaLabel = area === 'development' ? 'Desenvolvimento' : (area === 'design' ? 'Design' : 'Todas as áreas');
-            summary.textContent = areaLabel + ': ' + visibleServices + (visibleServices === 1 ? ' servico visivel.' : ' servicos visiveis.');
+            summary.textContent = areaLabel + ': ' + visibleServices + (visibleServices === 1 ? ' serviço visível.' : ' serviços visíveis.');
         }
     };
 

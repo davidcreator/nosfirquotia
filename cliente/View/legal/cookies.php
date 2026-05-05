@@ -1,6 +1,6 @@
 <?php
 $legalPageIcon = 'fa-solid fa-cookie-bite';
-$legalPageDescription = 'Informacoes sobre cookies essenciais, consentimento e preferencias de navegacao.';
+$legalPageDescription = 'Informações sobre cookies essenciais, consentimento e preferências de navegação.';
 ?>
 
 <section class="aq-legal-shell">
@@ -8,19 +8,19 @@ $legalPageDescription = 'Informacoes sobre cookies essenciais, consentimento e p
 
     <article class="card border-0 shadow-sm">
         <div class="card-body p-4 p-lg-5 aq-legal-content">
-            <p class="aq-legal-meta">Ultima atualizacao: <?= e(date('d/m/Y')) ?></p>
+            <p class="aq-legal-meta">Última atualização: <?= e(date('d/m/Y')) ?></p>
 
-            <h2>1. O que sao cookies</h2>
-            <p>Cookies sao pequenos arquivos armazenados no navegador para manter funcionalidades e preferencias de navegacao.</p>
+            <h2>1. O que são cookies</h2>
+            <p>Cookies são pequenos arquivos armazenados no navegador para manter funcionalidades e preferências de navegação.</p>
 
             <h2>2. Cookies essenciais</h2>
-            <p>O Quotia utiliza cookies essenciais para autenticacao de sessao, seguranca e funcionamento basico da plataforma. Esses cookies sao necessarios para o servico operar.</p>
+            <p>O Quotia utiliza cookies essenciais para autenticação de sessão, segurança e funcionamento básico da plataforma. Esses cookies são necessários para o serviço operar.</p>
 
             <h2>3. Consentimento</h2>
-            <p>Ao acessar o sistema, o usuario pode definir preferencia de consentimento de cookies. O consentimento e armazenado para registro de preferencia.</p>
+            <p>Ao acessar o sistema, o usuário pode definir preferência de consentimento de cookies. O consentimento é armazenado para registro de preferência.</p>
 
             <h2>4. Como gerenciar</h2>
-            <p>Voce pode alterar ou remover cookies pelas configuracoes do navegador. A desativacao de cookies essenciais pode comprometer funcionalidades de login e seguranca.</p>
+            <p>Você pode alterar ou remover cookies pelas configurações do navegador. A desativação de cookies essenciais pode comprometer funcionalidades de login e segurança.</p>
         </div>
     </article>
 </section>

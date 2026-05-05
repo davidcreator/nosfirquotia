@@ -1,6 +1,6 @@
 <?php
 $metaAppName = (string) ($appName ?? 'Quotia');
-$metaDescription = 'Quotia - Sistema para solicitacao, analise e emissao de orcamentos de design.';
+$metaDescription = 'Quotia - Sistema para solicitação, análise e emissão de orçamentos de design.';
 $metaPath = (string) ($currentPath ?? app()->request()->path());
 $metaIsSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 $metaScheme = $metaIsSecure ? 'https' : 'http';
@@ -73,7 +73,7 @@ $showClientNavbar = $currentClientPath !== '/' && !$isClientAuthPage;
                     <small class="aq-client-brand-subtitle">Portal do Cliente</small>
                 </span>
             </a>
-            <button class="navbar-toggler aq-client-navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu" aria-controls="clientMenu" aria-expanded="false" aria-label="Alternar navegacao">
+            <button class="navbar-toggler aq-client-navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#clientMenu" aria-controls="clientMenu" aria-expanded="false" aria-label="Alternar navegação">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="clientMenu" data-client-nav-collapse>
@@ -81,20 +81,20 @@ $showClientNavbar = $currentClientPath !== '/' && !$isClientAuthPage;
                     <li class="nav-item">
                         <a class="nav-link aq-client-nav-link<?= $isActivePath('/') ? ' is-active' : '' ?>" href="<?= e(url('/')) ?>">
                             <i class="fa-solid fa-house"></i>
-                            <span>Inicio</span>
+                            <span>Início</span>
                         </a>
                     </li>
                     <?php if ($clientUser): ?>
                         <li class="nav-item">
                             <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamento/novo') ? ' is-active' : '' ?>" href="<?= e(url('/orcamento/novo')) ?>">
                                 <i class="fa-solid fa-pen-ruler"></i>
-                                <span>Nova Solicitacao</span>
+                                <span>Nova Solicitação</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link aq-client-nav-link<?= $isActivePath('/orcamentos') ? ' is-active' : '' ?>" href="<?= e(url('/orcamentos')) ?>">
                                 <i class="fa-solid fa-list-check"></i>
-                                <span>Minhas Solicitacoes</span>
+                                <span>Minhas Solicitações</span>
                             </a>
                         </li>
                     <?php else: ?>
@@ -159,7 +159,7 @@ $showClientNavbar = $currentClientPath !== '/' && !$isClientAuthPage;
     <div class="container">
         <div class="aq-client-footer-links">
             <a href="<?= e(url('/termos-de-uso')) ?>">Termos de Uso</a>
-            <a href="<?= e(url('/politica-de-uso')) ?>">Politica de Uso</a>
+            <a href="<?= e(url('/politica-de-uso')) ?>">Política de Uso</a>
             <a href="<?= e(url('/politica-de-privacidade')) ?>">Privacidade e Dados</a>
             <a href="<?= e(url('/politica-de-cookies')) ?>">Cookies</a>
             <a href="<?= e(url('/lgpd')) ?>">LGPD</a>
@@ -171,7 +171,7 @@ $showClientNavbar = $currentClientPath !== '/' && !$isClientAuthPage;
     <div class="aq-cookie-content">
         <div>
             <strong>Consentimento de cookies</strong>
-            <p class="mb-0 small">Utilizamos cookies essenciais para seguranca, login e funcionamento da plataforma. Voce pode aceitar todos ou manter apenas os essenciais.</p>
+            <p class="mb-0 small">Utilizamos cookies essenciais para segurança, login e funcionamento da plataforma. Você pode aceitar todos ou manter apenas os essenciais.</p>
         </div>
         <div class="d-flex gap-2 flex-wrap">
             <button class="btn btn-sm btn-outline-light" type="button" data-cookie-consent="essential">Somente essenciais</button>

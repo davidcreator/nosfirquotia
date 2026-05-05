@@ -390,7 +390,7 @@ final class QuoteModel extends Model
         return [
             [
                 'title' => 'Lei Complementar 116/2003',
-                'description' => 'Regras gerais do ISS (aliquota minima de 2% e maxima de 5%).',
+                'description' => 'Regras gerais do ISS (alíquota mínima de 2% e máxima de 5%).',
                 'url' => 'https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp116.htm',
             ],
             [
@@ -399,8 +399,8 @@ final class QuoteModel extends Model
                 'url' => 'https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm',
             ],
             [
-                'title' => 'NFS-e Padrao Nacional',
-                'description' => 'Diretrizes de emissao e integracao fiscal para servicos.',
+                'title' => 'NFS-e Padrão Nacional',
+                'description' => 'Diretrizes de emissão e integração fiscal para serviços.',
                 'url' => 'https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2025/agosto/nota-fiscal-de-servico-eletronica-nfs-e-padrao-nacional-para-simplificar-o-cotidiano-das-empresas',
             ],
         ];

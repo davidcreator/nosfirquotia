@@ -6,56 +6,56 @@ if (!is_array($selectedServices)) {
 $selectedMap = array_fill_keys(array_map('intval', $selectedServices), true);
 
 $personTypeOptions = [
-    'pf' => 'Pessoa Fisica',
-    'pj' => 'Pessoa Juridica',
+    'pf' => 'Pessoa Física',
+    'pj' => 'Pessoa Jurídica',
 ];
 
 $companyProfileOptions = [
     'mei' => 'MEI',
     'pequena' => 'Pequena empresa',
-    'media' => 'Media empresa',
+    'media' => 'Média empresa',
     'grande' => 'Grande empresa',
 ];
 
 $areaOptions = [
     'moda_beleza' => 'Moda e beleza',
-    'alimentacao' => 'Alimentacao e gastronomia',
-    'saude' => 'Saude e bem-estar',
-    'educacao' => 'Educacao e treinamentos',
+    'alimentacao' => 'Alimentação e gastronomia',
+    'saude' => 'Saúde e bem-estar',
+    'educacao' => 'Educação e treinamentos',
     'tecnologia' => 'Tecnologia e software',
-    'comercio' => 'Comercio e varejo',
-    'servicos' => 'Servicos profissionais',
-    'imobiliario' => 'Imobiliario e construcao',
+    'comercio' => 'Comércio e varejo',
+    'servicos' => 'Serviços profissionais',
+    'imobiliario' => 'Imobiliário e construção',
     'eventos' => 'Eventos e entretenimento',
-    'industria' => 'Industria e manufatura',
-    'agro' => 'Agronegocio',
+    'industria' => 'Indústria e manufatura',
+    'agro' => 'Agronegócio',
     'outros' => 'Outros',
 ];
 
 $businessMomentOptions = [
-    'estah_comecando' => 'Esta comecando',
-    'inicio' => 'Inicio',
-    'lancamento' => 'Lancamento',
-    'crescimento' => 'Crescimento / escalando o negocio',
+    'estah_comecando' => 'Está começando',
+    'inicio' => 'Início',
+    'lancamento' => 'Lançamento',
+    'crescimento' => 'Crescimento / escalando o negócio',
     'reposicionamento' => 'Ajustes e reposicionamento da marca',
-    'padronizacao' => 'Padronizacao da marca e processos da empresa',
+    'padronizacao' => 'Padronização da marca e processos da empresa',
 ];
 
 $channelOptions = [
     'digital' => 'Digital',
-    'fisico' => 'Fisico',
-    'hibrido' => 'Hibrido',
+    'fisico' => 'Físico',
+    'hibrido' => 'Híbrido',
 ];
 
 $priorityOptions = [
-    'equilibrio' => 'Equilibrio entre prazo e qualidade',
-    'inicio_rapido' => 'Inicio rapido',
+    'equilibrio' => 'Equilíbrio entre prazo e qualidade',
+    'inicio_rapido' => 'Início rápido',
     'detalhado' => 'Projeto mais detalhado',
 ];
 
 $serviceCategoryOptions = [
     'criacao_marca' => [
-        'label' => 'Criacao de marca',
+        'label' => 'Criação de marca',
         'items' => [
             'criacao_logo'   => 'Criação de Logo',
             'criacao_naming' => 'Criação de Nome',
@@ -199,8 +199,8 @@ foreach ($serviceCatalogs as $catalog) {
     <div class="col-xl-10">
         <div class="card border-0 shadow-sm">
             <div class="card-body p-4 p-lg-5">
-                <h1 class="h3 mb-2"><i class="fa-solid fa-wand-magic-sparkles me-2 text-primary"></i>Formulario de Orcamento</h1>
-                <p class="text-muted mb-4">Preencha em 4 passos e receba um atendimento estrategico para marca, identidade visual e materiais da sua empresa.</p>
+                <h1 class="h3 mb-2"><i class="fa-solid fa-wand-magic-sparkles me-2 text-primary"></i>Formulário de Orçamento</h1>
+                <p class="text-muted mb-4">Preencha em 4 passos e receba um atendimento estratégico para marca, identidade visual e materiais da sua empresa.</p>
 
                 <form method="post" action="<?= e(url('/orcamento/enviar')) ?>" data-quote-wizard>
                     <div class="aq-assistant-shell aq-wizard-shell">
@@ -213,20 +213,20 @@ foreach ($serviceCatalogs as $catalog) {
                         </div>
 
                         <div class="aq-assistant-progress-wrap mt-3">
-                            <div class="progress aq-assistant-progress" role="progressbar" aria-label="Progresso do formulario">
+                            <div class="progress aq-assistant-progress" role="progressbar" aria-label="Progresso do formulário">
                                 <div class="progress-bar bg-primary" data-wizard-progressbar style="width:25%;" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></div>
                             </div>
                             <div class="aq-assistant-stepper mt-2">
                                 <button type="button" class="aq-assistant-step is-active" data-step-target="0"><i class="fa-solid fa-id-card"></i>1. Perfil</button>
-                                <button type="button" class="aq-assistant-step" data-step-target="1"><i class="fa-solid fa-list-check"></i>2. Servicos</button>
-                                <button type="button" class="aq-assistant-step" data-step-target="2"><i class="fa-solid fa-compass-drafting"></i>3. Estrategia</button>
-                                <button type="button" class="aq-assistant-step" data-step-target="3"><i class="fa-solid fa-square-check"></i>4. Revisao</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="1"><i class="fa-solid fa-list-check"></i>2. Serviços</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="2"><i class="fa-solid fa-compass-drafting"></i>3. Estratégia</button>
+                                <button type="button" class="aq-assistant-step" data-step-target="3"><i class="fa-solid fa-square-check"></i>4. Revisão</button>
                             </div>
                         </div>
 
                         <div class="aq-wizard-helper mt-3">
                             <p class="aq-wizard-helper-title mb-1" data-assistant-title>Passo 1 - Perfil do cliente</p>
-                            <p class="aq-wizard-helper-text mb-0" data-assistant-text>Informe os dados iniciais para que o passo de servicos seja personalizado para seu perfil.</p>
+                            <p class="aq-wizard-helper-text mb-0" data-assistant-text>Informe os dados iniciais para que o passo de serviços seja personalizado para seu perfil.</p>
                         </div>
                         <p class="aq-wizard-step-error mt-2 mb-0 d-none" data-step-error></p>
 
@@ -248,9 +248,9 @@ foreach ($serviceCatalogs as $catalog) {
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label" for="clientArea">Area de atuacao</label>
+                                        <label class="form-label" for="clientArea">Área de atuação</label>
                                         <select class="form-select" id="clientArea" name="client_area" data-client-area required>
-                                            <option value="">Selecione a area</option>
+                                            <option value="">Selecione a área</option>
                                             <?php foreach ($areaOptions as $value => $label): ?>
                                                 <option value="<?= e($value) ?>" <?= $selectedArea === $value ? 'selected' : '' ?>><?= e($label) ?></option>
                                             <?php endforeach; ?>
@@ -263,9 +263,9 @@ foreach ($serviceCatalogs as $catalog) {
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label" for="serviceCategory">Servico principal desejado</label>
+                                        <label class="form-label" for="serviceCategory">Serviço principal desejado</label>
                                         <select class="form-select" id="serviceCategory" name="service_category" data-service-category required>
-                                            <option value="">Selecione um servico</option>
+                                            <option value="">Selecione um serviço</option>
                                             <?php foreach ($serviceCategoryOptions as $groupKey => $groupData): ?>
                                                 <optgroup label="<?= e($groupData['label']) ?>">
                                                     <?php foreach ($groupData['items'] as $value => $label): ?>
@@ -288,7 +288,7 @@ foreach ($serviceCatalogs as $catalog) {
 
                                     <div class="col-12">
                                         <label class="form-label" for="requestedAvailability">Disponibilidade esperada</label>
-                                        <input class="form-control" id="requestedAvailability" name="requested_availability" value="<?= e((string) old('requested_availability')) ?>" placeholder="Ex.: inicio imediato, reunioes no periodo da tarde">
+                                        <input class="form-control" id="requestedAvailability" name="requested_availability" value="<?= e((string) old('requested_availability')) ?>" placeholder="Ex.: início imediato, reuniões no período da tarde">
                                     </div>
                                 </div>
                             </section>
@@ -297,24 +297,24 @@ foreach ($serviceCatalogs as $catalog) {
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <div class="aq-step-hint">
-                                            <strong>Escolha dos servicos</strong>
-                                            <p class="mb-0">Use a lista recomendada com base no seu perfil ou ative a visualizacao completa para ver todo o catalogo.</p>
+                                            <strong>Escolha dos serviços</strong>
+                                            <p class="mb-0">Use a lista recomendada com base no seu perfil ou ative a visualização completa para ver todo o catálogo.</p>
                                         </div>
                                     </div>
 
                                     <div class="col-12">
-                                        <label class="form-label d-block mb-2">Visualizacao dos servicos</label>
-                                        <div class="aq-service-visibility" role="group" aria-label="Visualizacao de servicos">
+                                        <label class="form-label d-block mb-2">Visualização dos serviços</label>
+                                        <div class="aq-service-visibility" role="group" aria-label="Visualização de serviços">
                                             <label class="aq-service-visibility-option">
                                                 <input type="radio" name="service_view_mode" value="recommended" data-service-mode <?= $selectedServiceMode === 'recommended' ? 'checked' : '' ?>>
                                                 <span>Mostrar recomendados</span>
                                             </label>
                                             <label class="aq-service-visibility-option">
                                                 <input type="radio" name="service_view_mode" value="all" data-service-mode <?= $selectedServiceMode === 'all' ? 'checked' : '' ?>>
-                                                <span>Mostrar todos os servicos</span>
+                                                <span>Mostrar todos os serviços</span>
                                             </label>
                                         </div>
-                                        <div class="form-text" data-service-mode-helper>As recomendacoes consideram tipo de cadastro, area, servico principal e porte.</div>
+                                        <div class="form-text" data-service-mode-helper>As recomendações consideram tipo de cadastro, area, serviço principal e porte.</div>
                                     </div>
 
                                     <div class="col-12"><p class="small text-muted mb-2" data-service-counter aria-live="polite"></p></div>
@@ -373,13 +373,13 @@ foreach ($serviceCatalogs as $catalog) {
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <div class="aq-step-hint">
-                                            <strong>Direcionamento estrategico</strong>
-                                            <p class="mb-0">Essas respostas ajudam a agencia a analisar melhor o contexto e construir um orcamento mais aderente.</p>
+                                            <strong>Direcionamento estratégico</strong>
+                                            <p class="mb-0">Essas respostas ajudam a agência a analisar melhor o contexto e construir um orçamento mais aderente.</p>
                                         </div>
                                     </div>
 
                                     <div class="col-12">
-                                        <label class="form-label" for="businessMoment">Momento do negocio</label>
+                                        <label class="form-label" for="businessMoment">Momento do negócio</label>
                                         <select class="form-select" id="businessMoment" name="business_moment" data-business-moment required>
                                             <option value="">Selecione o momento</option>
                                             <?php foreach ($businessMomentOptions as $value => $label): ?>
@@ -389,7 +389,7 @@ foreach ($serviceCatalogs as $catalog) {
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label" for="priorityChannel">Canal prioritario</label>
+                                        <label class="form-label" for="priorityChannel">Canal prioritário</label>
                                         <select class="form-select" id="priorityChannel" name="priority_channel" data-priority-channel required>
                                             <option value="">Selecione o canal</option>
                                             <?php foreach ($channelOptions as $value => $label): ?>
@@ -412,7 +412,7 @@ foreach ($serviceCatalogs as $catalog) {
 
                             <section class="aq-wizard-stage d-none" data-step="3">
                                 <div class="aq-step-hint mb-3">
-                                    <strong>Resumo e revisao final</strong>
+                                    <strong>Resumo e revisão final</strong>
                                     <p class="mb-0">Revise as escolhas antes de enviar. Se precisar, volte e ajuste qualquer etapa.</p>
                                 </div>
 
@@ -423,22 +423,22 @@ foreach ($serviceCatalogs as $catalog) {
                                             <div><dt>Nome do projeto</dt><dd data-summary-project-title>-</dd></div>
                                             <div><dt>Tipo de cadastro</dt><dd data-summary-person-type>-</dd></div>
                                             <div data-summary-company-profile-row><dt>Porte da empresa</dt><dd data-summary-company-profile>-</dd></div>
-                                            <div><dt>Area de atuacao</dt><dd data-summary-client-area>-</dd></div>
-                                            <div><dt>Servico principal</dt><dd data-summary-service-category>-</dd></div>
+                                            <div><dt>Área de atuação</dt><dd data-summary-client-area>-</dd></div>
+                                            <div><dt>Serviço principal</dt><dd data-summary-service-category>-</dd></div>
                                             <div><dt>Disponibilidade esperada</dt><dd data-summary-availability>-</dd></div>
                                         </dl>
                                     </div>
 
                                     <div class="aq-summary-card">
-                                        <h3 class="h6">Servicos selecionados</h3>
+                                        <h3 class="h6">Serviços selecionados</h3>
                                         <ul class="aq-summary-services mb-0" data-summary-services></ul>
                                     </div>
 
                                     <div class="aq-summary-card">
-                                        <h3 class="h6">Estrategia</h3>
+                                        <h3 class="h6">Estratégia</h3>
                                         <dl class="aq-summary-list mb-0">
-                                            <div><dt>Momento do negocio</dt><dd data-summary-business-moment>-</dd></div>
-                                            <div><dt>Canal prioritario</dt><dd data-summary-priority-channel>-</dd></div>
+                                            <div><dt>Momento do negócio</dt><dd data-summary-business-moment>-</dd></div>
+                                            <div><dt>Canal prioritário</dt><dd data-summary-priority-channel>-</dd></div>
                                             <div><dt>Prioridade do projeto</dt><dd data-summary-project-priority>-</dd></div>
                                         </dl>
                                     </div>
@@ -446,8 +446,8 @@ foreach ($serviceCatalogs as $catalog) {
 
                                 <div class="aq-summary-actions mt-3">
                                     <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="0">Editar perfil</button>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="1">Editar servicos</button>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="2">Editar estrategia</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="1">Editar serviços</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-edit-step="2">Editar estratégia</button>
                                 </div>
                             </section>
                         </div>
@@ -456,8 +456,8 @@ foreach ($serviceCatalogs as $catalog) {
                             <button type="button" class="btn btn-outline-secondary" data-prev-step><i class="fa-solid fa-arrow-left me-1"></i>Etapa anterior</button>
                             <span class="small text-muted" data-step-label>Passo 1 de 4 - Perfil</span>
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-primary" data-next-step>Proximo passo<i class="fa-solid fa-arrow-right ms-1"></i></button>
-                                <button type="submit" class="btn btn-primary d-none" data-submit-request><i class="fa-solid fa-paper-plane me-1"></i>Seguir para orcamento</button>
+                                <button type="button" class="btn btn-primary" data-next-step>Próximo passo<i class="fa-solid fa-arrow-right ms-1"></i></button>
+                                <button type="submit" class="btn btn-primary d-none" data-submit-request><i class="fa-solid fa-paper-plane me-1"></i>Seguir para orçamento</button>
                             </div>
                         </div>
                     </div>
@@ -518,10 +518,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const availabilityInput = form.querySelector('input[name="requested_availability"]');
 
     const stepMeta = [
-        { label: 'Perfil', title: 'Passo 1 - Perfil do cliente', text: 'Informe os dados iniciais para que o passo de servicos seja personalizado para seu perfil.' },
-        { label: 'Servicos', title: 'Passo 2 - Escolha dos servicos', text: 'Voce pode usar os servicos recomendados para acelerar sua decisao ou visualizar o catalogo completo.' },
-        { label: 'Estrategia', title: 'Passo 3 - Estrategia do projeto', text: 'Defina momento, canal e prioridade para direcionar uma analise mais precisa do orcamento.' },
-        { label: 'Revisao', title: 'Passo 4 - Resumo e revisao', text: 'Revise todos os dados antes de enviar. Se necessario, volte para editar qualquer etapa.' }
+        { label: 'Perfil', title: 'Passo 1 - Perfil do cliente', text: 'Informe os dados iniciais para que o passo de serviços seja personalizado para seu perfil.' },
+        { label: 'Serviços', title: 'Passo 2 - Escolha dos serviços', text: 'Você pode usar os serviços recomendados para acelerar sua decisão ou visualizar o catálogo completo.' },
+        { label: 'Estratégia', title: 'Passo 3 - Estratégia do projeto', text: 'Defina momento, canal e prioridade para direcionar uma análise mais precisa do orçamento.' },
+        { label: 'Revisão', title: 'Passo 4 - Resumo e revisão', text: 'Revise todos os dados antes de enviar. Se necessário, volte para editar qualquer etapa.' }
     ];
 
     const areaKeywords = {
@@ -741,38 +741,38 @@ document.addEventListener('DOMContentLoaded', function () {
             const selectedCount = serviceOptions.filter(function (option) {
                 return option.checkbox && option.checkbox.checked;
             }).length;
-            const visibleText = visibleCount === 1 ? '1 servico visivel' : visibleCount + ' servicos visiveis';
+            const visibleText = visibleCount === 1 ? '1 serviço visível' : visibleCount + ' serviços visíveis';
             const selectedText = selectedCount === 1 ? '1 selecionado' : selectedCount + ' selecionados';
             serviceCounter.textContent = visibleText + ' | ' + selectedText + '.';
         }
 
         if (serviceModeHelper) {
             serviceModeHelper.textContent = mode === 'all'
-                ? 'Voce esta visualizando todo o catalogo de servicos da agencia.'
-                : 'Voce esta visualizando a lista recomendada para o seu perfil.';
+                ? 'Você está visualizando todo o catálogo de serviços da agência.'
+                : 'Você está visualizando a lista recomendada para o seu perfil.';
         }
     }
 
     function updateSummary() {
-        if (summaryProjectTitle) { summaryProjectTitle.textContent = String(projectTitleInput ? projectTitleInput.value : '').trim() || 'Nao informado'; }
-        if (summaryPersonType) { summaryPersonType.textContent = selectText(personTypeSelect) || 'Nao informado'; }
+        if (summaryProjectTitle) { summaryProjectTitle.textContent = String(projectTitleInput ? projectTitleInput.value : '').trim() || 'Não informado'; }
+        if (summaryPersonType) { summaryPersonType.textContent = selectText(personTypeSelect) || 'Não informado'; }
         
         if (summaryClientArea) { 
             let areaText = selectText(clientAreaSelect);
             if (clientAreaSelect && clientAreaSelect.value === 'outros' && areaOtherInput && areaOtherInput.value.trim() !== '') {
                 areaText += ': ' + areaOtherInput.value.trim();
             }
-            summaryClientArea.textContent = areaText || 'Nao informado'; 
+            summaryClientArea.textContent = areaText || 'Não informado'; 
         }
-        if (summaryServiceCategory) { summaryServiceCategory.textContent = selectText(serviceCategorySelect) || 'Nao informado'; }
-        if (summaryAvailability) { summaryAvailability.textContent = String(availabilityInput ? availabilityInput.value : '').trim() || 'Nao informado'; }
-        if (summaryBusinessMoment) { summaryBusinessMoment.textContent = selectText(businessMomentSelect) || 'Nao informado'; }
-        if (summaryPriorityChannel) { summaryPriorityChannel.textContent = selectText(priorityChannelSelect) || 'Nao informado'; }
-        if (summaryProjectPriority) { summaryProjectPriority.textContent = selectText(projectPrioritySelect) || 'Nao informado'; }
+        if (summaryServiceCategory) { summaryServiceCategory.textContent = selectText(serviceCategorySelect) || 'Não informado'; }
+        if (summaryAvailability) { summaryAvailability.textContent = String(availabilityInput ? availabilityInput.value : '').trim() || 'Não informado'; }
+        if (summaryBusinessMoment) { summaryBusinessMoment.textContent = selectText(businessMomentSelect) || 'Não informado'; }
+        if (summaryPriorityChannel) { summaryPriorityChannel.textContent = selectText(priorityChannelSelect) || 'Não informado'; }
+        if (summaryProjectPriority) { summaryProjectPriority.textContent = selectText(projectPrioritySelect) || 'Não informado'; }
 
         const isPj = selectedPersonType() === 'pj';
         if (summaryCompanyProfileRow) { summaryCompanyProfileRow.classList.toggle('d-none', !isPj); }
-        if (summaryCompanyProfile) { summaryCompanyProfile.textContent = isPj ? (selectText(companyProfileSelect) || 'Nao informado') : 'Nao se aplica'; }
+        if (summaryCompanyProfile) { summaryCompanyProfile.textContent = isPj ? (selectText(companyProfileSelect) || 'Não informado') : 'Não se aplica'; }
 
         if (summaryServices) {
             const selectedLabels = serviceOptions.filter(function (option) {
@@ -784,7 +784,7 @@ document.addEventListener('DOMContentLoaded', function () {
             summaryServices.innerHTML = '';
             if (selectedLabels.length === 0) {
                 const emptyItem = document.createElement('li');
-                emptyItem.textContent = 'Nenhum servico selecionado.';
+                emptyItem.textContent = 'Nenhum serviço selecionado.';
                 summaryServices.appendChild(emptyItem);
             } else {
                 selectedLabels.forEach(function (label) {
@@ -805,15 +805,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
             if (String(clientAreaSelect ? clientAreaSelect.value : '').trim() === '') {
-                showStepError('Selecione a area de atuacao para continuar.', clientAreaSelect);
+                showStepError('Selecione a área de atuação para continuar.', clientAreaSelect);
                 return false;
             }
             if (clientAreaSelect && clientAreaSelect.value === 'outros' && String(areaOtherInput ? areaOtherInput.value : '').trim() === '') {
-                showStepError('Descreva sua area de atuacao ou servico.', areaOtherInput);
+                showStepError('Descreva sua área de atuação ou serviço.', areaOtherInput);
                 return false;
             }
             if (String(serviceCategorySelect ? serviceCategorySelect.value : '').trim() === '') {
-                showStepError('Selecione o servico principal para continuar.', serviceCategorySelect);
+                showStepError('Selecione o serviço principal para continuar.', serviceCategorySelect);
                 return false;
             }
             if (personType === 'pj' && String(companyProfileSelect ? companyProfileSelect.value : '').trim() === '') {
@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return option.checkbox && option.checkbox.checked;
             });
             if (!hasService) {
-                showStepError('Selecione pelo menos um servico para o orcamento.', serviceOptions[0] ? serviceOptions[0].checkbox : null);
+                showStepError('Selecione pelo menos um serviço para o orçamento.', serviceOptions[0] ? serviceOptions[0].checkbox : null);
                 return false;
             }
             return true;
@@ -836,11 +836,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (stepIndex === 2) {
             if (String(businessMomentSelect ? businessMomentSelect.value : '').trim() === '') {
-                showStepError('Selecione o momento do negocio para continuar.', businessMomentSelect);
+                showStepError('Selecione o momento do negócio para continuar.', businessMomentSelect);
                 return false;
             }
             if (String(priorityChannelSelect ? priorityChannelSelect.value : '').trim() === '') {
-                showStepError('Selecione o canal prioritario para continuar.', priorityChannelSelect);
+                showStepError('Selecione o canal prioritário para continuar.', priorityChannelSelect);
                 return false;
             }
             if (String(projectPrioritySelect ? projectPrioritySelect.value : '').trim() === '') {
@@ -975,3 +975,4 @@ document.addEventListener('DOMContentLoaded', function () {
     renderStep(0);
 });
 </script>
+

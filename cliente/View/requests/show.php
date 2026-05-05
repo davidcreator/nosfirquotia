@@ -4,8 +4,8 @@
 <?php
 $statusCode = (string) ($requestData['status'] ?? 'pendente');
 $statusLabel = match ($statusCode) {
-    'orcado' => 'Orcado',
-    'em_analise' => 'Em analise',
+    'orcado' => 'Orçado',
+    'em_analise' => 'Em análise',
     default => 'Pendente',
 };
 $statusClass = match ($statusCode) {
@@ -22,7 +22,7 @@ $statusIcon = match ($statusCode) {
 
 <section class="aq-client-page-head">
     <div>
-        <h1 class="aq-client-page-title mb-1">Solicitacao #<?= (int) $requestData['id'] ?></h1>
+        <h1 class="aq-client-page-title mb-1">Solicitação #<?= (int) $requestData['id'] ?></h1>
         <p class="aq-client-page-subtitle mb-2"><?= e($requestData['project_title']) ?></p>
         <span class="<?= e($statusClass) ?>"><i class="<?= e($statusIcon) ?>"></i><?= e($statusLabel) ?></span>
     </div>
@@ -38,17 +38,17 @@ $statusIcon = match ($statusCode) {
             <div class="card-body">
                 <h2 class="h5 mb-3"><i class="fa-solid fa-file-lines me-2 text-primary"></i>Escopo solicitado</h2>
                 <p class="mb-3"><?= nl2br(e((string) $requestData['scope'])) ?></p>
-                <p class="mb-1"><strong>Prazo desejado:</strong> <?= $requestData['desired_deadline_days'] ? (int) $requestData['desired_deadline_days'] . ' dias' : 'Nao informado' ?></p>
-                <p class="mb-0"><strong>Disponibilidade desejada:</strong> <?= e((string) ($requestData['requested_availability'] ?? 'Nao informado')) ?></p>
+                <p class="mb-1"><strong>Prazo desejado:</strong> <?= $requestData['desired_deadline_days'] ? (int) $requestData['desired_deadline_days'] . ' dias' : 'Não informado' ?></p>
+                <p class="mb-0"><strong>Disponibilidade desejada:</strong> <?= e((string) ($requestData['requested_availability'] ?? 'Não informado')) ?></p>
             </div>
         </div>
     </div>
     <div class="col-lg-5">
         <div class="card border-0 shadow-sm aq-request-services">
             <div class="card-body">
-                <h2 class="h5 mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i>Servicos selecionados</h2>
+                <h2 class="h5 mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i>Serviços selecionados</h2>
                 <?php if ($services === []): ?>
-                    <p class="text-muted mb-0">Nenhum servico vinculado.</p>
+                    <p class="text-muted mb-0">Nenhum serviço vinculado.</p>
                 <?php else: ?>
                     <ul class="small mb-0">
                         <?php foreach ($services as $service): ?>
@@ -66,33 +66,33 @@ $statusIcon = match ($statusCode) {
 <section class="mt-3" data-quote-report-container="<?= $protectReport ? '1' : '0' ?>">
     <div class="card border-0 shadow-sm aq-request-report">
         <div class="card-body<?= $protectReport ? ' aq-quote-report-protected' : '' ?>">
-            <h2 class="h5 mb-3"><i class="fa-solid fa-file-invoice-dollar me-2 text-primary"></i>Relatorio do Orcamento</h2>
+            <h2 class="h5 mb-3"><i class="fa-solid fa-file-invoice-dollar me-2 text-primary"></i>Relatório do Orçamento</h2>
             <?php if (empty($requestData['report_id'])): ?>
-                <div class="alert alert-info mb-0">Seu pedido esta em analise. O admin ira gerar o relatorio em breve.</div>
+                <div class="alert alert-info mb-0">Seu pedido está em análise. O admin irá gerar o relatório em breve.</div>
             <?php else: ?>
                 <?php $showTaxDetails = !empty($requestData['show_tax_details']); ?>
                 <div class="alert alert-warning border small aq-quote-security-note">
-                    Consulta habilitada. Copia de conteudo e impressao/PDF estao bloqueados para este relatorio.
+                    Consulta habilitada. Cópia de conteúdo e impressão/PDF estão bloqueados para este relatório.
                     <?php if ($isQuoteExpired): ?>
                         <strong class="d-block mt-1">Status: validade expirada, consulta apenas.</strong>
                     <?php endif; ?>
                 </div>
                 <?php if ($showTaxDetails): ?>
-                    <p class="mb-1"><strong>Subtotal dos servicos:</strong> R$ <?= number_format((float) ($requestData['subtotal_value'] ?? 0), 2, ',', '.') ?></p>
+                    <p class="mb-1"><strong>Subtotal dos serviços:</strong> R$ <?= number_format((float) ($requestData['subtotal_value'] ?? 0), 2, ',', '.') ?></p>
                     <p class="mb-1"><strong>Total de tributos e encargos:</strong> R$ <?= number_format((float) ($requestData['taxes_total_value'] ?? 0), 2, ',', '.') ?></p>
                 <?php endif; ?>
                 <p class="mb-1"><strong>Valor total:</strong> R$ <?= number_format((float) $requestData['total_value'], 2, ',', '.') ?></p>
                 <p class="mb-1"><strong>Prazo total estimado:</strong> <?= $requestData['total_deadline_days'] ? (int) $requestData['total_deadline_days'] . ' dias' : 'A combinar' ?></p>
-                <p class="mb-1"><strong>Disponibilidade:</strong> <?= e((string) ($requestData['availability_summary'] ?? 'Nao informada')) ?></p>
+                <p class="mb-1"><strong>Disponibilidade:</strong> <?= e((string) ($requestData['availability_summary'] ?? 'Não informada')) ?></p>
                 <p class="mb-3">
                     <strong>Validade:</strong>
                     <?= e(date('d/m/Y', strtotime((string) $requestData['valid_until']))) ?>
-                    <span class="text-muted">(este orcamento e valido por 90 dias)</span>
+                    <span class="text-muted">(este orçamento é válido por 90 dias)</span>
                 </p>
 
                 <?php if ($showTaxDetails): ?>
                     <?php if ($reportTaxes === []): ?>
-                        <div class="alert alert-light border small">Sem componentes tributarios adicionais neste relatorio.</div>
+                        <div class="alert alert-light border small">Sem componentes tributários adicionais neste relatório.</div>
                     <?php else: ?>
                         <div class="table-responsive mb-3">
                             <table class="table table-sm align-middle aq-table-stack">
@@ -117,7 +117,7 @@ $statusIcon = match ($statusCode) {
                     <?php endif; ?>
                 <?php else: ?>
                     <div class="alert alert-light border small">
-                        O admin optou por nao exibir o detalhamento de impostos, taxas e encargos para este relatorio.
+                        O admin optou por não exibir o detalhamento de impostos, taxas e encargos para este relatório.
                     </div>
                 <?php endif; ?>
 
@@ -125,28 +125,28 @@ $statusIcon = match ($statusCode) {
                     <table class="table table-sm align-middle aq-table-stack">
                         <thead class="table-light">
                         <tr>
-                            <th>Servico</th>
+                            <th>Serviço</th>
                             <th>Valor</th>
                             <th>Prazo</th>
                             <th>Disponibilidade</th>
-                            <th>Observacoes</th>
+                            <th>Observações</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach ($reportItems as $item): ?>
                             <tr>
-                                <td data-label="Servico"><?= e($item['service_name']) ?></td>
+                                <td data-label="Serviço"><?= e($item['service_name']) ?></td>
                                 <td data-label="Valor">R$ <?= number_format((float) $item['price_value'], 2, ',', '.') ?></td>
                                 <td data-label="Prazo"><?= $item['deadline_days'] ? (int) $item['deadline_days'] . ' dias' : 'A combinar' ?></td>
                                 <td data-label="Disponibilidade"><?= e((string) ($item['availability_label'] ?? '-')) ?></td>
-                                <td data-label="Observacoes"><?= e((string) ($item['notes'] ?? '-')) ?></td>
+                                <td data-label="Observações"><?= e((string) ($item['notes'] ?? '-')) ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
 
-                <p class="mb-0"><strong>Observacoes gerais:</strong><br><?= nl2br(e((string) ($requestData['report_notes'] ?? 'Sem observacoes.'))) ?></p>
+                <p class="mb-0"><strong>Observações gerais:</strong><br><?= nl2br(e((string) ($requestData['report_notes'] ?? 'Sem observações.'))) ?></p>
             <?php endif; ?>
         </div>
     </div>
@@ -165,7 +165,7 @@ $statusIcon = match ($statusCode) {
             }
 
             body.aq-quote-print-block::before {
-                content: "Impressao/PDF bloqueados para este relatorio.";
+                content: "Impressão/PDF bloqueados para este relatório.";
                 visibility: visible !important;
                 position: fixed;
                 inset: 0;
@@ -190,8 +190,8 @@ $statusIcon = match ($statusCode) {
 
             document.body.classList.add('aq-quote-print-block');
 
-            const copyMessage = 'Copia de conteudo bloqueada para este relatorio.';
-            const printMessage = 'Impressao/PDF bloqueados para este relatorio.';
+            const copyMessage = 'Cópia de conteúdo bloqueada para este relatório.';
+            const printMessage = 'Impressão/PDF bloqueados para este relatório.';
             let hasWarnedCopy = false;
             let hasWarnedPrint = false;
 

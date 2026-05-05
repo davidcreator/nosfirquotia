@@ -210,13 +210,13 @@ if (!is_array($legalReferences)) {
                 </div>
             </div>
             <div class="aq-admin-panel-body">
-                <p class="small text-muted">Este painel ajuda na padronizacao interna. A validacao final deve ser feita por contador responsavel antes da proposta ao cliente.</p>
+                <p class="small text-muted">Este painel ajuda na padronização interna. A validação final deve ser feita por contador responsável antes da proposta ao cliente.</p>
 
                 <div class="alert alert-warning small mb-3">
                     O sistema não substitui consultoria contábil ou jurídica. Use os campos para registrar revisão técnica e rastreabilidade.
                 </div>
 
-                <h3 class="h6 text-uppercase text-muted mb-2">Referencias legais</h3>
+                <h3 class="h6 text-uppercase text-muted mb-2">Referências legais</h3>
                 <?php if ($legalReferences === []): ?>
                     <p class="small text-muted mb-0">Nenhuma referência cadastrada.</p>
                 <?php else: ?>

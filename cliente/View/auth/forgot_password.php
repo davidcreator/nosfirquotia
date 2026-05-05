@@ -7,15 +7,15 @@
                     <strong>Quotia</strong>
                 </div>
 
-                <h1>Recupere o acesso da sua conta com seguranca.</h1>
+                <h1>Recupere o acesso da sua conta com segurança.</h1>
                 <p class="aq-entry-lead">
-                    Informe o email utilizado no cadastro para receber o link de redefinicao e voltar ao portal rapidamente.
+                    Informe o email utilizado no cadastro para receber o link de redefinição e voltar ao portal rapidamente.
                 </p>
 
                 <ul class="aq-entry-list">
-                    <li><strong>Fluxo protegido:</strong> O link e enviado somente para o email informado no cadastro.</li>
-                    <li><strong>Token temporario:</strong> A redefinicao possui validade limitada para maior seguranca.</li>
-                    <li><strong>Acesso restaurado:</strong> Depois de definir nova senha, voce pode entrar normalmente.</li>
+                    <li><strong>Fluxo protegido:</strong> O link é enviado somente para o email informado no cadastro.</li>
+                    <li><strong>Token temporário:</strong> A redefinição possui validade limitada para maior segurança.</li>
+                    <li><strong>Acesso restaurado:</strong> Depois de definir nova senha, você pode entrar normalmente.</li>
                 </ul>
 
                 <div class="aq-entry-actions">
@@ -28,13 +28,13 @@
 
             <aside class="aq-entry-login">
                 <h2>Esqueci minha senha</h2>
-                <p>Digite seu email para receber o link de redefinicao.</p>
+                <p>Digite seu email para receber o link de redefinição.</p>
 
                 <form class="aq-entry-form" method="post" action="<?= e(url('/cliente/esqueci-senha')) ?>">
                     <label for="forgotPasswordEmail">Email</label>
                     <input type="email" id="forgotPasswordEmail" name="email" required autocomplete="email" value="<?= e((string) old('email')) ?>">
 
-                    <button class="aq-entry-submit" type="submit">Enviar link de recuperacao</button>
+                    <button class="aq-entry-submit" type="submit">Enviar link de recuperação</button>
                 </form>
 
                 <div class="aq-entry-login-links">
