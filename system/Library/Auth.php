@@ -57,6 +57,7 @@ final class Auth
 
         $this->session->regenerate();
         $this->session->remove('_csrf_token');
+        $this->session->remove('_csrf_secret');
         $this->session->set('admin_user', [
             'id' => (int) $user['id'],
             'name' => (string) $user['name'],
@@ -141,6 +142,7 @@ final class Auth
         $this->session->remove('admin_user');
         $this->session->regenerate();
         $this->session->remove('_csrf_token');
+        $this->session->remove('_csrf_secret');
     }
 
     public static function permissionCatalog(): array

@@ -12,6 +12,9 @@ use Throwable;
 
 final class Application
 {
+    private const CSRF_TOKEN_TTL_SECONDS = 7200; // 2 horas
+    private const CSRF_TOKEN_MAX_FUTURE_SKEW_SECONDS = 300;
+
     private static ?self $instance = null;
 
     private Request $request;
@@ -128,27 +131,59 @@ final class Application
 
     public function csrfToken(): string
     {
-        $token = (string) $this->session->get('_csrf_token', '');
-        if ($token === '') {
-            try {
-                $token = bin2hex(random_bytes(32));
-            } catch (Throwable) {
-                $token = hash('sha256', uniqid('csrf_', true));
-            }
-            $this->session->set('_csrf_token', $token);
-        }
+        $secret = $this->csrfSecret();
+        $issuedAt = time();
+        $nonce = bin2hex($this->randomBytesSafe(12));
+        $payload = $issuedAt . '|' . $nonce;
+        $signature = hash_hmac('sha256', $payload, $secret);
 
-        return $token;
+        return $issuedAt . '.' . $nonce . '.' . $signature;
     }
 
     public function csrfTokenIsValid(string $providedToken): bool
     {
-        $stored = (string) $this->session->get('_csrf_token', '');
-        if ($stored === '' || trim($providedToken) === '') {
+        $providedToken = trim($providedToken);
+        if ($providedToken === '') {
             return false;
         }
 
-        return hash_equals($stored, trim($providedToken));
+        // Compatibilidade transitória com tokens legados fixos de sessão.
+        $legacyStored = (string) $this->session->get('_csrf_token', '');
+        if ($legacyStored !== '' && hash_equals($legacyStored, $providedToken)) {
+            return true;
+        }
+
+        $parts = explode('.', $providedToken);
+        if (count($parts) !== 3) {
+            return false;
+        }
+
+        [$issuedAtRaw, $nonce, $signature] = $parts;
+        if (!ctype_digit($issuedAtRaw)) {
+            return false;
+        }
+
+        if (!preg_match('/^[a-f0-9]{24}$/', $nonce)) {
+            return false;
+        }
+
+        if (!preg_match('/^[a-f0-9]{64}$/', $signature)) {
+            return false;
+        }
+
+        $issuedAt = (int) $issuedAtRaw;
+        $now = time();
+        if ($issuedAt > ($now + self::CSRF_TOKEN_MAX_FUTURE_SKEW_SECONDS)) {
+            return false;
+        }
+
+        if (($now - $issuedAt) > self::CSRF_TOKEN_TTL_SECONDS) {
+            return false;
+        }
+
+        $expectedSignature = hash_hmac('sha256', $issuedAtRaw . '|' . $nonce, $this->csrfSecret());
+
+        return hash_equals($expectedSignature, $signature);
     }
 
     private function registerRoutes(): void
@@ -239,16 +274,121 @@ final class Application
             return true;
         }
 
-        $token = trim((string) $this->request->post('_csrf_token', ''));
-        if ($token === '' && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
-            $token = trim((string) $_SERVER['HTTP_X_CSRF_TOKEN']);
+        if (!$this->isRequestFromTrustedOrigin()) {
+            return $this->handleCsrfFailure();
         }
+
+        $token = $this->csrfTokenFromRequest();
         if ($this->csrfTokenIsValid($token)) {
             return true;
         }
 
+        return $this->handleCsrfFailure();
+    }
+
+    private function csrfTokenFromRequest(): string
+    {
+        $token = trim((string) $this->request->post('_csrf_token', ''));
+        if ($token !== '') {
+            return $token;
+        }
+
+        $headerCandidates = [
+            'X-CSRF-TOKEN',
+            'X-CSRF-Token',
+            'X-XSRF-TOKEN',
+        ];
+
+        foreach ($headerCandidates as $headerName) {
+            $headerValue = trim((string) $this->request->header($headerName, ''));
+            if ($headerValue !== '') {
+                return $headerValue;
+            }
+        }
+
+        return '';
+    }
+
+    private function isRequestFromTrustedOrigin(): bool
+    {
+        $expectedOrigin = $this->request->scheme() . '://' . $this->request->host();
+        $origin = trim((string) $this->request->header('Origin', ''));
+        if ($origin !== '') {
+            return $this->isSameOrigin($origin, $expectedOrigin);
+        }
+
+        $referer = trim((string) $this->request->header('Referer', ''));
+        if ($referer !== '') {
+            return $this->isSameOrigin($referer, $expectedOrigin);
+        }
+
+        $fetchSite = strtolower(trim((string) $this->request->header('Sec-Fetch-Site', '')));
+        if ($fetchSite !== '' && !in_array($fetchSite, ['same-origin', 'same-site', 'none'], true)) {
+            return false;
+        }
+
+        // Alguns agentes/proxies removem Origin/Referer; nao bloquear para evitar falso positivo.
+        return true;
+    }
+
+    private function isSameOrigin(string $sourceUrl, string $expectedOrigin): bool
+    {
+        $sourceParts = parse_url($sourceUrl);
+        $expectedParts = parse_url($expectedOrigin);
+        if (!is_array($sourceParts) || !is_array($expectedParts)) {
+            return false;
+        }
+
+        $sourceScheme = strtolower((string) ($sourceParts['scheme'] ?? ''));
+        $sourceHost = strtolower((string) ($sourceParts['host'] ?? ''));
+        $sourcePort = (int) ($sourceParts['port'] ?? ($sourceScheme === 'https' ? 443 : 80));
+
+        $expectedScheme = strtolower((string) ($expectedParts['scheme'] ?? ''));
+        $expectedHost = strtolower((string) ($expectedParts['host'] ?? ''));
+        $expectedPort = (int) ($expectedParts['port'] ?? ($expectedScheme === 'https' ? 443 : 80));
+
+        return $sourceScheme === $expectedScheme
+            && $sourceHost === $expectedHost
+            && $sourcePort === $expectedPort;
+    }
+
+    private function handleCsrfFailure(): bool
+    {
+        if ($this->requestExpectsJson()) {
+            $this->response->json(
+                [
+                    'success' => false,
+                    'code' => 'csrf_rejected',
+                    'error' => 'Token CSRF invalido, expirado ou origem nao confiavel.',
+                ],
+                403
+            );
+
+            return false;
+        }
+
         $this->session->flash('error', 'Sua sessao expirou ou a requisicao e invalida. Tente novamente.');
         $this->response->redirect($this->csrfFailureRedirectPath($this->request->path()));
+
+        return false;
+    }
+
+    private function requestExpectsJson(): bool
+    {
+        $accept = strtolower(trim((string) $this->request->header('Accept', '')));
+        if ($accept !== '' && str_contains($accept, 'application/json')) {
+            return true;
+        }
+
+        $contentType = strtolower(trim((string) $this->request->header('Content-Type', '')));
+        if ($contentType !== '' && str_contains($contentType, 'application/json')) {
+            return true;
+        }
+
+        $requestedWith = strtolower(trim((string) $this->request->header('X-Requested-With', '')));
+        if ($requestedWith === 'xmlhttprequest') {
+            return true;
+        }
 
         return false;
     }
@@ -317,6 +457,33 @@ final class Application
         error_log($exception->getTraceAsString());
 
         echo 'Erro interno. Verifique os logs do servidor.';
+    }
+
+    private function csrfSecret(): string
+    {
+        $secret = (string) $this->session->get('_csrf_secret', '');
+        if ($secret !== '' && preg_match('/^[a-f0-9]{64}$/', $secret)) {
+            return $secret;
+        }
+
+        $secret = bin2hex($this->randomBytesSafe(32));
+        $this->session->set('_csrf_secret', $secret);
+
+        return $secret;
+    }
+
+    private function randomBytesSafe(int $length): string
+    {
+        try {
+            return random_bytes($length);
+        } catch (Throwable) {
+            $buffer = '';
+            while (strlen($buffer) < $length) {
+                $buffer .= hash('sha256', uniqid('csrf_entropy_', true), true);
+            }
+
+            return substr($buffer, 0, $length);
+        }
     }
 
     private function applySecurityHeaders(): void

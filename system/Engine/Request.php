@@ -61,6 +61,42 @@ final class Request
         return $this->cookies[$key] ?? $default;
     }
 
+    public function header(string $name, mixed $default = null): mixed
+    {
+        $normalized = strtoupper(str_replace('-', '_', trim($name)));
+        if ($normalized === '') {
+            return $default;
+        }
+
+        $candidates = [
+            'HTTP_' . $normalized,
+            $normalized,
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (array_key_exists($candidate, $this->server)) {
+                return $this->server[$candidate];
+            }
+        }
+
+        return $default;
+    }
+
+    public function isSecure(): bool
+    {
+        return !empty($this->server['HTTPS']) && $this->server['HTTPS'] !== 'off';
+    }
+
+    public function scheme(): string
+    {
+        return $this->isSecure() ? 'https' : 'http';
+    }
+
+    public function host(): string
+    {
+        return trim((string) ($this->server['HTTP_HOST'] ?? 'localhost'));
+    }
+
     public function all(): array
     {
         return array_merge($this->query, $this->body);
@@ -68,9 +104,8 @@ final class Request
 
     public function fullBaseUrl(): string
     {
-        $isSecure = !empty($this->server['HTTPS']) && $this->server['HTTPS'] !== 'off';
-        $scheme = $isSecure ? 'https' : 'http';
-        $host = (string) ($this->server['HTTP_HOST'] ?? 'localhost');
+        $scheme = $this->scheme();
+        $host = $this->host();
 
         return $scheme . '://' . $host . ($this->basePath !== '/' ? $this->basePath : '');
     }
