@@ -41,6 +41,27 @@ let currentBackgroundImage = null;
 let currentImageFile = null;
 const OG_SETTINGS_STORAGE_KEY = 'ogImageSettings';
 
+function setHiddenState(element, hidden) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.toggle('is-hidden', Boolean(hidden));
+}
+
+function applyElementStyles(element, styles = {}) {
+    if (!element || !styles || typeof styles !== 'object') {
+        return;
+    }
+
+    Object.entries(styles).forEach(([property, value]) => {
+        if (value === undefined || value === null) {
+            return;
+        }
+        element.style[property] = String(value);
+    });
+}
+
 function getBrandKitApi() {
     return window.AQBrandKit || null;
 }
@@ -242,9 +263,9 @@ function createCharacterCounter(fieldId, limits) {
         <div class="progress-bar">
             <div class="progress-fill"></div>
             <div class="progress-markers">
-                <div class="marker min-marker" style="left: 33.33%"></div>
-                <div class="marker max-marker" style="left: 66.66%"></div>
-                ${limits.ABSOLUTE_MAX ? '<div class="marker absolute-marker" style="left: 100%"></div>' : ''}
+                <div class="marker min-marker"></div>
+                <div class="marker max-marker"></div>
+                ${limits.ABSOLUTE_MAX ? '<div class="marker absolute-marker"></div>' : ''}
             </div>
         </div>
         <div class="limits-info">Recomendado: ${limits.MIN_RECOMMENDED}-${limits.MAX_RECOMMENDED}${maxText} caracteres</div>
@@ -345,6 +366,18 @@ function addCharacterCounterStyles() {
             height: 100%;
             background: rgba(0, 0, 0, 0.3);
             transform: translateX(-50%);
+        }
+
+        .marker.min-marker {
+            left: 33.33%;
+        }
+
+        .marker.max-marker {
+            left: 66.66%;
+        }
+
+        .marker.absolute-marker {
+            left: 100%;
         }
         
         .limits-info {
@@ -500,19 +533,19 @@ function updateInstagramPreview(title, description, brand, backgroundStyle) {
                 const overlayText = document.createElement('div');
                 overlayText.className = 'overlay-text';
                 overlayText.textContent = title;
-                overlayText.style.cssText = `
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: white;
-                    font-weight: bold;
-                    font-size: 18px;
-                    text-align: center;
-                    padding: 10px;
-                    background: rgba(0, 0, 0, 0.5);
-                    border-radius: 8px;
-                `;
+                applyElementStyles(overlayText, {
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '18px',
+                    textAlign: 'center',
+                    padding: '10px',
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    borderRadius: '8px'
+                });
                 instagramImage.appendChild(overlayText);
             }
         }
@@ -584,25 +617,25 @@ function updateInstagramPreview(title, description, brand, backgroundStyle) {
                     const overlayText = document.createElement('div');
                     overlayText.className = 'overlay-text';
                     overlayText.textContent = title;
-                    overlayText.style.cssText = `
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        color: white;
-                        font-weight: bold;
-                        font-size: clamp(16px, 4vw, 24px);
-                        text-align: center;
-                        padding: 15px 20px;
-                        background: rgba(0, 0, 0, 0.7);
-                        border-radius: 12px;
-                        max-width: 80%;
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-                        backdrop-filter: blur(10px);
-                        line-height: 1.4;
-                        word-wrap: break-word;
-                        z-index: 10;
-                    `;
+                    applyElementStyles(overlayText, {
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: 'clamp(16px, 4vw, 24px)',
+                        textAlign: 'center',
+                        padding: '15px 20px',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        borderRadius: '12px',
+                        maxWidth: '80%',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                        backdropFilter: 'blur(10px)',
+                        lineHeight: '1.4',
+                        wordWrap: 'break-word',
+                        zIndex: '10'
+                    });
                     instagramImage.appendChild(overlayText);
                 }
             } else if (existingText) {
@@ -636,16 +669,16 @@ function updateInstagramPreview(title, description, brand, backgroundStyle) {
             instagramCaption.textContent = captionText.trim();
             
             // Estilizar caption
-            instagramCaption.style.cssText = `
-                font-size: 14px;
-                line-height: 1.5;
-                color: #262626;
-                margin-top: 12px;
-                white-space: pre-line;
-                max-height: 150px;
-                overflow-y: auto;
-                padding: 8px 0;
-            `;
+            applyElementStyles(instagramCaption, {
+                fontSize: '14px',
+                lineHeight: '1.5',
+                color: '#262626',
+                marginTop: '12px',
+                whiteSpace: 'pre-line',
+                maxHeight: '150px',
+                overflowY: 'auto',
+                padding: '8px 0'
+            });
         }
         
         // Atualizar username
@@ -671,12 +704,12 @@ function updateInstagramPreview(title, description, brand, backgroundStyle) {
             instagramUsername.textContent = `@${username}`;
             
             // Estilizar username
-            instagramUsername.style.cssText = `
-                font-weight: bold;
-                color: #262626;
-                font-size: 14px;
-                margin-bottom: 8px;
-            `;
+            applyElementStyles(instagramUsername, {
+                fontWeight: 'bold',
+                color: '#262626',
+                fontSize: '14px',
+                marginBottom: '8px'
+            });
         }
         
         // Adicionar indicadores visuais se necessário
@@ -694,15 +727,15 @@ function updateInstagramPreview(title, description, brand, backgroundStyle) {
             const errorMessage = document.createElement('div');
             errorMessage.className = 'instagram-error';
             errorMessage.textContent = 'Erro ao carregar preview do Instagram';
-            errorMessage.style.cssText = `
-                padding: 20px;
-                background: #f8f9fa;
-                border: 1px solid #e9ecef;
-                border-radius: 8px;
-                color: #6c757d;
-                text-align: center;
-                font-size: 14px;
-            `;
+            applyElementStyles(errorMessage, {
+                padding: '20px',
+                background: '#f8f9fa',
+                border: '1px solid #e9ecef',
+                borderRadius: '8px',
+                color: '#6c757d',
+                textAlign: 'center',
+                fontSize: '14px'
+            });
             errorContainer.innerHTML = '';
             errorContainer.appendChild(errorMessage);
         }
@@ -757,23 +790,23 @@ function addInstagramInteractionElements() {
         // Criar container de interações
         const interactionsContainer = document.createElement('div');
         interactionsContainer.className = 'instagram-interactions';
-        interactionsContainer.style.cssText = `
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-top: 1px solid #efefef;
-            margin-top: 12px;
-        `;
+        applyElementStyles(interactionsContainer, {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 0',
+            borderTop: '1px solid #efefef',
+            marginTop: '12px'
+        });
         
         // Botões de ação
         const actionsContainer = document.createElement('div');
         actionsContainer.className = 'instagram-actions';
-        actionsContainer.style.cssText = `
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        `;
+        applyElementStyles(actionsContainer, {
+            display: 'flex',
+            gap: '16px',
+            alignItems: 'center'
+        });
         
         // Ícones de ação (coração, comentário, compartilhar)
         const actions = [
@@ -786,15 +819,15 @@ function addInstagramInteractionElements() {
             const button = document.createElement('button');
             button.textContent = action.icon;
             button.title = action.label;
-            button.style.cssText = `
-                background: none;
-                border: none;
-                font-size: 18px;
-                cursor: pointer;
-                padding: 4px;
-                opacity: 0.7;
-                transition: opacity 0.2s;
-            `;
+            applyElementStyles(button, {
+                background: 'none',
+                border: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                padding: '4px',
+                opacity: '0.7',
+                transition: 'opacity 0.2s'
+            });
             button.addEventListener('mouseenter', () => button.style.opacity = '1');
             button.addEventListener('mouseleave', () => button.style.opacity = '0.7');
             
@@ -805,12 +838,12 @@ function addInstagramInteractionElements() {
         const likesContainer = document.createElement('div');
         likesContainer.className = 'instagram-likes';
         likesContainer.textContent = '1,234 curtidas';
-        likesContainer.style.cssText = `
-            font-size: 14px;
-            font-weight: bold;
-            color: #262626;
-            margin-top: 8px;
-        `;
+        applyElementStyles(likesContainer, {
+            fontSize: '14px',
+            fontWeight: 'bold',
+            color: '#262626',
+            marginTop: '8px'
+        });
         
         interactionsContainer.appendChild(actionsContainer);
         
@@ -1070,28 +1103,23 @@ function downloadImage(format = 'png') {
 
 // Função para alternar entre os previews das redes sociais
 function showPreview(platform) {
-    // Remove a classe 'active' de todas as abas
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    // Esconde todos os previews
-    document.querySelectorAll('.social-preview').forEach(preview => {
-        preview.classList.remove('active');
-        preview.style.display = 'none';
-    });
-    
-    // Ativa a aba clicada
-    const activeButton = document.querySelector(`[onclick="showPreview('${platform}')"]`);
-    if (activeButton) {
-        activeButton.classList.add('active');
+    const normalizedPlatform = String(platform || '').trim().toLowerCase();
+    if (normalizedPlatform === '') {
+        return;
     }
-    
-    // Mostra o preview correspondente
-    const activePreview = document.getElementById(`${platform}-preview`);
+
+    document.querySelectorAll('.social-tab').forEach((button) => {
+        const buttonPlatform = String(button.getAttribute('data-platform') || '').trim().toLowerCase();
+        button.classList.toggle('active', buttonPlatform === normalizedPlatform);
+    });
+
+    document.querySelectorAll('.social-preview').forEach((preview) => {
+        preview.classList.remove('active');
+    });
+
+    const activePreview = document.getElementById(`${normalizedPlatform}-preview`);
     if (activePreview) {
         activePreview.classList.add('active');
-        activePreview.style.display = 'block';
     }
 }
 
@@ -1397,8 +1425,8 @@ function handleImageUpload(file) {
                 const removeBtn = document.getElementById('removeImageBtn');
                 const editBtn = document.getElementById('editImageBtn');
                 
-                if (removeBtn) removeBtn.style.display = 'block';
-                if (editBtn) editBtn.style.display = 'block';
+                setHiddenState(removeBtn, false);
+                setHiddenState(editBtn, false);
                 
                 // Atualiza o preview
                 updatePreview();
@@ -1442,8 +1470,8 @@ function removeImage() {
         const removeBtn = document.getElementById('removeImageBtn');
         const editBtn = document.getElementById('editImageBtn');
         
-        if (removeBtn) removeBtn.style.display = 'none';
-        if (editBtn) editBtn.style.display = 'none';
+        setHiddenState(removeBtn, true);
+        setHiddenState(editBtn, true);
         
         // Atualiza o preview
         updatePreview();
@@ -1530,7 +1558,7 @@ function generateCode() {
     }
     
     generatedCodeElement.textContent = code;
-    codeModalElement.style.display = 'block';
+    codeModalElement.classList.add('is-open');
 }
 
 // Função para escapar HTML
@@ -1590,7 +1618,7 @@ function closeModal() {
         return;
     }
     
-    codeModalElement.style.display = 'none';
+    codeModalElement.classList.remove('is-open');
 }
 
 // Função para salvar configurações no localStorage
@@ -1817,6 +1845,25 @@ function initializeEventListeners() {
             console.error('Erro ao configurar event listeners para botões de template:', error);
         }
 
+        // Event listeners para abas de preview social
+        try {
+            const socialTabs = document.querySelectorAll('.social-tab[data-platform]');
+            if (socialTabs && socialTabs.length > 0) {
+                socialTabs.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const platform = String(button.getAttribute('data-platform') || '').trim();
+                        if (platform !== '') {
+                            showPreview(platform);
+                        }
+                    });
+                });
+            } else {
+                console.warn('Nenhuma aba de preview social encontrada');
+            }
+        } catch (error) {
+            console.error('Erro ao configurar abas de preview social:', error);
+        }
+
         // Event listeners para os campos de input com debounce
         const debouncedUpdate = debounce(() => {
             updatePreview();
@@ -1893,6 +1940,11 @@ function initializeEventListeners() {
         }
 
         // Event listeners para botões de ação
+        addEventListenerIfExists('updatePreviewBtn', 'click', () => {
+            updatePreview();
+            saveSettings();
+        });
+
         addEventListenerIfExists('exportBtn', 'click', () => {
             if (validateFields()) {
                 exportImage();
@@ -1990,13 +2042,13 @@ function openImageEditor() {
             return;
         }
         
-        editorContainer.style.display = 'flex';
+        setHiddenState(editorContainer, false);
         
         // Verifica se o objeto imageEditor está disponível
         if (!imageEditor) {
             console.error('Objeto imageEditor não está disponível');
             alert('Erro ao inicializar o editor de imagem. Tente recarregar a página.');
-            editorContainer.style.display = 'none';
+            setHiddenState(editorContainer, true);
             return;
         }
     } catch (error) {
@@ -2010,7 +2062,7 @@ function openImageEditor() {
     }).catch(error => {
         console.error('Erro ao inicializar o editor de imagem:', error);
         alert('Erro ao carregar a imagem no editor. Tente novamente.');
-        editorContainer.style.display = 'none';
+        setHiddenState(editorContainer, true);
     });
 }
 
@@ -2243,7 +2295,7 @@ function closeImageEditor() {
     try {
         const editorContainer = document.getElementById('imageEditor');
         if (editorContainer) {
-            editorContainer.style.display = 'none';
+            setHiddenState(editorContainer, true);
         } else {
             console.warn('Elemento do editor de imagem não encontrado ao tentar fechar');
         }

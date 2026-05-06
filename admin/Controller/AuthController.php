@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace NosfirQuotia\Admin\Controller;
 
 use NosfirQuotia\System\Engine\Controller;
-use NosfirQuotia\System\Library\EmailService;
 use NosfirQuotia\System\Library\PasswordResetService;
 use NosfirQuotia\System\Library\RateLimiter;
 
@@ -65,6 +64,14 @@ final class AuthController extends Controller
 
         if (!$this->auth()->attempt($email, $password)) {
             $this->registerLoginFailure($email);
+            $this->securityLogger()->warning(
+                'admin_login_failed',
+                [
+                    'email_hash' => $this->emailFingerprint($emailRaw),
+                    'ip' => $this->securityIp(),
+                    'reason' => 'invalid_credentials_or_inactive',
+                ]
+            );
             $this->session->flash('error', 'Credenciais inválidas ou usuário sem acesso ativo.');
             $this->redirect('/admin');
         }
@@ -72,10 +79,24 @@ final class AuthController extends Controller
         $this->clearLoginFailures($email);
         $this->syncRememberedEmailCookie($email, $rememberEmail);
         $this->session->forgetMany(['old_input']);
+        $loggedUser = $this->auth()->user();
+        $this->securityLogger()->info(
+            'admin_login_success',
+            [
+                'admin_user_id' => (int) ($loggedUser['id'] ?? 0),
+                'ip' => $this->securityIp(),
+            ]
+        );
 
         $path = $this->auth()->preferredAdminPath();
         if ($path === '/admin/logout') {
             $this->auth()->logout();
+            $this->securityLogger()->warning(
+                'admin_login_denied_no_permissions',
+                [
+                    'ip' => $this->securityIp(),
+                ]
+            );
             $this->session->flash('error', 'Seu usuário não possui permissões ativas. Contate o Administrador Geral.');
             $this->redirect('/admin');
         }
@@ -86,7 +107,15 @@ final class AuthController extends Controller
 
     public function logout(): void
     {
+        $user = $this->auth()->user();
         $this->auth()->logout();
+        $this->securityLogger()->info(
+            'admin_logout',
+            [
+                'admin_user_id' => (int) ($user['id'] ?? 0),
+                'ip' => $this->securityIp(),
+            ]
+        );
         $this->session->flash('success', 'Sessão encerrada.');
         $this->redirect('/admin');
     }
@@ -118,8 +147,8 @@ final class AuthController extends Controller
         $resetService->requestReset(
             'admin',
             $email,
-            $this->request->fullBaseUrl(),
-            (string) ($_SERVER['REMOTE_ADDR'] ?? '')
+            $this->app->fullBaseUrl(),
+            $this->request->clientIp()
         );
 
         $this->session->flash('success', 'Se o email estiver cadastrado, enviaremos o link de redefinicao em instantes.');
@@ -176,13 +205,10 @@ final class AuthController extends Controller
 
     private function resetService(): PasswordResetService
     {
-        $emailService = new EmailService($this->db(), (array) $this->app->config('mail', []));
+        /** @var PasswordResetService $service */
+        $service = $this->make(PasswordResetService::class);
 
-        return new PasswordResetService(
-            $this->db(),
-            $emailService,
-            (string) $this->app->config('name', 'Quotia')
-        );
+        return $service;
     }
 
     private function canAttemptLogin(string $email): bool
@@ -215,6 +241,15 @@ final class AuthController extends Controller
             'error',
             'Muitas tentativas de login. Aguarde ' . $this->formatRetryAfter($retryAfter) . ' para tentar novamente.'
         );
+        $this->securityLogger()->warning(
+            'admin_login_blocked',
+            [
+                'email_hash' => $this->emailFingerprint($email),
+                'ip' => $this->securityIp(),
+                'retry_after_seconds' => $retryAfter,
+                'window_seconds' => self::LOGIN_WINDOW_SECONDS,
+            ]
+        );
 
         return false;
     }
@@ -238,10 +273,7 @@ final class AuthController extends Controller
     private function loginThrottleKeys(string $scope, string $email): array
     {
         $email = strtolower(trim($email));
-        $ip = trim((string) ($_SERVER['REMOTE_ADDR'] ?? 'ip-desconhecido'));
-        if ($ip === '') {
-            $ip = 'ip-desconhecido';
-        }
+        $ip = $this->request->clientIp();
 
         return [
             'email' => $scope . '|email|' . $email,
@@ -251,7 +283,10 @@ final class AuthController extends Controller
 
     private function rateLimiter(): RateLimiter
     {
-        return new RateLimiter($this->app->rootPath() . '/storage/cache/rate_limits');
+        /** @var RateLimiter $limiter */
+        $limiter = $this->make(RateLimiter::class);
+
+        return $limiter;
     }
 
     private function formatRetryAfter(int $seconds): string
@@ -292,5 +327,15 @@ final class AuthController extends Controller
     private function clearRememberedEmailCookie(): void
     {
         $this->clearCookie(self::REMEMBER_EMAIL_COOKIE, true);
+    }
+
+    private function emailFingerprint(string $email): string
+    {
+        return hash('sha256', strtolower(trim($email)));
+    }
+
+    private function securityIp(): string
+    {
+        return $this->request->clientIp();
     }
 }

@@ -47,6 +47,115 @@
     </div>
 </section>
 
+<?php
+/** @var array<string, mixed> $securityOverview */
+$securityOverview = is_array($securityOverview ?? null) ? $securityOverview : [];
+$securityCounts = is_array($securityOverview['counts'] ?? null) ? $securityOverview['counts'] : [];
+$securityAlerts = is_array($securityOverview['alerts'] ?? null) ? $securityOverview['alerts'] : [];
+$securityWindowHours = (int) ($securityOverview['window_hours'] ?? 24);
+$securityTotal = (int) ($securityOverview['total_events'] ?? 0);
+/** @var array<string, mixed> $securityTrend */
+$securityTrend = is_array($securityTrend ?? null) ? $securityTrend : [];
+$securityTrendBuckets = is_array($securityTrend['buckets'] ?? null) ? $securityTrend['buckets'] : [];
+$securityTrendEvents = is_array($securityTrend['events'] ?? null) ? $securityTrend['events'] : [];
+$securityBucketMinutes = (int) ($securityTrend['bucket_minutes'] ?? 60);
+$securityRecentBuckets = array_slice($securityTrendBuckets, -12);
+$securityEventLabels = [
+    'csrf_rejected' => 'CSRF',
+    'host_header_rejected' => 'Host',
+    'admin_login_blocked' => 'Login admin',
+    'client_login_blocked' => 'Login cliente',
+];
+?>
+<section class="card border-0 shadow-sm mb-4 aq-admin-filter-bar">
+    <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div>
+                <small class="text-muted d-block">Monitoramento de seguranca (ultimas <?= $securityWindowHours ?>h)</small>
+                <strong><?= $securityTotal ?> eventos avaliados</strong>
+            </div>
+            <div>
+                <?php if ($securityAlerts === []): ?>
+                    <span class="badge text-bg-success">Sem alertas ativos</span>
+                <?php else: ?>
+                    <span class="badge text-bg-danger"><?= count($securityAlerts) ?> alerta(s) ativo(s)</span>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="row g-2 mb-3">
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-light">
+                    <small class="text-muted d-block">CSRF rejeitado</small>
+                    <strong><?= (int) ($securityCounts['csrf_rejected'] ?? 0) ?></strong>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-light">
+                    <small class="text-muted d-block">Host rejeitado</small>
+                    <strong><?= (int) ($securityCounts['host_header_rejected'] ?? 0) ?></strong>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-light">
+                    <small class="text-muted d-block">Login admin bloqueado</small>
+                    <strong><?= (int) ($securityCounts['admin_login_blocked'] ?? 0) ?></strong>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-light">
+                    <small class="text-muted d-block">Login cliente bloqueado</small>
+                    <strong><?= (int) ($securityCounts['client_login_blocked'] ?? 0) ?></strong>
+                </div>
+            </div>
+        </div>
+        <?php if ($securityAlerts !== []): ?>
+            <div class="alert alert-warning mb-0">
+                <strong>Alertas operacionais:</strong>
+                <ul class="mb-0 mt-2">
+                    <?php foreach ($securityAlerts as $alert): ?>
+                        <li><?= e((string) ($alert['message'] ?? 'Alerta de seguranca detectado.')) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        <?php if ($securityRecentBuckets !== []): ?>
+            <div class="table-responsive mt-3">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Faixa</th>
+                        <th>Total</th>
+                        <?php foreach ($securityTrendEvents as $eventName): ?>
+                            <?php
+                            $eventKey = (string) $eventName;
+                            $eventLabel = (string) ($securityEventLabels[$eventKey] ?? $eventKey);
+                            ?>
+                            <th><?= e($eventLabel) ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($securityRecentBuckets as $bucket): ?>
+                        <?php
+                        $bucketStart = strtotime((string) ($bucket['start_iso'] ?? ''));
+                        $bucketLabel = $bucketStart !== false ? date('d/m H:i', $bucketStart) : '-';
+                        $bucketCounts = is_array($bucket['counts'] ?? null) ? $bucket['counts'] : [];
+                        ?>
+                        <tr>
+                            <td><?= e($bucketLabel) ?> (<?= (int) $securityBucketMinutes ?>m)</td>
+                            <td><?= (int) ($bucket['total'] ?? 0) ?></td>
+                            <?php foreach ($securityTrendEvents as $eventName): ?>
+                                <td><?= (int) ($bucketCounts[(string) $eventName] ?? 0) ?></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
+
 <section class="card border-0 shadow-sm mb-4 aq-admin-filter-bar">
     <div class="card-body d-flex flex-wrap gap-3 justify-content-between align-items-center">
         <div>

@@ -22,6 +22,32 @@
   },
   "scripts": {
     "serve": "php -S localhost:8080",
-    "dump": "composer dump-autoload -o"
+    "dump": "composer dump-autoload -o",
+    "test:services": "php tests/run_services.php",
+    "test:http": "php tests/run_http.php",
+    "audit:security-config": "php config/audit_security_config.php",
+    "audit:security-config:strict": "php config/audit_security_config.php --strict",
+    "audit:security-config:online": "php config/audit_security_config.php --env=online",
+    "audit:security-config:strict:online": "php config/audit_security_config.php --strict --env=online",
+    "verify:release": [
+      "@audit:security-config",
+      "@test:services",
+      "@test:http"
+    ],
+    "verify:release:online": [
+      "@audit:security-config:online",
+      "@test:services",
+      "@test:http"
+    ],
+    "verify:release:strict": [
+      "@audit:security-config:strict",
+      "@test:services",
+      "@test:http"
+    ],
+    "verify:release:strict:online": [
+      "@audit:security-config:strict:online",
+      "@test:services",
+      "@test:http"
+    ]
   }
 }

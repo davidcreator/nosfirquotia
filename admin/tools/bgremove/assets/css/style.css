@@ -180,6 +180,44 @@ body {
     color: var(--text-muted);
 }
 
+.control-row {
+    margin-top: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.control-row-tight {
+    margin-top: 12px;
+    gap: 12px;
+}
+
+.control-grid-fine {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.control-label-inline {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.control-inline-input {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-inline-input input[type="checkbox"] {
+    margin: 0;
+}
+
 .fine-controls .fine-control {
     display: flex;
     flex-direction: column;
@@ -572,8 +610,19 @@ body {
     flex-wrap: wrap;
 }
 
-.editor-tools, .optimize-tools {
+.editor-tools {
     display: none;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.optimize-tools {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .editor-tools label, .optimize-tools label {
@@ -689,6 +738,8 @@ body {
 /* ===== Result Preview Backgrounds ===== */
 .image-box { position: relative; border-radius: 10px; }
 .processed-box { overflow: hidden; }
+.display-block { display: block; }
+.editor-canvas { max-width: 100%; border-radius: 10px; }
 .edge-canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
 .bg-checker {
     background-color: #fff;
@@ -737,8 +788,16 @@ body {
 }
 
 /* ===== Preview Controls ===== */
+.preview-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 .preview-controls select, .preview-controls input[type="color"] { padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; }
-.preview-extra { display: inline-flex; }
+.preview-extra { display: inline-flex; align-items: center; gap: 8px; }
+.opt-width-input { width: 100px; }
 
 /* ===== Use Cases ===== */
 .use-cases { margin-top: 24px; }

@@ -324,6 +324,7 @@ final class Installer
         $config = [
             'name' => (string) ($existing['name'] ?? 'Nosfir Quotia'),
             'timezone' => (string) ($existing['timezone'] ?? 'America/Sao_Paulo'),
+            'app_url' => (string) ($existing['app_url'] ?? ''),
             'environment' => $environment,
             'environments' => $environments,
         ];

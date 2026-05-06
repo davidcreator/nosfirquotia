@@ -215,7 +215,7 @@ foreach ($serviceCatalogs as $catalog) {
 
                         <div class="aq-assistant-progress-wrap mt-3">
                             <div class="progress aq-assistant-progress" role="progressbar" aria-label="Progresso do formulário">
-                                <div class="progress-bar bg-primary" data-wizard-progressbar style="width:25%;" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></div>
+                                <div class="progress-bar bg-primary w-25" data-wizard-progressbar aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></div>
                             </div>
                             <div class="aq-assistant-stepper mt-2">
                                 <button type="button" class="aq-assistant-step is-active" data-step-target="0"><i class="fa-solid fa-id-card"></i>1. Perfil</button>

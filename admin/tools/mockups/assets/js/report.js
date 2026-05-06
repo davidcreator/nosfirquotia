@@ -290,13 +290,14 @@ function renderBrandingSummary(entries) {
     } else {
         paletteTarget.innerHTML = colors.map((item) => `
             <article class="report-color-item">
-                <div class="report-color-swatch" style="background:${escapeHtml(item.hex)};"></div>
+                <div class="report-color-swatch" data-swatch-color="${escapeHtml(item.hex)}"></div>
                 <div class="report-color-meta">
                     <strong>${escapeHtml(item.role)}</strong>
                     <span>${escapeHtml(item.hex)}</span>
                 </div>
             </article>
         `).join('');
+        applyPaletteSwatchColors(paletteTarget);
     }
 
     const primaryFont = typography.primaryFontName || typography.fontName || 'Não definido';
@@ -322,6 +323,19 @@ function renderBrandingSummary(entries) {
             <strong>${escapeHtml(source)}</strong>
         </article>
     `;
+}
+
+function applyPaletteSwatchColors(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('[data-swatch-color]').forEach((element) => {
+        const color = String(element.getAttribute('data-swatch-color') || '').trim();
+        if (color !== '') {
+            element.style.background = color;
+        }
+    });
 }
 
 function getIntegrationContext(entries) {

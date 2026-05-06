@@ -1382,6 +1382,7 @@ function renderRecommendation(payload) {
         const rankingView = buildRankingView(payload.ranking);
         applyRankingDensityClass(cards);
         cards.innerHTML = rankingView.items.map((font, index) => renderFontCard(font, index)).join('');
+        applyFontCardFamilies(cards);
         renderRankingMeta(rankingView);
     }
 
@@ -1454,7 +1455,7 @@ function renderFontCard(font, index) {
 
     return `
         <article class="font-card">
-            <h4 style="font-family:${font.css};">${index + 1}. ${escapeHtml(font.name)}</h4>
+            <h4 data-font-family="${escapeHtml(font.css)}">${index + 1}. ${escapeHtml(font.name)}</h4>
             <p>${escapeHtml(translateLabel('category', font.category))} | Pontuação: ${escapeHtml(String(roundTo(font.score, 2)))}</p>
             <p>${escapeHtml(reasons)}</p>
             <div class="font-card-meta">
@@ -1463,6 +1464,19 @@ function renderFontCard(font, index) {
             </div>
         </article>
     `;
+}
+
+function applyFontCardFamilies(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('[data-font-family]').forEach((element) => {
+        const fontFamily = String(element.getAttribute('data-font-family') || '').trim();
+        if (fontFamily !== '') {
+            element.style.fontFamily = fontFamily;
+        }
+    });
 }
 
 function renderPairAlternatives(pairOptions, activeSignature) {

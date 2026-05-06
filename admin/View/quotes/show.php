@@ -265,8 +265,8 @@
                         <thead class="table-light">
                         <tr>
                             <th>Componente</th>
-                            <th style="width: 160px;">Percentual (%)</th>
-                            <th style="width: 200px;">Estimativa (R$)</th>
+                            <th class="aq-admin-tax-percent-col">Percentual (%)</th>
+                            <th class="aq-admin-tax-estimate-col">Estimativa (R$)</th>
                         </tr>
                         </thead>
                         <tbody>

@@ -13,8 +13,8 @@ $mockupScriptVersion = is_file($mockupScriptPath) ? (string) filemtime($mockupSc
             <span class="close">&times;</span>
             <img id="previewImage" src="" alt="Preview">
             <div class="modal-actions">
-                <button type="button" class="btn-primary" onclick="usePreviewedMockup()">Usar Este Mockup</button>
-                <button type="button" class="btn-secondary" onclick="closeModal()">Fechar</button>
+                <button type="button" class="btn-primary" id="usePreviewedMockupBtn">Usar Este Mockup</button>
+                <button type="button" class="btn-secondary" id="closePreviewModalBtn">Fechar</button>
             </div>
         </div>
     </div>

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace NosfirQuotia\Cliente\Controller;
 
 use NosfirQuotia\System\Engine\Controller;
-use NosfirQuotia\System\Library\EmailService;
 use NosfirQuotia\System\Library\PasswordResetService;
 use NosfirQuotia\System\Library\RateLimiter;
 
@@ -60,6 +59,14 @@ final class AuthController extends Controller
 
         if (!$this->clientAuth()->attempt($email, $password)) {
             $this->registerLoginFailure($email);
+            $this->securityLogger()->warning(
+                'client_login_failed',
+                [
+                    'email_hash' => $this->emailFingerprint($emailRaw),
+                    'ip' => $this->securityIp(),
+                    'reason' => 'invalid_credentials',
+                ]
+            );
             $this->session->flash('error', 'Credenciais de cliente inválidas.');
             $this->redirect('/cliente/login');
         }
@@ -67,6 +74,14 @@ final class AuthController extends Controller
         $this->clearLoginFailures($email);
         $this->syncRememberedEmailCookie($email, $rememberEmail);
         $this->session->forgetMany(['old_input']);
+        $loggedUser = $this->clientAuth()->user();
+        $this->securityLogger()->info(
+            'client_login_success',
+            [
+                'client_user_id' => (int) ($loggedUser['id'] ?? 0),
+                'ip' => $this->securityIp(),
+            ]
+        );
 
         $this->session->flash('success', 'Login realizado com sucesso.');
         $this->redirect('/orcamentos');
@@ -121,7 +136,15 @@ final class AuthController extends Controller
 
     public function logout(): void
     {
+        $user = $this->clientAuth()->user();
         $this->clientAuth()->logout();
+        $this->securityLogger()->info(
+            'client_logout',
+            [
+                'client_user_id' => (int) ($user['id'] ?? 0),
+                'ip' => $this->securityIp(),
+            ]
+        );
         $this->session->flash('success', 'Sessão de cliente encerrada.');
         $this->redirect('/');
     }
@@ -148,8 +171,8 @@ final class AuthController extends Controller
         $this->resetService()->requestReset(
             'client',
             $email,
-            $this->request->fullBaseUrl(),
-            (string) ($_SERVER['REMOTE_ADDR'] ?? '')
+            $this->app->fullBaseUrl(),
+            $this->request->clientIp()
         );
 
         $this->session->flash('success', 'Se o email estiver cadastrado, enviaremos o link de redefinição em instantes.');
@@ -209,13 +232,10 @@ final class AuthController extends Controller
 
     private function resetService(): PasswordResetService
     {
-        $emailService = new EmailService($this->db(), (array) $this->app->config('mail', []));
+        /** @var PasswordResetService $service */
+        $service = $this->make(PasswordResetService::class);
 
-        return new PasswordResetService(
-            $this->db(),
-            $emailService,
-            (string) $this->app->config('name', 'Quotia')
-        );
+        return $service;
     }
 
     private function canAttemptLogin(string $email): bool
@@ -248,6 +268,15 @@ final class AuthController extends Controller
             'error',
             'Muitas tentativas de login. Aguarde ' . $this->formatRetryAfter($retryAfter) . ' para tentar novamente.'
         );
+        $this->securityLogger()->warning(
+            'client_login_blocked',
+            [
+                'email_hash' => $this->emailFingerprint($email),
+                'ip' => $this->securityIp(),
+                'retry_after_seconds' => $retryAfter,
+                'window_seconds' => self::LOGIN_WINDOW_SECONDS,
+            ]
+        );
 
         return false;
     }
@@ -271,10 +300,7 @@ final class AuthController extends Controller
     private function loginThrottleKeys(string $scope, string $email): array
     {
         $email = strtolower(trim($email));
-        $ip = trim((string) ($_SERVER['REMOTE_ADDR'] ?? 'ip-desconhecido'));
-        if ($ip === '') {
-            $ip = 'ip-desconhecido';
-        }
+        $ip = $this->request->clientIp();
 
         return [
             'email' => $scope . '|email|' . $email,
@@ -284,7 +310,10 @@ final class AuthController extends Controller
 
     private function rateLimiter(): RateLimiter
     {
-        return new RateLimiter($this->app->rootPath() . '/storage/cache/rate_limits');
+        /** @var RateLimiter $limiter */
+        $limiter = $this->make(RateLimiter::class);
+
+        return $limiter;
     }
 
     private function formatRetryAfter(int $seconds): string
@@ -325,5 +354,15 @@ final class AuthController extends Controller
     private function clearRememberedEmailCookie(): void
     {
         $this->clearCookie(self::REMEMBER_EMAIL_COOKIE, true);
+    }
+
+    private function emailFingerprint(string $email): string
+    {
+        return hash('sha256', strtolower(trim($email)));
+    }
+
+    private function securityIp(): string
+    {
+        return $this->request->clientIp();
     }
 }

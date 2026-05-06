@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const resolveCspNonce = (targetDocument) => {
+    if (!targetDocument || typeof targetDocument.querySelector !== 'function') {
+      return '';
+    }
+
+    const nonceNode = targetDocument.querySelector('script[nonce], style[nonce]');
+    if (!nonceNode) {
+      return '';
+    }
+
+    return String(nonceNode.nonce || nonceNode.getAttribute('nonce') || '').trim();
+  };
+
   const tooltips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltips.forEach((tooltip) => {
     if (window.bootstrap && window.bootstrap.Tooltip) {
@@ -309,7 +322,11 @@ document.addEventListener('DOMContentLoaded', () => {
       frameDoc.body.classList.add('aq-tool-embedded-body');
 
       if (!frameDoc.getElementById('aqToolEmbeddedStyle')) {
+        const frameNonce = resolveCspNonce(frameDoc);
         const style = frameDoc.createElement('style');
+        if (frameNonce !== '') {
+          style.setAttribute('nonce', frameNonce);
+        }
         style.id = 'aqToolEmbeddedStyle';
         style.textContent = `
 html.aq-tool-embedded,

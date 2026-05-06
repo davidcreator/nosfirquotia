@@ -103,7 +103,7 @@ $reportJsVersion = is_file($reportJsPath) ? (string) filemtime($reportJsPath) : 
                 </article>
             </section>
 
-            <section class="report-empty-state" id="reportEmptyState" style="display: none;">
+            <section class="report-empty-state aq-hidden" id="reportEmptyState">
                 <p>Nenhum mockup salvo ainda. Volte ao editor, finalize os ajustes e salve para anexar ao orçamento.</p>
             </section>
 

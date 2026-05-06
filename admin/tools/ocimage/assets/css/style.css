@@ -441,6 +441,10 @@ body {
     -webkit-backdrop-filter: blur(4px);
 }
 
+.modal.is-open {
+    display: block;
+}
+
 .modal-content {
     background: white;
     margin: 5% auto;
@@ -1163,6 +1167,10 @@ body {
 /* ==========================================
    9. UTILITÁRIOS
    ========================================== */
+
+.is-hidden {
+    display: none !important;
+}
 
 .code-container {
     position: relative;

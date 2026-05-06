@@ -111,6 +111,10 @@ body.aq-tool-fluid .main-content {
     margin-right: 0 !important;
 }
 
+body.aq-tool-fluid .aq-hidden {
+    display: none;
+}
+
 /* Background Remover */
 body.aq-tool-bgremove {
     padding: clamp(10px, 1.4vw, 22px) !important;

@@ -205,20 +205,20 @@ class ColorPaletteGenerator {
         });
 
         this.imagePreview.addEventListener('mousemove', (e) => {
-            if (this.isPickingColor && this.previewImage.style.display !== 'none') {
+            if (this.isPickingColor && this.isPreviewImageVisible()) {
                 this.updateColorPickerPosition(e);
             }
         });
 
         this.imagePreview.addEventListener('click', (e) => {
-            if (this.isPickingColor && this.previewImage.style.display !== 'none') {
+            if (this.isPickingColor && this.isPreviewImageVisible()) {
                 this.pickColor(e);
             }
         });
 
         // Evento para detectar cores dominantes
         this.detectDominantColors.addEventListener('click', () => {
-            if (this.previewImage.style.display !== 'none') {
+            if (this.isPreviewImageVisible()) {
                 this.findDominantColors();
             } else {
                 this.showNotification('Faça upload de uma imagem primeiro!');
@@ -1329,7 +1329,7 @@ class ColorPaletteGenerator {
             const textChoice = this.pickTextColor(color);
             const contrast = textChoice.ratio.toFixed(2);
             return `
-                <article class="role-item" style="--role-color:${color};--role-text:${textChoice.text};">
+                <article class="role-item" data-role-color="${color}" data-role-text="${textChoice.text}">
                     <div class="role-item-swatch">${item.label}</div>
                     <div class="role-item-meta">
                         <strong>${color.toUpperCase()}</strong>
@@ -1338,6 +1338,7 @@ class ColorPaletteGenerator {
                 </article>
             `;
         }).join('');
+        this.applyRoleSuggestionStyles(this.roleSuggestions);
     }
 
     renderContrastAudit(colors) {
@@ -1352,7 +1353,7 @@ class ColorPaletteGenerator {
             return `
                 <div class="contrast-row">
                     <div class="contrast-color">
-                        <span class="contrast-swatch" style="background:${item.color};"></span>
+                        <span class="contrast-swatch" data-color="${item.color}"></span>
                         <code>${item.color.toUpperCase()}</code>
                     </div>
                     <div class="contrast-values">
@@ -1365,6 +1366,7 @@ class ColorPaletteGenerator {
         }).join('');
 
         this.contrastAudit.innerHTML = rows;
+        this.applyElementColors(this.contrastAudit, '.contrast-swatch', 'data-color');
     }
 
     buildContrastPayload(colors) {
@@ -2779,10 +2781,11 @@ class ColorPaletteGenerator {
 
         this.visionSwatches.innerHTML = simulated.map((hex) => `
             <article class="vision-swatch">
-                <div class="vision-swatch-tone" style="background:${hex};"></div>
+                <div class="vision-swatch-tone" data-color="${hex}"></div>
                 <div class="vision-swatch-code">${hex.toUpperCase()}</div>
             </article>
         `).join('');
+        this.applyElementColors(this.visionSwatches, '.vision-swatch-tone', 'data-color');
 
         if (mode === 'normal') {
             this.visionConflicts.innerHTML = '<li class="ok">Selecione um modo de daltonismo para avaliar conflitos.</li>';
@@ -3163,7 +3166,7 @@ class ColorPaletteGenerator {
                 </div>
                 <p class="saved-theme-meta">${this.escapeHtml(theme.tags || 'Sem tags')} | ${this.formatThemeDate(theme.createdAt)}</p>
                 <div class="saved-theme-palette">
-                    ${theme.colors.slice(0, 5).map((color) => `<span class="saved-theme-chip" style="background:${color};"></span>`).join('')}
+                    ${theme.colors.slice(0, 5).map((color) => `<span class="saved-theme-chip" data-color="${color}"></span>`).join('')}
                 </div>
                 <div class="saved-theme-actions">
                     <button type="button" data-theme-load="${theme.id}">Carregar</button>
@@ -3171,6 +3174,7 @@ class ColorPaletteGenerator {
                 </div>
             </article>
         `).join('');
+        this.applyElementColors(this.savedThemesList, '.saved-theme-chip', 'data-color');
         this.renderWorkflowAssistant();
     }
 
@@ -3180,6 +3184,35 @@ class ColorPaletteGenerator {
             return '-';
         }
         return date.toLocaleDateString('pt-BR');
+    }
+
+    applyElementColors(root, selector, attributeName = 'data-color') {
+        if (!root || !selector) {
+            return;
+        }
+        root.querySelectorAll(selector).forEach((element) => {
+            const color = String(element.getAttribute(attributeName) || '').trim();
+            if (!color) {
+                return;
+            }
+            element.style.backgroundColor = color;
+        });
+    }
+
+    applyRoleSuggestionStyles(root) {
+        if (!root) {
+            return;
+        }
+        root.querySelectorAll('.role-item').forEach((item) => {
+            const roleColor = String(item.getAttribute('data-role-color') || '').trim();
+            const roleText = String(item.getAttribute('data-role-text') || '').trim();
+            if (roleColor) {
+                item.style.setProperty('--role-color', roleColor);
+            }
+            if (roleText) {
+                item.style.setProperty('--role-text', roleText);
+            }
+        });
     }
 
     escapeHtml(value) {
@@ -3539,7 +3572,17 @@ class ColorPaletteGenerator {
         }, 2000);
     }
     
-    // Métodos para manipulação de imagem e extração de cores
+    isPreviewImageVisible() {
+        if (!this.previewImage) {
+            return false;
+        }
+        if (!this.previewImage.src) {
+            return false;
+        }
+        return window.getComputedStyle(this.previewImage).display !== 'none';
+    }
+
+    // Metodos para manipulacao de imagem e extracao de cores
     loadImage(file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -3621,9 +3664,10 @@ class ColorPaletteGenerator {
         const colorElement = document.createElement('div');
         colorElement.className = 'extracted-color';
         colorElement.innerHTML = `
-            <div class="extracted-color-swatch" style="background-color: ${color}" data-color="${color}"></div>
+            <div class="extracted-color-swatch" data-color="${color}"></div>
             <div class="extracted-color-hex">${color}</div>
         `;
+        this.applyElementColors(colorElement, '.extracted-color-swatch', 'data-color');
         
         // Adicionar evento de clique para usar como cor base
         colorElement.querySelector('.extracted-color-swatch').addEventListener('click', () => {
@@ -3845,6 +3889,4 @@ class ColorPaletteGenerator {
 document.addEventListener('DOMContentLoaded', () => {
     new ColorPaletteGenerator();
 });
-
-
 

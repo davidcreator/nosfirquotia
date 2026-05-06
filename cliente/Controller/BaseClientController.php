@@ -20,4 +20,39 @@ abstract class BaseClientController extends Controller
     {
         return $this->clientAuth()->user();
     }
+
+    protected function securityIp(): string
+    {
+        return $this->request->clientIp();
+    }
+
+    protected function logClientSecurityInfo(string $event, array $context = []): void
+    {
+        $user = $this->clientUser();
+        $this->securityLogger()->info(
+            $event,
+            array_merge(
+                [
+                    'client_user_id' => (int) ($user['id'] ?? 0),
+                    'ip' => $this->securityIp(),
+                ],
+                $context
+            )
+        );
+    }
+
+    protected function logClientSecurityWarning(string $event, array $context = []): void
+    {
+        $user = $this->clientUser();
+        $this->securityLogger()->warning(
+            $event,
+            array_merge(
+                [
+                    'client_user_id' => (int) ($user['id'] ?? 0),
+                    'ip' => $this->securityIp(),
+                ],
+                $context
+            )
+        );
+    }
 }

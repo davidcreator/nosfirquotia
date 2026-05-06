@@ -12,7 +12,8 @@ final class ReferencePriceController extends BaseAdminController
     {
         $this->ensurePermission('references.view');
 
-        $model = new ReferencePriceModel($this->app);
+        /** @var ReferencePriceModel $model */
+        $model = $this->make(ReferencePriceModel::class);
         $totals = $model->totals();
         $catalogs = $model->grouped();
 

@@ -954,7 +954,7 @@ function renderPalette(palette) {
     const container = document.getElementById('palettePreview');
     container.innerHTML = palette.map((item) => `
         <article class="swatch">
-            <div class="swatch-color" style="background:${item.hex};"></div>
+            <div class="swatch-color" data-swatch-color="${escapeHtml(item.hex)}"></div>
             <div class="swatch-info">
                 <p class="swatch-role">${item.role}</p>
                 <p class="swatch-meta">
@@ -964,17 +964,32 @@ function renderPalette(palette) {
             </div>
         </article>
     `).join('');
+    applyElementColors(container, '[data-swatch-color]', 'data-swatch-color');
 }
 
 function renderScoreTable(ranked) {
     const body = document.getElementById('scoreTableBody');
     body.innerHTML = ranked.map((entry) => `
         <tr>
-            <td><span class="score-color" style="background:${entry.hex};"></span>${entry.label}</td>
+            <td><span class="score-color" data-score-color="${escapeHtml(entry.hex)}"></span>${entry.label}</td>
             <td>${formatScore(entry.score)}</td>
             <td>${entry.reasons.slice(0, 3).join(' | ') || 'Sem regra aplicada'}</td>
         </tr>
     `).join('');
+    applyElementColors(body, '[data-score-color]', 'data-score-color');
+}
+
+function applyElementColors(root, selector, attributeName) {
+    if (!root || !selector || !attributeName) {
+        return;
+    }
+
+    root.querySelectorAll(selector).forEach((element) => {
+        const color = String(element.getAttribute(attributeName) || '').trim();
+        if (color !== '') {
+            element.style.background = color;
+        }
+    });
 }
 
 function renderNotes(targetId, notes, emptyMessage) {

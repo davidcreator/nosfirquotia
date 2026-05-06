@@ -73,7 +73,7 @@ require_once 'assets/common/header.php';
                             <span class="material-symbols-outlined">image</span>
                             <p>Faça upload de uma imagem para extrair cores</p>
                         </div>
-                        <img id="previewImage" src="" alt="Preview" style="display: none;">
+                        <img id="previewImage" class="aq-hidden" src="" alt="Preview">
                         <div class="color-picker-tool" id="colorPickerTool">
                             <div class="color-picker-crosshair" id="colorPickerCrosshair"></div>
                             <div class="color-picker-info">

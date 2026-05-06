@@ -260,6 +260,62 @@ php database/upgrade_brand_manual_mvp.php
   - Aceitar todos
 - Politicas publicas de uso, termos, privacidade/captacao de dados, cookies e LGPD.
 
+### Auditoria de configuração de segurança
+
+Use o comando abaixo para validar configurações críticas antes de publicar:
+
+```bash
+composer audit:security-config
+```
+
+O script audita `app_url`, `security.trusted_proxies`, hosts confiáveis e limites de monitoramento.
+Erros bloqueantes retornam `exit 1`; avisos permitem execução, mas devem ser revisados.
+Quando variáveis `NQ_*` estiverem definidas no ambiente, a auditoria considera os overrides de runtime do ambiente auditado.
+
+Modo estrito (avisos tambem bloqueiam):
+
+```bash
+composer audit:security-config:strict
+```
+
+Checklist automatizado de release (auditoria padrao + testes):
+
+```bash
+composer verify:release
+```
+
+Checklist estrito para pipeline de producao:
+
+```bash
+composer verify:release:strict
+```
+
+Checklist por ambiente online (sem auditar `local`):
+
+```bash
+composer verify:release:online
+composer verify:release:strict:online
+```
+
+Guia operacional de deploy seguro:
+
+- `docs/CHECKLIST_DEPLOY_SEGURANCA_2026-05-06.md`
+
+Overrides por variavel de ambiente (sem expor credenciais no `config.php`):
+
+- `NQ_ENVIRONMENT` (`local`/`online`)
+- `NQ_APP_URL`
+- `NQ_SECURITY_TRUSTED_HOSTS`
+- `NQ_SECURITY_TRUSTED_PROXIES`
+- `NQ_SECURITY_MONITORING_WINDOW_HOURS`
+- `NQ_SECURITY_MONITORING_BUCKET_MINUTES`
+- `NQ_SECURITY_THRESHOLD_CSRF_REJECTED`
+- `NQ_SECURITY_THRESHOLD_HOST_HEADER_REJECTED`
+- `NQ_SECURITY_THRESHOLD_ADMIN_LOGIN_BLOCKED`
+- `NQ_SECURITY_THRESHOLD_CLIENT_LOGIN_BLOCKED`
+- `NQ_DB_HOST`, `NQ_DB_PORT`, `NQ_DB_DATABASE`, `NQ_DB_USERNAME`, `NQ_DB_PASSWORD`
+- `NQ_MAIL_ENABLED`, `NQ_MAIL_FROM_NAME`, `NQ_MAIL_FROM_EMAIL`
+
 ## Permissoes Admin
 
 - O usuário criado no instalador é definido como `Administrador Geral`.

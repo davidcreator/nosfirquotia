@@ -12,7 +12,8 @@ final class EmailLogController extends BaseAdminController
     {
         $this->ensurePermission('quotes.manage');
 
-        $model = new EmailLogModel($this->app);
+        /** @var EmailLogModel $model */
+        $model = $this->make(EmailLogModel::class);
         $logs = $model->latest();
 
         $this->render(

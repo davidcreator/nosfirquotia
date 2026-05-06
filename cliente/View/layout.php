@@ -2,13 +2,9 @@
 $metaAppName = (string) ($appName ?? 'Quotia');
 $metaDescription = 'Quotia - Sistema para solicitação, análise e emissão de orçamentos de design.';
 $metaPath = (string) ($currentPath ?? app()->request()->path());
-$metaIsSecure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-$metaScheme = $metaIsSecure ? 'https' : 'http';
-$metaHost = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
-$metaOrigin = $metaScheme . '://' . $metaHost;
-$metaCanonicalUrl = $metaOrigin . url($metaPath);
+$metaCanonicalUrl = absolute_url($metaPath);
 $metaOgImagePath = asset('image/quotia_logo.png');
-$metaOgImage = $metaOrigin . $metaOgImagePath;
+$metaOgImage = absolute_url($metaOgImagePath);
 $metaFavicon = asset('image/quotia.png');
 ?>
 <!doctype html>

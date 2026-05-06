@@ -12,7 +12,8 @@ final class ToolController extends BaseAdminController
     {
         $this->ensurePermission('tools.view');
 
-        $model = new ToolModel($this->app);
+        /** @var ToolModel $model */
+        $model = $this->make(ToolModel::class);
         $location = $this->resolveToolsLocation();
         $toolsPath = $location['path'];
         $tools = $model->listTools($toolsPath);
@@ -37,7 +38,8 @@ final class ToolController extends BaseAdminController
     {
         $this->ensurePermission('tools.view');
 
-        $model = new ToolModel($this->app);
+        /** @var ToolModel $model */
+        $model = $this->make(ToolModel::class);
         $location = $this->resolveToolsLocation();
         $toolsPath = $location['path'];
         $tool = $model->findTool($toolsPath, $slug);

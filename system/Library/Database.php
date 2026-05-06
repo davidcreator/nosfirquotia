@@ -8,6 +8,7 @@ use PDO;
 use PDOException;
 use PDOStatement;
 use RuntimeException;
+use Throwable;
 
 final class Database
 {
@@ -72,6 +73,64 @@ final class Database
     public function execute(string $sql, array $params = []): bool
     {
         return $this->query($sql, $params)->rowCount() >= 0;
+    }
+
+    public function beginTransaction(): bool
+    {
+        return $this->pdo->beginTransaction();
+    }
+
+    public function commit(): bool
+    {
+        if (!$this->pdo->inTransaction()) {
+            return false;
+        }
+
+        return $this->pdo->commit();
+    }
+
+    public function rollBack(): bool
+    {
+        if (!$this->pdo->inTransaction()) {
+            return false;
+        }
+
+        return $this->pdo->rollBack();
+    }
+
+    public function inTransaction(): bool
+    {
+        return $this->pdo->inTransaction();
+    }
+
+    public function transaction(callable $callback): mixed
+    {
+        $started = false;
+        if (!$this->pdo->inTransaction()) {
+            $started = $this->pdo->beginTransaction();
+            if (!$started) {
+                throw new RuntimeException('Nao foi possivel iniciar transacao.');
+            }
+        }
+
+        try {
+            $result = $callback($this);
+
+            if ($started) {
+                $committed = $this->pdo->commit();
+                if (!$committed) {
+                    throw new RuntimeException('Nao foi possivel confirmar transacao.');
+                }
+            }
+
+            return $result;
+        } catch (Throwable $exception) {
+            if ($started && $this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw $exception;
+        }
     }
 
     public function lastInsertId(): int

@@ -4,6 +4,8 @@ const uploadSection = document.getElementById('uploadSection');
 const processingSection = document.getElementById('processingSection');
 const resultSection = document.getElementById('resultSection');
 const errorMessage = document.getElementById('errorMessage');
+const openFilePickerBtn = document.getElementById('openFilePickerBtn');
+const resetAppBtn = document.getElementById('resetAppBtn');
 const processingStatusEl = document.getElementById('processingStatus');
 const processingElapsedEl = document.getElementById('processingElapsed');
 const processingSpinnerEl = processingSection ? processingSection.querySelector('.spinner') : null;
@@ -593,6 +595,15 @@ function hideSmartDebug() {
     smartDebugPanelEl.style.display = 'none';
 }
 
+function applySmartScoreBarWidths(root) {
+    if (!root) return;
+    root.querySelectorAll('[data-score-width]').forEach((fillEl) => {
+        const raw = Number.parseFloat(String(fillEl.getAttribute('data-score-width') || '0'));
+        const safe = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+        fillEl.style.width = `${safe}%`;
+    });
+}
+
 function escapeHtml(value) {
     return String(value)
         .replace(/&/g, '&amp;')
@@ -643,7 +654,7 @@ function renderSmartDebug(meta) {
         return `
             <div class="smart-score-row">
                 <span>${escapeHtml(getPresetLabel(key))}</span>
-                <div class="smart-score-bar"><div class="smart-score-fill" style="width:${pct}%"></div></div>
+                <div class="smart-score-bar"><div class="smart-score-fill" data-score-width="${pct}"></div></div>
                 <strong>${pct}%</strong>
             </div>
         `;
@@ -667,6 +678,7 @@ function renderSmartDebug(meta) {
             </section>
         </div>
     `;
+    applySmartScoreBarWidths(smartDebugPanelEl);
     smartDebugPanelEl.style.display = 'block';
 }
 
@@ -812,6 +824,10 @@ fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         handleFile(e.target.files[0]);
     }
+});
+
+openFilePickerBtn?.addEventListener('click', () => {
+    fileInput?.click();
 });
 
 qualityPresetSelect?.addEventListener('change', () => {
@@ -1218,6 +1234,7 @@ openFinalFrameBtn?.addEventListener('click', () => {
     });
     window.location.href = '../finalframe/';
 });
+resetAppBtn?.addEventListener('click', resetApp);
 
 // ===== Magic Brush Editor =====
 let isBrushing = false;

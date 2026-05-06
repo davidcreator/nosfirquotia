@@ -40,6 +40,13 @@ if (!function_exists('asset')) {
     }
 }
 
+if (!function_exists('absolute_url')) {
+    function absolute_url(string $path = ''): string
+    {
+        return app()->absoluteUrl($path);
+    }
+}
+
 if (!function_exists('old')) {
     function old(string $key, mixed $default = ''): mixed
     {
@@ -67,6 +74,20 @@ if (!function_exists('csrf_field')) {
     function csrf_field(): string
     {
         return '<input type="hidden" name="_csrf_token" value="' . e(csrf_token()) . '">';
+    }
+}
+
+if (!function_exists('csp_nonce')) {
+    function csp_nonce(): string
+    {
+        return app()->cspNonce();
+    }
+}
+
+if (!function_exists('csp_nonce_attr')) {
+    function csp_nonce_attr(): string
+    {
+        return 'nonce="' . e(csp_nonce()) . '"';
     }
 }
 

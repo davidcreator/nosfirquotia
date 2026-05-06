@@ -528,113 +528,127 @@ final class QuoteModel extends Model
 
         $totalValue = $subtotalValue + $taxesTotalValue;
         $validUntil = date('Y-m-d', strtotime('+90 days'));
-        $existing = $this->db->fetch(
-            'SELECT id FROM quote_reports WHERE quote_request_id = :request_id LIMIT 1',
-            ['request_id' => $requestId]
-        );
+        $reportId = 0;
 
-        if ($existing === null) {
-            $this->db->execute(
-                'INSERT INTO quote_reports (
-                    quote_request_id, admin_user_id, subtotal_value, taxes_total_value, total_value, total_deadline_days, availability_summary, report_notes, show_tax_details, valid_until
-                 ) VALUES (
-                    :quote_request_id, :admin_user_id, :subtotal_value, :taxes_total_value, :total_value, :total_deadline_days, :availability_summary, :report_notes, :show_tax_details, :valid_until
-                 )',
-                [
-                    'quote_request_id' => $requestId,
-                    'admin_user_id' => $adminUserId,
-                    'subtotal_value' => round($subtotalValue, 2),
-                    'taxes_total_value' => round($taxesTotalValue, 2),
-                    'total_value' => round($totalValue, 2),
-                    'total_deadline_days' => $payload['total_deadline_days'] ?? $maxDeadline,
-                    'availability_summary' => $payload['availability_summary'],
-                    'report_notes' => $payload['report_notes'],
-                    'show_tax_details' => !empty($payload['show_tax_details']) ? 1 : 0,
-                    'valid_until' => $validUntil,
-                ]
+        $this->db->beginTransaction();
+
+        try {
+            $existing = $this->db->fetch(
+                'SELECT id FROM quote_reports WHERE quote_request_id = :request_id LIMIT 1',
+                ['request_id' => $requestId]
             );
 
-            $reportId = $this->db->lastInsertId();
-        } else {
-            $reportId = (int) $existing['id'];
-            $this->db->execute(
-                'UPDATE quote_reports
-                 SET
-                    admin_user_id = :admin_user_id,
-                    subtotal_value = :subtotal_value,
-                    taxes_total_value = :taxes_total_value,
-                    total_value = :total_value,
-                    total_deadline_days = :total_deadline_days,
-                    availability_summary = :availability_summary,
-                    report_notes = :report_notes,
-                    show_tax_details = :show_tax_details,
-                    valid_until = :valid_until
-                 WHERE id = :id',
-                [
-                    'id' => $reportId,
-                    'admin_user_id' => $adminUserId,
-                    'subtotal_value' => round($subtotalValue, 2),
-                    'taxes_total_value' => round($taxesTotalValue, 2),
-                    'total_value' => round($totalValue, 2),
-                    'total_deadline_days' => $payload['total_deadline_days'] ?? $maxDeadline,
-                    'availability_summary' => $payload['availability_summary'],
-                    'report_notes' => $payload['report_notes'],
-                    'show_tax_details' => !empty($payload['show_tax_details']) ? 1 : 0,
-                    'valid_until' => $validUntil,
-                ]
-            );
+            if ($existing === null) {
+                $this->db->execute(
+                    'INSERT INTO quote_reports (
+                        quote_request_id, admin_user_id, subtotal_value, taxes_total_value, total_value, total_deadline_days, availability_summary, report_notes, show_tax_details, valid_until
+                     ) VALUES (
+                        :quote_request_id, :admin_user_id, :subtotal_value, :taxes_total_value, :total_value, :total_deadline_days, :availability_summary, :report_notes, :show_tax_details, :valid_until
+                     )',
+                    [
+                        'quote_request_id' => $requestId,
+                        'admin_user_id' => $adminUserId,
+                        'subtotal_value' => round($subtotalValue, 2),
+                        'taxes_total_value' => round($taxesTotalValue, 2),
+                        'total_value' => round($totalValue, 2),
+                        'total_deadline_days' => $payload['total_deadline_days'] ?? $maxDeadline,
+                        'availability_summary' => $payload['availability_summary'],
+                        'report_notes' => $payload['report_notes'],
+                        'show_tax_details' => !empty($payload['show_tax_details']) ? 1 : 0,
+                        'valid_until' => $validUntil,
+                    ]
+                );
+
+                $reportId = $this->db->lastInsertId();
+            } else {
+                $reportId = (int) $existing['id'];
+                $this->db->execute(
+                    'UPDATE quote_reports
+                     SET
+                        admin_user_id = :admin_user_id,
+                        subtotal_value = :subtotal_value,
+                        taxes_total_value = :taxes_total_value,
+                        total_value = :total_value,
+                        total_deadline_days = :total_deadline_days,
+                        availability_summary = :availability_summary,
+                        report_notes = :report_notes,
+                        show_tax_details = :show_tax_details,
+                        valid_until = :valid_until
+                     WHERE id = :id',
+                    [
+                        'id' => $reportId,
+                        'admin_user_id' => $adminUserId,
+                        'subtotal_value' => round($subtotalValue, 2),
+                        'taxes_total_value' => round($taxesTotalValue, 2),
+                        'total_value' => round($totalValue, 2),
+                        'total_deadline_days' => $payload['total_deadline_days'] ?? $maxDeadline,
+                        'availability_summary' => $payload['availability_summary'],
+                        'report_notes' => $payload['report_notes'],
+                        'show_tax_details' => !empty($payload['show_tax_details']) ? 1 : 0,
+                        'valid_until' => $validUntil,
+                    ]
+                );
+
+                $this->db->execute(
+                    'DELETE FROM quote_report_items WHERE quote_report_id = :report_id',
+                    ['report_id' => $reportId]
+                );
+            }
 
             $this->db->execute(
-                'DELETE FROM quote_report_items WHERE quote_report_id = :report_id',
+                'DELETE FROM quote_report_taxes WHERE quote_report_id = :report_id',
                 ['report_id' => $reportId]
             );
-        }
 
-        $this->db->execute(
-            'DELETE FROM quote_report_taxes WHERE quote_report_id = :report_id',
-            ['report_id' => $reportId]
-        );
+            foreach ($serviceRows as $row) {
+                $this->db->execute(
+                    'INSERT INTO quote_report_items (
+                        quote_report_id, reference_price_item_id, service_name, price_value, deadline_days, availability_label, notes
+                     ) VALUES (
+                        :quote_report_id, :reference_price_item_id, :service_name, :price_value, :deadline_days, :availability_label, :notes
+                     )',
+                    [
+                        'quote_report_id' => $reportId,
+                        'reference_price_item_id' => $row['reference_price_item_id'],
+                        'service_name' => $row['service_name'],
+                        'price_value' => $row['price_value'],
+                        'deadline_days' => $row['deadline_days'],
+                        'availability_label' => $row['availability_label'],
+                        'notes' => $row['notes'],
+                    ]
+                );
+            }
 
-        foreach ($serviceRows as $row) {
+            foreach ($taxRows as $taxRow) {
+                $this->db->execute(
+                    'INSERT INTO quote_report_taxes (
+                        quote_report_id, tax_key, tax_label, tax_percent, tax_amount
+                     ) VALUES (
+                        :quote_report_id, :tax_key, :tax_label, :tax_percent, :tax_amount
+                     )',
+                    [
+                        'quote_report_id' => $reportId,
+                        'tax_key' => $taxRow['tax_key'],
+                        'tax_label' => $taxRow['tax_label'],
+                        'tax_percent' => $taxRow['tax_percent'],
+                        'tax_amount' => $taxRow['tax_amount'],
+                    ]
+                );
+            }
+
             $this->db->execute(
-                'INSERT INTO quote_report_items (
-                    quote_report_id, reference_price_item_id, service_name, price_value, deadline_days, availability_label, notes
-                 ) VALUES (
-                    :quote_report_id, :reference_price_item_id, :service_name, :price_value, :deadline_days, :availability_label, :notes
-                 )',
-                [
-                    'quote_report_id' => $reportId,
-                    'reference_price_item_id' => $row['reference_price_item_id'],
-                    'service_name' => $row['service_name'],
-                    'price_value' => $row['price_value'],
-                    'deadline_days' => $row['deadline_days'],
-                    'availability_label' => $row['availability_label'],
-                    'notes' => $row['notes'],
-                ]
+                "UPDATE quote_requests SET status = 'orcado' WHERE id = :id",
+                ['id' => $requestId]
             );
-        }
 
-        foreach ($taxRows as $taxRow) {
-            $this->db->execute(
-                'INSERT INTO quote_report_taxes (
-                    quote_report_id, tax_key, tax_label, tax_percent, tax_amount
-                 ) VALUES (
-                    :quote_report_id, :tax_key, :tax_label, :tax_percent, :tax_amount
-                 )',
-                [
-                    'quote_report_id' => $reportId,
-                    'tax_key' => $taxRow['tax_key'],
-                    'tax_label' => $taxRow['tax_label'],
-                    'tax_percent' => $taxRow['tax_percent'],
-                    'tax_amount' => $taxRow['tax_amount'],
-                ]
-            );
-        }
+            $this->db->commit();
+        } catch (\Throwable $exception) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
 
-        $this->db->execute(
-            "UPDATE quote_requests SET status = 'orcado' WHERE id = :id",
-            ['id' => $requestId]
-        );
+            throw $exception;
+        }
 
         return $reportId;
     }

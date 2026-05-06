@@ -44,4 +44,39 @@ abstract class BaseAdminController extends Controller
     {
         return $this->auth()->user();
     }
+
+    protected function securityIp(): string
+    {
+        return $this->request->clientIp();
+    }
+
+    protected function logAdminSecurityInfo(string $event, array $context = []): void
+    {
+        $user = $this->adminUser();
+        $this->securityLogger()->info(
+            $event,
+            array_merge(
+                [
+                    'admin_user_id' => (int) ($user['id'] ?? 0),
+                    'ip' => $this->securityIp(),
+                ],
+                $context
+            )
+        );
+    }
+
+    protected function logAdminSecurityWarning(string $event, array $context = []): void
+    {
+        $user = $this->adminUser();
+        $this->securityLogger()->warning(
+            $event,
+            array_merge(
+                [
+                    'admin_user_id' => (int) ($user['id'] ?? 0),
+                    'ip' => $this->securityIp(),
+                ],
+                $context
+            )
+        );
+    }
 }

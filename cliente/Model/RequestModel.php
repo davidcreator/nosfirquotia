@@ -10,36 +10,38 @@ final class RequestModel extends Model
 {
     public function create(int $clientUserId, array $payload, array $serviceIds): int
     {
-        $this->db->execute(
-            'INSERT INTO quote_requests (
-                client_user_id, project_title, scope, desired_deadline_days, requested_availability, status
-            ) VALUES (
-                :client_user_id, :project_title, :scope, :desired_deadline_days, :requested_availability, :status
-            )',
-            [
-                'client_user_id' => $clientUserId,
-                'project_title' => $payload['project_title'],
-                'scope' => $payload['scope'],
-                'desired_deadline_days' => $payload['desired_deadline_days'],
-                'requested_availability' => $payload['requested_availability'],
-                'status' => 'pendente',
-            ]
-        );
-
-        $requestId = $this->db->lastInsertId();
-
-        foreach ($serviceIds as $serviceId) {
+        return $this->db->transaction(function () use ($clientUserId, $payload, $serviceIds): int {
             $this->db->execute(
-                'INSERT INTO quote_request_items (quote_request_id, reference_price_item_id)
-                 VALUES (:quote_request_id, :reference_price_item_id)',
+                'INSERT INTO quote_requests (
+                    client_user_id, project_title, scope, desired_deadline_days, requested_availability, status
+                ) VALUES (
+                    :client_user_id, :project_title, :scope, :desired_deadline_days, :requested_availability, :status
+                )',
                 [
-                    'quote_request_id' => $requestId,
-                    'reference_price_item_id' => $serviceId,
+                    'client_user_id' => $clientUserId,
+                    'project_title' => $payload['project_title'],
+                    'scope' => $payload['scope'],
+                    'desired_deadline_days' => $payload['desired_deadline_days'],
+                    'requested_availability' => $payload['requested_availability'],
+                    'status' => 'pendente',
                 ]
             );
-        }
 
-        return $requestId;
+            $requestId = $this->db->lastInsertId();
+
+            foreach ($serviceIds as $serviceId) {
+                $this->db->execute(
+                    'INSERT INTO quote_request_items (quote_request_id, reference_price_item_id)
+                     VALUES (:quote_request_id, :reference_price_item_id)',
+                    [
+                        'quote_request_id' => $requestId,
+                        'reference_price_item_id' => $serviceId,
+                    ]
+                );
+            }
+
+            return $requestId;
+        });
     }
 
     public function allByClient(int $clientUserId): array

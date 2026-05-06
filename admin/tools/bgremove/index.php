@@ -29,7 +29,7 @@ cleanOldFiles();
                     <h3><?php echo $lang['upload_desc']; ?></h3>
                     <p class="upload-info"><?php echo $lang['max_size']; ?> | <?php echo $lang['allowed_formats']; ?></p>
                     <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg" hidden>
-                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    <button class="btn btn-primary" id="openFilePickerBtn" type="button">
                         <?php echo $lang['upload_btn']; ?>
                     </button>
                 </div>
@@ -41,30 +41,30 @@ cleanOldFiles();
                         <span><?php echo $lang['tolerance_low']; ?></span>
                         <span><?php echo $lang['tolerance_high']; ?></span>
                     </div>
-                    <div class="picker-row" style="margin-top:15px; display:flex; gap:15px; align-items:center;">
-                        <label for="bgColor" style="font-weight:600;">Cor do fundo:</label>
+                    <div class="picker-row control-row">
+                        <label for="bgColor" class="control-label-inline">Cor do fundo:</label>
                         <input type="color" id="bgColor" value="#ffffff"/>
-                        <label style="display:flex; align-items:center; gap:8px;">
+                        <label class="control-inline-input">
                             <input type="checkbox" id="useBgColor"/>
                             Usar cor escolhida
                         </label>
                     </div>
-                    <div class="advanced-controls" style="margin-top:15px; display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
-                        <label for="removeMode" style="font-weight:600;">Modo:</label>
+                    <div class="advanced-controls control-row">
+                        <label for="removeMode" class="control-label-inline">Modo:</label>
                         <select id="removeMode">
                             <option value="auto" selected>Auto (recomendado)</option>
                             <option value="rgb">RGB</option>
                             <option value="hsv">HSV</option>
                         </select>
-                        <label for="feather" style="font-weight:600;">Suavizar bordas:</label>
+                        <label for="feather" class="control-label-inline">Suavizar bordas:</label>
                         <input type="range" id="feather" min="0" max="8" value="1" step="1"/>
-                        <label style="display:flex; align-items:center; gap:8px;">
+                        <label class="control-inline-input">
                             <input type="checkbox" id="autoBg" checked/>
                             Detectar fundo automático
                         </label>
                     </div>
-                    <div class="advanced-controls preset-controls" style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                        <label for="qualityPreset" style="font-weight:600;">Preset:</label>
+                    <div class="advanced-controls preset-controls control-row control-row-tight">
+                        <label for="qualityPreset" class="control-label-inline">Preset:</label>
                         <select id="qualityPreset">
                             <option value="auto" selected>Auto equilibrado</option>
                             <option value="portrait">Retrato</option>
@@ -73,18 +73,18 @@ cleanOldFiles();
                             <option value="soft">Recorte suave</option>
                             <option value="custom">Personalizado</option>
                         </select>
-                        <label style="display:flex; align-items:center; gap:8px;">
+                        <label class="control-inline-input">
                             <input type="checkbox" id="smartPreset" checked/>
                             Preset inteligente
                         </label>
-                        <label style="display:flex; align-items:center; gap:8px;">
+                        <label class="control-inline-input">
                             <input type="checkbox" id="showSmartDebug"/>
                             Diagnóstico IA
                         </label>
                         <button class="btn btn-secondary" id="comparePresetsBtn" type="button">Comparar presets</button>
                         <small class="preset-help">Escolha um preset para aplicar ajustes recomendados.</small>
                     </div>
-                    <div class="advanced-controls fine-controls" style="margin-top:12px; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                    <div class="advanced-controls fine-controls control-grid-fine">
                         <label class="fine-control">
                             <span>Limpeza de ruido <strong id="noiseCleanValue">45</strong></span>
                             <input type="range" id="noiseClean" min="0" max="100" step="5" value="45"/>
@@ -142,9 +142,9 @@ cleanOldFiles();
                     </div>
                     <div class="image-box processed-box" id="processedBox">
                         <h4>Sem Fundo</h4>
-                        <img id="processedImage" alt="Processado" style="display:block;">
-                        <canvas id="editorCanvas" style="display:none; max-width:100%; border-radius:10px;"></canvas>
-                        <canvas id="edgeCanvas" class="edge-canvas" style="display:none;"></canvas>
+                        <img id="processedImage" class="display-block" alt="Processado">
+                        <canvas id="editorCanvas" class="editor-canvas aq-hidden"></canvas>
+                        <canvas id="edgeCanvas" class="edge-canvas aq-hidden"></canvas>
                     </div>
                 </div>
 
@@ -170,12 +170,12 @@ cleanOldFiles();
                         <span class="result-block-icon" aria-hidden="true">-</span>
                     </button>
                     <div class="result-block-content">
-                        <div class="comparison-slider" id="comparisonSlider" style="display:none;">
+                        <div class="comparison-slider aq-hidden" id="comparisonSlider">
                             <div class="comp-wrapper">
                                 <img id="compOriginal" alt="Original" class="comp-image" />
                                 <div class="comp-overlay" id="compOverlay">
                                     <img id="compProcessed" alt="Sem Fundo" class="comp-image" />
-                                    <canvas id="compEdgeCanvas" class="edge-canvas" style="display:none;"></canvas>
+                                    <canvas id="compEdgeCanvas" class="edge-canvas aq-hidden"></canvas>
                                 </div>
                                 <div class="comp-handle" id="compHandle"></div>
                             </div>
@@ -189,18 +189,18 @@ cleanOldFiles();
                         <span class="result-block-icon" aria-hidden="true">-</span>
                     </button>
                     <div class="result-block-content">
-                        <div class="preview-controls" id="previewControls" style="display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap;">
+                        <div class="preview-controls" id="previewControls">
                             <label for="previewBgMode"><strong><?php echo $lang['preview_bg_title'] ?? 'Pré-visualização de fundo'; ?>:</strong></label>
                             <select id="previewBgMode">
                                 <option value="checker"><?php echo $lang['preview_bg_checker'] ?? 'Transparente (xadrez)'; ?></option>
                                 <option value="solid"><?php echo $lang['preview_bg_solid'] ?? 'Sólido'; ?></option>
                                 <option value="backdrop"><?php echo $lang['preview_bg_backdrop'] ?? 'Bastidores'; ?></option>
                             </select>
-                            <div id="previewSolidControls" class="preview-extra" style="display:none; align-items:center; gap:8px;">
+                            <div id="previewSolidControls" class="preview-extra aq-hidden">
                                 <label for="previewBgColor"><?php echo $lang['preview_bg_color'] ?? 'Cor do fundo'; ?>:</label>
                                 <input type="color" id="previewBgColor" value="#ffffff"/>
                             </div>
-                            <div id="previewBackdropControls" class="preview-extra" style="display:none; align-items:center; gap:8px;">
+                            <div id="previewBackdropControls" class="preview-extra aq-hidden">
                                 <label for="previewBackdrop"><?php echo $lang['preview_bg_backdrop_label'] ?? 'Cenário'; ?>:</label>
                                 <select id="previewBackdrop">
                                     <option value="gray"><?php echo $lang['backdrop_gray'] ?? 'Studio Cinza'; ?></option>
@@ -220,12 +220,12 @@ cleanOldFiles();
                         <span class="result-block-icon" aria-hidden="true">-</span>
                     </button>
                     <div class="result-block-content">
-                        <div class="editor-tools" style="display:none; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;">
+                        <div class="editor-tools">
                             <button class="btn btn-secondary" id="toggleBrushBtn">Ativar Pincel</button>
-                            <label style="display:flex; align-items:center; gap:8px;">Tamanho
+                            <label class="control-inline-input">Tamanho
                                 <input type="range" id="brushSize" min="5" max="100" value="25"/>
                             </label>
-                            <label style="display:flex; align-items:center; gap:8px;">Modo
+                            <label class="control-inline-input">Modo
                                 <select id="brushMode">
                                     <option value="erase">Apagar</option>
                                     <option value="restore">Restaurar</option>
@@ -233,21 +233,21 @@ cleanOldFiles();
                             </label>
                             <button class="btn btn-secondary" id="refineEdgesBtn">Refinar recorte</button>
                             <button class="btn btn-secondary" id="applyAdjustBtn">Aplicar Ajustes</button>
-                            <a class="btn btn-success" id="downloadAdjustedBtn" download style="display:none;">Baixar Ajustado</a>
+                            <a class="btn btn-success aq-hidden" id="downloadAdjustedBtn" download>Baixar Ajustado</a>
                         </div>
-                        <div class="optimize-tools" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                            <label style="display:flex; align-items:center; gap:8px;">Formato
+                        <div class="optimize-tools">
+                            <label class="control-inline-input">Formato
                                 <select id="optFormat">
                                     <option value="png">PNG</option>
                                     <option value="jpeg">JPEG</option>
                                     <option value="webp">WebP</option>
                                 </select>
                             </label>
-                            <label style="display:flex; align-items:center; gap:8px;">Qualidade
+                            <label class="control-inline-input">Qualidade
                                 <input type="range" id="optQuality" min="10" max="100" value="80"/>
                             </label>
-                            <label style="display:flex; align-items:center; gap:8px;">Largura máx.
-                                <input type="number" id="optWidth" min="100" step="50" placeholder="1200" style="width:100px;"/>
+                            <label class="control-inline-input">Largura máx.
+                                <input type="number" id="optWidth" class="opt-width-input" min="100" step="50" placeholder="1200"/>
                             </label>
                             <button class="btn btn-secondary" id="optimizeBtn">Otimizar</button>
                         </div>
@@ -260,9 +260,9 @@ cleanOldFiles();
                         <span class="result-block-icon" aria-hidden="true">-</span>
                     </button>
                     <div class="result-block-content">
-                        <div id="presetResultInfo" class="preset-result-info" style="display:none;"></div>
-                        <div id="smartDebugPanel" class="smart-debug-panel" style="display:none;"></div>
-                        <div id="presetCompareGrid" class="preset-compare-grid" style="display:none;"></div>
+                        <div id="presetResultInfo" class="preset-result-info aq-hidden"></div>
+                        <div id="smartDebugPanel" class="smart-debug-panel aq-hidden"></div>
+                        <div id="presetCompareGrid" class="preset-compare-grid aq-hidden"></div>
                     </div>
                 </section>
 
@@ -276,7 +276,7 @@ cleanOldFiles();
                             <a id="downloadBtn" class="btn btn-success" download>
                                 <?php echo $lang['download_btn']; ?>
                             </a>
-                            <button class="btn btn-secondary" onclick="resetApp()">
+                            <button class="btn btn-secondary" id="resetAppBtn" type="button">
                                 <?php echo $lang['try_another']; ?>
                             </button>
                             <button class="btn btn-secondary" id="openFinalFrameBtn" type="button">

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace NosfirQuotia\Admin\Controller;
 
+use NosfirQuotia\Admin\DTO\ValidateAdminUserCreateCommand;
+use NosfirQuotia\Admin\DTO\ValidateAdminUserUpdateCommand;
 use NosfirQuotia\Admin\Model\AdminUserModel;
+use NosfirQuotia\Admin\Service\AdminUserValidationService;
 use NosfirQuotia\System\Library\Auth;
 use Throwable;
 
@@ -14,7 +17,8 @@ final class AdminUserController extends BaseAdminController
     {
         $this->ensureGeneralAdmin();
 
-        $model = new AdminUserModel($this->app);
+        /** @var AdminUserModel $model */
+        $model = $this->make(AdminUserModel::class);
         $users = $model->all();
 
         $this->render(
@@ -32,31 +36,49 @@ final class AdminUserController extends BaseAdminController
     {
         $this->ensureGeneralAdmin();
 
-        $payload = [
-            'name' => $this->sanitizeSingleLineText((string) $this->request->post('name', ''), 120),
-            'email' => $this->sanitizeEmailAddress((string) $this->request->post('email', '')),
-            'password' => (string) $this->request->post('password', ''),
-            'access_level' => $this->sanitizeSingleLineText((string) $this->request->post('access_level', 'Operacional'), 80),
-            'is_active' => $this->toBoolValue($this->request->post('is_active', false)),
-            'permissions' => $this->normalizePermissionsInput($this->request->post('permissions', [])),
-        ];
+        /** @var AdminUserValidationService $validationService */
+        $validationService = $this->make(AdminUserValidationService::class);
+        $result = $validationService->validateCreate(
+            new ValidateAdminUserCreateCommand($this->request->all())
+        );
+        $payload = $result->payload;
 
-        $errors = $this->validateCreatePayload($payload);
-        if ($errors !== []) {
-            $this->session->flash('error', implode(' ', $errors));
+        if (!$result->ok) {
+            $this->logAdminSecurityWarning(
+                'admin_user_create_validation_failed',
+                [
+                    'error_code' => (string) ($result->errorCode ?? ''),
+                    'error_count' => count($result->errors),
+                    'target_email_hash' => hash('sha256', strtolower((string) ($payload['email'] ?? ''))),
+                ]
+            );
+            $this->session->flash('error', implode(' ', $result->errors));
             $this->redirect('/admin/usuarios');
         }
 
-        $model = new AdminUserModel($this->app);
+        /** @var AdminUserModel $model */
+        $model = $this->make(AdminUserModel::class);
 
         try {
             $model->create($payload, (int) ($this->adminUser()['id'] ?? 0));
         } catch (Throwable) {
-            $this->session->flash('error', 'Não foi possível criar o usuário admin. Verifique se o e-mail já existe.');
+            $this->logAdminSecurityWarning(
+                'admin_user_create_failed',
+                [
+                    'target_email_hash' => hash('sha256', strtolower((string) ($payload['email'] ?? ''))),
+                ]
+            );
+            $this->session->flash('error', 'Nao foi possivel criar o usuario admin. Verifique se o e-mail ja existe.');
             $this->redirect('/admin/usuarios');
         }
 
-        $this->session->flash('success', 'Usuário administrativo criado com sucesso.');
+        $this->logAdminSecurityInfo(
+            'admin_user_created',
+            [
+                'target_email_hash' => hash('sha256', strtolower((string) ($payload['email'] ?? ''))),
+            ]
+        );
+        $this->session->flash('success', 'Usuario administrativo criado com sucesso.');
         $this->redirect('/admin/usuarios');
     }
 
@@ -66,119 +88,63 @@ final class AdminUserController extends BaseAdminController
 
         $adminId = (int) $id;
         if ($adminId < 1) {
-            $this->session->flash('error', 'Usuário inválido.');
+            $this->session->flash('error', 'Usuario invalido.');
             $this->redirect('/admin/usuarios');
         }
 
-        $payload = [
-            'name' => $this->sanitizeSingleLineText((string) $this->request->post('name', ''), 120),
-            'email' => $this->sanitizeEmailAddress((string) $this->request->post('email', '')),
-            'new_password' => (string) $this->request->post('new_password', ''),
-            'access_level' => $this->sanitizeSingleLineText((string) $this->request->post('access_level', 'Operacional'), 80),
-            'is_active' => $this->toBoolValue($this->request->post('is_active', false)),
-            'permissions' => $this->normalizePermissionsInput($this->request->post('permissions', [])),
-        ];
-
-        $model = new AdminUserModel($this->app);
+        /** @var AdminUserModel $model */
+        $model = $this->make(AdminUserModel::class);
         $target = $model->find($adminId);
         if ($target === null) {
-            $this->session->flash('error', 'Usuário não encontrado.');
+            $this->session->flash('error', 'Usuario nao encontrado.');
             $this->redirect('/admin/usuarios');
         }
 
-        $errors = $this->validateUpdatePayload($payload, empty($target['is_general_admin']));
-        if ($errors !== []) {
-            $this->session->flash('error', implode(' ', $errors));
-            $this->redirect('/admin/usuarios');
-        }
+        /** @var AdminUserValidationService $validationService */
+        $validationService = $this->make(AdminUserValidationService::class);
+        $result = $validationService->validateUpdate(
+            new ValidateAdminUserUpdateCommand(
+                $adminId,
+                !empty($target['is_general_admin']),
+                (int) ($this->adminUser()['id'] ?? 0),
+                $this->request->all()
+            )
+        );
+        $payload = $result->payload;
 
-        if (
-            $adminId === (int) ($this->adminUser()['id'] ?? 0)
-            && !$payload['is_active']
-            && empty($target['is_general_admin'])
-        ) {
-            $this->session->flash('error', 'Você não pode desativar sua própria conta logada.');
+        if (!$result->ok) {
+            $this->logAdminSecurityWarning(
+                'admin_user_update_validation_failed',
+                [
+                    'target_admin_id' => $adminId,
+                    'error_code' => (string) ($result->errorCode ?? ''),
+                    'error_count' => count($result->errors),
+                ]
+            );
+            $this->session->flash('error', implode(' ', $result->errors));
             $this->redirect('/admin/usuarios');
         }
 
         try {
             $model->update($adminId, $payload);
         } catch (Throwable) {
-            $this->session->flash('error', 'Não foi possível atualizar o usuário. Verifique se o e-mail já existe.');
+            $this->logAdminSecurityWarning(
+                'admin_user_update_failed',
+                [
+                    'target_admin_id' => $adminId,
+                ]
+            );
+            $this->session->flash('error', 'Nao foi possivel atualizar o usuario. Verifique se o e-mail ja existe.');
             $this->redirect('/admin/usuarios');
         }
 
-        $this->session->flash('success', 'Permissões e configurações do usuário atualizadas.');
+        $this->logAdminSecurityInfo(
+            'admin_user_updated',
+            [
+                'target_admin_id' => $adminId,
+            ]
+        );
+        $this->session->flash('success', 'Permissoes e configuracoes do usuario atualizadas.');
         $this->redirect('/admin/usuarios');
-    }
-
-    private function validateCreatePayload(array $payload): array
-    {
-        $errors = [];
-
-        if ($payload['name'] === '' || $payload['email'] === '' || $payload['access_level'] === '') {
-            $errors[] = 'Preencha nome, email e nivel de acesso.';
-        }
-
-        if (filter_var($payload['email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors[] = 'E-mail inválido.';
-        }
-
-        if (strlen((string) $payload['password']) < 6) {
-            $errors[] = 'Senha deve ter pelo menos 6 caracteres.';
-        }
-        if (strlen((string) $payload['password']) > 200) {
-            $errors[] = 'Senha excede o tamanho máximo permitido.';
-        }
-
-        if (($payload['permissions'] ?? []) === []) {
-            $errors[] = 'Selecione pelo menos uma permissão para o usuário.';
-        }
-
-        return $errors;
-    }
-
-    private function validateUpdatePayload(array $payload, bool $requirePermissions = true): array
-    {
-        $errors = [];
-
-        if ($payload['name'] === '' || $payload['email'] === '' || $payload['access_level'] === '') {
-            $errors[] = 'Preencha nome, email e nivel de acesso.';
-        }
-
-        if (filter_var($payload['email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors[] = 'E-mail inválido.';
-        }
-
-        if ($payload['new_password'] !== '' && strlen((string) $payload['new_password']) < 6) {
-            $errors[] = 'Nova senha deve ter pelo menos 6 caracteres.';
-        }
-        if (strlen((string) $payload['new_password']) > 200) {
-            $errors[] = 'Nova senha excede o tamanho máximo permitido.';
-        }
-
-        if ($requirePermissions && ($payload['permissions'] ?? []) === []) {
-            $errors[] = 'Selecione pelo menos uma permissão para o usuário.';
-        }
-
-        return $errors;
-    }
-
-    private function normalizePermissionsInput(mixed $raw): array
-    {
-        if (!is_array($raw)) {
-            return [];
-        }
-
-        $allowedPermissions = array_keys(Auth::permissionCatalog());
-        $permissions = [];
-        foreach ($raw as $permission) {
-            $permission = (string) $permission;
-            if ($permission !== '' && in_array($permission, $allowedPermissions, true)) {
-                $permissions[$permission] = $permission;
-            }
-        }
-
-        return array_values($permissions);
     }
 }

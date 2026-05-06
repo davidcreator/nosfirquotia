@@ -14,6 +14,8 @@ if (!is_file($autoload)) {
 
 require $autoload;
 
+use NosfirQuotia\System\Support\RuntimeConfigOverrides;
+
 $configFile = NQ_ROOT . '/config/config.php';
 $configExampleFile = NQ_ROOT . '/config/config.example.php';
 $legacyConfigFiles = [
@@ -28,11 +30,26 @@ if (is_file($configFile)) {
 } elseif (is_file($configExampleFile)) {
     $loaded = require $configExampleFile;
     $config = is_array($loaded) ? $loaded : [];
+    $config['app_url'] = (string) ($config['app_url'] ?? '');
     $config['installed'] = false;
 } else {
     $config = [
         'name' => 'Nosfir Quotia',
         'timezone' => 'America/Sao_Paulo',
+        'app_url' => '',
+        'security' => [
+            'trusted_proxies' => [],
+            'monitoring' => [
+                'window_hours' => 24,
+                'bucket_minutes' => 60,
+                'thresholds' => [
+                    'csrf_rejected' => 10,
+                    'host_header_rejected' => 3,
+                    'admin_login_blocked' => 3,
+                    'client_login_blocked' => 3,
+                ],
+            ],
+        ],
         'installed' => false,
         'db' => [
             'driver' => 'mysql',
@@ -51,7 +68,9 @@ if (is_file($configFile)) {
     ];
 }
 
+$config = RuntimeConfigOverrides::selectEnvironment($config);
 $config = resolveEnvironmentConfig($config);
+$config = RuntimeConfigOverrides::apply($config);
 
 $application = new NosfirQuotia\System\Engine\Application(NQ_ROOT, $config);
 $application->run();

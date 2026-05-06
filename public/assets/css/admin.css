@@ -1576,6 +1576,14 @@ body.aq-admin-theme.aq-admin-sidebar-collapsed .aq-admin-menu-empty {
     background: #f9fcff;
 }
 
+.aq-admin-tax-percent-col {
+    width: 160px;
+}
+
+.aq-admin-tax-estimate-col {
+    width: 200px;
+}
+
 .aq-admin-link-chip {
     display: inline-flex;
     align-items: center;

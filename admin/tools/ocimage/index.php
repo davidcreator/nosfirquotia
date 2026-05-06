@@ -45,8 +45,8 @@ require_once 'assets/common/header.php';
                     </div>
                 </div>
                 <div class="image-actions">
-                    <button type="button" class="remove-image-btn" id="removeImageBtn" style="display: none;">Remover Imagem</button>
-                    <button type="button" class="edit-image-btn" id="editImageBtn" style="display: none;">Editar Imagem</button>
+                    <button type="button" class="remove-image-btn is-hidden" id="removeImageBtn">Remover Imagem</button>
+                    <button type="button" class="edit-image-btn is-hidden" id="editImageBtn">Editar Imagem</button>
                 </div>
             </div>
 
@@ -75,9 +75,9 @@ require_once 'assets/common/header.php';
             </div>
 
             <div class="button-group">
-                <button class="update-btn" onclick="updatePreview()">Atualizar Preview</button>
-                <button class="export-btn" onclick="exportImage()">Exportar Imagem</button>
-                <button class="code-btn" onclick="generateCode()">Gerar Código HTML</button>
+                <button type="button" class="update-btn" id="updatePreviewBtn">Atualizar Preview</button>
+                <button type="button" class="export-btn" id="exportBtn">Exportar Imagem</button>
+                <button type="button" class="code-btn" id="generateCodeBtn">Gerar Código HTML</button>
             </div>
         </div>
 
@@ -95,16 +95,16 @@ require_once 'assets/common/header.php';
 
             <!-- Tabs das Redes Sociais -->
             <div class="social-tabs">
-                <button class="social-tab facebook active" onclick="showPreview('facebook')">
+                <button type="button" class="social-tab facebook active" data-platform="facebook">
                     📘 Facebook
                 </button>
-                <button class="social-tab instagram" onclick="showPreview('instagram')">
+                <button type="button" class="social-tab instagram" data-platform="instagram">
                     📸 Instagram
                 </button>
-                <button class="social-tab twitter" onclick="showPreview('twitter')">
+                <button type="button" class="social-tab twitter" data-platform="twitter">
                     🐦 X (Twitter)
                 </button>
-                <button class="social-tab pinterest" onclick="showPreview('pinterest')">
+                <button type="button" class="social-tab pinterest" data-platform="pinterest">
                     📌 Pinterest
                 </button>
             </div>
@@ -207,20 +207,20 @@ require_once 'assets/common/header.php';
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Código HTML Gerado</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <button type="button" class="close-btn" id="closeCodeModalBtn">&times;</button>
             </div>
             <div class="modal-body">
                 <p>Cole este código no &lt;head&gt; da sua página:</p>
                 <div class="code-container">
                     <pre id="generatedCode"></pre>
-                    <button class="copy-btn" onclick="copyCode()">Copiar Código</button>
+                    <button type="button" class="copy-btn" id="copyCodeBtn">Copiar Código</button>
                 </div>
             </div>
         </div>
     </div>
     
     <!-- Editor de Imagem -->
-    <div class="image-editor-container" id="imageEditor" style="display: none;">
+    <div class="image-editor-container is-hidden" id="imageEditor">
         <div class="image-editor-header">
             <h2 class="image-editor-title">Editor de Imagem</h2>
             <button class="image-editor-close" id="closeImageEditor">&times;</button>

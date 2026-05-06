@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace NosfirQuotia\Admin\Controller;
 
+use NosfirQuotia\Admin\DTO\ValidateCategoryCreateCommand;
 use NosfirQuotia\Admin\Model\CategoryModel;
+use NosfirQuotia\Admin\Service\CategoryValidationService;
 use Throwable;
 
 final class CategoryController extends BaseAdminController
@@ -13,7 +15,8 @@ final class CategoryController extends BaseAdminController
     {
         $this->ensurePermission('categories.manage');
 
-        $model = new CategoryModel($this->app);
+        /** @var CategoryModel $model */
+        $model = $this->make(CategoryModel::class);
         $categories = $model->all();
 
         $this->render(
@@ -30,47 +33,56 @@ final class CategoryController extends BaseAdminController
     {
         $this->ensurePermission('categories.manage');
 
-        $areaType = strtolower(trim((string) $this->request->post('area_type', 'design')));
-        $name = $this->sanitizeSingleLineText((string) $this->request->post('name', ''), 160);
-        $description = $this->sanitizeMultilineText((string) $this->request->post('description', ''), 2000);
-        $basePrice = $this->toPositiveFloat($this->request->post('base_price', 0));
-        $allowedAreas = ['design', 'development'];
+        /** @var CategoryValidationService $validationService */
+        $validationService = $this->make(CategoryValidationService::class);
+        $result = $validationService->validateCreate(
+            new ValidateCategoryCreateCommand($this->request->all())
+        );
+        $payload = $result->payload;
 
-        if (!in_array($areaType, $allowedAreas, true)) {
-            $areaType = 'design';
-        }
-
-        if ($name === '' || $basePrice === null || $basePrice <= 0) {
-            $this->session->flash('error', 'Informe área, nome e valor base válido.');
+        if (!$result->ok) {
+            $this->logAdminSecurityWarning(
+                'admin_category_create_validation_failed',
+                [
+                    'error_code' => (string) ($result->errorCode ?? ''),
+                    'error_count' => count($result->errors),
+                    'area_type' => (string) ($payload['area_type'] ?? 'design'),
+                ]
+            );
+            $this->session->flash('error', implode(' ', $result->errors));
             $this->redirect('/admin/categorias');
         }
 
-        $model = new CategoryModel($this->app);
+        /** @var CategoryModel $model */
+        $model = $this->make(CategoryModel::class);
 
         try {
-            $model->create($areaType, $name, $description, $basePrice);
+            $model->create(
+                (string) $payload['area_type'],
+                (string) $payload['name'],
+                (string) $payload['description'],
+                (float) $payload['base_price']
+            );
         } catch (Throwable) {
-            $this->session->flash('error', 'Não foi possível criar categoria. Verifique se já existe com este nome.');
+            $this->logAdminSecurityWarning(
+                'admin_category_create_failed',
+                [
+                    'area_type' => (string) $payload['area_type'],
+                    'category_name' => (string) $payload['name'],
+                ]
+            );
+            $this->session->flash('error', 'Nao foi possivel criar categoria. Verifique se ja existe com este nome.');
             $this->redirect('/admin/categorias');
         }
 
+        $this->logAdminSecurityInfo(
+            'admin_category_created',
+            [
+                'area_type' => (string) $payload['area_type'],
+                'category_name' => (string) $payload['name'],
+            ]
+        );
         $this->session->flash('success', 'Categoria criada com sucesso.');
         $this->redirect('/admin/categorias');
-    }
-
-    private function toPositiveFloat(mixed $value): ?float
-    {
-        $raw = trim((string) $value);
-        if ($raw === '') {
-            return null;
-        }
-
-        $normalized = str_replace(',', '.', $raw);
-        $normalized = preg_replace('/[^0-9.\-]/', '', $normalized) ?? '';
-        if ($normalized === '' || !is_numeric($normalized)) {
-            return null;
-        }
-
-        return (float) $normalized;
     }
 }

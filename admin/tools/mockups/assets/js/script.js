@@ -434,6 +434,48 @@ function bindEvents() {
         removeLogoBtn.addEventListener('click', removeLogo);
     }
 
+    const saveMockupChangesBtn = document.getElementById('saveMockupChangesBtn');
+    if (saveMockupChangesBtn) {
+        saveMockupChangesBtn.addEventListener('click', () => saveMockupChanges());
+    }
+
+    const downloadMockupBtn = document.getElementById('downloadMockupBtn');
+    if (downloadMockupBtn) {
+        downloadMockupBtn.addEventListener('click', downloadMockup);
+    }
+
+    const resetEditorBtn = document.getElementById('resetEditorBtn');
+    if (resetEditorBtn) {
+        resetEditorBtn.addEventListener('click', resetEditor);
+    }
+
+    const applyBrandKitBtn = document.getElementById('applyBrandKitBtn');
+    if (applyBrandKitBtn) {
+        applyBrandKitBtn.addEventListener('click', () => {
+            applyBrandKitToEditor({ notify: true, force: true });
+        });
+    }
+
+    const finalizeMockupsBtn = document.getElementById('finalizeMockupsBtn');
+    if (finalizeMockupsBtn) {
+        finalizeMockupsBtn.addEventListener('click', finalizeMockupsForReport);
+    }
+
+    const closeEditorBtn = document.getElementById('closeEditorBtn');
+    if (closeEditorBtn) {
+        closeEditorBtn.addEventListener('click', closeEditor);
+    }
+
+    const usePreviewedMockupBtn = document.getElementById('usePreviewedMockupBtn');
+    if (usePreviewedMockupBtn) {
+        usePreviewedMockupBtn.addEventListener('click', usePreviewedMockup);
+    }
+
+    const closePreviewModalBtn = document.getElementById('closePreviewModalBtn');
+    if (closePreviewModalBtn) {
+        closePreviewModalBtn.addEventListener('click', closeModal);
+    }
+
     const closeBtn = document.querySelector('.close');
     if (closeBtn) {
         closeBtn.addEventListener('click', closeModal);

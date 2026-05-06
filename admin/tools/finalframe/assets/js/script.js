@@ -1104,7 +1104,7 @@ function renderBgremoveQuality(quality) {
                 <strong>${escapeHtml(String(factor.value))}/100</strong>
             </div>
             <div class="quality-meter" role="presentation">
-                <span style="width:${clampNumber(Number(factor.value), 0, 100)}%"></span>
+                <span data-meter-width="${escapeHtml(String(clampNumber(Number(factor.value), 0, 100)))}"></span>
             </div>
             <p>${escapeHtml(String(factor.detail || ''))}</p>
         </article>
@@ -1124,11 +1124,24 @@ function renderBgremoveQuality(quality) {
         ` : ''}
         ${factorItems}
     `;
+    applyQualityMeterWidths(qualityTarget);
 
     const recs = Array.isArray(quality.recommendations) ? quality.recommendations : [];
     recsTarget.innerHTML = recs.map((item) => `
         <li class="${escapeHtml(item.level || 'warn')}">${escapeHtml(String(item.message || ''))}</li>
     `).join('');
+}
+
+function applyQualityMeterWidths(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('[data-meter-width]').forEach((element) => {
+        const raw = Number(element.getAttribute('data-meter-width'));
+        const width = clampNumber(Number.isFinite(raw) ? raw : 0, 0, 100);
+        element.style.width = `${width}%`;
+    });
 }
 
 function applyBgRecommendation() {

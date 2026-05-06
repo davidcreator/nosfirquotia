@@ -5523,12 +5523,12 @@ function renderDesignStudioCanvas() {
         if (element.type === 'color_row') {
             const swatches = (palette.length ? palette : [{ hex: '#0f172a' }, { hex: '#334155' }, { hex: '#64748b' }])
                 .slice(0, 6)
-                .map((item) => `<span style="background:${escapeHtml(item.hex)}"></span>`)
+                .map((item) => `<span data-color="${escapeHtml(item.hex)}"></span>`)
                 .join('');
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 >${swatches}${resizeHandles}${lockBadge}</article>
@@ -5542,7 +5542,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 >${content}${resizeHandles}${lockBadge}</article>
@@ -5554,7 +5554,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><span class="divider-line"></span>${dividerLabel}${resizeHandles}${lockBadge}</article>
@@ -5571,7 +5571,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><ul>${listItems}</ul>${resizeHandles}${lockBadge}</article>
@@ -5585,7 +5585,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><strong>${escapeHtml(headline)}</strong><small>${escapeHtml(caption)}</small>${resizeHandles}${lockBadge}</article>
@@ -5599,7 +5599,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><strong>${escapeHtml(heading)}</strong><p>${escapeHtml(body)}</p>${resizeHandles}${lockBadge}</article>
@@ -5613,7 +5613,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><blockquote>${escapeHtml(quote)}</blockquote><cite>${escapeHtml(author)}</cite>${resizeHandles}${lockBadge}</article>
@@ -5627,7 +5627,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><span class="timeline-dot" aria-hidden="true"></span><div class="timeline-copy"><strong>${escapeHtml(phase)}</strong><p>${escapeHtml(detail)}</p></div>${resizeHandles}${lockBadge}</article>
@@ -5645,7 +5645,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 >
@@ -5660,7 +5660,7 @@ function renderDesignStudioCanvas() {
             return `
                 <article
                     class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                    style="${baseStyle}"
+                    data-inline-style="${baseStyle}"
                     data-design-element-id="${escapeHtml(element.id)}"
                     data-design-element-type="${escapeHtml(element.type)}"
                 ><span class="shape-line-core"></span>${resizeHandles}${lockBadge}</article>
@@ -5673,12 +5673,13 @@ function renderDesignStudioCanvas() {
         return `
             <article
                 class="design-element type-${escapeHtml(element.type)}${isSelected ? ' is-selected' : ''}${isPrimary ? ' is-primary-selected' : ''}${isLocked ? ' is-locked' : ''}"
-                style="${baseStyle}"
+                data-inline-style="${baseStyle}"
                 data-design-element-id="${escapeHtml(element.id)}"
                 data-design-element-type="${escapeHtml(element.type)}"
             >${escapeHtml(contentText)}${resizeHandles}${lockBadge}</article>
         `;
     }).join('');
+    applyInlineStyleDataset(canvas);
 }
 
 function renderDesignStudioInspector() {
@@ -8182,6 +8183,44 @@ function applyTemplateMetadata(payload, preset, generatedSheets) {
     };
 }
 
+function applyInlineStyleDataset(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('[data-inline-style]').forEach((element) => {
+        const raw = String(element.getAttribute('data-inline-style') || '').trim();
+        if (!raw) {
+            return;
+        }
+
+        raw.split(';').forEach((chunk) => {
+            const declaration = chunk.trim();
+            if (!declaration) {
+                return;
+            }
+            const separator = declaration.indexOf(':');
+            if (separator <= 0) {
+                return;
+            }
+            const prop = declaration.slice(0, separator).trim();
+            const value = declaration.slice(separator + 1).trim();
+            if (!prop || !value) {
+                return;
+            }
+            element.style.setProperty(prop, value);
+        });
+    });
+
+    root.querySelectorAll('[data-color]').forEach((element) => {
+        const color = String(element.getAttribute('data-color') || '').trim();
+        if (!color) {
+            return;
+        }
+        element.style.backgroundColor = color;
+    });
+}
+
 function renderBrandbook(payload, displayMockups, templateRef, options = {}) {
     const settings = {
         source: 'render',
@@ -8215,6 +8254,7 @@ function renderBrandbook(payload, displayMockups, templateRef, options = {}) {
     target.innerHTML = sheets
         .map((sheet, index) => renderBrandbookSheet(sheet, preset, index + 1, totalPages))
         .join('');
+    applyInlineStyleDataset(target);
 
     const panelBadge = document.getElementById('brandbookPagesBadge');
     if (panelBadge) {
@@ -8540,41 +8580,41 @@ function buildDesignStudioSceneHtml(page, payload, displayMockups, preset, color
         if (element.type === 'color_row') {
             const swatches = (palette.length ? palette : [{ hex: '#0f172a' }])
                 .slice(0, 6)
-                .map((item) => `<span style="background:${escapeHtml(item.hex)}"></span>`)
+                .map((item) => `<span data-color="${escapeHtml(item.hex)}"></span>`)
                 .join('');
-            return `<article class="scene-item type-color_row" style="${style}">${swatches}</article>`;
+            return `<article class="scene-item type-color_row" data-inline-style="${style}">${swatches}</article>`;
         }
 
         if (element.type === 'mockup_slot') {
             const content = firstMockup && firstMockup.previewDataUrl
                 ? `<img src="${escapeHtml(firstMockup.previewDataUrl)}" alt="Mockup"/>`
                 : `<div class="scene-mockup-placeholder">${escapeHtml(resolveDesignTextTokens(element.text || 'Mockup', payload, displayMockups))}</div>`;
-            return `<article class="scene-item type-mockup_slot" style="${style}">${content}</article>`;
+            return `<article class="scene-item type-mockup_slot" data-inline-style="${style}">${content}</article>`;
         }
 
         if (element.type === 'shape_line') {
-            return `<article class="scene-item type-shape_line" style="${style}"><span class="shape-line-core"></span></article>`;
+            return `<article class="scene-item type-shape_line" data-inline-style="${style}"><span class="shape-line-core"></span></article>`;
         }
 
         if (element.type === 'info_card') {
             const parts = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
             const heading = parts[0] || 'Título';
             const body = parts.slice(1).join(' ') || 'Texto de apoio.';
-            return `<article class="scene-item type-info_card" style="${style}"><strong>${escapeHtml(heading)}</strong><p>${escapeHtml(body)}</p></article>`;
+            return `<article class="scene-item type-info_card" data-inline-style="${style}"><strong>${escapeHtml(heading)}</strong><p>${escapeHtml(body)}</p></article>`;
         }
 
         if (element.type === 'quote_block') {
             const parts = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
             const quote = parts[0] || '"Mensagem da marca"';
             const author = parts.slice(1).join(' ') || 'Equipe';
-            return `<article class="scene-item type-quote_block" style="${style}"><blockquote>${escapeHtml(quote)}</blockquote><cite>${escapeHtml(author)}</cite></article>`;
+            return `<article class="scene-item type-quote_block" data-inline-style="${style}"><blockquote>${escapeHtml(quote)}</blockquote><cite>${escapeHtml(author)}</cite></article>`;
         }
 
         if (element.type === 'timeline_step') {
             const parts = String(resolveDesignTextTokens(element.text, payload, displayMockups) || '').split(/\r?\n/g).filter(Boolean);
             const phase = parts[0] || 'Etapa';
             const detail = parts.slice(1).join(' ') || 'Descrição da etapa';
-            return `<article class="scene-item type-timeline_step" style="${style}"><span class="timeline-dot" aria-hidden="true"></span><div class="timeline-copy"><strong>${escapeHtml(phase)}</strong><p>${escapeHtml(detail)}</p></div></article>`;
+            return `<article class="scene-item type-timeline_step" data-inline-style="${style}"><span class="timeline-dot" aria-hidden="true"></span><div class="timeline-copy"><strong>${escapeHtml(phase)}</strong><p>${escapeHtml(detail)}</p></div></article>`;
         }
 
         if (element.type === 'comparison_card') {
@@ -8585,11 +8625,11 @@ function buildDesignStudioSceneHtml(page, payload, displayMockups, preset, color
             const rightHeader = headerParts[1] || 'Depois';
             const leftBody = bodyParts[0] || 'Contexto anterior';
             const rightBody = bodyParts[1] || 'Contexto otimizado';
-            return `<article class="scene-item type-comparison_card" style="${style}"><div class="comparison-col"><strong>${escapeHtml(leftHeader)}</strong><p>${escapeHtml(leftBody)}</p></div><div class="comparison-col"><strong>${escapeHtml(rightHeader)}</strong><p>${escapeHtml(rightBody)}</p></div></article>`;
+            return `<article class="scene-item type-comparison_card" data-inline-style="${style}"><div class="comparison-col"><strong>${escapeHtml(leftHeader)}</strong><p>${escapeHtml(leftBody)}</p></div><div class="comparison-col"><strong>${escapeHtml(rightHeader)}</strong><p>${escapeHtml(rightBody)}</p></div></article>`;
         }
 
         const text = resolveDesignTextTokens(element.text, payload, displayMockups);
-        return `<article class="scene-item type-${escapeHtml(element.type)}" style="${style}">${escapeHtml(text || '')}</article>`;
+        return `<article class="scene-item type-${escapeHtml(element.type)}" data-inline-style="${style}">${escapeHtml(text || '')}</article>`;
     }).join('');
 
     return `
@@ -8645,7 +8685,7 @@ function buildMiniGuideContent(context) {
 
     const colorChips = colors.length
         ? colors.map((color) => `
-            <span class="mini-color-dot" title="${escapeHtml(color.hex)}" style="background:${escapeHtml(color.hex)}"></span>
+            <span class="mini-color-dot" title="${escapeHtml(color.hex)}" data-color="${escapeHtml(color.hex)}"></span>
         `).join('')
         : '<span class="mini-color-empty">Sem cores definidas</span>';
 
@@ -8759,7 +8799,7 @@ function buildSheetColorItems(colors) {
 
     return colors.slice(0, 6).map((color) => `
         <article class="sheet-color-item">
-            <div class="sheet-color-swatch" style="background:${escapeHtml(color.hex)}"></div>
+            <div class="sheet-color-swatch" data-color="${escapeHtml(color.hex)}"></div>
             <div class="sheet-color-meta">
                 <strong>${escapeHtml(color.role || 'Cor')}</strong>
                 <small>${escapeHtml(color.hex || '-')}</small>
@@ -8975,6 +9015,33 @@ function buildStandaloneBrandbookHtml(context) {
     <section class="brandbook-preview">
         ${context.sheetsHtml}
     </section>
+    <script>
+    (function () {
+        function applyInlineStyleDataset(root) {
+            if (!root) return;
+            root.querySelectorAll('[data-inline-style]').forEach(function (element) {
+                const raw = String(element.getAttribute('data-inline-style') || '').trim();
+                if (!raw) return;
+                raw.split(';').forEach(function (chunk) {
+                    const declaration = chunk.trim();
+                    if (!declaration) return;
+                    const separator = declaration.indexOf(':');
+                    if (separator <= 0) return;
+                    const prop = declaration.slice(0, separator).trim();
+                    const value = declaration.slice(separator + 1).trim();
+                    if (!prop || !value) return;
+                    element.style.setProperty(prop, value);
+                });
+            });
+            root.querySelectorAll('[data-color]').forEach(function (element) {
+                const color = String(element.getAttribute('data-color') || '').trim();
+                if (!color) return;
+                element.style.backgroundColor = color;
+            });
+        }
+        applyInlineStyleDataset(document);
+    })();
+    </script>
 </body>
 </html>`;
 }
@@ -10039,13 +10106,14 @@ function renderPalette(colors) {
     }
     target.innerHTML = colors.map((item) => `
         <article class="palette-item">
-            <div class="palette-swatch" style="background:${escapeHtml(item.hex)}"></div>
+            <div class="palette-swatch" data-color="${escapeHtml(item.hex)}"></div>
             <div class="palette-meta">
                 <small>${escapeHtml(item.role || 'Cor')}</small>
                 <strong>${escapeHtml(item.hex || '-')}</strong>
             </div>
         </article>
     `).join('');
+    applyInlineStyleDataset(target);
 }
 
 function renderTypography(typography) {

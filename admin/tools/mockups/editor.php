@@ -19,7 +19,7 @@ require_once 'assets/common/header.php';
                             <span>A preview da arte sera exibida aqui.</span>
                         </div>
 
-                        <div class="upload-preview upload-preview-intake" id="uploadPreview" style="display: none;">
+                        <div class="upload-preview upload-preview-intake aq-hidden" id="uploadPreview">
                             <img id="uploadedPreviewImage" alt="Preview da imagem enviada">
                             <div class="upload-preview-meta">
                                 <strong id="uploadPreviewTitle">Imagem carregada</strong>
@@ -32,7 +32,7 @@ require_once 'assets/common/header.php';
                         <i class="fas fa-upload"></i>
                         Trocar imagem
                     </label>
-                    <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml" style="display: none;">
+                    <input type="file" id="fileInput" class="aq-hidden" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml">
                     <p class="upload-status upload-status-intake" id="uploadStatusMessage">Formatos suportados: PNG, JPEG e SVG.</p>
 
                     <div class="work-intake-color">
@@ -165,7 +165,7 @@ require_once 'assets/common/header.php';
             <!-- Mockups carregados via JavaScript -->
         </section>
 
-        <section class="list-loader" id="listLoader" style="display: none;">
+        <section class="list-loader aq-hidden" id="listLoader">
             <button type="button" class="btn-primary" id="loadMoreBtn">
                 <i class="fas fa-plus"></i>
                 Carregar mais mockups
@@ -175,7 +175,7 @@ require_once 'assets/common/header.php';
         <div id="mockupListSentinel" class="list-sentinel" aria-hidden="true"></div>
         <div id="editorDockHome"></div>
 
-        <section class="editor-section" id="editorSection" style="display: none;">
+        <section class="editor-section aq-hidden" id="editorSection">
             <div class="editor-container">
                 <div class="editor-sidebar">
                     <h3>Personalizar Mockup</h3>
@@ -357,7 +357,7 @@ require_once 'assets/common/header.php';
                                     Remover Logo
                                 </button>
                             </div>
-                            <input type="file" id="logoInput" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml" style="display: none;">
+                            <input type="file" id="logoInput" class="aq-hidden" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml">
                             <div class="control-group">
                                 <label>Escala da logo:</label>
                                 <input type="range" id="logoScaleRange" min="0.1" max="1.8" step="0.05" value="0.4">
@@ -401,22 +401,22 @@ require_once 'assets/common/header.php';
                     </div>
 
                     <div class="editor-actions">
-                        <button type="button" class="btn-primary" onclick="saveMockupChanges()">
+                        <button type="button" class="btn-primary" id="saveMockupChangesBtn">
                             <i class="fas fa-save"></i> Salvar Alterações
                         </button>
-                        <button type="button" class="btn-primary" onclick="downloadMockup()">
+                        <button type="button" class="btn-primary" id="downloadMockupBtn">
                             <i class="fas fa-download"></i> Baixar
                         </button>
-                        <button type="button" class="btn-secondary" onclick="resetEditor()">
+                        <button type="button" class="btn-secondary" id="resetEditorBtn">
                             <i class="fas fa-undo"></i> Resetar
                         </button>
-                        <button type="button" class="btn-secondary" onclick="applyBrandKitToEditor({ notify: true, force: true })">
+                        <button type="button" class="btn-secondary" id="applyBrandKitBtn">
                             <i class="fas fa-swatchbook"></i> Aplicar Cores/Fonte da Marca
                         </button>
-                        <button type="button" class="btn-secondary" onclick="finalizeMockupsForReport()">
+                        <button type="button" class="btn-secondary" id="finalizeMockupsBtn">
                             <i class="fas fa-store"></i> Ir para Resultados dos Mockups
                         </button>
-                        <button type="button" class="btn-secondary" onclick="closeEditor()">
+                        <button type="button" class="btn-secondary" id="closeEditorBtn">
                             <i class="fas fa-times"></i> Fechar
                         </button>
                     </div>

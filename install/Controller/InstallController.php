@@ -11,7 +11,8 @@ final class InstallController extends Controller
 {
     public function step1(): void
     {
-        $installer = new Installer($this->app->rootPath());
+        /** @var Installer $installer */
+        $installer = $this->make(Installer::class);
         $checks = $installer->requirementChecks();
         $canContinue = $this->allPassed($checks);
 
@@ -28,7 +29,8 @@ final class InstallController extends Controller
 
     public function storeStep1(): void
     {
-        $installer = new Installer($this->app->rootPath());
+        /** @var Installer $installer */
+        $installer = $this->make(Installer::class);
         $checks = $installer->requirementChecks();
 
         if (!$this->allPassed($checks)) {
@@ -46,7 +48,8 @@ final class InstallController extends Controller
             $this->redirect($this->installRoute('/step1'));
         }
 
-        $installer = new Installer($this->app->rootPath());
+        /** @var Installer $installer */
+        $installer = $this->make(Installer::class);
         $checks = $installer->permissionChecks();
         $canContinue = $this->allPassed($checks);
 
@@ -67,7 +70,8 @@ final class InstallController extends Controller
             $this->redirect($this->installRoute('/step1'));
         }
 
-        $installer = new Installer($this->app->rootPath());
+        /** @var Installer $installer */
+        $installer = $this->make(Installer::class);
         $checks = $installer->permissionChecks();
 
         if (!$this->allPassed($checks)) {
@@ -123,7 +127,8 @@ final class InstallController extends Controller
             $this->redirect($this->installRoute('/step3'));
         }
 
-        $installer = new Installer($this->app->rootPath());
+        /** @var Installer $installer */
+        $installer = $this->make(Installer::class);
         $result = $installer->install($payload);
 
         if (!$result['success']) {

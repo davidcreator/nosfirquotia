@@ -7,6 +7,7 @@ namespace NosfirQuotia\System\Engine;
 use NosfirQuotia\System\Library\Auth;
 use NosfirQuotia\System\Library\ClientAuth;
 use NosfirQuotia\System\Library\Database;
+use NosfirQuotia\System\Library\SecurityEventLogger;
 
 abstract class Controller
 {
@@ -51,6 +52,19 @@ abstract class Controller
     protected function clientAuth(): ClientAuth
     {
         return $this->app->clientAuth();
+    }
+
+    protected function make(string $id): mixed
+    {
+        return $this->app->make($id);
+    }
+
+    protected function securityLogger(): SecurityEventLogger
+    {
+        /** @var SecurityEventLogger $logger */
+        $logger = $this->make(SecurityEventLogger::class);
+
+        return $logger;
     }
 
     protected function sanitizeSingleLineText(string $value, int $maxLength): string

@@ -4,6 +4,8 @@
 !/storage/sessions/.gitkeep
 /storage/cache/rate_limits/*
 !/storage/cache/rate_limits/.gitkeep
+/storage/logs/*.log
+!/storage/logs/.gitkeep
 /config/config.php
 /config/config-*.php
 !/config/config.example.php

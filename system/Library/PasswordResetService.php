@@ -48,21 +48,67 @@ final class PasswordResetService
             return ['success' => true, 'status' => 'not_found', 'error' => null];
         }
 
-        $lastRecent = $this->db->fetch(
-            'SELECT id
-             FROM password_resets
-             WHERE user_type = :user_type
-               AND user_id = :user_id
-               AND created_at >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
-             ORDER BY id DESC
-             LIMIT 1',
-            [
-                'user_type' => $map['user_type'],
-                'user_id' => (int) $user['id'],
-            ]
-        );
+        $token = '';
+        $rateLimited = false;
+        $this->db->transaction(function () use (&$token, &$rateLimited, $map, $user, $email, $requestIp): void {
+            $this->db->fetch(
+                sprintf('SELECT id FROM %s WHERE id = :id LIMIT 1 FOR UPDATE', $map['table']),
+                ['id' => (int) $user['id']]
+            );
 
-        if ($lastRecent !== null) {
+            $lastRecent = $this->db->fetch(
+                'SELECT id
+                 FROM password_resets
+                 WHERE user_type = :user_type
+                   AND user_id = :user_id
+                   AND created_at >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
+                 ORDER BY id DESC
+                 LIMIT 1',
+                [
+                    'user_type' => $map['user_type'],
+                    'user_id' => (int) $user['id'],
+                ]
+            );
+
+            if ($lastRecent !== null) {
+                $rateLimited = true;
+                return;
+            }
+
+            $this->db->execute(
+                'UPDATE password_resets
+                 SET used_at = NOW()
+                 WHERE user_type = :user_type
+                   AND user_id = :user_id
+                   AND used_at IS NULL',
+                [
+                    'user_type' => $map['user_type'],
+                    'user_id' => (int) $user['id'],
+                ]
+            );
+
+            $token = bin2hex(random_bytes(32));
+            $tokenHash = hash('sha256', $token);
+            $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+            $this->db->execute(
+                'INSERT INTO password_resets (
+                    user_type, user_id, email, token_hash, expires_at, requested_ip
+                 ) VALUES (
+                    :user_type, :user_id, :email, :token_hash, :expires_at, :requested_ip
+                 )',
+                [
+                    'user_type' => $map['user_type'],
+                    'user_id' => (int) $user['id'],
+                    'email' => $email,
+                    'token_hash' => $tokenHash,
+                    'expires_at' => $expiresAt,
+                    'requested_ip' => $requestIp,
+                ]
+            );
+        });
+
+        if ($rateLimited) {
             $this->logResetEvent(
                 'password_reset_' . $map['user_type'],
                 (string) ($user['name'] ?? ''),
@@ -75,38 +121,6 @@ final class PasswordResetService
             );
             return ['success' => true, 'status' => 'rate_limited', 'error' => null];
         }
-
-        $this->db->execute(
-            'UPDATE password_resets
-             SET used_at = NOW()
-             WHERE user_type = :user_type
-               AND user_id = :user_id
-               AND used_at IS NULL',
-            [
-                'user_type' => $map['user_type'],
-                'user_id' => (int) $user['id'],
-            ]
-        );
-
-        $token = bin2hex(random_bytes(32));
-        $tokenHash = hash('sha256', $token);
-        $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
-
-        $this->db->execute(
-            'INSERT INTO password_resets (
-                user_type, user_id, email, token_hash, expires_at, requested_ip
-             ) VALUES (
-                :user_type, :user_id, :email, :token_hash, :expires_at, :requested_ip
-             )',
-            [
-                'user_type' => $map['user_type'],
-                'user_id' => (int) $user['id'],
-                'email' => $email,
-                'token_hash' => $tokenHash,
-                'expires_at' => $expiresAt,
-                'requested_ip' => $requestIp,
-            ]
-        );
 
         $link = rtrim($baseUrl, '/') . $map['reset_path'] . '?token=' . urlencode($token);
         $name = (string) ($user['name'] ?? 'Usuario');
@@ -183,11 +197,6 @@ final class PasswordResetService
 
     public function resetPassword(string $userType, string $token, string $newPassword): array
     {
-        $tokenData = $this->tokenData($userType, $token);
-        if ($tokenData === null) {
-            return ['success' => false, 'error' => 'Token invalido ou expirado.'];
-        }
-
         if (strlen($newPassword) < 6) {
             return ['success' => false, 'error' => 'A senha deve ter pelo menos 6 caracteres.'];
         }
@@ -197,23 +206,61 @@ final class PasswordResetService
             return ['success' => false, 'error' => 'Tipo de usuario invalido.'];
         }
 
-        $this->db->execute(
-            sprintf('UPDATE %s SET password = :password WHERE id = :id LIMIT 1', $map['table']),
-            [
-                'password' => password_hash($newPassword, PASSWORD_DEFAULT),
-                'id' => $tokenData['user_id'],
-            ]
-        );
+        $token = trim($token);
+        if ($token === '') {
+            return ['success' => false, 'error' => 'Token invalido ou expirado.'];
+        }
 
-        $this->db->execute(
-            'UPDATE password_resets
-             SET used_at = NOW()
-             WHERE id = :id
-             LIMIT 1',
-            ['id' => $tokenData['reset_id']]
-        );
+        $tokenHash = hash('sha256', $token);
+        $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        return ['success' => true, 'error' => null];
+        return $this->db->transaction(function () use ($map, $tokenHash, $passwordHash): array {
+            $reset = $this->db->fetch(
+                'SELECT id, user_id
+                 FROM password_resets
+                 WHERE user_type = :user_type
+                   AND token_hash = :token_hash
+                   AND used_at IS NULL
+                   AND expires_at >= NOW()
+                 LIMIT 1
+                 FOR UPDATE',
+                [
+                    'user_type' => $map['user_type'],
+                    'token_hash' => $tokenHash,
+                ]
+            );
+
+            if ($reset === null) {
+                return ['success' => false, 'error' => 'Token invalido ou expirado.'];
+            }
+
+            $user = $this->db->fetch(
+                sprintf('SELECT id FROM %s WHERE id = :id LIMIT 1 FOR UPDATE', $map['table']),
+                ['id' => (int) $reset['user_id']]
+            );
+
+            if ($user === null) {
+                return ['success' => false, 'error' => 'Usuario associado ao token nao foi encontrado.'];
+            }
+
+            $this->db->execute(
+                sprintf('UPDATE %s SET password = :password WHERE id = :id LIMIT 1', $map['table']),
+                [
+                    'password' => $passwordHash,
+                    'id' => (int) $user['id'],
+                ]
+            );
+
+            $this->db->execute(
+                'UPDATE password_resets
+                 SET used_at = NOW()
+                 WHERE id = :id
+                 LIMIT 1',
+                ['id' => (int) $reset['id']]
+            );
+
+            return ['success' => true, 'error' => null];
+        });
     }
 
     private function mapType(string $userType): ?array

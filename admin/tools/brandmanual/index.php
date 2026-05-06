@@ -1054,8 +1054,8 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"></path><path d="M8 11l4 4 4-4"></path><rect x="4" y="17" width="16" height="4" rx="1"></rect><path d="M5 17h14"></path></svg>
                             </button>
                         </div>
-                        <input type="file" id="importFigmaJsonFile" accept=".json,application/json" style="display:none;">
-                        <input type="file" id="importDesignSceneFile" accept=".json,application/json" style="display:none;">
+                        <input type="file" id="importFigmaJsonFile" class="aq-hidden" accept=".json,application/json">
+                        <input type="file" id="importDesignSceneFile" class="aq-hidden" accept=".json,application/json">
                     </div>
                 </section>
                 <div class="actions mt-compact icon-toolbar">
@@ -1092,7 +1092,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
                     <button type="button" class="btn ghost compact-icon-btn" id="downloadTemplateBackupBtn" aria-label="Baixar backup" title="Baixar backup" data-tooltip="Baixar backup">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"></path><path d="M8 11l4 4 4-4"></path><rect x="4" y="17" width="16" height="4" rx="1"></rect><path d="M6 17h12"></path></svg>
                     </button>
-                    <input type="file" id="importCustomTemplatesFile" accept=".json,application/json" style="display:none;">
+                    <input type="file" id="importCustomTemplatesFile" class="aq-hidden" accept=".json,application/json">
                 </div>
             </section>
             <div class="actions mt-compact icon-toolbar">
@@ -1242,7 +1242,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
             <h2>Aplicações em Mockups</h2>
             <p class="muted">Amostras encontradas no fluxo do editor. Selecione no módulo de mockups para atualizar este painel.</p>
             <div id="mockupsGrid" class="mockups-grid"></div>
-            <p id="mockupsEmpty" class="empty-note" style="display:none;">Nenhum mockup salvo no navegador atual.</p>
+            <p id="mockupsEmpty" class="empty-note aq-hidden">Nenhum mockup salvo no navegador atual.</p>
         </section>
 
         <section class="panel brandbook-panel" id="brandbookPanel">

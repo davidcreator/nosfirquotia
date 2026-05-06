@@ -850,24 +850,56 @@ function renderColorSystem(context) {
             const textColor = pickTextColor(color);
             return `
                 <article class="role-card">
-                    <div class="role-chip" style="--role-color:${color};--role-text:${textColor};">${escapeHtml(label)}</div>
+                    <div class="role-chip" data-role-color="${escapeHtml(color)}" data-role-text="${escapeHtml(textColor)}">${escapeHtml(label)}</div>
                     <div class="role-meta">
                         <strong>${escapeHtml(color.toUpperCase())}</strong>
                     </div>
                 </article>
             `;
         }).join('');
+        applyRoleChipColors(roleTarget);
     }
 
     const swatchTarget = document.getElementById('paletteSwatches');
     if (swatchTarget) {
         swatchTarget.innerHTML = context.paletteColors.map((hex) => `
             <article class="swatch-card">
-                <div class="swatch-color" style="background:${escapeHtml(hex)};"></div>
+                <div class="swatch-color" data-swatch-color="${escapeHtml(hex)}"></div>
                 <code>${escapeHtml(hex.toUpperCase())}</code>
             </article>
         `).join('');
+        applyPaletteSwatchColors(swatchTarget);
     }
+}
+
+function applyRoleChipColors(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('.role-chip[data-role-color]').forEach((element) => {
+        const roleColor = String(element.getAttribute('data-role-color') || '').trim();
+        const roleText = String(element.getAttribute('data-role-text') || '').trim();
+        if (roleColor !== '') {
+            element.style.setProperty('--role-color', roleColor);
+        }
+        if (roleText !== '') {
+            element.style.setProperty('--role-text', roleText);
+        }
+    });
+}
+
+function applyPaletteSwatchColors(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('.swatch-color[data-swatch-color]').forEach((element) => {
+        const color = String(element.getAttribute('data-swatch-color') || '').trim();
+        if (color !== '') {
+            element.style.background = color;
+        }
+    });
 }
 
 function resolveHarmonyProfile(snapshot, paletteType) {
