@@ -99,45 +99,54 @@ final class AdminUserModel extends Model
 
     public function update(int $id, array $payload): void
     {
-        $target = $this->find($id);
-        if ($target === null) {
-            return;
-        }
+        $this->db->transaction(function () use ($id, $payload): void {
+            $target = $this->db->fetch(
+                'SELECT id, is_general_admin
+                 FROM admin_users
+                 WHERE id = :id
+                 LIMIT 1
+                 FOR UPDATE',
+                ['id' => $id]
+            );
+            if ($target === null) {
+                return;
+            }
 
-        $isGeneralAdmin = !empty($target['is_general_admin']);
-        $permissionsJson = json_encode(
-            $isGeneralAdmin
-                ? Auth::permissionKeys()
-                : $this->sanitizePermissions($payload['permissions'] ?? []),
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-        );
+            $isGeneralAdmin = !empty($target['is_general_admin']);
+            $permissionsJson = json_encode(
+                $isGeneralAdmin
+                    ? Auth::permissionKeys()
+                    : $this->sanitizePermissions($payload['permissions'] ?? []),
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
 
-        $params = [
-            'id' => $id,
-            'name' => $payload['name'],
-            'email' => $payload['email'],
-            'access_level' => $isGeneralAdmin ? 'Administrador Geral' : $payload['access_level'],
-            'is_active' => $isGeneralAdmin ? 1 : (!empty($payload['is_active']) ? 1 : 0),
-            'permissions_json' => $permissionsJson,
-        ];
+            $params = [
+                'id' => $id,
+                'name' => $payload['name'],
+                'email' => $payload['email'],
+                'access_level' => $isGeneralAdmin ? 'Administrador Geral' : $payload['access_level'],
+                'is_active' => $isGeneralAdmin ? 1 : (!empty($payload['is_active']) ? 1 : 0),
+                'permissions_json' => $permissionsJson,
+            ];
 
-        $sql = 'UPDATE admin_users
-                SET
-                    name = :name,
-                    email = :email,
-                    access_level = :access_level,
-                    is_active = :is_active,
-                    permissions_json = :permissions_json';
+            $sql = 'UPDATE admin_users
+                    SET
+                        name = :name,
+                        email = :email,
+                        access_level = :access_level,
+                        is_active = :is_active,
+                        permissions_json = :permissions_json';
 
-        $newPassword = (string) ($payload['new_password'] ?? '');
-        if ($newPassword !== '') {
-            $sql .= ', password = :password';
-            $params['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
-        }
+            $newPassword = (string) ($payload['new_password'] ?? '');
+            if ($newPassword !== '') {
+                $sql .= ', password = :password';
+                $params['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+            }
 
-        $sql .= ' WHERE id = :id LIMIT 1';
+            $sql .= ' WHERE id = :id LIMIT 1';
 
-        $this->db->execute($sql, $params);
+            $this->db->execute($sql, $params);
+        });
     }
 
     private function sanitizePermissions(array $permissions): array

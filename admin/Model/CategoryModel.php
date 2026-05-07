@@ -94,27 +94,14 @@ final class CategoryModel extends Model
             $basePrice = (float) $default[3];
             $slug = $this->slugify($name);
 
-            $exists = $this->db->fetch(
-                'SELECT id FROM design_categories WHERE slug = :slug LIMIT 1',
-                ['slug' => $slug]
-            );
-
-            if ($exists !== null) {
-                $this->db->execute(
-                    'UPDATE design_categories
-                     SET area_type = :area_type
-                     WHERE id = :id',
-                    [
-                        'id' => (int) $exists['id'],
-                        'area_type' => $areaType,
-                    ]
-                );
-                continue;
-            }
-
             $this->db->execute(
                 'INSERT INTO design_categories (area_type, name, slug, description, base_price)
-                 VALUES (:area_type, :name, :slug, :description, :base_price)',
+                 VALUES (:area_type, :name, :slug, :description, :base_price)
+                 ON DUPLICATE KEY UPDATE
+                    area_type = VALUES(area_type),
+                    name = VALUES(name),
+                    description = VALUES(description),
+                    base_price = VALUES(base_price)',
                 [
                     'area_type' => $areaType,
                     'name' => $name,

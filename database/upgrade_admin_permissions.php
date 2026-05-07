@@ -8,17 +8,10 @@ use NosfirQuotia\System\Library\Database;
 define('NQ_ROOT', dirname(__DIR__));
 
 require NQ_ROOT . '/vendor/autoload.php';
-
-$configFile = NQ_ROOT . '/config/config.php';
-if (!is_file($configFile)) {
-    fwrite(STDERR, "Arquivo config/config.php não encontrado.\n");
-    exit(1);
-}
-
-$config = require $configFile;
-$dbConfig = (array) ($config['db'] ?? []);
+require NQ_ROOT . '/database/bootstrap_cli.php';
 
 try {
+    $dbConfig = nqLoadDbConfig(NQ_ROOT);
     $db = new Database($dbConfig);
 
     $hasColumn = static function (Database $database, string $table, string $column): bool {
@@ -89,11 +82,23 @@ try {
     }
 
     $allPermissionsJson = json_encode(Auth::permissionKeys(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_string($allPermissionsJson) || $allPermissionsJson === '') {
+        throw new RuntimeException('Falha ao serializar permissoes administrativas.');
+    }
 
-    $firstAdmin = $db->fetch('SELECT id FROM admin_users ORDER BY id ASC LIMIT 1');
-    if ($firstAdmin !== null) {
+    $emptyPermissionsJson = json_encode([], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_string($emptyPermissionsJson)) {
+        throw new RuntimeException('Falha ao serializar permissoes vazias.');
+    }
+
+    $db->transaction(static function (Database $database) use ($allPermissionsJson, $emptyPermissionsJson): void {
+        $firstAdmin = $database->fetch('SELECT id FROM admin_users ORDER BY id ASC LIMIT 1 FOR UPDATE');
+        if ($firstAdmin === null) {
+            return;
+        }
+
         $firstAdminId = (int) $firstAdmin['id'];
-        $db->execute(
+        $database->execute(
             'UPDATE admin_users
              SET
                 is_general_admin = CASE WHEN id = :first_id_1 THEN 1 ELSE is_general_admin END,
@@ -109,10 +114,10 @@ try {
                 'general_level' => 'Administrador Geral',
                 'default_level' => 'Administrador',
                 'full_permissions' => $allPermissionsJson,
-                'empty_permissions' => json_encode([], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                'empty_permissions' => $emptyPermissionsJson,
             ]
         );
-    }
+    });
 
     echo "Upgrade de permissoes admin concluido com sucesso.\n";
     exit(0);

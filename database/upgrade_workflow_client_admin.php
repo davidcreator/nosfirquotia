@@ -7,17 +7,10 @@ use NosfirQuotia\System\Library\Database;
 define('NQ_ROOT', dirname(__DIR__));
 
 require NQ_ROOT . '/vendor/autoload.php';
-
-$configFile = NQ_ROOT . '/config/config.php';
-if (!is_file($configFile)) {
-    fwrite(STDERR, "Arquivo config/config.php não encontrado.\n");
-    exit(1);
-}
-
-$config = require $configFile;
-$dbConfig = (array) ($config['db'] ?? []);
+require NQ_ROOT . '/database/bootstrap_cli.php';
 
 try {
+    $dbConfig = nqLoadDbConfig(NQ_ROOT);
     $db = new Database($dbConfig);
     $hasColumn = static function (Database $database, string $table, string $column): bool {
         $row = $database->fetch(
@@ -86,9 +79,13 @@ try {
         $db->execute('CREATE INDEX idx_admin_users_active ON admin_users (is_active)');
     }
 
-    $firstAdmin = $db->fetch('SELECT id FROM admin_users ORDER BY id ASC LIMIT 1');
-    if ($firstAdmin !== null) {
-        $db->execute(
+    $db->transaction(static function (Database $database): void {
+        $firstAdmin = $database->fetch('SELECT id FROM admin_users ORDER BY id ASC LIMIT 1 FOR UPDATE');
+        if ($firstAdmin === null) {
+            return;
+        }
+
+        $database->execute(
             'UPDATE admin_users
              SET
                 is_general_admin = CASE WHEN id = :first_id_1 THEN 1 ELSE is_general_admin END,
@@ -103,7 +100,7 @@ try {
                 'default_level' => 'Administrador',
             ]
         );
-    }
+    });
 
     if (!$hasColumn($db, 'design_categories', 'area_type')) {
         $db->execute("ALTER TABLE design_categories ADD COLUMN area_type VARCHAR(30) NOT NULL DEFAULT 'design' AFTER id");
@@ -120,8 +117,6 @@ try {
         $db->execute('CREATE INDEX idx_design_categories_area_type ON design_categories (area_type)');
     }
 
-    $db->execute("UPDATE design_categories SET area_type = 'design' WHERE area_type IS NULL OR TRIM(area_type) = ''");
-
     $defaultCategories = [
         ['design', 'Design Grafico', 'logos, identidade visual, cartazes', 350.00],
         ['design', 'Design UX/UI', 'interfaces de apps e websites', 750.00],
@@ -132,51 +127,44 @@ try {
         ['development', 'Integracoes e API', 'integracoes entre sistemas, automacoes e API REST', 2800.00],
     ];
 
-    foreach ($defaultCategories as $category) {
-        $name = (string) $category[1];
-        $normalizedName = strtr(strtolower($name), [
-            'á' => 'a', 'à' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a',
-            'é' => 'e', 'è' => 'e', 'ê' => 'e', 'ë' => 'e',
-            'í' => 'i', 'ì' => 'i', 'î' => 'i', 'ï' => 'i',
-            'ó' => 'o', 'ò' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o',
-            'ú' => 'u', 'ù' => 'u', 'û' => 'u', 'ü' => 'u',
-            'ç' => 'c',
-        ]);
-        $slug = strtolower(trim((string) preg_replace('/[^a-z0-9]+/', '-', $normalizedName), '-'));
-        if ($slug === '') {
-            $slug = 'categoria';
+    $slugify = static function (string $name): string {
+        $normalizedName = $name;
+        if (function_exists('iconv')) {
+            $converted = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $name);
+            if (is_string($converted) && $converted !== '') {
+                $normalizedName = $converted;
+            }
         }
 
-        $exists = $db->fetch(
-            'SELECT id FROM design_categories WHERE slug = :slug LIMIT 1',
-            ['slug' => $slug]
-        );
+        $slug = strtolower(trim((string) preg_replace('/[^a-z0-9]+/', '-', strtolower($normalizedName)), '-'));
 
-        if ($exists !== null) {
-            $db->execute(
-                'UPDATE design_categories
-                 SET area_type = :area_type
-                 WHERE id = :id',
+        return $slug !== '' ? $slug : 'categoria';
+    };
+
+    $db->transaction(static function (Database $database) use ($defaultCategories, $slugify): void {
+        $database->execute("UPDATE design_categories SET area_type = 'design' WHERE area_type IS NULL OR TRIM(area_type) = ''");
+
+        foreach ($defaultCategories as $category) {
+            $name = (string) $category[1];
+
+            $database->execute(
+                'INSERT INTO design_categories (area_type, name, slug, description, base_price)
+                 VALUES (:area_type, :name, :slug, :description, :base_price)
+                 ON DUPLICATE KEY UPDATE
+                    area_type = VALUES(area_type),
+                    name = VALUES(name),
+                    description = VALUES(description),
+                    base_price = VALUES(base_price)',
                 [
-                    'id' => (int) $exists['id'],
                     'area_type' => (string) $category[0],
+                    'name' => $name,
+                    'slug' => $slugify($name),
+                    'description' => (string) $category[2],
+                    'base_price' => (float) $category[3],
                 ]
             );
-            continue;
         }
-
-        $db->execute(
-            'INSERT INTO design_categories (area_type, name, slug, description, base_price)
-             VALUES (:area_type, :name, :slug, :description, :base_price)',
-            [
-                'area_type' => (string) $category[0],
-                'name' => $name,
-                'slug' => $slug,
-                'description' => (string) $category[2],
-                'base_price' => (float) $category[3],
-            ]
-        );
-    }
+    });
 
     $db->execute(
         'CREATE TABLE IF NOT EXISTS client_users (
@@ -287,11 +275,13 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
 
-    $db->execute(
-        'INSERT INTO tax_settings (id)
-         VALUES (1)
-         ON DUPLICATE KEY UPDATE id = id'
-    );
+    $db->transaction(static function (Database $database): void {
+        $database->execute(
+            'INSERT INTO tax_settings (id)
+             VALUES (1)
+             ON DUPLICATE KEY UPDATE id = id'
+        );
+    });
 
     $db->execute(
         'CREATE TABLE IF NOT EXISTS email_dispatch_logs (
@@ -336,4 +326,3 @@ try {
     fwrite(STDERR, 'Erro: ' . $exception->getMessage() . "\n");
     exit(1);
 }
-

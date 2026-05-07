@@ -419,12 +419,12 @@ final class Application
         $expectedOrigin = $this->baseOrigin();
         $origin = trim((string) $this->request->header('Origin', ''));
         if ($origin !== '') {
-            return $this->isSameOrigin($origin, $expectedOrigin);
+            return $this->isAcceptedOrigin($origin, $expectedOrigin);
         }
 
         $referer = trim((string) $this->request->header('Referer', ''));
         if ($referer !== '') {
-            return $this->isSameOrigin($referer, $expectedOrigin);
+            return $this->isAcceptedOrigin($referer, $expectedOrigin);
         }
 
         $fetchSite = strtolower(trim((string) $this->request->header('Sec-Fetch-Site', '')));
@@ -434,6 +434,15 @@ final class Application
 
         // Alguns agentes/proxies removem Origin/Referer; nao bloquear para evitar falso positivo.
         return true;
+    }
+
+    private function isAcceptedOrigin(string $sourceUrl, string $expectedOrigin): bool
+    {
+        if ($this->isSameOrigin($sourceUrl, $expectedOrigin)) {
+            return true;
+        }
+
+        return $this->isTrustedHostOrigin($sourceUrl, $expectedOrigin);
     }
 
     private function isSameOrigin(string $sourceUrl, string $expectedOrigin): bool
@@ -455,6 +464,38 @@ final class Application
         return $sourceScheme === $expectedScheme
             && $sourceHost === $expectedHost
             && $sourcePort === $expectedPort;
+    }
+
+    private function isTrustedHostOrigin(string $sourceUrl, string $expectedOrigin): bool
+    {
+        $sourceParts = parse_url($sourceUrl);
+        $expectedParts = parse_url($expectedOrigin);
+        if (!is_array($sourceParts) || !is_array($expectedParts)) {
+            return false;
+        }
+
+        $sourceScheme = strtolower((string) ($sourceParts['scheme'] ?? ''));
+        $sourceHostRaw = (string) ($sourceParts['host'] ?? '');
+        $sourceHost = $this->normalizeComparableHost($sourceHostRaw);
+        $sourcePort = (int) ($sourceParts['port'] ?? ($sourceScheme === 'https' ? 443 : 80));
+
+        $expectedScheme = strtolower((string) ($expectedParts['scheme'] ?? ''));
+        $expectedPort = (int) ($expectedParts['port'] ?? ($expectedScheme === 'https' ? 443 : 80));
+
+        if ($sourceScheme === '' || $sourceHost === '') {
+            return false;
+        }
+
+        if ($sourceScheme !== $expectedScheme || $sourcePort !== $expectedPort) {
+            return false;
+        }
+
+        $trustedHosts = $this->trustedHostAllowlist();
+        if ($trustedHosts === []) {
+            return false;
+        }
+
+        return in_array($sourceHost, $trustedHosts, true);
     }
 
     private function handleCsrfFailure(string $reason = 'unknown', array $extraContext = []): bool

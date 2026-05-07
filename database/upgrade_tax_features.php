@@ -7,17 +7,10 @@ use NosfirQuotia\System\Library\Database;
 define('NQ_ROOT', dirname(__DIR__));
 
 require NQ_ROOT . '/vendor/autoload.php';
-
-$configFile = NQ_ROOT . '/config/config.php';
-if (!is_file($configFile)) {
-    fwrite(STDERR, "Arquivo config/config.php não encontrado.\n");
-    exit(1);
-}
-
-$config = require $configFile;
-$dbConfig = (array) ($config['db'] ?? []);
+require NQ_ROOT . '/database/bootstrap_cli.php';
 
 try {
+    $dbConfig = nqLoadDbConfig(NQ_ROOT);
     $db = new Database($dbConfig);
 
     $hasColumn = static function (Database $database, string $table, string $column): bool {
@@ -76,11 +69,13 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
 
-    $db->execute(
-        'INSERT INTO tax_settings (id)
-         VALUES (1)
-         ON DUPLICATE KEY UPDATE id = id'
-    );
+    $db->transaction(static function (Database $database): void {
+        $database->execute(
+            'INSERT INTO tax_settings (id)
+             VALUES (1)
+             ON DUPLICATE KEY UPDATE id = id'
+        );
+    });
 
     echo "Upgrade fiscal concluido com sucesso.\n";
     exit(0);

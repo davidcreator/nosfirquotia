@@ -148,7 +148,195 @@ Se ao acessar `/install` o sistema não entra no instalador, verifique:
 
 ## Upgrade para o novo fluxo cliente/admin (se banco antigo já existe)
 
-Para criar as tabelas do fluxo atual sem reinstalar:
+Pipeline recomendado (versionado) para aplicar upgrades em banco existente:
+
+```bash
+composer db:migrate
+```
+
+Consultar status (aplicada/pendente/divergencia):
+
+```bash
+composer db:migrate:status
+```
+
+Consultar historico de auditoria por release:
+
+```bash
+composer db:migrate:history
+```
+
+Auditar prontidao de rollback do manifesto:
+
+```bash
+composer db:migrate:rollback-audit
+```
+
+Modo estrito (avisos bloqueiam):
+
+```bash
+composer db:migrate:rollback-audit:strict
+```
+
+Auditar cobertura real de snapshots em runs aplicados:
+
+```bash
+composer db:migrate:snapshot-coverage-audit
+```
+
+Modo estrito (falha quando houver run aplicado sem snapshot exigido):
+
+```bash
+composer db:migrate:snapshot-coverage-audit:strict
+```
+
+Executar pre-check de conectividade dos ambientes antes do report:
+
+```bash
+composer db:migrate:snapshot-coverage-env-check:all-envs
+```
+
+Pre-check estrito (falha se algum ambiente estiver indisponivel):
+
+```bash
+composer db:migrate:snapshot-coverage-env-check:all-envs:strict
+```
+
+Pipeline consolidado multiambiente:
+
+```bash
+composer verify:release:multi-env
+```
+
+Pipeline consolidado multiambiente estrito:
+
+```bash
+composer verify:release:multi-env:strict
+```
+
+Gerar dashboard historico de conformidade (artefato Markdown):
+
+```bash
+composer db:migrate:snapshot-coverage-report
+```
+
+Gerar dashboard consolidado de todos os ambientes (`local/online/staging` quando existirem no `config`):
+
+```bash
+composer db:migrate:snapshot-coverage-report:all-envs
+```
+
+Modo estrito multiambiente (falha se houver ambiente indisponivel ou pendencias):
+
+```bash
+composer db:migrate:snapshot-coverage-report:all-envs:strict
+```
+
+No modo estrito multiambiente, o report tambem falha se detectar drift de baseline por release entre ambientes.
+
+Gerar dashboard para um run especifico e caminho customizado:
+
+```bash
+php database/migrate.php snapshot-coverage-report --run-id=<run_id> --output=docs/relatorios/snapshot_coverage_run_<run_id>.md
+```
+
+Limitar o dashboard a um ambiente especifico:
+
+```bash
+php database/migrate.php snapshot-coverage-report --env=local --output=docs/relatorios/snapshot_coverage_local.md
+```
+
+Credenciais seguras por ambiente para report multiambiente (sem salvar senha no `config.php`):
+
+- `NQ_DB_HOST_ONLINE`, `NQ_DB_PORT_ONLINE`, `NQ_DB_DATABASE_ONLINE`, `NQ_DB_USERNAME_ONLINE`, `NQ_DB_PASSWORD_ONLINE`
+- `NQ_DB_HOST_LOCAL`, `NQ_DB_PORT_LOCAL`, `NQ_DB_DATABASE_LOCAL`, `NQ_DB_USERNAME_LOCAL`, `NQ_DB_PASSWORD_LOCAL`
+- para ambiente unico/ativo, tambem funciona fallback global: `NQ_DB_HOST`, `NQ_DB_PORT`, `NQ_DB_DATABASE`, `NQ_DB_USERNAME`, `NQ_DB_PASSWORD`
+- para senha vazia explicita (quando o shell nao preserva `""`): `NQ_DB_PASSWORD_ONLINE_EMPTY=1` (ou `NQ_DB_PASSWORD_EMPTY=1` no ambiente ativo)
+
+Exemplo (PowerShell) para executar modo estrito multiambiente com override do ambiente `online`:
+
+```powershell
+$env:NQ_DB_HOST_ONLINE='localhost'
+$env:NQ_DB_PORT_ONLINE='3306'
+$env:NQ_DB_DATABASE_ONLINE='nosfirquotia'
+$env:NQ_DB_USERNAME_ONLINE='root'
+$env:NQ_DB_PASSWORD_ONLINE_EMPTY='1'
+composer db:migrate:snapshot-coverage-report:all-envs:strict
+```
+
+Gerar roteiro assistido de rollback por release (ultimo run bem-sucedido):
+
+```bash
+composer db:migrate:rollback-plan
+```
+
+Gerar rollback para um run especifico:
+
+```bash
+php database/migrate.php rollback-plan --run-id=<run_id>
+```
+
+Backfill de snapshots para runs legados (quando faltarem snapshots para rollback deterministico):
+
+```bash
+composer db:migrate:snapshot-backfill -- --run-id=<run_id>
+```
+
+Limitar backfill a uma migracao:
+
+```bash
+php database/migrate.php snapshot-backfill --run-id=<run_id> --migration-id=20260506_0006_release_version_format
+```
+
+Executar rollback de uma migracao especifica (modo real):
+
+```bash
+php database/rollback/<migration_id>.php --apply --confirm
+```
+
+Observacao de seguranca:
+
+- scripts em `database/rollback/` rodam em simulacao por padrao (sem alterar banco);
+- para efetivar mudancas destrutivas, e obrigatorio informar `--apply --confirm`.
+- para rollbacks deterministicos por snapshot (ex.: `20260505_0001_workflow_client_admin`, `20260505_0002_tax_features`, `20260505_0003_admin_permissions` e `20260506_0006_release_version_format`), informe tambem `--run-id=<run_id>`;
+- o runner captura snapshots automaticamente durante o `db:migrate` para suportar restauracao por run.
+- no backfill, snapshots sao marcados como `backfill`; snapshots capturados durante migracao ficam como `runtime`.
+
+Simular execucao sem aplicar:
+
+```bash
+composer db:migrate:dry-run
+```
+
+Registrar metadados de release na trilha de auditoria:
+
+```bash
+php database/migrate.php --release=06/05/2026 --author="Time Plataforma" --source=deploy --notes="Ajustes de seguranca e estabilizacao de login admin"
+```
+
+Exigir validacao automatica de backup antes de aplicar migracoes:
+
+```bash
+php database/migrate.php --require-backup --backup-file="E:/backups/quotia_2026-05-06.sql.gz" --backup-ref="snapshot-pre-release-06-05-2026"
+```
+
+Tambem e possivel fornecer os mesmos metadados por ambiente:
+
+- `NQ_RELEASE_VERSION`
+- `NQ_RELEASE_AUTHOR`
+- `NQ_RELEASE_SOURCE`
+- `NQ_RELEASE_NOTES`
+- `NQ_REQUIRE_BACKUP`
+- `NQ_RELEASE_BACKUP_REF`
+- `NQ_RELEASE_BACKUP_FILE`
+
+Observacao:
+
+- ao executar `composer db:migrate`, a migracao `20260506_0006_release_version_format` normaliza valores legados de `release_version` para `dd/mm/aaaa` na trilha de auditoria.
+
+Os scripts abaixo continuam disponiveis para compatibilidade/manual, mas o fluxo recomendado e o runner versionado.
+
+Para criar as tabelas do fluxo atual sem reinstalar (modo legado/manual):
 
 ```bash
 php database/upgrade_workflow_client_admin.php

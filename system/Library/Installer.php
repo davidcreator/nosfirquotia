@@ -124,9 +124,13 @@ final class Installer
                 throw new RuntimeException('Arquivo de schema nao encontrado.');
             }
 
-            $this->runSchema($pdo, (string) file_get_contents($schemaPath));
-            $this->seedAdmin($pdo, $adminName, $adminEmail, $adminPass);
-            $this->seedCategories($pdo);
+            $schema = file_get_contents($schemaPath);
+            if (!is_string($schema) || $schema === '') {
+                throw new RuntimeException('Falha ao carregar database/schema.sql');
+            }
+
+            $this->runSchema($pdo, $schema);
+            $this->seedInitialData($pdo, $adminName, $adminEmail, $adminPass);
 
             if ($importReferencePrices) {
                 $this->seedReferencePrices([
@@ -171,17 +175,55 @@ final class Installer
         }
     }
 
+    private function seedInitialData(PDO $pdo, string $adminName, string $adminEmail, string $adminPass): void
+    {
+        $startedTransaction = false;
+
+        if (!$pdo->inTransaction()) {
+            $startedTransaction = $pdo->beginTransaction();
+        }
+
+        try {
+            $this->seedAdmin($pdo, $adminName, $adminEmail, $adminPass);
+            $this->seedCategories($pdo);
+
+            if ($startedTransaction) {
+                $pdo->commit();
+            }
+        } catch (PDOException | RuntimeException $exception) {
+            if ($startedTransaction && $pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+
+            throw $exception;
+        }
+    }
+
     private function seedAdmin(PDO $pdo, string $name, string $email, string $password): void
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
+        if (!is_string($hash) || $hash === '') {
+            throw new RuntimeException('Falha ao gerar hash de senha para usuario administrador.');
+        }
+
         $allPermissions = json_encode(Auth::permissionKeys(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if (!is_string($allPermissions) || $allPermissions === '') {
+            throw new RuntimeException('Falha ao serializar permissoes iniciais do administrador.');
+        }
 
         $pdo->prepare(
             'INSERT INTO admin_users (
                 name, email, password, access_level, is_general_admin, is_active, permissions_json
              ) VALUES (
                 :name, :email, :password, :access_level, :is_general_admin, :is_active, :permissions_json
-             )'
+             )
+             ON DUPLICATE KEY UPDATE
+                name = VALUES(name),
+                password = VALUES(password),
+                access_level = VALUES(access_level),
+                is_general_admin = VALUES(is_general_admin),
+                is_active = VALUES(is_active),
+                permissions_json = VALUES(permissions_json)'
         )->execute([
             'name' => $name,
             'email' => $email,
@@ -212,7 +254,12 @@ final class Installer
 
         $statement = $pdo->prepare(
             'INSERT INTO design_categories (area_type, name, slug, description, base_price)
-             VALUES (:area_type, :name, :slug, :description, :base_price)'
+             VALUES (:area_type, :name, :slug, :description, :base_price)
+             ON DUPLICATE KEY UPDATE
+                area_type = VALUES(area_type),
+                name = VALUES(name),
+                description = VALUES(description),
+                base_price = VALUES(base_price)'
         );
 
         foreach ($categories as $category) {

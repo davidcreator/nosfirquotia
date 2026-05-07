@@ -8,17 +8,10 @@ use NosfirQuotia\System\Library\ReferencePriceImporter;
 define('NQ_ROOT', dirname(__DIR__));
 
 require NQ_ROOT . '/vendor/autoload.php';
-
-$configFile = NQ_ROOT . '/config/config.php';
-if (!is_file($configFile)) {
-    fwrite(STDERR, "Arquivo config/config.php não encontrado.\n");
-    exit(1);
-}
-
-$config = require $configFile;
-$dbConfig = (array) ($config['db'] ?? []);
+require NQ_ROOT . '/database/bootstrap_cli.php';
 
 try {
+    $dbConfig = nqLoadDbConfig(NQ_ROOT);
     $db = new Database($dbConfig);
     ensureReferenceSchema($db, $dbConfig);
 

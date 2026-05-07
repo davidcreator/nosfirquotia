@@ -23,6 +23,23 @@
   "scripts": {
     "serve": "php -S localhost:8080",
     "dump": "composer dump-autoload -o",
+    "db:migrate": "php database/migrate.php",
+    "db:migrate:status": "php database/migrate.php status",
+    "db:migrate:history": "php database/migrate.php history",
+    "db:migrate:rollback-plan": "php database/migrate.php rollback-plan",
+    "db:migrate:snapshot-backfill": "php database/migrate.php snapshot-backfill",
+    "db:migrate:rollback-audit": "php database/migrate.php rollback-audit",
+    "db:migrate:rollback-audit:strict": "php database/migrate.php rollback-audit --strict",
+    "db:migrate:snapshot-coverage-audit": "php database/migrate.php snapshot-coverage-audit",
+    "db:migrate:snapshot-coverage-audit:strict": "php database/migrate.php snapshot-coverage-audit --strict",
+    "db:migrate:snapshot-coverage-report": "php database/migrate.php snapshot-coverage-report",
+    "db:migrate:snapshot-coverage-env-check": "php database/migrate.php snapshot-coverage-env-check",
+    "db:migrate:snapshot-coverage-env-check:all-envs": "php database/migrate.php snapshot-coverage-env-check --all-envs",
+    "db:migrate:snapshot-coverage-env-check:all-envs:strict": "php database/migrate.php snapshot-coverage-env-check --all-envs --strict",
+    "db:migrate:snapshot-coverage-report:all-envs": "php database/migrate.php snapshot-coverage-report --all-envs",
+    "db:migrate:snapshot-coverage-report:all-envs:strict": "php database/migrate.php snapshot-coverage-report --all-envs --strict",
+    "db:migrate:require-backup": "php database/migrate.php --require-backup",
+    "db:migrate:dry-run": "php database/migrate.php --dry-run",
     "test:services": "php tests/run_services.php",
     "test:http": "php tests/run_http.php",
     "audit:security-config": "php config/audit_security_config.php",
@@ -30,24 +47,40 @@
     "audit:security-config:online": "php config/audit_security_config.php --env=online",
     "audit:security-config:strict:online": "php config/audit_security_config.php --strict --env=online",
     "verify:release": [
+      "@db:migrate:rollback-audit",
+      "@db:migrate:snapshot-coverage-audit",
       "@audit:security-config",
       "@test:services",
       "@test:http"
     ],
     "verify:release:online": [
+      "@db:migrate:rollback-audit",
+      "@db:migrate:snapshot-coverage-audit",
       "@audit:security-config:online",
       "@test:services",
       "@test:http"
     ],
     "verify:release:strict": [
+      "@db:migrate:rollback-audit:strict",
+      "@db:migrate:snapshot-coverage-audit:strict",
       "@audit:security-config:strict",
       "@test:services",
       "@test:http"
     ],
     "verify:release:strict:online": [
+      "@db:migrate:rollback-audit:strict",
+      "@db:migrate:snapshot-coverage-audit:strict",
       "@audit:security-config:strict:online",
       "@test:services",
       "@test:http"
+    ],
+    "verify:release:multi-env": [
+      "@db:migrate:snapshot-coverage-env-check:all-envs",
+      "@db:migrate:snapshot-coverage-report:all-envs"
+    ],
+    "verify:release:multi-env:strict": [
+      "@db:migrate:snapshot-coverage-env-check:all-envs:strict",
+      "@db:migrate:snapshot-coverage-report:all-envs:strict"
     ]
   }
 }

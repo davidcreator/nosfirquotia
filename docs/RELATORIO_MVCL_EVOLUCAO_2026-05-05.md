@@ -368,6 +368,141 @@ Beneficio principal:
 
 - reduz risco de estados inconsistentes em falhas intermediarias e em cenarios de concorrencia.
 
+### 2.24 Transacoes em fluxos administrativos remanescentes
+
+Foi aplicada nova rodada de atomicidade em escritas administrativas:
+
+- `admin/Model/AdminUserModel.php`
+  - atualizacao de usuario admin agora usa transacao com lock (`FOR UPDATE`) para leitura/escrita consistente.
+- `admin/Model/QuoteModel.php`
+  - persistencia do manual da marca migrada para `UPSERT` atomico (`INSERT ... ON DUPLICATE KEY UPDATE`);
+  - fluxo de criacao/atualizacao de relatorio padronizado para `Database::transaction(...)`.
+- `admin/Model/CategoryModel.php`
+  - semeadura de categorias padrao migrada de `SELECT + INSERT/UPDATE` para `UPSERT` por `slug`, reduzindo janela de corrida.
+
+Beneficio principal:
+
+- fortalece consistencia em operacoes administrativas concorrentes e simplifica manutencao de rollback/commit.
+
+### 2.25 Fechamento transacional em instalador e scripts de manutencao
+
+Foi concluido o fechamento da pendencia de confiabilidade fora do admin principal:
+
+- `system/Library/Installer.php`
+  - semeadura inicial (admin + categorias) agora ocorre em bloco transacional dedicado;
+  - semeadura migrada para `UPSERT` em `admin_users` e `design_categories`, reduzindo falhas por reexecucao parcial;
+  - validacoes explicitas para leitura de schema e serializacao/hash inicial.
+- `database/bootstrap_cli.php`
+  - novo bootstrap compartilhado para scripts CLI de banco, com resolucao consistente de configuracao por `environment`/`environments`.
+- `database/import_reference_prices.php`
+  - migrado para bootstrap compartilhado de configuracao.
+- `database/upgrade_admin_permissions.php`
+  - ajuste de permissao inicial do primeiro admin protegido por transacao e lock (`FOR UPDATE`).
+- `database/upgrade_tax_features.php`
+  - inicializacao de `tax_settings` encapsulada em transacao.
+- `database/upgrade_workflow_client_admin.php`
+  - bloco de categorias padrao migrado para transacao + `UPSERT` por `slug`;
+  - normalizacao de slug reforcada para nomes com acentos via transliteracao.
+- `database/upgrade_brand_manual_mvp.php` e `database/upgrade_communications_security.php`
+  - migrados para bootstrap compartilhado de configuracao.
+
+Beneficio principal:
+
+- elimina divergencia de configuracao entre ambientes em scripts de banco e reduz estados parciais nas rotinas legadas de setup/upgrade.
+
+### 2.26 Runner de migracoes versionadas (estado aplicado/pendente)
+
+Foi implementado um pipeline versionado de migracao para substituir execucao manual ad-hoc:
+
+- `database/migrations_manifest.php`
+  - manifesto ordenado com IDs versionados e mapeamento de scripts legados.
+- `database/migrate.php`
+  - comandos `up`/`status`;
+  - tabela `schema_migrations` com registro de checksum, script, tempo e timestamp;
+  - lock de execucao (`GET_LOCK`) para evitar corridas entre processos simultaneos;
+  - deteccao de drift de checksum para migracoes ja aplicadas.
+- `composer.json`
+  - novos atalhos: `db:migrate`, `db:migrate:status`, `db:migrate:dry-run`.
+- `README.md`
+  - fluxo operacional atualizado para uso do runner versionado.
+
+Beneficio principal:
+
+- reduz erro operacional em upgrade incremental, melhora rastreabilidade de estado e padroniza rollout entre ambientes.
+
+### 2.27 Trilha de auditoria por release no runner de migracoes
+
+Foi evoluido o runner para registrar contexto de release por execucao e por item aplicado:
+
+- `database/migrate.php`
+  - novos metadados por execucao: `release_version` (padrao `dd/mm/aaaa`), `release_author`, `release_source`, `release_notes` (via CLI ou variavel de ambiente);
+  - novo comando `history` para consulta do historico de releases;
+  - novo comando `rollback-plan` para playbook assistido por run/release;
+  - novo comando `snapshot-backfill` para preencher snapshots faltantes em runs legados;
+  - novo comando `rollback-audit` para validar prontidao operacional do manifesto (script/estrategia/snapshot);
+  - novo comando `snapshot-coverage-audit` para validar cobertura real de snapshots em runs aplicados;
+  - novo comando `snapshot-coverage-report` para gerar dashboard historico de conformidade por release em Markdown;
+  - gate opcional de backup com validacao automatica por arquivo (`--require-backup` + `--backup-file`);
+  - `rollback-plan` agora aponta comando de execucao por migracao (`php database/rollback/<migration_id>.php --apply --confirm`);
+  - captura automatica de snapshots por run para migracoes com rollback deterministico de dados;
+  - gravacao de run de auditoria com status (`running`/`success`/`failed`) e contagem planejada/aplicada.
+- `database/rollback/*.php`
+  - scaffold de rollback versionado por migracao com simulacao por padrao;
+  - execucao real destrutiva protegida por `--apply --confirm`;
+  - rollbacks de `20260505_0001_workflow_client_admin`, `20260505_0002_tax_features`, `20260505_0003_admin_permissions` e `20260506_0006_release_version_format` agora restauram por snapshot (`--run-id=<run_id>`).
+- `database/upgrade_release_version_format.php`
+  - migracao de normalizacao de legado para converter `release_version` historico de formatos antigos para `dd/mm/aaaa`.
+- `database/migrations_manifest.php`
+  - declaracao explicita de governanca por migracao: `rollback_strategy`, `rollback_script` e `rollback_requires_snapshot`.
+- Banco de controle de migracao:
+  - tabela `schema_migration_releases` (cabecalho de auditoria por run/release);
+  - tabela `schema_migration_release_items` (detalhe por migracao executada);
+  - tabela `schema_migration_rollback_snapshots` para restauracao deterministica de dados sensiveis por run (`snapshot_origin=runtime/backfill`);
+  - enriquecimento de `schema_migration_releases` com `backup_ref` e `backup_verified_at`;
+  - enriquecimento de `schema_migrations` com referencia de release (`release_run_id`, `release_version`, `release_author`, `release_source`).
+- `composer.json`
+  - novos atalhos `db:migrate:history`, `db:migrate:rollback-plan`, `db:migrate:snapshot-backfill`, `db:migrate:rollback-audit`, `db:migrate:snapshot-coverage-audit`, `db:migrate:snapshot-coverage-report` e `db:migrate:require-backup`;
+  - verificacao de release passou a incluir auditores de rollback e de cobertura real de snapshots.
+- `README.md`
+  - instrucoes de uso de auditoria por release e variaveis `NQ_RELEASE_*`.
+
+Beneficio principal:
+
+- cria trilha formal de quem aplicou cada release, quando, com qual contexto e com qual resultado, com suporte operacional para rollback assistido e evidencias de backup.
+
+### 2.28 Dashboard multiambiente de conformidade de snapshots
+
+A pendencia de consolidacao historica multiambiente foi concluida:
+
+- `database/migrate.php`
+  - `snapshot-coverage-report` agora roda sem depender de lock global de migracao;
+  - novos filtros de ambiente para o report: `--env=<nome>` e `--all-envs`;
+  - novo comando `snapshot-coverage-env-check` para pre-check de conectividade multiambiente antes do report;
+  - fallback seguro de credenciais por variavel de ambiente para report multiambiente (`NQ_DB_*_<ENV>`, ex.: `NQ_DB_USERNAME_ONLINE`);
+  - suporte a senha vazia explicita por flag (`NQ_DB_PASSWORD_<ENV>_EMPTY=1`) para shells que removem variavel vazia;
+  - consolidacao por ambiente com tabela de disponibilidade (inclui ambiente indisponivel sem interromper modo padrao);
+  - baseline de drift entre ambientes por release (comparativo de assinatura de cobertura) incorporada no report;
+  - modo estrito de report (`--strict`) agora falha com pendencias (`unavailable`, `missing`, `warnings`, `drift`) apos gravar o artefato;
+  - output agora inclui:
+    - resumo executivo consolidado;
+    - resumo por ambiente;
+    - detalhamento por release dentro de cada ambiente;
+    - pendencias por release com contexto de ambiente.
+- `composer.json`
+  - novos atalhos operacionais:
+    - `db:migrate:snapshot-coverage-env-check:all-envs`
+    - `db:migrate:snapshot-coverage-env-check:all-envs:strict`
+    - `db:migrate:snapshot-coverage-report:all-envs`
+    - `db:migrate:snapshot-coverage-report:all-envs:strict`
+    - `verify:release:multi-env`
+    - `verify:release:multi-env:strict`
+- `README.md`
+  - instrucoes expandidas para execucao ambiente unico, ambiente especifico e consolidacao multiambiente.
+
+Beneficio principal:
+
+- transforma o report de snapshot em artefato de governanca de release entre ambientes, reduzindo risco de divergencia operacional silenciosa.
+
 ## 3. Testes automatizados adicionados
 
 Suite de servicos com fakes (sem dependencia de banco):
@@ -386,7 +521,7 @@ Script de execucao:
 Resultado atual:
 
 - `[OK] Service tests passed: 99`
-- `[OK] HTTP integration tests passed: 110`
+- `[OK] HTTP integration tests passed: 111`
 
 Cobertura HTTP de seguranca CSRF contempla:
 
@@ -411,6 +546,8 @@ Cobertura HTTP de seguranca CSRF contempla:
 - Lint PHP: sem erros de sintaxe em todos os arquivos novos/alterados.
 - Testes de servico: aprovados.
 - Auditoria de configuracao de seguranca: aprovada sem erros bloqueantes (`composer audit:security-config`).
+- Runner de migracoes validado com `composer db:migrate:status`, `composer db:migrate:dry-run` e execucao real (`composer db:migrate`) sem falhas.
+- Dashboard multiambiente validado com `composer db:migrate:snapshot-coverage-report:all-envs` e comportamento estrito (`--strict`) tanto para falha controlada por ambiente indisponivel quanto para sucesso com override de credencial por `NQ_DB_*_<ENV>`.
 - Fluxo automatizado de release validado em modo padrao (`composer verify:release`).
 - Fluxo estrito validado ponta a ponta (`composer verify:release:strict` e `composer verify:release:strict:online`), ambos sem alertas bloqueantes.
 
@@ -418,16 +555,16 @@ Cobertura HTTP de seguranca CSRF contempla:
 
 - Arquitetura e organizacao: **8.0 -> 9.5**
 - Seguranca de aplicacao: **5.0 -> 8.8** (CSRF + validacao de origem + auditoria estruturada + ciclo de vida de logs + CSP com nonce + hardening de host confiavel + cobertura autenticada + monitoramento + hardening de proxy confiavel)
-- Confiabilidade de dados: **6.0 -> 8.0** (transacoes expandidas para solicitacoes, reset de senha e importacao de referencia + testes)
-- Operacao/DevEx: **5.0 -> 8.5** (container simples + testes executaveis + observabilidade com retencao + validadores dedicados + alerta operacional em dashboard + suporte seguro a proxy)
+- Confiabilidade de dados: **6.0 -> 8.8** (transacoes expandidas para solicitacoes, reset de senha, importacao de referencia, escritas administrativas criticas, instalador, scripts legados e controle versionado de migracoes + testes)
+- Operacao/DevEx: **5.0 -> 8.9** (container simples + testes executaveis + observabilidade com retencao + validadores dedicados + alerta operacional em dashboard + suporte seguro a proxy + runner de migracoes com estado + trilha de auditoria por release)
 - Maturidade geral do produto: **6.0 -> 8.8**
 
 ## 6. Pendencias recomendadas (proxima fase)
 
-1. Expandir transacoes para fluxos restantes de escrita critica no admin (cadastros auxiliares e ajustes de configuracao legados).
+1. Integrar `snapshot-coverage-env-check:all-envs:strict` e `snapshot-coverage-report:all-envs:strict` no pipeline de CI/CD com publicacao automatica do artefato `.md`.
 2. Eliminar injecoes dinamicas legadas que ainda dependam de estilo inline em scripts secundarios e demos embarcadas.
 3. Expandir testes de seguranca para futuros endpoints administrativos/API (quando expostos).
-4. Evoluir monitoramento para serie temporal e exportacao de metricas (alem do resumo em dashboard).
+4. Evoluir monitoramento para exportacao de metricas (prometheus/json) e alertas externos alem do resumo em dashboard.
 5. Definir `app_url` canonica em todos os ambientes produtivos.
 6. Configurar e validar `security.trusted_proxies` em todos os ambientes com reverse proxy, alinhando com whitelist de host no servidor web/proxy.
 

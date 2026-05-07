@@ -357,6 +357,24 @@ function run_http_csrf_integration_tests(): int
         );
         $tests += 2;
 
+        $r4TrustedHostOrigin = http_request(
+            'POST',
+            'http://127.0.0.1:' . $port . '/admin/login',
+            [
+                'Content-Type: application/x-www-form-urlencoded',
+                'Accept: application/json',
+                'Cookie: ' . $adminSessionCookie,
+                'Origin: http://localhost',
+            ],
+            http_build_query(['_csrf_token' => $adminCsrf])
+        );
+        test_assert_same(
+            302,
+            $r4TrustedHostOrigin['status'],
+            'POST /admin/login com Origin em trusted_hosts deve passar no guard de CSRF'
+        );
+        $tests++;
+
         $r4Taxes = http_request(
             'POST',
             'http://127.0.0.1:' . $port . '/admin/tributos',

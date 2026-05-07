@@ -210,42 +210,20 @@ final class QuoteModel extends Model
         if (!$this->ensureBrandManualTable()) {
             return false;
         }
-
-        $existing = $this->db->fetch(
-            'SELECT id FROM brand_manual_reports WHERE quote_request_id = :request_id LIMIT 1',
-            ['request_id' => $requestId]
-        );
-
-        if ($existing === null) {
-            $this->db->execute(
-                'INSERT INTO brand_manual_reports (
-                    quote_request_id, admin_user_id, schema_version, tool_source, generated_at, payload_json
-                 ) VALUES (
-                    :quote_request_id, :admin_user_id, :schema_version, :tool_source, :generated_at, :payload_json
-                 )',
-                [
-                    'quote_request_id' => $requestId,
-                    'admin_user_id' => $adminUserId,
-                    'schema_version' => $schemaVersion,
-                    'tool_source' => $toolSource,
-                    'generated_at' => $generatedAt,
-                    'payload_json' => $payloadJson,
-                ]
-            );
-            return true;
-        }
-
         $this->db->execute(
-            'UPDATE brand_manual_reports
-             SET
-                admin_user_id = :admin_user_id,
-                schema_version = :schema_version,
-                tool_source = :tool_source,
-                generated_at = :generated_at,
-                payload_json = :payload_json
-             WHERE quote_request_id = :request_id',
+            'INSERT INTO brand_manual_reports (
+                quote_request_id, admin_user_id, schema_version, tool_source, generated_at, payload_json
+             ) VALUES (
+                :quote_request_id, :admin_user_id, :schema_version, :tool_source, :generated_at, :payload_json
+             )
+             ON DUPLICATE KEY UPDATE
+                admin_user_id = VALUES(admin_user_id),
+                schema_version = VALUES(schema_version),
+                tool_source = VALUES(tool_source),
+                generated_at = VALUES(generated_at),
+                payload_json = VALUES(payload_json)',
             [
-                'request_id' => $requestId,
+                'quote_request_id' => $requestId,
                 'admin_user_id' => $adminUserId,
                 'schema_version' => $schemaVersion,
                 'tool_source' => $toolSource,
@@ -530,9 +508,7 @@ final class QuoteModel extends Model
         $validUntil = date('Y-m-d', strtotime('+90 days'));
         $reportId = 0;
 
-        $this->db->beginTransaction();
-
-        try {
+        $this->db->transaction(function () use (&$reportId, $requestId, $adminUserId, $subtotalValue, $taxesTotalValue, $totalValue, $payload, $maxDeadline, $validUntil, $serviceRows, $taxRows): void {
             $existing = $this->db->fetch(
                 'SELECT id FROM quote_reports WHERE quote_request_id = :request_id LIMIT 1',
                 ['request_id' => $requestId]
@@ -640,15 +616,7 @@ final class QuoteModel extends Model
                 "UPDATE quote_requests SET status = 'orcado' WHERE id = :id",
                 ['id' => $requestId]
             );
-
-            $this->db->commit();
-        } catch (\Throwable $exception) {
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
-            }
-
-            throw $exception;
-        }
+        });
 
         return $reportId;
     }
